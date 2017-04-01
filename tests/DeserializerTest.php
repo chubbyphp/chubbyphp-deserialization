@@ -51,6 +51,7 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(Many::class, $many);
         self::assertSame('id2', $many->getId());
         self::assertSame('name2', $many->getName());
+        self::assertSame($one, $many->getOne());
 
         /** @var Many $many */
         $many = $manies[1];
@@ -58,5 +59,6 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(Many::class, $many);
         self::assertSame('id3', $many->getId());
         self::assertSame('name3', $many->getName());
+        self::assertSame($one, $many->getOne());
     }
 }
