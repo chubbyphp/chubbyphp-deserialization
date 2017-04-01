@@ -25,34 +25,37 @@ final class Deserializer implements DeserializerInterface
     }
 
     /**
-     * @param array $data
-     * @param string $class
+     * @param array         $serializedData
+     * @param object|string $object
      * @return object
      */
-    public function deserializeFromArray(array $data, string $class)
+    public function deserializeFromArray(array $serializedData, $object)
     {
+        $object = is_object($object) ? $object : new $object();
+
+        $class = get_class($object);
+
         $objectMapping = $this->objectMappingRegistry->getObjectMappingForClass($class);
-
-        $name = $objectMapping->getClass();
-
-        $object = new $name;
 
         $propertyMappingsByName = $this->getPropertyMappingsByName($objectMapping);
 
-        foreach ($data as $property => $value) {
+        foreach ($serializedData as $property => $serializedValue) {
             if (!isset($propertyMappingsByName[$property])) {
-                throw new \RuntimeException(sprintf('Missing property mapping %s on class %s', $property, $name));
+                throw new \RuntimeException(sprintf('Missing property mapping %s on class %s', $property, $class));
             }
 
             $propertyMapping = $propertyMappingsByName[$property];
 
+            $reflectionProperty = new \ReflectionProperty($class, $property);
+            $reflectionProperty->setAccessible(true);
+
+            $oldValue = $reflectionProperty->getValue($object);
+
             if (null !== $callback = $propertyMapping->getCallback()) {
-                $value = $callback($value, $this);
+                $serializedValue = $callback($this, $serializedValue, $oldValue, $object);
             }
 
-            $reflectionProperty = new \ReflectionProperty($name, $property);
-            $reflectionProperty->setAccessible(true);
-            $reflectionProperty->setValue($object, $value);
+            $reflectionProperty->setValue($object, $serializedValue);
         }
 
         return $object;

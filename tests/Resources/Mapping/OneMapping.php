@@ -29,13 +29,16 @@ final class OneMapping implements ObjectMappingInterface
         return [
             new PropertyMapping('id'),
             new PropertyMapping('name'),
-            new PropertyMapping('manies', function($newData, DeserializerInterface $deserializer) {
-                $manies = [];
-                foreach ($newData as $element) {
-                    $manies[] = $deserializer->deserializeFromArray($element, Many::class);
+            new PropertyMapping('manies', function(DeserializerInterface $deserializer, $serializedValues, $oldValues, $object) {
+                $newValues = [];
+                foreach ($serializedValues as $i => $serializedValue) {
+                    $serializedValue['one'] = $object;
+
+                    $relatedObject = $oldValues[$i] ?? Many::class;
+                    $newValues[$i] = $deserializer->deserializeFromArray($serializedValue, $relatedObject);
                 }
 
-                return $manies;
+                return $newValues;
             }),
         ];
     }
