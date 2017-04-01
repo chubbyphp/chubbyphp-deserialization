@@ -26,11 +26,14 @@ final class ManyMapping implements ObjectMappingInterface
     public function getPropertyMappings(): array
     {
         return [
-            new PropertyMapping('id'),
             new PropertyMapping('name'),
             new PropertyMapping('one', function(DeserializerInterface $deserializer, $serializedValue, $oldValue, $object) {
                 if (is_object($serializedValue)) {
                     return $serializedValue;
+                }
+
+                if (null === $serializedValue) {
+                    return null;
                 }
 
                 $relatedObject = $oldValue ?? Many::class;

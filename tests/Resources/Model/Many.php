@@ -21,6 +21,11 @@ final class Many
      */
     private $one;
 
+    public function __construct()
+    {
+        $this->id = spl_object_hash($this);
+    }
+
     /**
      * @return string
      */
@@ -49,18 +54,31 @@ final class Many
     }
 
     /**
-     * @return One
+     * @param One  $one
+     * @param bool $stopPropagation
+     * @return $this
      */
-    public function getOne(): One
+    public function setOne(One $one = null, $stopPropagation = false)
     {
-        return $this->one;
+        if(!$stopPropagation) {
+            if(!is_null($this->one)) {
+                $this->one->removeMany($this, true);
+            }
+            if(!is_null($one)) {
+                $one->addMany($this, true);
+            }
+        }
+
+        $this->one = $one;
+
+        return $this;
     }
 
     /**
-     * @param One $one
+     * @return One
      */
-    public function setOne(One $one)
+    public function getOne()
     {
-        $this->one = $one;
+        return $this->one;
     }
 }

@@ -21,6 +21,11 @@ final class One
      */
     private $manies = [];
 
+    public function __construct()
+    {
+        $this->id = spl_object_hash($this);
+    }
+
     /**
      * @return string
      */
@@ -50,33 +55,44 @@ final class One
 
     /**
      * @param Many $many
-     * @return self
+     * @param bool $stopPropagation
+     * @return $this
      */
-    public function addMany(Many $many): self
+    public function addMany(Many $many, $stopPropagation = false)
     {
-        $this->manies[spl_object_hash($many)] = $many;
+        if (false ===  array_search($many, $this->manies, true)) {
+            $this->manies[] = $many;
+        }
 
-        return $this;
-    }
-
-    /**
-     * @param Many $many
-     * @return self
-     */
-    public function removeMany(Many $many): self
-    {
-        $hash = spl_object_hash($many);
-        if (isset($this->manies[$hash])) {
-            unset($this->manies[$hash]);
+        if(!$stopPropagation) {
+            $many->setOne($this, true);
         }
 
         return $this;
     }
 
     /**
-     * @return array
+     * @param Many $many
+     * @param bool $stopPropagation
+     * @return $this
      */
-    public function getManies(): array
+    public function removeMany(Many $many, $stopPropagation = false)
+    {
+        if (false !== $index = array_search($many, $this->manies, true)) {
+            unset($this->manies[$index]);
+        }
+
+        if(!$stopPropagation) {
+            $many->setOne(null, true);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Many[]
+     */
+    public function getManies()
     {
         return $this->manies;
     }

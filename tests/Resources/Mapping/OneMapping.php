@@ -27,15 +27,25 @@ final class OneMapping implements ObjectMappingInterface
     public function getPropertyMappings(): array
     {
         return [
-            new PropertyMapping('id'),
             new PropertyMapping('name'),
             new PropertyMapping('manies', function(DeserializerInterface $deserializer, $serializedValues, $oldValues, $object) {
                 $newValues = [];
                 foreach ($serializedValues as $i => $serializedValue) {
                     $serializedValue['one'] = $object;
 
-                    $relatedObject = $oldValues[$i] ?? Many::class;
+                    if (isset($oldValues[$i])) {
+                        $relatedObject = $oldValues[$i];
+
+                        unset($oldValues[$i]);
+                    } else {
+                        $relatedObject = Many::class;
+                    }
+
                     $newValues[$i] = $deserializer->deserializeFromArray($serializedValue, $relatedObject);
+                }
+
+                foreach ($oldValues as $oldValue) {
+                    $deserializer->deserializeFromArray(['one' => null], $oldValue);
                 }
 
                 return $newValues;
