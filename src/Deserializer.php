@@ -17,6 +17,11 @@ final class Deserializer implements DeserializerInterface
     private $objectMappingRegistry;
 
     /**
+     * @var \ReflectionProperty[]
+     */
+    private $reflectionProperties;
+
+    /**
      * @param ObjectMappingRegistryInterface $objectMappingRegistry
      */
     public function __construct(ObjectMappingRegistryInterface $objectMappingRegistry)
@@ -28,6 +33,7 @@ final class Deserializer implements DeserializerInterface
      * @param array  $serializedData
      * @param string $class
      * @return object
+     * @throws MissingMappingException
      */
     public function deserializeByClass(array $serializedData, string $class)
     {
@@ -38,11 +44,12 @@ final class Deserializer implements DeserializerInterface
      * @param array  $serializedData
      * @param object $object
      * @return object
+     * @throws NotObjectException|MissingMappingException
      */
     public function deserializeByObject(array $serializedData, $object)
     {
         if (!is_object($object)) {
-            throw new \RuntimeException(sprintf('Input is not an object, type %s given', gettype($object)));
+            throw NotObjectException::createByType(gettype($object));
         }
 
         $class = get_class($object);
@@ -53,13 +60,12 @@ final class Deserializer implements DeserializerInterface
 
         foreach ($serializedData as $property => $serializedValue) {
             if (!isset($propertyMappingsByName[$property])) {
-                throw new \RuntimeException(sprintf('Missing property mapping %s on class %s', $property, $class));
+                throw MissingMappingException::createByClassAndProperty($class, $property);
             }
 
             $propertyMapping = $propertyMappingsByName[$property];
 
-            $reflectionProperty = new \ReflectionProperty($class, $property);
-            $reflectionProperty->setAccessible(true);
+            $reflectionProperty = $this->getPropertyReflection($class, $property);
 
             $oldValue = $reflectionProperty->getValue($object);
 
@@ -85,5 +91,24 @@ final class Deserializer implements DeserializerInterface
         }
 
         return $propertyMappings;
+    }
+
+    /**
+     * @param string $class
+     * @param string $property
+     * @return \ReflectionProperty
+     */
+    private function getPropertyReflection(string $class, string $property): \ReflectionProperty
+    {
+        $reflectionPropertyKey = $class . '::' . $property;
+
+        if (!isset($this->reflectionProperties[$reflectionPropertyKey])) {
+            $reflectionProperty = new \ReflectionProperty($class, $property);
+            $reflectionProperty->setAccessible(true);
+
+            $this->reflectionProperties[$reflectionPropertyKey] = $reflectionProperty;
+        }
+
+        return $this->reflectionProperties[$reflectionPropertyKey];
     }
 }
