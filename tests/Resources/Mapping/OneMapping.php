@@ -13,7 +13,7 @@ use Chubbyphp\Tests\Deserialize\Resources\Model\One;
 
 final class OneMapping implements ObjectMappingInterface
 {
-        /**
+    /**
      * @return string
      */
     public function getClass(): string

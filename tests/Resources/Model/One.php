@@ -64,7 +64,7 @@ final class One
             $this->manies[] = $many;
         }
 
-        if(!$stopPropagation) {
+        if (!$stopPropagation) {
             $many->setOne($this, true);
         }
 
@@ -82,7 +82,7 @@ final class One
             unset($this->manies[$index]);
         }
 
-        if(!$stopPropagation) {
+        if (!$stopPropagation) {
             $many->setOne(null, true);
         }
 

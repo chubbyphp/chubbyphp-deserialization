@@ -60,11 +60,11 @@ final class Many
      */
     public function setOne(One $one = null, $stopPropagation = false)
     {
-        if(!$stopPropagation) {
-            if(!is_null($this->one)) {
+        if (!$stopPropagation) {
+            if (!is_null($this->one)) {
                 $this->one->removeMany($this, true);
             }
-            if(!is_null($one)) {
+            if (!is_null($one)) {
                 $one->addMany($this, true);
             }
         }

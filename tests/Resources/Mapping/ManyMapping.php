@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialize\Resources\Mapping;
 
 use Chubbyphp\Deserialize\Callback\Simple\ManyToOneCallback;
-use Chubbyphp\Deserialize\DeserializerInterface;
 use Chubbyphp\Deserialize\Mapping\ObjectMappingInterface;
 use Chubbyphp\Deserialize\Mapping\PropertyMapping;
 use Chubbyphp\Deserialize\Mapping\PropertyMappingInterface;
