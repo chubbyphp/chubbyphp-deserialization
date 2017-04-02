@@ -1,16 +1,16 @@
 <?php
 
 
-namespace Chubbyphp\Tests\Deserialize;
+namespace Chubbyphp\Tests\Deserialize\Deserializer;
 
 use Chubbyphp\Deserialize\Deserializer;
 use Chubbyphp\Deserialize\Registry\ObjectMappingRegistry;
-use Chubbyphp\Tests\Deserialize\Resources\Mapping\ManyMapping;
-use Chubbyphp\Tests\Deserialize\Resources\Mapping\OneMapping;
-use Chubbyphp\Tests\Deserialize\Resources\Model\Many;
-use Chubbyphp\Tests\Deserialize\Resources\Model\One;
+use Chubbyphp\Tests\Deserialize\Resources\Mapping\Bidirectional\ManyMapping;
+use Chubbyphp\Tests\Deserialize\Resources\Mapping\Bidirectional\OneMapping;
+use Chubbyphp\Tests\Deserialize\Resources\Model\Bidirectional\Many;
+use Chubbyphp\Tests\Deserialize\Resources\Model\Bidirectional\One;
 
-class DeserializerTest extends \PHPUnit_Framework_TestCase
+class BidirectionalOneToManyDeserializerTest extends \PHPUnit_Framework_TestCase
 {
     public function testNew()
     {
@@ -66,11 +66,13 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
 
         $many1 = new Many();
         $many1->setName('name2');
-        $many1->setOne($one);
+
+        $one->addMany($many1);
 
         $many2 = new Many();
         $many2->setName('name3');
-        $many2->setOne($one);
+
+        $one->addMany($many2);
 
         $objectMappingRegistry = new ObjectMappingRegistry([
             new OneMapping(),

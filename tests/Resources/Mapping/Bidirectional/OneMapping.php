@@ -2,21 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Deserialize\Resources\Mapping;
+namespace Chubbyphp\Tests\Deserialize\Resources\Mapping\Bidirectional;
 
+use Chubbyphp\Deserialize\Callback\Simple\BidirectionalOneToManyCallback;
 use Chubbyphp\Deserialize\Mapping\ObjectMappingInterface;
 use Chubbyphp\Deserialize\Mapping\PropertyMapping;
 use Chubbyphp\Deserialize\Mapping\PropertyMappingInterface;
-use Chubbyphp\Tests\Deserialize\Resources\Model\Many;
+use Chubbyphp\Tests\Deserialize\Resources\Model\Bidirectional\Many;
+use Chubbyphp\Tests\Deserialize\Resources\Model\Bidirectional\One;
 
-final class ManyMapping implements ObjectMappingInterface
+final class OneMapping implements ObjectMappingInterface
 {
     /**
      * @return string
      */
     public function getClass(): string
     {
-        return Many::class;
+        return One::class;
     }
 
     /**
@@ -26,7 +28,7 @@ final class ManyMapping implements ObjectMappingInterface
     {
         return [
             new PropertyMapping('name'),
-            new PropertyMapping('one'),
+            new PropertyMapping('manies', new BidirectionalOneToManyCallback(Many::class, 'one')),
         ];
     }
 }

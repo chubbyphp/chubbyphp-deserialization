@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Deserialize\Resources\Model;
+namespace Chubbyphp\Tests\Deserialize\Resources\Model\Bidirectional;
 
 final class One
 {
