@@ -25,13 +25,25 @@ final class Deserializer implements DeserializerInterface
     }
 
     /**
-     * @param array         $serializedData
-     * @param object|string $object
+     * @param array  $serializedData
+     * @param string $class
      * @return object
      */
-    public function deserializeFromArray(array $serializedData, $object)
+    public function deserializeByClass(array $serializedData, string $class)
     {
-        $object = is_object($object) ? $object : new $object();
+        return $this->deserializeByObject($serializedData, new $class());
+    }
+
+    /**
+     * @param array  $serializedData
+     * @param object $object
+     * @return object
+     */
+    public function deserializeByObject(array $serializedData, $object)
+    {
+        if (!is_object($object)) {
+            throw new \RuntimeException(sprintf('Input is not an object, type %s given', gettype($object)));
+        }
 
         $class = get_class($object);
 

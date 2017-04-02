@@ -22,7 +22,7 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
         $deserializer = new Deserializer($objectMappingRegistry);
 
         /** @var One $one */
-        $one = $deserializer->deserializeFromArray([
+        $one = $deserializer->deserializeByClass([
             'name' => 'name1',
             'manies' => [
                 0 => [
@@ -80,7 +80,7 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
         $deserializer = new Deserializer($objectMappingRegistry);
 
         /** @var One $updatedOne */
-        $updatedOne = $deserializer->deserializeFromArray([
+        $updatedOne = $deserializer->deserializeByObject([
             'name' => 'name11',
             'manies' => [
                 0 => [

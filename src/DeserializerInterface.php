@@ -7,9 +7,16 @@ namespace Chubbyphp\Deserialize;
 interface DeserializerInterface
 {
     /**
-     * @param array         $serializedData
-     * @param object|string $object
+     * @param array  $serializedData
+     * @param string $class
      * @return object
      */
-    public function deserializeFromArray(array $serializedData, $object);
+    public function deserializeByClass(array $serializedData, string $class);
+
+    /**
+     * @param array  $serializedData
+     * @param object $object
+     * @return object
+     */
+    public function deserializeByObject(array $serializedData, $object);
 }

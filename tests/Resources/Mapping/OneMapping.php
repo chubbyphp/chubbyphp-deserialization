@@ -34,18 +34,18 @@ final class OneMapping implements ObjectMappingInterface
                     $serializedValue['one'] = $object;
 
                     if (isset($oldValues[$i])) {
-                        $relatedObject = $oldValues[$i];
+                        $relatedObject = $deserializer->deserializeByObject($serializedValue, $oldValues[$i]);
 
                         unset($oldValues[$i]);
                     } else {
-                        $relatedObject = Many::class;
+                        $relatedObject = $deserializer->deserializeByClass($serializedValue, Many::class);
                     }
 
-                    $newValues[$i] = $deserializer->deserializeFromArray($serializedValue, $relatedObject);
+                    $newValues[$i] = $relatedObject;
                 }
 
                 foreach ($oldValues as $oldValue) {
-                    $deserializer->deserializeFromArray(['one' => null], $oldValue);
+                    $deserializer->deserializeByObject(['one' => null], $oldValue);
                 }
 
                 return $newValues;

@@ -36,9 +36,11 @@ final class ManyMapping implements ObjectMappingInterface
                     return null;
                 }
 
-                $relatedObject = $oldValue ?? Many::class;
+                if (null !== $oldValue) {
+                    return $deserializer->deserializeByObject($serializedValue, $oldValue);
+                }
 
-                return $deserializer->deserializeFromArray($serializedValue, $relatedObject);
+                return $deserializer->deserializeByClass($serializedValue, Many::class);
             }),
         ];
     }
