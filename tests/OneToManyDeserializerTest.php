@@ -65,10 +65,12 @@ class OneToManyDeserializerTest extends \PHPUnit_Framework_TestCase
         $many1 = Many::create();
         $many1->setName('name2');
 
+        $one->addMany($many1);
+
         $many2 = Many::create();
         $many2->setName('name3');
 
-        $one->setModels([$many1, $many2]);
+        $one->addMany($many2);
 
         $objectMappingRegistry = new ObjectMappingRegistry([
             new OneMapping(),

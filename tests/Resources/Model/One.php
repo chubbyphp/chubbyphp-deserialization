@@ -71,12 +71,23 @@ final class One implements ModelInterface
     }
 
     /**
-     * @param Many[] $manies
+     * @param Many $many
      * @return $this
      */
-    public function setModels(array $manies)
+    public function addMany(Many $many)
     {
-        $this->manies->setModels($manies);
+        $this->manies->addModel($many);
+
+        return $this;
+    }
+
+        /**
+     * @param Many $many
+     * @return $this
+     */
+    public function removeMany(Many $many)
+    {
+        $this->manies->removeModel($many);
 
         return $this;
     }
