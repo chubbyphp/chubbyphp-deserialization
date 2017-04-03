@@ -37,8 +37,6 @@ final class OneToManyCallback implements CallbackInterface
         foreach ($serializedValues as $i => $serializedValue) {
             if (isset($oldValues[$i])) {
                 $value = $deserializer->deserializeByObject($serializedValue, $oldValues[$i]);
-
-                unset($oldValues[$i]);
             } else {
                 $value = $deserializer->deserializeByClass($serializedValue, $this->manyClass);
             }
