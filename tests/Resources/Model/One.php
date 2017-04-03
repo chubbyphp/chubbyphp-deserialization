@@ -25,7 +25,9 @@ final class One implements ModelInterface
      */
     private $manies = [];
 
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * @param string $id

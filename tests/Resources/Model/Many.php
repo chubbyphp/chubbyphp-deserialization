@@ -23,7 +23,9 @@ final class Many implements ModelInterface
      */
     private $oneId;
 
-    private function __construct() {}
+    private function __construct()
+    {
+    }
 
     /**
      * @param string $id
