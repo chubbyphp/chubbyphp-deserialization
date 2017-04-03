@@ -15,18 +15,11 @@ final class OneToManyCallback implements CallbackInterface
     private $manyClass;
 
     /**
-     * @var string
-     */
-    private $bidirectionalProperty;
-
-    /**
      * @param string $manyClass
-     * @param string $bidirectionalProperty
      */
-    public function __construct(string $manyClass, string $bidirectionalProperty)
+    public function __construct(string $manyClass)
     {
         $this->manyClass = $manyClass;
-        $this->bidirectionalProperty = $bidirectionalProperty;
     }
 
     /**

@@ -36,7 +36,7 @@ final class OneMapping implements ObjectMappingInterface
     {
         return [
             new PropertyMapping('name'),
-            new PropertyMapping('manies', new OneToManyCallback(Many::class, 'one')),
+            new PropertyMapping('manies', new OneToManyCallback(Many::class)),
         ];
     }
 }
