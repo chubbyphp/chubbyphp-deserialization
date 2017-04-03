@@ -2,23 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Deserialize\Resources\Mapping\Unidirectional;
+namespace Chubbyphp\Tests\Deserialize\Resources\Mapping;
 
-use Chubbyphp\Deserialize\Callback\Simple\UnidirectionalOneToManyCallback;
 use Chubbyphp\Deserialize\Mapping\ObjectMappingInterface;
 use Chubbyphp\Deserialize\Mapping\PropertyMapping;
 use Chubbyphp\Deserialize\Mapping\PropertyMappingInterface;
-use Chubbyphp\Tests\Deserialize\Resources\Model\Unidirectional\Many;
-use Chubbyphp\Tests\Deserialize\Resources\Model\Unidirectional\One;
+use Chubbyphp\Tests\Deserialize\Resources\Model\Many;
 
-final class OneMapping implements ObjectMappingInterface
+final class ManyMapping implements ObjectMappingInterface
 {
     /**
      * @return string
      */
     public function getClass(): string
     {
-        return One::class;
+        return Many::class;
+    }
+
+    /**
+     * @return string
+     */
+    public function getConstructMethod(): string
+    {
+        return 'create';
     }
 
     /**
@@ -28,7 +34,6 @@ final class OneMapping implements ObjectMappingInterface
     {
         return [
             new PropertyMapping('name'),
-            new PropertyMapping('manies', new UnidirectionalOneToManyCallback(Many::class)),
         ];
     }
 }

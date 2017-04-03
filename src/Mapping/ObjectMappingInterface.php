@@ -12,6 +12,11 @@ interface ObjectMappingInterface
     public function getClass(): string;
 
     /**
+     * @return string
+     */
+    public function getConstructMethod(): string;
+
+    /**
      * @return PropertyMappingInterface[]
      */
     public function getPropertyMappings(): array;

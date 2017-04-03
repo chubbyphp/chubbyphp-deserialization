@@ -37,7 +37,15 @@ final class Deserializer implements DeserializerInterface
      */
     public function deserializeByClass(array $serializedData, string $class)
     {
-        return $this->deserializeByObject($serializedData, new $class());
+        $objectMapping = $this->objectMappingRegistry->getObjectMappingForClass($class);
+
+        $method = $objectMapping->getConstructMethod();
+
+        $object = $class::$method();
+
+        $this->updateProperties($objectMapping, $object, $class, $serializedData);
+
+        return $object;
     }
 
     /**
@@ -56,6 +64,19 @@ final class Deserializer implements DeserializerInterface
 
         $objectMapping = $this->objectMappingRegistry->getObjectMappingForClass($class);
 
+        $this->updateProperties($objectMapping, $object, $class, $serializedData);
+
+        return $object;
+    }
+
+    /**
+     * @param ObjectMappingInterface $objectMapping
+     * @param $object
+     * @param string $class
+     * @param array $serializedData
+     */
+    private function updateProperties(ObjectMappingInterface $objectMapping, $object, string $class, array $serializedData)
+    {
         $propertyMappingsByName = $this->getPropertyMappingsByName($objectMapping);
 
         foreach ($serializedData as $property => $serializedValue) {
@@ -75,8 +96,6 @@ final class Deserializer implements DeserializerInterface
 
             $reflectionProperty->setValue($object, $serializedValue);
         }
-
-        return $object;
     }
 
     /**

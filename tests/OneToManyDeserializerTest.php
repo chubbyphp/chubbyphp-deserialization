@@ -5,12 +5,12 @@ namespace Chubbyphp\Tests\Deserialize\Deserializer;
 
 use Chubbyphp\Deserialize\Deserializer;
 use Chubbyphp\Deserialize\Registry\ObjectMappingRegistry;
-use Chubbyphp\Tests\Deserialize\Resources\Mapping\Bidirectional\ManyMapping;
-use Chubbyphp\Tests\Deserialize\Resources\Mapping\Bidirectional\OneMapping;
-use Chubbyphp\Tests\Deserialize\Resources\Model\Bidirectional\Many;
-use Chubbyphp\Tests\Deserialize\Resources\Model\Bidirectional\One;
+use Chubbyphp\Tests\Deserialize\Resources\Mapping\ManyMapping;
+use Chubbyphp\Tests\Deserialize\Resources\Mapping\OneMapping;
+use Chubbyphp\Tests\Deserialize\Resources\Model\Many;
+use Chubbyphp\Tests\Deserialize\Resources\Model\One;
 
-class BidirectionalOneToManyDeserializerTest extends \PHPUnit_Framework_TestCase
+class OneToManyDeserializerTest extends \PHPUnit_Framework_TestCase
 {
     public function testNew()
     {
@@ -48,7 +48,6 @@ class BidirectionalOneToManyDeserializerTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(Many::class, $many1);
         self::assertNotNull($many1->getId());
         self::assertSame('name2', $many1->getName());
-        self::assertSame($one, $many1->getOne());
 
         /** @var Many $many2 */
         $many2 = $manies[1];
@@ -56,23 +55,20 @@ class BidirectionalOneToManyDeserializerTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(Many::class, $many2);
         self::assertNotNull($many2->getId());
         self::assertSame('name3', $many2->getName());
-        self::assertSame($one, $many2->getOne());
     }
 
     public function testUpdate()
     {
-        $one = new One();
+        $one = One::create();
         $one->setName('name1');
 
-        $many1 = new Many();
+        $many1 = Many::create();
         $many1->setName('name2');
 
-        $one->addMany($many1);
-
-        $many2 = new Many();
+        $many2 = Many::create();
         $many2->setName('name3');
 
-        $one->addMany($many2);
+        $one->setModels([$many1, $many2]);
 
         $objectMappingRegistry = new ObjectMappingRegistry([
             new OneMapping(),
@@ -110,18 +106,14 @@ class BidirectionalOneToManyDeserializerTest extends \PHPUnit_Framework_TestCase
 
         self::assertNotNull($updatedMany1->getId());
         self::assertSame('name22', $updatedMany1->getName());
-        self::assertSame($updatedOne, $updatedMany1->getOne());
 
         /** @var Many $updatedMany2 */
-        $updatedMany2 = $manies[2];
+        $updatedMany2 = $manies[1];
 
         self::assertNotSame($many2, $updatedMany2);
 
         self::assertInstanceOf(Many::class, $updatedMany2);
         self::assertNotNull($updatedMany2->getId());
         self::assertSame('name33', $updatedMany2->getName());
-        self::assertSame($updatedOne, $updatedMany2->getOne());
-
-        self::assertNull($many2->getOne());
     }
 }
