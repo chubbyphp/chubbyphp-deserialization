@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialize\Resources\Model;
 
 use Chubbyphp\Model\ModelInterface;
+use Chubbyphp\Model\Reference\ModelReference;
+use Chubbyphp\Model\Reference\ModelReferenceInterface;
 
 final class Many implements ModelInterface
 {
@@ -23,6 +25,11 @@ final class Many implements ModelInterface
      */
     private $oneId;
 
+    /**
+     * @var ModelReferenceInterface
+     */
+    private $reference;
+
     private function __construct()
     {
     }
@@ -36,6 +43,7 @@ final class Many implements ModelInterface
         $many = new self();
 
         $many->id = $id ?? spl_object_hash($many);
+        $many->reference = new ModelReference();
 
         return $many;
     }
@@ -67,6 +75,25 @@ final class Many implements ModelInterface
     }
 
     /**
+     * @return Reference|ModelInterface|null
+     */
+    public function getReference()
+    {
+        return $this->reference->getModel();
+    }
+
+    /**
+     * @param Reference $reference
+     * @return self
+     */
+    public function setReference(Reference $reference)
+    {
+        $this->reference->setModel($reference);
+
+        return $this;
+    }
+
+    /**
      * @param array $data
      *
      * @return Many|ModelInterface
@@ -78,6 +105,7 @@ final class Many implements ModelInterface
         $many->id = $data['id'];
         $many->name = $data['name'];
         $many->oneId = $data['oneId'];
+        $many->reference = $data['reference'];
 
         return $many;
     }
@@ -91,6 +119,7 @@ final class Many implements ModelInterface
             'id' => $this->id,
             'name' => $this->name,
             'oneId' => $this->oneId,
+            'referenceId' => $this->reference->getId(),
         ];
     }
 
@@ -102,6 +131,7 @@ final class Many implements ModelInterface
         return [
             'id' => $this->id,
             'name' => $this->name,
+            'reference' => $this->reference->jsonSerialize(),
         ];
     }
 }

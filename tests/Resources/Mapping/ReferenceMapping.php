@@ -4,35 +4,19 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialize\Resources\Mapping;
 
-use Chubbyphp\Deserialize\Callback\ReferenceCallback;
 use Chubbyphp\Deserialize\Mapping\ObjectMappingInterface;
 use Chubbyphp\Deserialize\Mapping\PropertyMapping;
 use Chubbyphp\Deserialize\Mapping\PropertyMappingInterface;
-use Chubbyphp\Model\ResolverInterface;
-use Chubbyphp\Tests\Deserialize\Resources\Model\Many;
 use Chubbyphp\Tests\Deserialize\Resources\Model\Reference;
 
-final class ManyMapping implements ObjectMappingInterface
+final class ReferenceMapping implements ObjectMappingInterface
 {
-    /**
-     * @var ResolverInterface
-     */
-    private $resolver;
-
-    /**
-     * @param ResolverInterface $resolver
-     */
-    public function __construct(ResolverInterface $resolver)
-    {
-        $this->resolver = $resolver;
-    }
-
     /**
      * @return string
      */
     public function getClass(): string
     {
-        return Many::class;
+        return Reference::class;
     }
 
     /**
@@ -50,7 +34,6 @@ final class ManyMapping implements ObjectMappingInterface
     {
         return [
             new PropertyMapping('name'),
-            new PropertyMapping('reference', new ReferenceCallback($this->resolver, Reference::class))
         ];
     }
 }
