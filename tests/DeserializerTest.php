@@ -30,6 +30,7 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
         /** @var One $one */
         $one = $deserializer->deserializeByClass([
             'name' => 'name1',
+            'unknownField' => 'dummy',
             'manies' => [
                 0 => [
                     'name' => 'name11',

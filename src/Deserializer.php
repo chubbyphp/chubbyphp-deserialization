@@ -81,7 +81,7 @@ final class Deserializer implements DeserializerInterface
 
         foreach ($serializedData as $property => $serializedValue) {
             if (!isset($propertyMappingsByName[$property])) {
-                throw MissingMappingException::createByClassAndProperty($class, $property);
+                continue;
             }
 
             $propertyMapping = $propertyMappingsByName[$property];
