@@ -17,23 +17,29 @@ final class Deserializer implements DeserializerInterface
     private $objectMappingRegistry;
 
     /**
+     * @var bool
+     */
+    private $emptyStringToNull;
+
+    /**
      * @var \ReflectionProperty[]
      */
     private $reflectionProperties;
 
     /**
      * @param ObjectMappingRegistryInterface $objectMappingRegistry
+     * @param bool $emptyStringToNull
      */
-    public function __construct(ObjectMappingRegistryInterface $objectMappingRegistry)
+    public function __construct(ObjectMappingRegistryInterface $objectMappingRegistry, bool $emptyStringToNull = true)
     {
         $this->objectMappingRegistry = $objectMappingRegistry;
+        $this->emptyStringToNull = $emptyStringToNull;
     }
 
     /**
      * @param array  $serializedData
      * @param string $class
      * @return object
-     * @throws MissingMappingException
      */
     public function deserializeByClass(array $serializedData, string $class)
     {
@@ -52,7 +58,7 @@ final class Deserializer implements DeserializerInterface
      * @param array  $serializedData
      * @param object $object
      * @return object
-     * @throws NotObjectException|MissingMappingException
+     * @throws NotObjectException
      */
     public function deserializeByObject(array $serializedData, $object)
     {
@@ -91,10 +97,16 @@ final class Deserializer implements DeserializerInterface
             $oldValue = $reflectionProperty->getValue($object);
 
             if (null !== $callback = $propertyMapping->getCallback()) {
-                $serializedValue = $callback($this, $serializedValue, $oldValue, $object);
+                $newValue = $callback($this, $serializedValue, $oldValue, $object);
+            } else {
+                $newValue = $serializedValue;
             }
 
-            $reflectionProperty->setValue($object, $serializedValue);
+            if ($this->emptyStringToNull && '' === $newValue) {
+                $newValue = null;
+            }
+
+            $reflectionProperty->setValue($object, $newValue);
         }
     }
 
