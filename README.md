@@ -4,6 +4,7 @@
 [![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-deserialize/downloads.png)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialize)
 [![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-deserialize/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialize)
 [![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-deserialize/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-deserialize/?branch=master)
+[![Code Coverage](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-deserialize/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-deserialize/?branch=master)
 
 ## Description
 
@@ -16,6 +17,10 @@ A simple deserializer.
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialize][1].
+
+```sh
+composer require chubbyphp/chubbyphp-deserialize "~1.0@dev"
+```
 
 ## Usage
 
