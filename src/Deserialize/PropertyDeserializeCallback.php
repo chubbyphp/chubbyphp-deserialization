@@ -14,6 +14,14 @@ final class PropertyDeserializeCallback implements PropertyDeserializeInterface
     private $callback;
 
     /**
+     * @param callable $callback
+     */
+    public function __construct(callable $callback)
+    {
+        $this->callback = $callback;
+    }
+
+    /**
      * @param DeserializerInterface $deserializer
      * @param mixed $serializedValue
      * @param mixed$oldValue
