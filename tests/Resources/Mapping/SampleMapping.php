@@ -7,16 +7,16 @@ namespace Chubbyphp\Tests\Deserialize\Resources\Mapping;
 use Chubbyphp\Deserialize\Mapping\ObjectMappingInterface;
 use Chubbyphp\Deserialize\Mapping\PropertyMapping;
 use Chubbyphp\Deserialize\Mapping\PropertyMappingInterface;
-use Chubbyphp\Tests\Deserialize\Resources\Model\Reference;
+use Chubbyphp\Tests\Deserialize\Resources\Model\Sample;
 
-final class ReferenceMapping implements ObjectMappingInterface
+final class SampleMapping implements ObjectMappingInterface
 {
     /**
      * @return string
      */
     public function getClass(): string
     {
-        return Reference::class;
+        return Sample::class;
     }
 
     /**
