@@ -9,16 +9,14 @@ interface DeserializerInterface
     /**
      * @param array  $serializedData
      * @param string $class
-     * @param string $path
      * @return object
      */
-    public function deserializeByClass(array $serializedData, string $class, string $path = '');
+    public function deserializeByClass(array $serializedData, string $class);
 
     /**
      * @param array  $serializedData
      * @param object $object
-     * @param string $path
      * @return object
      */
-    public function deserializeByObject(array $serializedData, $object, string $path = '');
+    public function deserializeByObject(array $serializedData, $object);
 }
