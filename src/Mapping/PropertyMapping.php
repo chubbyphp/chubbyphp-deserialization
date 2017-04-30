@@ -4,6 +4,9 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialize\Mapping;
 
+use Chubbyphp\Deserialize\Deserialize\PropertyDeserialize;
+use Chubbyphp\Deserialize\Deserialize\PropertyDeserializeInterface;
+
 final class PropertyMapping implements PropertyMappingInterface
 {
     /**
@@ -12,18 +15,18 @@ final class PropertyMapping implements PropertyMappingInterface
     private $name;
 
     /**
-     * @var callable|null
+     * @var PropertyDeserializeInterface
      */
-    private $callback;
+    private $propertyDeserializer;
 
     /**
      * @param string $name
-     * @param callable $callback
+     * @param PropertyDeserializeInterface|null $propertyDeserializer
      */
-    public function __construct(string $name, callable $callback = null)
+    public function __construct(string $name, PropertyDeserializeInterface $propertyDeserializer = null)
     {
         $this->name = $name;
-        $this->callback = $callback;
+        $this->propertyDeserializer = $propertyDeserializer ?? new PropertyDeserialize();
     }
 
     /**
@@ -35,10 +38,10 @@ final class PropertyMapping implements PropertyMappingInterface
     }
 
     /**
-     * @return callable|null
+     * @return PropertyDeserializeInterface
      */
-    public function getCallback()
+    public function getPropertyDeserializer(): PropertyDeserializeInterface
     {
-        return $this->callback;
+        return $this->propertyDeserializer;
     }
 }

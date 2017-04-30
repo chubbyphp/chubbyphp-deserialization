@@ -94,13 +94,12 @@ final class Deserializer implements DeserializerInterface
 
             $reflectionProperty = $this->getPropertyReflection($class, $property);
 
-            $oldValue = $reflectionProperty->getValue($object);
-
-            if (null !== $callback = $propertyMapping->getCallback()) {
-                $newValue = $callback($this, $serializedValue, $oldValue, $object);
-            } else {
-                $newValue = $serializedValue;
-            }
+            $newValue = $propertyMapping->getPropertyDeserializer()->deserializeProperty(
+                $this,
+                $serializedValue,
+                $reflectionProperty->getValue($object),
+                $object
+            );
 
             if ($this->emptyStringToNull && '' === $newValue) {
                 $newValue = null;

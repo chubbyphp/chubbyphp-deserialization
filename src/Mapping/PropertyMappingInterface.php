@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialize\Mapping;
 
+use Chubbyphp\Deserialize\Deserialize\PropertyDeserializeInterface;
+
 interface PropertyMappingInterface
 {
     /**
@@ -12,7 +14,7 @@ interface PropertyMappingInterface
     public function getName(): string;
 
     /**
-     * @return callable|null
+     * @return PropertyDeserializeInterface
      */
-    public function getCallback();
+    public function getPropertyDeserializer(): PropertyDeserializeInterface;
 }
