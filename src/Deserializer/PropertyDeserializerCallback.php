@@ -30,8 +30,8 @@ final class PropertyDeserializerCallback implements PropertyDeserializerInterfac
      */
     public function deserializeProperty(
         $serializedValue,
-        $existingValue,
-        $object,
+        $existingValue = null,
+        $object = null,
         DeserializerInterface $deserializer = null
     ) {
         $callback = $this->callback;

@@ -17,8 +17,8 @@ interface PropertyDeserializerInterface
      */
     public function deserializeProperty(
         $serializedValue,
-        $existingValue,
-        $object,
+        $existingValue = null,
+        $object = null,
         DeserializerInterface $deserializer = null
     );
 }
