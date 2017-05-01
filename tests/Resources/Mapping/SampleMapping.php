@@ -20,11 +20,11 @@ final class SampleMapping implements ObjectMappingInterface
     }
 
     /**
-     * @return string
+     * @return callable
      */
-    public function getConstructMethod(): string
+    public function getFactory(): callable
     {
-        return 'create';
+        return [Sample::class, 'create'];
     }
 
     /**

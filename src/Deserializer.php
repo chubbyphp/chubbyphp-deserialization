@@ -59,9 +59,9 @@ final class Deserializer implements DeserializerInterface
 
         $objectMapping = $this->objectMappingRegistry->getObjectMappingForClass($class);
 
-        $method = $objectMapping->getConstructMethod();
+        $factory = $objectMapping->getFactory();
 
-        $object = $class::$method();
+        $object = $factory();
 
         $this->updateProperties($objectMapping, $object, $class, $serializedData);
 

@@ -12,9 +12,9 @@ interface ObjectMappingInterface
     public function getClass(): string;
 
     /**
-     * @return string
+     * @return callable
      */
-    public function getConstructMethod(): string;
+    public function getFactory(): callable;
 
     /**
      * @return PropertyMappingInterface[]
