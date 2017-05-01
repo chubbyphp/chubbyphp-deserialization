@@ -44,11 +44,11 @@ final class LazyObjectMapping implements ObjectMappingInterface
     }
 
     /**
-     * @return string
+     * @return callable
      */
-    public function getConstructMethod(): string
+    public function getFactory(): callable
     {
-        return $this->container->get($this->serviceId)->getConstructMethod();
+        return $this->container->get($this->serviceId)->getFactory();
     }
 
     /**
