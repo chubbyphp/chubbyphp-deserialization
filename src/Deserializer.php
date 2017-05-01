@@ -105,11 +105,17 @@ final class Deserializer implements DeserializerInterface
 
         foreach ($serializedData as $property => $serializedValue) {
             if (!isset($propertyMappingsByName[$property])) {
-                $this->logger->notice('deserialize: no mapping for property {property}', ['property' => $property]);
+                $this->logger->notice(
+                    'deserialize: no mapping for property {property} of class {class}',
+                    ['class' => $class, 'property' => $property]
+                );
                 continue;
             }
 
-            $this->logger->info('deserialize: property {property}', ['property' => $property]);
+            $this->logger->info(
+                'deserialize: property {property} of class {class}',
+                ['class' => $class, 'property' => $property]
+            );
 
             $propertyMapping = $propertyMappingsByName[$property];
 
