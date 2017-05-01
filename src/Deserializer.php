@@ -7,6 +7,8 @@ namespace Chubbyphp\Deserialize;
 use Chubbyphp\Deserialize\Mapping\ObjectMappingInterface;
 use Chubbyphp\Deserialize\Mapping\PropertyMappingInterface;
 use Chubbyphp\Deserialize\Registry\ObjectMappingRegistryInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 final class Deserializer implements DeserializerInterface
 {
@@ -22,6 +24,11 @@ final class Deserializer implements DeserializerInterface
     private $emptyStringToNull;
 
     /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @var \ReflectionProperty[]
      */
     private $reflectionProperties;
@@ -29,11 +36,16 @@ final class Deserializer implements DeserializerInterface
     /**
      * @param ObjectMappingRegistryInterface $objectMappingRegistry
      * @param bool $emptyStringToNull
+     * @param LoggerInterface|null $logger
      */
-    public function __construct(ObjectMappingRegistryInterface $objectMappingRegistry, bool $emptyStringToNull = true)
-    {
+    public function __construct(
+        ObjectMappingRegistryInterface $objectMappingRegistry,
+        bool $emptyStringToNull = true,
+        LoggerInterface $logger = null
+    ) {
         $this->objectMappingRegistry = $objectMappingRegistry;
         $this->emptyStringToNull = $emptyStringToNull;
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -43,6 +55,8 @@ final class Deserializer implements DeserializerInterface
      */
     public function deserializeByClass(array $serializedData, string $class)
     {
+        $this->logger->info('deserialize: class {class}', ['class' => $class]);
+
         $objectMapping = $this->objectMappingRegistry->getObjectMappingForClass($class);
 
         $method = $objectMapping->getConstructMethod();
@@ -63,10 +77,14 @@ final class Deserializer implements DeserializerInterface
     public function deserializeByObject(array $serializedData, $object)
     {
         if (!is_object($object)) {
+            $this->logger->error('deserialize: object without an object given {type}', ['type' => gettype($object)]);
+
             throw NotObjectException::createByType(gettype($object));
         }
 
         $class = get_class($object);
+
+        $this->logger->info('deserialize: object {class}', ['class' => $class]);
 
         $objectMapping = $this->objectMappingRegistry->getObjectMappingForClass($class);
 
@@ -87,8 +105,11 @@ final class Deserializer implements DeserializerInterface
 
         foreach ($serializedData as $property => $serializedValue) {
             if (!isset($propertyMappingsByName[$property])) {
+                $this->logger->notice('deserialize: no mapping for property {property}', ['property' => $property]);
                 continue;
             }
+
+            $this->logger->info('deserialize: property {property}', ['property' => $property]);
 
             $propertyMapping = $propertyMappingsByName[$property];
 
