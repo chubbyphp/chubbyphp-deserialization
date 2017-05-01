@@ -55,8 +55,6 @@ final class Deserializer implements DeserializerInterface
      */
     public function deserializeByClass(array $serializedData, string $class)
     {
-        $this->logger->info('deserialize: class {class}', ['class' => $class]);
-
         $objectMapping = $this->objectMappingRegistry->getObjectMappingForClass($class);
 
         $factory = $objectMapping->getFactory();
@@ -83,8 +81,6 @@ final class Deserializer implements DeserializerInterface
         }
 
         $class = get_class($object);
-
-        $this->logger->info('deserialize: object {class}', ['class' => $class]);
 
         $objectMapping = $this->objectMappingRegistry->getObjectMappingForClass($class);
 

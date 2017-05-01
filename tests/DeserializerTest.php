@@ -46,13 +46,6 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
         self::assertEquals([
             [
                 'level' => LogLevel::INFO,
-                'message' => 'deserialize: class {class}',
-                'context' => [
-                    'class' => Model::class,
-                ]
-            ],
-            [
-                'level' => LogLevel::INFO,
                 'message' => 'deserialize: property {property} of class {class}',
                 'context' => [
                     'class' => Model::class,
@@ -100,13 +93,6 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
         self::assertSame('name2', $updatedModel->getName());
 
         self::assertEquals([
-            [
-                'level' => LogLevel::INFO,
-                'message' => 'deserialize: object {class}',
-                'context' => [
-                    'class' => Model::class,
-                ]
-            ],
             [
                 'level' => LogLevel::INFO,
                 'message' => 'deserialize: property {property} of class {class}',
