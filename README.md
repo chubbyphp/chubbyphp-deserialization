@@ -13,6 +13,12 @@ A simple deserializer.
 ## Requirements
 
  * php: ~7.0
+ * psr/log: ~1.0
+
+## Suggest
+
+ * container-interop/container-interop: ~1.0
+ * pimple/pimple: ~3.0
 
 ## Installation
 
