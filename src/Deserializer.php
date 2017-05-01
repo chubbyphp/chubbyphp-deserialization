@@ -51,9 +51,10 @@ final class Deserializer implements DeserializerInterface
     /**
      * @param array  $serializedData
      * @param string $class
+     * @param string $path
      * @return object
      */
-    public function deserializeByClass(array $serializedData, string $class)
+    public function deserializeByClass(array $serializedData, string $class, string $path = '')
     {
         $objectMapping = $this->objectMappingRegistry->getObjectMappingForClass($class);
 
@@ -61,7 +62,7 @@ final class Deserializer implements DeserializerInterface
 
         $object = $factory();
 
-        $this->updateProperties($objectMapping, $object, $class, $serializedData);
+        $this->updateProperties($objectMapping, $object, $class, $serializedData, $path);
 
         return $object;
     }
@@ -69,10 +70,11 @@ final class Deserializer implements DeserializerInterface
     /**
      * @param array  $serializedData
      * @param object $object
+     * @param string $path
      * @return object
      * @throws NotObjectException
      */
-    public function deserializeByObject(array $serializedData, $object)
+    public function deserializeByObject(array $serializedData, $object, string $path = '')
     {
         if (!is_object($object)) {
             $this->logger->error('deserialize: object without an object given {type}', ['type' => gettype($object)]);
@@ -84,7 +86,7 @@ final class Deserializer implements DeserializerInterface
 
         $objectMapping = $this->objectMappingRegistry->getObjectMappingForClass($class);
 
-        $this->updateProperties($objectMapping, $object, $class, $serializedData);
+        $this->updateProperties($objectMapping, $object, $class, $serializedData, $path);
 
         return $object;
     }
@@ -94,30 +96,29 @@ final class Deserializer implements DeserializerInterface
      * @param $object
      * @param string $class
      * @param array $serializedData
+     * @param string $path
      */
-    private function updateProperties(ObjectMappingInterface $objectMapping, $object, string $class, array $serializedData)
+    private function updateProperties(ObjectMappingInterface $objectMapping, $object, string $class, array $serializedData, $path)
     {
         $propertyMappingsByName = $this->getPropertyMappingsByName($objectMapping);
 
         foreach ($serializedData as $property => $serializedValue) {
+            $subPath = $path !== '' ? $path . '.' . $property : $property;
+
             if (!isset($propertyMappingsByName[$property])) {
-                $this->logger->notice(
-                    'deserialize: no mapping for property {property} of class {class}',
-                    ['class' => $class, 'property' => $property]
-                );
+                $this->logger->notice('deserialize: no mapping for path {path}', ['path' => $subPath]);
+
                 continue;
             }
 
-            $this->logger->info(
-                'deserialize: property {property} of class {class}',
-                ['class' => $class, 'property' => $property]
-            );
+            $this->logger->info('deserialize: path {path}', ['path' => $subPath]);
 
             $propertyMapping = $propertyMappingsByName[$property];
 
             $reflectionProperty = $this->getPropertyReflection($class, $property);
 
             $newValue = $propertyMapping->getPropertyDeserializer()->deserializeProperty(
+                $subPath,
                 $serializedValue,
                 $reflectionProperty->getValue($object),
                 $object,

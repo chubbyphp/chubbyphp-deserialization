@@ -17,7 +17,7 @@ final class PropertyDeserializerTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame(
             'value',
-            $propertyDeserializer->deserializeProperty('value')
+            $propertyDeserializer->deserializeProperty('path', 'value')
         );
     }
 }

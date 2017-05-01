@@ -22,13 +22,15 @@ final class PropertyDeserializerCallback implements PropertyDeserializerInterfac
     }
 
     /**
-     * @param DeserializerInterface|null $deserializer
+     * @param string $path
      * @param mixed $serializedValue
      * @param mixed $existingValue
      * @param object $object
+     * @param DeserializerInterface|null $deserializer
      * @return mixed
      */
     public function deserializeProperty(
+        string $path,
         $serializedValue,
         $existingValue = null,
         $object = null,
@@ -36,6 +38,6 @@ final class PropertyDeserializerCallback implements PropertyDeserializerInterfac
     ) {
         $callback = $this->callback;
 
-        return $callback($serializedValue, $existingValue, $object, $deserializer);
+        return $callback($path, $serializedValue, $existingValue, $object, $deserializer);
     }
 }

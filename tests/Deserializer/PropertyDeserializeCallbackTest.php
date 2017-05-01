@@ -17,7 +17,7 @@ final class PropertyDeserializerCallbackTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame(
             'existingValue',
-            $propertyDeserializer->deserializeProperty(null, 'existingValue')
+            $propertyDeserializer->deserializeProperty('path', null, 'existingValue')
         );
     }
 
@@ -27,7 +27,7 @@ final class PropertyDeserializerCallbackTest extends \PHPUnit_Framework_TestCase
 
         self::assertSame(
             'value',
-            $propertyDeserializer->deserializeProperty('value', 'existingValue')
+            $propertyDeserializer->deserializeProperty('path', 'value', 'existingValue')
         );
     }
 
@@ -36,7 +36,7 @@ final class PropertyDeserializerCallbackTest extends \PHPUnit_Framework_TestCase
      */
     private function getCallback(): callable
     {
-        return function ($serializedValue, $existingValue) {
+        return function (string $path, $serializedValue, $existingValue) {
             if (null !== $serializedValue) {
                 return $serializedValue;
             }

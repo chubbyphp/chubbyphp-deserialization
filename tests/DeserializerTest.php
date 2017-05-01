@@ -46,18 +46,16 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
         self::assertEquals([
             [
                 'level' => LogLevel::INFO,
-                'message' => 'deserialize: property {property} of class {class}',
+                'message' => 'deserialize: path {path}',
                 'context' => [
-                    'class' => Model::class,
-                    'property' => 'name',
+                    'path' => 'name',
                 ]
             ],
             [
                 'level' => LogLevel::NOTICE,
-                'message' => 'deserialize: no mapping for property {property} of class {class}',
+                'message' => 'deserialize: no mapping for path {path}',
                 'context' => [
-                    'class' => Model::class,
-                    'property' => 'unknownProperty',
+                    'path' => 'unknownProperty',
                 ]
             ],
         ], $logger->__logs);
@@ -95,10 +93,9 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
         self::assertEquals([
             [
                 'level' => LogLevel::INFO,
-                'message' => 'deserialize: property {property} of class {class}',
+                'message' => 'deserialize: path {path}',
                 'context' => [
-                    'class' => Model::class,
-                    'property' => 'name',
+                    'path' => 'name',
                 ]
             ],
         ], $logger->__logs);
@@ -235,6 +232,7 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
 
         $propertyDeserializer->expects(self::any())->method('deserializeProperty')->willReturnCallback(
             function(
+                string $path,
                 $serializedValue,
                 $existingValue = null,
                 $object = null,
