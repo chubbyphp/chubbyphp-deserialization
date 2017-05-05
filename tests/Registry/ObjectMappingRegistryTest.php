@@ -16,7 +16,7 @@ final class ObjectMappingRegistryTest extends \PHPUnit_Framework_TestCase
     {
         $mappings = [
             $this->getObjectMapping('Namespace\To\MyModel1'),
-            $this->getObjectMapping('Namespace\To\MyModel2')
+            $this->getObjectMapping('Namespace\To\MyModel2'),
         ];
 
         $registry = new ObjectMappingRegistry($mappings);
@@ -37,6 +37,7 @@ final class ObjectMappingRegistryTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param string $class
+     *
      * @return ObjectMappingInterface
      */
     private function getObjectMapping(string $class): ObjectMappingInterface

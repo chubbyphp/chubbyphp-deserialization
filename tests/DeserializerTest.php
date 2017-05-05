@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Chubbyphp\Tests\Deserialize\Deserializer;
 
 use Chubbyphp\Deserialize\Deserializer;
@@ -25,9 +24,9 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
                 Model::class,
                 $factory,
                 [
-                    $this->getPropertyMapping('name', $this->getPropertyDeserializer())
+                    $this->getPropertyMapping('name', $this->getPropertyDeserializer()),
                 ]
-            )
+            ),
         ]);
 
         $logger = $this->getLogger();
@@ -37,7 +36,7 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
         /** @var Model $model */
         $model = $deserializer->deserializeByClass([
             'name' => 'name1',
-            'unknownProperty' => 'dummy'
+            'unknownProperty' => 'dummy',
         ], Model::class);
 
         self::assertInstanceOf(Model::class, $model);
@@ -49,14 +48,14 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
                 'message' => 'deserialize: path {path}',
                 'context' => [
                     'path' => 'name',
-                ]
+                ],
             ],
             [
                 'level' => LogLevel::NOTICE,
                 'message' => 'deserialize: no mapping for path {path}',
                 'context' => [
                     'path' => 'unknownProperty',
-                ]
+                ],
             ],
         ], $logger->__logs);
     }
@@ -70,9 +69,9 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
                 Model::class,
                 $factory,
                 [
-                    $this->getPropertyMapping('name', $this->getPropertyDeserializer())
+                    $this->getPropertyMapping('name', $this->getPropertyDeserializer()),
                 ]
-            )
+            ),
         ]);
 
         $logger = $this->getLogger();
@@ -84,7 +83,7 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
 
         /** @var Model $updatedModel */
         $updatedModel = $deserializer->deserializeByObject([
-            'name' => 'name2'
+            'name' => 'name2',
         ], $model);
 
         self::assertSame($model, $updatedModel);
@@ -96,7 +95,7 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
                 'message' => 'deserialize: path {path}',
                 'context' => [
                     'path' => 'name',
-                ]
+                ],
             ],
         ], $logger->__logs);
     }
@@ -115,7 +114,7 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
         $model = [];
 
         $deserializer->deserializeByObject([
-            'name' => 'name2'
+            'name' => 'name2',
         ], $model);
     }
 
@@ -128,9 +127,9 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
                 Model::class,
                 $factory,
                 [
-                    $this->getPropertyMapping('name', $this->getPropertyDeserializer())
+                    $this->getPropertyMapping('name', $this->getPropertyDeserializer()),
                 ]
-            )
+            ),
         ]);
 
         $logger = $this->getLogger();
@@ -139,7 +138,7 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
 
         /** @var Model $model */
         $model = $deserializer->deserializeByClass([
-            'name' => ''
+            'name' => '',
         ], Model::class);
 
         self::assertInstanceOf(Model::class, $model);
@@ -148,9 +147,11 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param ObjectMappingInterface[] $mappings
+     *
      * @return ObjectMappingRegistryInterface
      */
-    private function getObjectMappingRegistry(array $mappings): ObjectMappingRegistryInterface {
+    private function getObjectMappingRegistry(array $mappings): ObjectMappingRegistryInterface
+    {
         /** @var ObjectMappingRegistryInterface|\PHPUnit_Framework_MockObject_MockObject $registry */
         $registry = $this
             ->getMockBuilder(ObjectMappingRegistryInterface::class)
@@ -172,9 +173,10 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $class
+     * @param string   $class
      * @param callable $factory
-     * @param array $propertyMappings
+     * @param array    $propertyMappings
+     *
      * @return ObjectMappingInterface
      */
     private function getObjectMapping(
@@ -197,8 +199,9 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $name
+     * @param string                        $name
      * @param PropertyDeserializerInterface $propertyDeserializer
+     *
      * @return PropertyMappingInterface
      */
     private function getPropertyMapping(
@@ -231,21 +234,21 @@ class DeserializerTest extends \PHPUnit_Framework_TestCase
         ;
 
         $propertyDeserializer->expects(self::any())->method('deserializeProperty')->willReturnCallback(
-            function(
+            function (
                 string $path,
                 $serializedValue,
                 $existingValue = null,
                 $object = null,
                 DeserializerInterface $deserializer = null
             ) {
-                    return $serializedValue;
+                return $serializedValue;
             }
         );
 
         return $propertyDeserializer;
     }
 
-        /**
+    /**
      * @return LoggerInterface
      */
     private function getLogger(): LoggerInterface
