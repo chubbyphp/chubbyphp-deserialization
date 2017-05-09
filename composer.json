@@ -18,6 +18,9 @@
         "container-interop/container-interop": "~1.0",
         "pimple/pimple": "~3.0"
     },
+    "replace": {
+        "chubbyphp/chubbyphp-deserialize": "self.version"
+    },
     "autoload": {
         "psr-4": { "Chubbyphp\\Deserialization\\": "src/" }
     },
