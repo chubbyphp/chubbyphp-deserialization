@@ -3,19 +3,19 @@
 namespace Chubbyphp\Tests\Deserialization\Provider;
 
 use Chubbyphp\Deserialization\Registry\ObjectMappingRegistry;
-use Chubbyphp\Deserialization\Provider\DeserializeProvider;
+use Chubbyphp\Deserialization\Provider\DeserializationProvider;
 use Chubbyphp\Deserialization\Deserializer;
 use Pimple\Container;
 
 /**
- * @covers \Chubbyphp\Deserialization\Provider\DeserializeProvider
+ * @covers \Chubbyphp\Deserialization\Provider\DeserializationProvider
  */
-final class DeserializeProviderTest extends \PHPUnit_Framework_TestCase
+final class DeserializationProviderTest extends \PHPUnit_Framework_TestCase
 {
     public function testRegister()
     {
         $container = new Container();
-        $container->register(new DeserializeProvider());
+        $container->register(new DeserializationProvider());
 
         self::assertTrue(isset($container['deserializer.emptystringtonull']));
         self::assertTrue(isset($container['deserializer.objectmappings']));

@@ -9,7 +9,7 @@ use Chubbyphp\Deserialization\Deserializer;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-final class DeserializeProvider implements ServiceProviderInterface
+final class DeserializationProvider implements ServiceProviderInterface
 {
     /**
      * @param Container $container
