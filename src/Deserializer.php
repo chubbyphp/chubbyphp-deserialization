@@ -12,7 +12,6 @@ use Psr\Log\NullLogger;
 
 final class Deserializer implements DeserializerInterface
 {
-
     /**
      * @var ObjectMappingRegistryInterface
      */
@@ -35,8 +34,8 @@ final class Deserializer implements DeserializerInterface
 
     /**
      * @param ObjectMappingRegistryInterface $objectMappingRegistry
-     * @param bool $emptyStringToNull
-     * @param LoggerInterface|null $logger
+     * @param bool                           $emptyStringToNull
+     * @param LoggerInterface|null           $logger
      */
     public function __construct(
         ObjectMappingRegistryInterface $objectMappingRegistry,
@@ -52,6 +51,7 @@ final class Deserializer implements DeserializerInterface
      * @param array  $serializedData
      * @param string $class
      * @param string $path
+     *
      * @return object
      */
     public function deserializeByClass(array $serializedData, string $class, string $path = '')
@@ -71,7 +71,9 @@ final class Deserializer implements DeserializerInterface
      * @param array  $serializedData
      * @param object $object
      * @param string $path
+     *
      * @return object
+     *
      * @throws NotObjectException
      */
     public function deserializeByObject(array $serializedData, $object, string $path = '')
@@ -95,7 +97,7 @@ final class Deserializer implements DeserializerInterface
      * @param ObjectMappingInterface $objectMapping
      * @param $object
      * @param string $class
-     * @param array $serializedData
+     * @param array  $serializedData
      * @param string $path
      */
     private function updateProperties(ObjectMappingInterface $objectMapping, $object, string $class, array $serializedData, $path)
@@ -103,7 +105,7 @@ final class Deserializer implements DeserializerInterface
         $propertyMappingsByName = $this->getPropertyMappingsByName($objectMapping);
 
         foreach ($serializedData as $property => $serializedValue) {
-            $subPath = $path !== '' ? $path . '.' . $property : $property;
+            $subPath = $path !== '' ? $path.'.'.$property : $property;
 
             if (!isset($propertyMappingsByName[$property])) {
                 $this->logger->notice('deserialize: no mapping for path {path}', ['path' => $subPath]);
@@ -135,6 +137,7 @@ final class Deserializer implements DeserializerInterface
 
     /**
      * @param ObjectMappingInterface $objectMapping
+     *
      * @return PropertyMappingInterface[]
      */
     private function getPropertyMappingsByName(ObjectMappingInterface $objectMapping): array
@@ -150,11 +153,12 @@ final class Deserializer implements DeserializerInterface
     /**
      * @param string $class
      * @param string $property
+     *
      * @return \ReflectionProperty
      */
     private function getPropertyReflection(string $class, string $property): \ReflectionProperty
     {
-        $reflectionPropertyKey = $class . '::' . $property;
+        $reflectionPropertyKey = $class.'::'.$property;
 
         if (!isset($this->reflectionProperties[$reflectionPropertyKey])) {
             $reflectionProperty = new \ReflectionProperty($class, $property);

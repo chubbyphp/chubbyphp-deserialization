@@ -10,7 +10,9 @@ interface ObjectMappingRegistryInterface
 {
     /**
      * @param string $class
+     *
      * @return ObjectMappingInterface
+     *
      * @throws \InvalidArgumentException
      */
     public function getObjectMappingForClass(string $class): ObjectMappingInterface;

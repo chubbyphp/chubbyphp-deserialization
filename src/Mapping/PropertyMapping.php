@@ -20,7 +20,7 @@ final class PropertyMapping implements PropertyMappingInterface
     private $propertyDeserializer;
 
     /**
-     * @param string $name
+     * @param string                             $name
      * @param PropertyDeserializerInterface|null $propertyDeserializer
      */
     public function __construct(string $name, PropertyDeserializerInterface $propertyDeserializer = null)

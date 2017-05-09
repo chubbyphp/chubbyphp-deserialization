@@ -9,11 +9,12 @@ use Chubbyphp\Deserialization\DeserializerInterface;
 interface PropertyDeserializerInterface
 {
     /**
-     * @param string $path
-     * @param mixed $serializedValue
-     * @param mixed $existingValue
-     * @param object $object
+     * @param string                     $path
+     * @param mixed                      $serializedValue
+     * @param mixed                      $existingValue
+     * @param object                     $object
      * @param DeserializerInterface|null $deserializer
+     *
      * @return mixed
      */
     public function deserializeProperty(

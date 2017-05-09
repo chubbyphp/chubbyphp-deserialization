@@ -19,7 +19,6 @@ final class LazyObjectMappingTest extends \PHPUnit_Framework_TestCase
         $propertyMappings = [$this->getPropertyMapping()];
 
         $factory = function () {
-
         };
 
         $container = $this->getContainer([
@@ -55,9 +54,10 @@ final class LazyObjectMappingTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @param string $class
+     * @param string   $class
      * @param callable $factory
-     * @param array $propertyMappings
+     * @param array    $propertyMappings
+     *
      * @return ObjectMappingInterface
      */
     private function getObjectMapping(
@@ -82,7 +82,8 @@ final class LazyObjectMappingTest extends \PHPUnit_Framework_TestCase
     /**
      * @return PropertyMappingInterface|\PHPUnit_Framework_MockObject_MockObject
      */
-    private function getPropertyMapping(): PropertyMappingInterface {
+    private function getPropertyMapping(): PropertyMappingInterface
+    {
         return $this->getMockBuilder(PropertyMappingInterface::class)->getMockForAbstractClass();
     }
 }
