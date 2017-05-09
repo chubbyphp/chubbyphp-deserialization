@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Deserialize\Resources;
+namespace Chubbyphp\Tests\Deserialization\Resources;
 
 final class Model
 {

@@ -1,7 +1,7 @@
 {
-    "name": "chubbyphp/chubbyphp-deserialize",
+    "name": "chubbyphp/chubbyphp-deserialization",
     "description": "Chubbyphp Deserialize",
-    "keywords": ["chubbyphp", "slim", "deserialize"],
+    "keywords": ["chubbyphp", "slim", "deserialization"],
     "license": "MIT",
     "authors": [
         {
@@ -19,7 +19,7 @@
         "pimple/pimple": "~3.0"
     },
     "autoload": {
-        "psr-4": { "Chubbyphp\\Deserialize\\": "src/" }
+        "psr-4": { "Chubbyphp\\Deserialization\\": "src/" }
     },
     "extra": {
         "branch-alias": {

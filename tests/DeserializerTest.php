@@ -1,16 +1,16 @@
 <?php
 
 
-namespace Chubbyphp\Tests\Deserialize\Deserializer;
+namespace Chubbyphp\Tests\Deserialization\Deserializer;
 
-use Chubbyphp\Deserialize\Deserializer;
-use Chubbyphp\Deserialize\Deserializer\PropertyDeserializerInterface;
-use Chubbyphp\Deserialize\DeserializerInterface;
-use Chubbyphp\Deserialize\Mapping\ObjectMappingInterface;
-use Chubbyphp\Deserialize\Mapping\PropertyMappingInterface;
-use Chubbyphp\Deserialize\NotObjectException;
-use Chubbyphp\Deserialize\Registry\ObjectMappingRegistryInterface;
-use Chubbyphp\Tests\Deserialize\Resources\Model;
+use Chubbyphp\Deserialization\Deserializer;
+use Chubbyphp\Deserialization\Deserializer\PropertyDeserializerInterface;
+use Chubbyphp\Deserialization\DeserializerInterface;
+use Chubbyphp\Deserialization\Mapping\ObjectMappingInterface;
+use Chubbyphp\Deserialization\Mapping\PropertyMappingInterface;
+use Chubbyphp\Deserialization\NotObjectException;
+use Chubbyphp\Deserialization\Registry\ObjectMappingRegistryInterface;
+use Chubbyphp\Tests\Deserialization\Resources\Model;
 use Psr\Log\LoggerInterface;
 use Psr\Log\LogLevel;
 

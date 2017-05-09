@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Deserialize\Mapping;
+namespace Chubbyphp\Deserialization\Mapping;
 
 use Interop\Container\ContainerInterface;
 

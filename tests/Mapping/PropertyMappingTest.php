@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Deserialize\Mapping;
+namespace Chubbyphp\Tests\Deserialization\Mapping;
 
-use Chubbyphp\Deserialize\Deserializer\PropertyDeserializerInterface;
-use Chubbyphp\Deserialize\Mapping\PropertyMapping;
+use Chubbyphp\Deserialization\Deserializer\PropertyDeserializerInterface;
+use Chubbyphp\Deserialization\Mapping\PropertyMapping;
 
 /**
- * @covers \Chubbyphp\Deserialize\Mapping\PropertyMapping
+ * @covers \Chubbyphp\Deserialization\Mapping\PropertyMapping
  */
 final class PropertyMappingTest extends \PHPUnit_Framework_TestCase
 {

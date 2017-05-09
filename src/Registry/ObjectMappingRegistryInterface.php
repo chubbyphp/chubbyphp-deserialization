@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Deserialize\Registry;
+namespace Chubbyphp\Deserialization\Registry;
 
-use Chubbyphp\Deserialize\Mapping\ObjectMappingInterface;
+use Chubbyphp\Deserialization\Mapping\ObjectMappingInterface;
 
 interface ObjectMappingRegistryInterface
 {

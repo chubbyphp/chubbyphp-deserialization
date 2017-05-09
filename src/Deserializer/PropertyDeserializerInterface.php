@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Deserialize\Deserializer;
+namespace Chubbyphp\Deserialization\Deserializer;
 
-use Chubbyphp\Deserialize\DeserializerInterface;
+use Chubbyphp\Deserialization\DeserializerInterface;
 
 interface PropertyDeserializerInterface
 {

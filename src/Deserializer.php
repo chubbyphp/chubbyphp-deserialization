@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Deserialize;
+namespace Chubbyphp\Deserialization;
 
-use Chubbyphp\Deserialize\Mapping\ObjectMappingInterface;
-use Chubbyphp\Deserialize\Mapping\PropertyMappingInterface;
-use Chubbyphp\Deserialize\Registry\ObjectMappingRegistryInterface;
+use Chubbyphp\Deserialization\Mapping\ObjectMappingInterface;
+use Chubbyphp\Deserialization\Mapping\PropertyMappingInterface;
+use Chubbyphp\Deserialization\Registry\ObjectMappingRegistryInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 

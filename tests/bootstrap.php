@@ -1,4 +1,4 @@
 <?php
 
 $loader = require __DIR__.'/../vendor/autoload.php';
-$loader->setPsr4('Chubbyphp\Tests\Deserialize\\', __DIR__);
+$loader->setPsr4('Chubbyphp\Tests\Deserialization\\', __DIR__);

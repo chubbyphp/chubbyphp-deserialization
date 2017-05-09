@@ -1,14 +1,14 @@
 <?php
 
-namespace Chubbyphp\Tests\Deserialize\Provider;
+namespace Chubbyphp\Tests\Deserialization\Provider;
 
-use Chubbyphp\Deserialize\Registry\ObjectMappingRegistry;
-use Chubbyphp\Deserialize\Provider\DeserializeProvider;
-use Chubbyphp\Deserialize\Deserializer;
+use Chubbyphp\Deserialization\Registry\ObjectMappingRegistry;
+use Chubbyphp\Deserialization\Provider\DeserializeProvider;
+use Chubbyphp\Deserialization\Deserializer;
 use Pimple\Container;
 
 /**
- * @covers \Chubbyphp\Deserialize\Provider\DeserializeProvider
+ * @covers \Chubbyphp\Deserialization\Provider\DeserializeProvider
  */
 final class DeserializeProviderTest extends \PHPUnit_Framework_TestCase
 {

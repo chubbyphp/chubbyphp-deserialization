@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Deserialize\Mapping;
+namespace Chubbyphp\Tests\Deserialization\Mapping;
 
-use Chubbyphp\Deserialize\Mapping\PropertyMappingInterface;
-use Chubbyphp\Deserialize\Mapping\LazyObjectMapping;
-use Chubbyphp\Deserialize\Mapping\ObjectMappingInterface;
+use Chubbyphp\Deserialization\Mapping\PropertyMappingInterface;
+use Chubbyphp\Deserialization\Mapping\LazyObjectMapping;
+use Chubbyphp\Deserialization\Mapping\ObjectMappingInterface;
 use Interop\Container\ContainerInterface;
 
 /**
- * @covers \Chubbyphp\Deserialize\Mapping\LazyObjectMapping
+ * @covers \Chubbyphp\Deserialization\Mapping\LazyObjectMapping
  */
 final class LazyObjectMappingTest extends \PHPUnit_Framework_TestCase
 {

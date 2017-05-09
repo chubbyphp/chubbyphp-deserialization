@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Deserialize\Deserializer;
+namespace Chubbyphp\Tests\Deserialization\Deserializer;
 
-use Chubbyphp\Deserialize\Deserializer\PropertyDeserializer;
+use Chubbyphp\Deserialization\Deserializer\PropertyDeserializer;
 
 /**
- * @covers \Chubbyphp\Deserialize\Deserializer\PropertyDeserializer
+ * @covers \Chubbyphp\Deserialization\Deserializer\PropertyDeserializer
  */
 final class PropertyDeserializerTest extends \PHPUnit_Framework_TestCase
 {

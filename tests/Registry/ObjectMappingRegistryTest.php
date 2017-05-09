@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Deserialize\Registry;
+namespace Chubbyphp\Tests\Deserialization\Registry;
 
-use Chubbyphp\Deserialize\Mapping\ObjectMappingInterface;
-use Chubbyphp\Deserialize\Registry\ObjectMappingRegistry;
+use Chubbyphp\Deserialization\Mapping\ObjectMappingInterface;
+use Chubbyphp\Deserialization\Registry\ObjectMappingRegistry;
 
 /**
- * @covers \Chubbyphp\Deserialize\Registry\ObjectMappingRegistry
+ * @covers \Chubbyphp\Deserialization\Registry\ObjectMappingRegistry
  */
 final class ObjectMappingRegistryTest extends \PHPUnit_Framework_TestCase
 {

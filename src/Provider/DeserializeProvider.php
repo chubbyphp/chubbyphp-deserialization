@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Deserialize\Provider;
+namespace Chubbyphp\Deserialization\Provider;
 
-use Chubbyphp\Deserialize\Registry\ObjectMappingRegistry;
-use Chubbyphp\Deserialize\Deserializer;
+use Chubbyphp\Deserialization\Registry\ObjectMappingRegistry;
+use Chubbyphp\Deserialization\Deserializer;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
