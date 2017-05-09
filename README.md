@@ -8,7 +8,7 @@
 
 ## Description
 
-A simple deserializer.
+A simple deserialization.
 
 ## Requirements
 
