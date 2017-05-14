@@ -38,13 +38,9 @@ composer require chubbyphp/chubbyphp-deserialization "~1.0@dev"
 use Chubbyphp\Deserialization\Registry\ObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;
 use MyProject\Model\Model;
-use MyProject\Repository\ModelRepository;
 use MyProject\Deserialization\ModelMapping;
 
-/** @var ModelRepository $modelRepository */
-$modelRepository = ...;
-
-$deserialize = new Deserializer(new ObjectMappingRegistry([new ModelMapping($modelRepository)]));
+$deserialize = new Deserializer(new ObjectMappingRegistry([new ModelMapping()]));
 
 $data = [
     'name' => 'name1'
