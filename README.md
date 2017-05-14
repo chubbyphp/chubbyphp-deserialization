@@ -30,6 +30,91 @@ composer require chubbyphp/chubbyphp-deserialization "~1.0@dev"
 
 ## Usage
 
+### Deserializer
+
+```php
+<?php
+
+use Chubbyphp\Deserialization\Registry\ObjectMappingRegistry;
+use Chubbyphp\Deserialization\Deserializer;
+use MyProject\Model\Model;
+use MyProject\Repository\ModelRepository;
+use MyProject\Deserialization\ModelMapping;
+
+/** @var ModelRepository $modelRepository */
+$modelRepository = ...;
+
+$deserialize = new Deserializer(new ObjectMappingRegistry([new ModelMapping($modelRepository)]));
+
+$data = [
+    'name' => 'name1'
+];
+
+$model = $deserializer->deserializeByClass($data, Model::class);
+
+$data = [
+    'name' => 'name1'
+];
+
+$model = $deserializer->deserializeByObject(new Model, $model);
+```
+
+### Mapping
+
+```php
+<?php
+
+namespace MyProject\Deserialization;
+
+use Chubbyphp\Deserialization\Mapping\ObjectMappingInterface;
+use Chubbyphp\Deserialization\Mapping\PropertyMapping;
+use Chubbyphp\Deserialization\Mapping\PropertyMappingInterface;
+use MyProject\Model\Model;
+use MyProject\Repository\ModelRepository;
+
+class ModelMapping implements ObjectMappingInterface
+{
+    /**
+     * @var ModelRepository
+     */
+    private $modelRepository;
+
+    /**
+     * @param ModelRepository $modelRepository
+     */
+    public function __construct(ModelRepository $modelRepository)
+    {
+        $this->modelRepository = $modelRepository;
+    }
+
+    /**
+     * @return string
+     */
+    public function getClass(): string
+    {
+        return Model::class;
+    }
+
+    /**
+     * @return callable
+     */
+    public function getFactory(): callable
+    {
+        return [Model::class, '__construct']
+    }
+
+    /**
+     * @return PropertyMappingInterface[]
+     */
+    public function getPropertyMappings(): array
+    {
+        return [
+            new PropertyMapping('name'),
+        ];
+    }
+}
+```
+
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-deserialization
 
 ## Copyright
