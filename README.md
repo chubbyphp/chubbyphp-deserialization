@@ -70,23 +70,9 @@ use Chubbyphp\Deserialization\Mapping\ObjectMappingInterface;
 use Chubbyphp\Deserialization\Mapping\PropertyMapping;
 use Chubbyphp\Deserialization\Mapping\PropertyMappingInterface;
 use MyProject\Model\Model;
-use MyProject\Repository\ModelRepository;
 
 class ModelMapping implements ObjectMappingInterface
 {
-    /**
-     * @var ModelRepository
-     */
-    private $modelRepository;
-
-    /**
-     * @param ModelRepository $modelRepository
-     */
-    public function __construct(ModelRepository $modelRepository)
-    {
-        $this->modelRepository = $modelRepository;
-    }
-
     /**
      * @return string
      */
