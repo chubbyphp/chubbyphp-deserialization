@@ -38,16 +38,16 @@ composer require chubbyphp/chubbyphp-deserialization "~1.0@dev"
 use Chubbyphp\Deserialization\Registry\ObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;
 use MyProject\Model\Model;
-use MyProject\Validation\ModelMapping;
 
-$deserializer = new Deserializer(new ObjectMappingRegistry([new ModelMapping()]));
+use MyProject\Deserialization\ModelMapping;
 
-$model = $deserializer->deserializeByClass(['name' => 'name'], Model::class);
-echo $model->getName(); // name
+$deserialize = new Deserializer(new ObjectMappingRegistry([new ModelMapping()]));
 
-$model = new Model();
-$model = $deserializer->deserializeByObject(['name' => 'name'], $model);
-echo $model->getName(); // name
+$model = $deserializer->deserializeByClass(['name' => 'name1'], Model::class);
+$model->getName(); // name1
+
+$model = $deserializer->deserializeByObject(['name' => 'name1'], new Model);
+$model->getName(); // name1
 ```
 
 ### Mapping
@@ -55,7 +55,7 @@ echo $model->getName(); // name
 ```php
 <?php
 
-namespace MyProject\Validation;
+namespace MyProject\Deserialization;
 
 use Chubbyphp\Deserialization\Mapping\ObjectMappingInterface;
 use Chubbyphp\Deserialization\Mapping\PropertyMapping;
