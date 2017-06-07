@@ -13,7 +13,9 @@ $propertyDeserializer = new class implements PropertyDeserializerInterface {
         $existingValue = null,
         $object = null,
         DeserializerInterface $deserializer = null
-    )
+    ) {
+        return $serializedValue;
+    }
 };
 
 $propertyMapping = new PropertyMapping('name', $propertyDeserializer);
