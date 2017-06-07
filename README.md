@@ -30,8 +30,87 @@ composer require chubbyphp/chubbyphp-deserialization "~1.0@dev"
 
 ## Usage
 
-[1]: https://packagist.org/packages/chubbyphp/chubbyphp-deserialization
+### Deserializer
+
+```php
+<?php
+
+use Chubbyphp\Deserialization\Registry\ObjectMappingRegistry;
+use Chubbyphp\Deserialization\Deserializer;
+use MyProject\Model\Model;
+use MyProject\Validation\ModelMapping;
+
+$deserializer = new Deserializer(new ObjectMappingRegistry([new ModelMapping()]));
+
+$model = $deserializer->deserializeByClass(['name' => 'name'], Model::class);
+echo $model->getName(); // name
+
+$model = new Model();
+$model = $deserializer->deserializeByObject(['name' => 'name'], $model);
+echo $model->getName(); // name
+```
+
+### Mapping
+
+```php
+<?php
+
+namespace MyProject\Validation;
+
+use Chubbyphp\Deserialization\Mapping\ObjectMappingInterface;
+use Chubbyphp\Deserialization\Mapping\PropertyMapping;
+use Chubbyphp\Deserialization\Mapping\PropertyMappingInterface;
+use MyProject\Model\Model;
+
+class ModelMapping implements ObjectMappingInterface
+{
+    /**
+     * @return string
+     */
+    public function getClass(): string
+    {
+        return Model::class;
+    }
+
+    /**
+     * @return callable
+     */
+    public function getFactory(): callable
+    {
+        return [Model::class, '__construct'];
+    }
+
+    /**
+     * @return PropertyMappingInterface[]
+     */
+    public function getPropertyMappings(): array
+    {
+        return [
+            new PropertyMapping('name'),
+        ];
+    }
+}
+```
+
+ * [LazyObjectMapping][2]
+ * [PropertyMapping][3]
+
+
+### Registry
+
+* [ObjectMappingRegistry][4]
+
+### Provider
+
+* [ValidationProvider][5]
 
 ## Copyright
 
 Dominik Zogg 2017
+
+
+[1]: https://packagist.org/packages/chubbyphp/chubbyphp-deserialization
+[2]: doc/Mapping/LazyObjectMapping.md
+[3]: doc/Mapping/PropertyMapping.md
+[4]: doc/Registry/ObjectMappingRegistry.md
+[5]: doc/Provider/DeserializationProvider.md
