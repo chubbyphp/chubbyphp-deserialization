@@ -16,5 +16,5 @@ $container->extend('deserializer.objectmappings', function (array $objectMapping
     return $objectMappings;
 });
 
-$container['deserializer']->validateObject($model);
+$container['deserializer']->deserializeByObject($data, $model);
 ```
