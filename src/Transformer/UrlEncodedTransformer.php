@@ -48,7 +48,7 @@ final class UrlEncodedTransformer implements TransformerInterface
     private function cleanRawData(array $rawData, int $numericPrefixLength): array
     {
         $data = [];
-        foreach ($rawData as $rawKey => $rawValue) {
+        foreach ($rawData as $rawKey => $value) {
             if (0 !== $numericPrefixLength && 0 === strpos($rawKey, $this->numericPrefix)) {
                 $rawSubKey = substr($rawKey, $numericPrefixLength);
                 if (is_numeric($rawSubKey)) {
@@ -58,10 +58,10 @@ final class UrlEncodedTransformer implements TransformerInterface
 
             $key = is_numeric($rawKey) ? (int) $rawKey : $rawKey;
 
-            if (is_array($rawValue)) {
-                $data[$key] = $this->cleanRawData($rawValue, $numericPrefixLength);
+            if (is_array($value)) {
+                $data[$key] = $this->cleanRawData($value, $numericPrefixLength);
             } else {
-                $data[$key] = urldecode($rawValue);
+                $data[$key] = $value;
             }
         }
 
