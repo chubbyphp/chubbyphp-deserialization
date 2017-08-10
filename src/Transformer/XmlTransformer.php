@@ -13,6 +13,9 @@ final class XmlTransformer implements TransformerInterface
      */
     public function transform(string $string): array
     {
+        $document = new \DOMDocument();
+        $document->loadXML($string);
+
         return [];
     }
 }
