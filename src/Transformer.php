@@ -33,6 +33,14 @@ final class Transformer implements TransformerInterface
     }
 
     /**
+     * @return array
+     */
+    public function getContentTypes(): array
+    {
+        return array_keys($this->transformers);
+    }
+
+    /**
      * @param string $string
      * @param string $contentType
      *

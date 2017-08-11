@@ -12,17 +12,29 @@ use Chubbyphp\Deserialization\Transformer;
  */
 final class TransformerTest extends \PHPUnit_Framework_TestCase
 {
-    public function testWithKnownTransformers()
+    public function testWithContentTypes()
     {
-        $mappings = [
+        $transformers = [
             $this->getJsonTransformer(),
             $this->getUrlEncodedTransformer(),
         ];
 
-        $registry = new Transformer($mappings);
+        $transformer = new Transformer($transformers);
 
-        self::assertEquals(['key' => 'value'], $registry->transform('{"key":"value"}', 'application/json'));
-        self::assertEquals(['key' => 'value'], $registry->transform('key=value', 'application/x-www-form-urlencoded'));
+        self::assertEquals(['application/json', 'application/x-www-form-urlencoded'], $transformer->getContentTypes());
+    }
+
+    public function testWithKnownTransformers()
+    {
+        $transformers = [
+            $this->getJsonTransformer(),
+            $this->getUrlEncodedTransformer(),
+        ];
+
+        $transformer = new Transformer($transformers);
+
+        self::assertEquals(['key' => 'value'], $transformer->transform('{"key":"value"}', 'application/json'));
+        self::assertEquals(['key' => 'value'], $transformer->transform('key=value', 'application/x-www-form-urlencoded'));
     }
 
     public function testWithUnknownTransformers()
@@ -30,9 +42,9 @@ final class TransformerTest extends \PHPUnit_Framework_TestCase
         self::expectException(\InvalidArgumentException::class);
         self::expectExceptionMessage('There is no transformer for content-type: application/x-yaml');
 
-        $registry = new Transformer([]);
+        $transformer = new Transformer([]);
 
-        $registry->transform('key: value', 'application/x-yaml');
+        $transformer->transform('key: value', 'application/x-yaml');
     }
 
     /**

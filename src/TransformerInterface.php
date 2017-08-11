@@ -6,6 +6,12 @@ namespace Chubbyphp\Deserialization;
 
 interface TransformerInterface
 {
+
+    /**
+     * @return string[]
+     */
+    public function getContentTypes(): array;
+
     /**
      * @param string $string
      * @param string $contentType

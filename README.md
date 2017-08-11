@@ -122,6 +122,8 @@ $transformer = new Transformer([
     new YamlTransformer(),
 ]);
 
+$contentTypes = $transformer->getContentTypes();
+
 $data = $transformer->transform('{"key":"value"}', 'application/json');
 ```
 
