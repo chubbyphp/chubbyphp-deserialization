@@ -27,7 +27,6 @@ class JsonTransformerTest extends AbstractTransformerTest
     "search": null,
     "sort": "name",
     "order": "asc",
-    "_type": "search",
     "_embedded": {
         "mainItem": {
             "id": "id1",
@@ -148,7 +147,8 @@ class JsonTransformerTest extends AbstractTransformerTest
             "href": "http://test.com/items/",
             "method": "POST"
         }
-    }
+    },
+    "_type": "search"
 }
 EOD;
 
