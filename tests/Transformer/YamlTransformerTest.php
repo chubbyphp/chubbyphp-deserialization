@@ -11,14 +11,21 @@ use Chubbyphp\Deserialization\Transformer\YamlTransformer;
  */
 class YamlTransformerTest extends AbstractTransformerTest
 {
+    public function testContentType()
+    {
+        $transformer = new YamlTransformer();
+
+        self::assertSame('application/x-yaml', $transformer->getContentType());
+    }
+
     /**
      * @dataProvider dataProvider
      *
      * @param array $expectedData
      */
-    public function testFormat(array $expectedData)
+    public function testTransform(array $expectedData)
     {
-        $yamlTransformer = new YamlTransformer();
+        $transformer = new YamlTransformer();
 
         $yaml = <<<EOD
 page: 1
@@ -117,7 +124,7 @@ _links:
 _type: search
 EOD;
 
-        $data = $yamlTransformer->transform($yaml);
+        $data = $transformer->transform($yaml);
 
         self::assertEquals($expectedData, $data);
     }

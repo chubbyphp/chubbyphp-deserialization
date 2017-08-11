@@ -20,6 +20,14 @@ final class XmlTransformer implements TransformerInterface
     }
 
     /**
+     * @return string
+     */
+    public function getContentType(): string
+    {
+        return 'application/xml';
+    }
+
+    /**
      * @param \DOMElement $node
      *
      * @return array

@@ -11,14 +11,21 @@ use Chubbyphp\Deserialization\Transformer\XmlTransformer;
  */
 class XmlTransformerTest extends AbstractTransformerTest
 {
+    public function testContentType()
+    {
+        $transformer = new XmlTransformer();
+
+        self::assertSame('application/xml', $transformer->getContentType());
+    }
+
     /**
      * @dataProvider dataProvider
      *
      * @param array $expectedData
      */
-    public function testFormat(array $expectedData)
+    public function testTransform(array $expectedData)
     {
-        $xmlTransformer = new XmlTransformer();
+        $transformer = new XmlTransformer();
 
         $xml = <<<EOD
 <?xml version="1.0" encoding="UTF-8"?>
@@ -150,7 +157,7 @@ class XmlTransformerTest extends AbstractTransformerTest
 </meta-type>
 EOD;
 
-        $data = $xmlTransformer->transform($xml);
+        $data = $transformer->transform($xml);
 
         self::assertEquals($expectedData, $data);
     }

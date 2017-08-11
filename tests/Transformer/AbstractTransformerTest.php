@@ -11,7 +11,7 @@ abstract class AbstractTransformerTest extends \PHPUnit_Framework_TestCase
      *
      * @param array $data
      */
-    abstract public function testFormat(array $data);
+    abstract public function testTransform(array $data);
 
     /**
      * @return array

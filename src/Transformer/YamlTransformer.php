@@ -22,6 +22,14 @@ final class YamlTransformer implements TransformerInterface
     }
 
     /**
+     * @return string
+     */
+    public function getContentType(): string
+    {
+        return 'application/x-yaml';
+    }
+
+    /**
      * @param string $string
      *
      * @return array

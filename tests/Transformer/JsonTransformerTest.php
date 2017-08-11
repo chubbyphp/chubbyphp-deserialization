@@ -11,14 +11,21 @@ use Chubbyphp\Deserialization\Transformer\JsonTransformer;
  */
 class JsonTransformerTest extends AbstractTransformerTest
 {
+    public function testContentType()
+    {
+        $transformer = new JsonTransformer();
+
+        self::assertSame('application/json', $transformer->getContentType());
+    }
+
     /**
      * @dataProvider dataProvider
      *
      * @param array $expectedData
      */
-    public function testFormat(array $expectedData)
+    public function testTransform(array $expectedData)
     {
-        $jsonTransformer = new JsonTransformer();
+        $transformer = new JsonTransformer();
 
         $json = <<<EOD
 {
@@ -152,7 +159,7 @@ class JsonTransformerTest extends AbstractTransformerTest
 }
 EOD;
 
-        $data = $jsonTransformer->transform($json);
+        $data = $transformer->transform($json);
 
         self::assertEquals($expectedData, $data);
     }
