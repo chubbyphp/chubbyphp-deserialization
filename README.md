@@ -106,6 +106,25 @@ class ModelMapping implements ObjectMappingInterface
 
 ### Transformer
 
+```php
+<?php
+
+use Chubbyphp\Deserialization\Transformer;
+use Chubbyphp\Deserialization\Transformer\JsonTransformer;
+use Chubbyphp\Deserialization\Transformer\UrlEncodedTransformer;
+use Chubbyphp\Deserialization\Transformer\XmlTransformer;
+use Chubbyphp\Deserialization\Transformer\YamlTransformer;
+
+$transformer = new Transformer([
+    new JsonTransformer(),
+    new UrlEncodedTransformer(),
+    new XmlTransformer(),
+    new YamlTransformer(),
+]);
+
+$data = $transformer->transform('{"key":"value"}', 'application/json');
+```
+
 * [JsonTransformer][6]
 * [UrlEncodedTransformer][7]
 * [XmlTransformer][8]
