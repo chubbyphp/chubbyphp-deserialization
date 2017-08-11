@@ -5,6 +5,7 @@ namespace Chubbyphp\Tests\Deserialization\Provider;
 use Chubbyphp\Deserialization\Registry\ObjectMappingRegistry;
 use Chubbyphp\Deserialization\Provider\DeserializationProvider;
 use Chubbyphp\Deserialization\Deserializer;
+use Chubbyphp\Deserialization\Transformer;
 use Chubbyphp\Deserialization\Transformer\JsonTransformer;
 use Chubbyphp\Deserialization\Transformer\UrlEncodedTransformer;
 use Chubbyphp\Deserialization\Transformer\XmlTransformer;
@@ -26,6 +27,7 @@ final class DeserializationProviderTest extends \PHPUnit_Framework_TestCase
         self::assertTrue(isset($container['deserializer.objectmappingregistry']));
         self::assertTrue(isset($container['deserializer']));
 
+        self::assertTrue(isset($container['deserializer.transformer']));
         self::assertTrue(isset($container['deserializer.transformer.json']));
         self::assertTrue(isset($container['deserializer.transformer.urlencoded']));
         self::assertTrue(isset($container['deserializer.transformer.xml']));
@@ -36,6 +38,7 @@ final class DeserializationProviderTest extends \PHPUnit_Framework_TestCase
         self::assertInstanceOf(ObjectMappingRegistry::class, $container['deserializer.objectmappingregistry']);
         self::assertInstanceOf(Deserializer::class, $container['deserializer']);
 
+        self::assertInstanceOf(Transformer::class, $container['deserializer.transformer']);
         self::assertInstanceOf(JsonTransformer::class, $container['deserializer.transformer.json']);
         self::assertInstanceOf(UrlEncodedTransformer::class, $container['deserializer.transformer.urlencoded']);
         self::assertInstanceOf(XmlTransformer::class, $container['deserializer.transformer.xml']);

@@ -6,6 +6,7 @@ namespace Chubbyphp\Deserialization\Provider;
 
 use Chubbyphp\Deserialization\Registry\ObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;
+use Chubbyphp\Deserialization\Transformer;
 use Chubbyphp\Deserialization\Transformer\JsonTransformer;
 use Chubbyphp\Deserialization\Transformer\UrlEncodedTransformer;
 use Chubbyphp\Deserialization\Transformer\XmlTransformer;
@@ -36,6 +37,15 @@ final class DeserializationProvider implements ServiceProviderInterface
                 $container['deserializer.emptystringtonull'],
                 $container['logger'] ?? null
             );
+        };
+
+        $container['deserializer.transformer'] = function () use ($container) {
+            return new Transformer([
+                $container['deserializer.transformer.json'],
+                $container['deserializer.transformer.urlencoded'],
+                $container['deserializer.transformer.xml'],
+                $container['deserializer.transformer.yaml'],
+            ]);
         };
 
         $container['deserializer.transformer.json'] = function () {
