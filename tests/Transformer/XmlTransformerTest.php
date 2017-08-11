@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Transformer;
 
+use Chubbyphp\Deserialization\Transformer\TransformerException;
 use Chubbyphp\Deserialization\Transformer\XmlTransformer;
 
 /**
@@ -160,5 +161,14 @@ EOD;
         $data = $transformer->transform($xml);
 
         self::assertEquals($expectedData, $data);
+    }
+
+    public function testInvalidTransform()
+    {
+        self::expectException(TransformerException::class);
+        self::expectExceptionMessage('Transform error: Xml not parsable');
+
+        $transformer = new XmlTransformer();
+        $transformer->transform('====');
     }
 }

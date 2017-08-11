@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization;
 
+use Chubbyphp\Deserialization\Transformer\TransformerException;
 use Chubbyphp\Deserialization\Transformer\TransformerInterface as ContenTypeTransformerInterface;
 
 final class Transformer implements TransformerInterface
@@ -46,6 +47,7 @@ final class Transformer implements TransformerInterface
      *
      * @return array
      *
+     * @throws TransformerException
      * @throws \InvalidArgumentException
      */
     public function transform(string $string, string $contentType): array

@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Transformer;
 
+use Chubbyphp\Deserialization\Transformer\TransformerException;
 use Chubbyphp\Deserialization\Transformer\UrlEncodedTransformer;
 
 /**
@@ -43,5 +44,14 @@ class UrlEncodedTransformerTest extends AbstractTransformerTest
         $data = $transformer->transform($urlEncoded);
 
         self::assertEquals(['key' => ['value1', 'value2']], $data);
+    }
+
+    public function testInvalidTransform()
+    {
+        self::expectException(TransformerException::class);
+        self::expectExceptionMessage('Transform error: UrlEncoded not parsable');
+
+        $transformer = new UrlEncodedTransformer();
+        $transformer->transform('====');
     }
 }

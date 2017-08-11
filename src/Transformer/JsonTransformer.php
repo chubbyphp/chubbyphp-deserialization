@@ -40,9 +40,15 @@ final class JsonTransformer implements TransformerInterface
      * @param string $string
      *
      * @return array
+     *
+     * @throws TransformerException
      */
     public function transform(string $string): array
     {
-        return json_decode($string, true, $this->level, $this->options);
+        try {
+            return json_decode($string, true, $this->level, $this->options);
+        } catch (\TypeError $e) {
+            throw TransformerException::create('Json not parsable');
+        }
     }
 }

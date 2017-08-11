@@ -15,6 +15,8 @@ interface TransformerInterface
      * @param string $string
      *
      * @return array
+     *
+     * @throws TransformerException
      */
     public function transform(string $string): array;
 }

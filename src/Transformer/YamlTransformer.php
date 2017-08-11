@@ -33,9 +33,15 @@ final class YamlTransformer implements TransformerInterface
      * @param string $string
      *
      * @return array
+     *
+     * @throws TransformerException
      */
     public function transform(string $string): array
     {
-        return Yaml::parse($string, $this->flags);
+        try {
+            return Yaml::parse($string, $this->flags);
+        } catch (\TypeError $e) {
+            throw TransformerException::create('Yaml not parsable');
+        }
     }
 }

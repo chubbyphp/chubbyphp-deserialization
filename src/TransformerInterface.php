@@ -4,9 +4,10 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization;
 
+use Chubbyphp\Deserialization\Transformer\TransformerException;
+
 interface TransformerInterface
 {
-
     /**
      * @return string[]
      */
@@ -18,6 +19,7 @@ interface TransformerInterface
      *
      * @return array
      *
+     * @throws TransformerException
      * @throws \InvalidArgumentException
      */
     public function transform(string $string, string $contentType): array;

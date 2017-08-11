@@ -7,16 +7,16 @@ namespace Chubbyphp\Deserialization\Transformer;
 final class XmlTransformer implements TransformerInterface
 {
     /**
-     * @param string $string
-     *
-     * @return array
+     * @var int
      */
-    public function transform(string $string): array
-    {
-        $document = new \DOMDocument();
-        $document->loadXML($string);
+    private $options;
 
-        return $this->transformType($document->getElementsByTagName('meta-type')->item(0));
+    /**
+     * @param int $options
+     */
+    public function __construct($options = 0)
+    {
+        $this->options = $options;
     }
 
     /**
@@ -25,6 +25,24 @@ final class XmlTransformer implements TransformerInterface
     public function getContentType(): string
     {
         return 'application/xml';
+    }
+
+    /**
+     * @param string $string
+     *
+     * @return array
+     *
+     * @throws TransformerException
+     */
+    public function transform(string $string): array
+    {
+        $document = new \DOMDocument();
+
+        if (!@$document->loadXML($string, $this->options)) {
+            throw TransformerException::create('Xml not parsable');
+        }
+
+        return $this->transformType($document->getElementsByTagName('meta-type')->item(0));
     }
 
     /**

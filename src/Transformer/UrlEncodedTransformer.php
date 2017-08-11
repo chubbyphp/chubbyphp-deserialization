@@ -41,8 +41,14 @@ final class UrlEncodedTransformer implements TransformerInterface
      */
     public function transform(string $string): array
     {
+        $string = str_replace($this->argSeperator, '&', $string);
+
         $rawData = [];
-        parse_str(str_replace($this->argSeperator, '&', $string), $rawData);
+        parse_str($string, $rawData);
+
+        if ('' !== $string && [] === $rawData) {
+            throw TransformerException::create('UrlEncoded not parsable');
+        }
 
         return $this->cleanRawData($rawData, strlen($this->numericPrefix));
     }

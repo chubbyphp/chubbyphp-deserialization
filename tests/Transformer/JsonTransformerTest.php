@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Transformer;
 
 use Chubbyphp\Deserialization\Transformer\JsonTransformer;
+use Chubbyphp\Deserialization\Transformer\TransformerException;
 
 /**
  * @covers \Chubbyphp\Deserialization\Transformer\JsonTransformer
@@ -162,5 +163,14 @@ EOD;
         $data = $transformer->transform($json);
 
         self::assertEquals($expectedData, $data);
+    }
+
+    public function testInvalidTransform()
+    {
+        self::expectException(TransformerException::class);
+        self::expectExceptionMessage('Transform error: Json not parsable');
+
+        $transformer = new JsonTransformer();
+        $transformer->transform('====');
     }
 }
