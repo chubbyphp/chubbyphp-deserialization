@@ -95,14 +95,21 @@ class ModelMapping implements ObjectMappingInterface
  * [LazyObjectMapping][2]
  * [PropertyMapping][3]
 
+### Provider
+
+* [ValidationProvider][4]
 
 ### Registry
 
-* [ObjectMappingRegistry][4]
+* [ObjectMappingRegistry][5]
 
-### Provider
 
-* [ValidationProvider][5]
+### Transformer
+
+* [JsonTransformer][6]
+* [UrlEncodedTransformer][7]
+* [XmlTransformer][8]
+* [YamlTransformer][9]
 
 ## Copyright
 
@@ -110,7 +117,16 @@ Dominik Zogg 2017
 
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-deserialization
+
 [2]: doc/Mapping/LazyObjectMapping.md
 [3]: doc/Mapping/PropertyMapping.md
-[4]: doc/Registry/ObjectMappingRegistry.md
-[5]: doc/Provider/DeserializationProvider.md
+
+[4]: doc/Provider/DeserializationProvider.md
+
+[5]: doc/Registry/ObjectMappingRegistry.md
+
+[6]: doc/Transformer/JsonTransformer.md
+[7]: doc/Transformer/UrlEncodedTransformer.md
+[8]: doc/Transformer/XmlTransformer.md
+[9]: doc/Transformer/YamlTransformer.md
+
