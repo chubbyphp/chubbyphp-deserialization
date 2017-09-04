@@ -75,6 +75,14 @@ final class UrlEncodedTransformer implements TransformerInterface
             if (is_array($value)) {
                 $data[$key] = $this->cleanRawData($value, $numericPrefixLength);
             } else {
+                if (is_numeric($value)) {
+                    if ((string) (int) $value === $value) {
+                        $value = (int) $value;
+                    } else {
+                        $value = (float) $value;
+                    }
+                }
+
                 $data[$key] = $value;
             }
         }
