@@ -14,20 +14,17 @@
         "psr/log": "~1.0"
     },
     "require-dev": {
-        "phpunit/phpunit": "~5.5",
+        "phpunit/phpunit": "~6.0",
         "container-interop/container-interop": "~1.0",
         "pimple/pimple": "~3.0",
         "symfony/yaml": "~2.7|~3.0"
-    },
-    "replace": {
-        "chubbyphp/chubbyphp-deserialize": "self.version"
     },
     "autoload": {
         "psr-4": { "Chubbyphp\\Deserialization\\": "src/" }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.1-dev"
+            "dev-master": "2.0-dev"
         }
     }
 }
