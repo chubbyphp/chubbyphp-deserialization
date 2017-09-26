@@ -7,28 +7,6 @@ namespace Chubbyphp\Deserialization\Decoder;
 final class JsonDecoderType implements DecoderTypeInterface
 {
     /**
-     * @var int
-     */
-    private $level;
-
-    /**
-     * @var int
-     */
-    private $options;
-
-    /**
-     * JsonTransformer constructor.
-     *
-     * @param int $options
-     * @param int $level
-     */
-    public function __construct(int $level = 512, int $options = 0)
-    {
-        $this->options = $options;
-        $this->level = $level;
-    }
-
-    /**
      * @return string
      */
     public function getContentType(): string
@@ -46,7 +24,7 @@ final class JsonDecoderType implements DecoderTypeInterface
     public function decode(string $data): array
     {
         try {
-            return json_decode($data, true, $this->level, $this->options);
+            return json_decode($data, true);
         } catch (\TypeError $e) {
             throw DecoderException::createNotParsable($this->getContentType());
         }

@@ -9,19 +9,6 @@ use Symfony\Component\Yaml\Yaml;
 final class YamlDecoderType implements DecoderTypeInterface
 {
     /**
-     * @var int
-     */
-    private $flags;
-
-    /**
-     * @param int $flags
-     */
-    public function __construct(int $flags = 0)
-    {
-        $this->flags = $flags;
-    }
-
-    /**
      * @return string
      */
     public function getContentType(): string
@@ -39,7 +26,7 @@ final class YamlDecoderType implements DecoderTypeInterface
     public function decode(string $data): array
     {
         try {
-            return Yaml::parse($data, $this->flags);
+            return Yaml::parse($data);
         } catch (\TypeError $e) {
             throw DecoderException::createNotParsable($this->getContentType());
         }

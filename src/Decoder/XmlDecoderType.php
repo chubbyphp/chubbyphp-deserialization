@@ -7,19 +7,6 @@ namespace Chubbyphp\Deserialization\Decoder;
 final class XmlDecoderType implements DecoderTypeInterface
 {
     /**
-     * @var int
-     */
-    private $options;
-
-    /**
-     * @param int $options
-     */
-    public function __construct($options = 0)
-    {
-        $this->options = $options;
-    }
-
-    /**
      * @return string
      */
     public function getContentType(): string
@@ -38,7 +25,7 @@ final class XmlDecoderType implements DecoderTypeInterface
     {
         $document = new \DOMDocument();
 
-        if (!@$document->loadXML($data, $this->options)) {
+        if (!@$document->loadXML($data)) {
             throw DecoderException::createNotParsable($this->getContentType());
         }
 

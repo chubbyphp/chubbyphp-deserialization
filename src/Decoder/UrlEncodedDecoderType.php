@@ -7,26 +7,6 @@ namespace Chubbyphp\Deserialization\Decoder;
 final class UrlEncodedDecoderType implements DecoderTypeInterface
 {
     /**
-     * @var string
-     */
-    private $numericPrefix;
-
-    /**
-     * @var string
-     */
-    private $argSeperator;
-
-    /**
-     * @param string $numericPrefix
-     * @param string $argSeperator
-     */
-    public function __construct(string $numericPrefix = '', string $argSeperator = '&')
-    {
-        $this->numericPrefix = $numericPrefix;
-        $this->argSeperator = $argSeperator;
-    }
-
-    /**
      * @return string
      */
     public function getContentType(): string
@@ -43,8 +23,6 @@ final class UrlEncodedDecoderType implements DecoderTypeInterface
      */
     public function decode(string $data): array
     {
-        $data = str_replace($this->argSeperator, '&', $data);
-
         $rawData = [];
         parse_str($data, $rawData);
 
@@ -52,30 +30,22 @@ final class UrlEncodedDecoderType implements DecoderTypeInterface
             throw DecoderException::createNotParsable($this->getContentType());
         }
 
-        return $this->cleanRawData($rawData, strlen($this->numericPrefix));
+        return $this->cleanRawData($rawData);
     }
 
     /**
      * @param array $rawData
-     * @param int   $numericPrefixLength
      *
      * @return array
      */
-    private function cleanRawData(array $rawData, int $numericPrefixLength): array
+    private function cleanRawData(array $rawData): array
     {
         $data = [];
         foreach ($rawData as $rawKey => $value) {
-            if (0 !== $numericPrefixLength && 0 === strpos($rawKey, $this->numericPrefix)) {
-                $rawSubKey = substr($rawKey, $numericPrefixLength);
-                if (is_numeric($rawSubKey)) {
-                    $rawKey = $rawSubKey;
-                }
-            }
-
-            $key = is_numeric($rawKey) ? (int) $rawKey : $rawKey;
+            $key = (string) (int) $rawKey === $rawData ? (int) $rawKey : $rawKey;
 
             if (is_array($value)) {
-                $data[$key] = $this->cleanRawData($value, $numericPrefixLength);
+                $data[$key] = $this->cleanRawData($value);
             } else {
                 if (is_numeric($value)) {
                     if ((string) (int) $value === $value) {
