@@ -20,9 +20,4 @@ interface FieldDenormalizerInterface
         DenormalizerInterface $denormalizer = null,
         DenormalizerContextInterface $context = null
     );
-
-    /**
-     * @return array
-     */
-    public function getGroups(): array;
 }

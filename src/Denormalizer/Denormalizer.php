@@ -68,10 +68,10 @@ final class Denormalizer implements DenormalizerInterface
                 continue;
             }
 
-            $fieldDenormalizer = $fieldDenormalizerMappings[$field]->getFieldDenormalizer();
+            $fieldMapping = $fieldDenormalizerMappings[$field];
 
-            if ($this->isWithinGroup($context, $fieldDenormalizer)) {
-                $fieldDenormalizer->denormalizeField($subPath, $object, $value, $this, $context);
+            if ($this->isWithinGroup($context, $fieldMapping)) {
+                $fieldMapping->getFieldDenormalizer()->denormalizeField($subPath, $object, $value, $this, $context);
             }
         }
 
@@ -108,20 +108,20 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param DenormalizerContextInterface $context
-     * @param FieldDenormalizerInterface   $fieldDenormalizer
+     * @param DenormalizerContextInterface       $context
+     * @param DenormalizingFieldMappingInterface $fieldMapping
      *
      * @return bool
      */
     private function isWithinGroup(
         DenormalizerContextInterface $context,
-        FieldDenormalizerInterface $fieldDenormalizer
+        DenormalizingFieldMappingInterface $fieldMapping
     ): bool {
         if ([] === $groups = $context->getGroups()) {
             return true;
         }
 
-        foreach ($fieldDenormalizer->getGroups() as $group) {
+        foreach ($fieldMapping->getGroups() as $group) {
             if (in_array($group, $groups, true)) {
                 return true;
             }

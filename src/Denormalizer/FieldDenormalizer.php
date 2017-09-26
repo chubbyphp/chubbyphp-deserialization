@@ -14,18 +14,12 @@ final class FieldDenormalizer implements FieldDenormalizerInterface
     private $accessor;
 
     /**
-     * @var array
-     */
-    private $groups;
-
-    /**
      * @param AccessorInterface $accessor
      * @param array             $groups
      */
-    public function __construct(AccessorInterface $accessor = null, array $groups = [])
+    public function __construct(AccessorInterface $accessor)
     {
         $this->accessor = $accessor;
-        $this->groups = $groups;
     }
 
     /**
@@ -43,13 +37,5 @@ final class FieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context = null
     ) {
         $this->accessor->setValue($object, $value);
-    }
-
-    /**
-     * @return array
-     */
-    public function getGroups(): array
-    {
-        return $this->groups;
     }
 }

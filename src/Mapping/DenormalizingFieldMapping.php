@@ -16,15 +16,21 @@ final class DenormalizingFieldMapping implements DenormalizingFieldMappingInterf
     private $name;
 
     /**
+     * @var array
+     */
+    private $groups;
+
+    /**
      * @var FieldDenormalizerInterface
      */
     private $fieldDenormalizer;
 
     /**
      * @param string                          $name
+     * @param array                           $groups
      * @param FieldDenormalizerInterface|null $fieldDenormalizer
      */
-    public function __construct($name, FieldDenormalizerInterface $fieldDenormalizer = null)
+    public function __construct($name, array $groups = [], FieldDenormalizerInterface $fieldDenormalizer = null)
     {
         $this->name = $name;
         $this->fieldDenormalizer = $fieldDenormalizer ?? new FieldDenormalizer(new PropertyAccessor($name));
@@ -36,6 +42,14 @@ final class DenormalizingFieldMapping implements DenormalizingFieldMappingInterf
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @return array
+     */
+    public function getGroups(): array
+    {
+        return $this->groups;
     }
 
     /**

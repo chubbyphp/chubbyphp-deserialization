@@ -14,6 +14,11 @@ interface DenormalizingFieldMappingInterface
     public function getName(): string;
 
     /**
+     * @return array
+     */
+    public function getGroups(): array;
+
+    /**
      * @return FieldDenormalizerInterface
      */
     public function getFieldDenormalizer(): FieldDenormalizerInterface;
