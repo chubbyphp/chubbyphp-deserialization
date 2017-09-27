@@ -9,21 +9,28 @@ final class DenormalizerContext implements DenormalizerContextInterface
     /**
      * @var bool
      */
-    private $allowAdditionalFields;
+    private $allowedAdditionalFields = false;
+
+    /**
+     * @var bool
+     */
+    private $replaceMode = false;
 
     /**
      * @var string[]
      */
-    private $groups;
+    private $groups = [];
 
     /**
-     * @param bool          $allowAdditionalFields
-     * @param null|string[] $groups
+     * @param bool $allowedAdditionalFields
+     *
+     * @return self
      */
-    public function __construct(bool $allowAdditionalFields = false, array $groups = [])
+    public function setAllowedAdditionalFields(bool $allowedAdditionalFields): self
     {
-        $this->allowAdditionalFields = $allowAdditionalFields;
-        $this->groups = $groups;
+        $this->allowedAdditionalFields = $allowedAdditionalFields;
+
+        return $this;
     }
 
     /**
@@ -31,7 +38,39 @@ final class DenormalizerContext implements DenormalizerContextInterface
      */
     public function isAllowedAdditionalFields(): bool
     {
-        return $this->allowAdditionalFields;
+        return $this->allowedAdditionalFields;
+    }
+
+    /**
+     * @param bool $replaceMode
+     *
+     * @return self
+     */
+    public function setReplaceMode(bool $replaceMode): self
+    {
+        $this->replaceMode = $replaceMode;
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isReplaceMode(): bool
+    {
+        return $this->replaceMode;
+    }
+
+    /**
+     * @param string[] $groups
+     *
+     * @return self
+     */
+    public function setGroups(array $groups): self
+    {
+        $this->groups = $groups;
+
+        return $this;
     }
 
     /**

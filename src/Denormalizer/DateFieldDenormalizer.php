@@ -40,4 +40,12 @@ final class DateFieldDenormalizer implements FieldDenormalizerInterface
 
         $this->fieldDenormalizer->denormalizeField($path, $object, $value, $denormalizer, $context);
     }
+
+    /**
+     * @return mixed
+     */
+    public function getDefault()
+    {
+        return $this->fieldDenormalizer->getDefault();
+    }
 }

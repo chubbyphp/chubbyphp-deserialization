@@ -20,4 +20,9 @@ interface FieldDenormalizerInterface
         DenormalizerInterface $denormalizer = null,
         DenormalizerContextInterface $context = null
     );
+
+    /**
+     * @return mixed
+     */
+    public function getDefault();
 }

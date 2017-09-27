@@ -26,11 +26,11 @@ class DeserializerIntegrationTest extends TestCase
             new Denormalizer([$this->getModelMapping()])
         );
 
-        $data = json_encode(['name' => 'Dominik']);
+        $data = json_encode(['name' => 'Name']);
 
         $model = $deserializer->deserialize(get_class($this->getModel()), $data, 'application/json');
 
-        self::assertSame('Dominik', $model->getName());
+        self::assertSame('Name', $model->getName());
     }
 
     public function testDenormalizeByObject()
@@ -40,24 +40,58 @@ class DeserializerIntegrationTest extends TestCase
             new Denormalizer([$this->getModelMapping()])
         );
 
-        $data = json_encode(['name' => 'Dominik']);
+        $data = json_encode(['name' => 'Name']);
 
         $model = $deserializer->deserialize($this->getModel(), $data, 'application/json');
 
-        self::assertSame('Dominik', $model->getName());
+        self::assertSame('Name', $model->getName());
+    }
+
+    public function testDenormalizeByObjectDefaultMode()
+    {
+        $deserializer = new Deserializer(
+            new Decoder([new JsonDecoderType()]),
+            new Denormalizer([$this->getModelMapping()])
+        );
+
+        $model = $this->getModel();
+        $model->setName('Name');
+
+        $data = json_encode([]);
+
+        $model = $deserializer->deserialize($model, $data, 'application/json');
+
+        self::assertSame('Name', $model->getName());
+    }
+
+    public function testDenormalizeByObjectReplaceMode()
+    {
+        $deserializer = new Deserializer(
+            new Decoder([new JsonDecoderType()]),
+            new Denormalizer([$this->getModelMapping()])
+        );
+
+        $model = $this->getModel();
+        $model->setName('Name');
+
+        $data = json_encode([]);
+
+        $model = $deserializer->deserialize($model, $data, 'application/json', (new DenormalizerContext())->setReplaceMode(true));
+
+        self::assertNull($model->getName());
     }
 
     public function testDenormalizeWithAdditionalFieldsExpectsException()
     {
         self::expectException(DenormalizerException::class);
-        self::expectExceptionMessage('There is an additional field at path: unknownField');
+        self::expectExceptionMessage('There are additional field(s) at paths: unknownField');
 
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([$this->getModelMapping()])
         );
 
-        $data = json_encode(['name' => 'Dominik', 'unknownField' => 'value']);
+        $data = json_encode(['name' => 'Name', 'unknownField' => 'value']);
 
         $deserializer->deserialize($this->getModel(), $data, 'application/json');
     }
@@ -69,11 +103,11 @@ class DeserializerIntegrationTest extends TestCase
             new Denormalizer([$this->getModelMapping()])
         );
 
-        $data = json_encode(['name' => 'Dominik', 'unknownField' => 'value']);
+        $data = json_encode(['name' => 'Name', 'unknownField' => 'value']);
 
-        $model = $deserializer->deserialize($this->getModel(), $data, 'application/json', new DenormalizerContext(true));
+        $model = $deserializer->deserialize($this->getModel(), $data, 'application/json', (new DenormalizerContext())->setAllowedAdditionalFields(true));
 
-        self::assertSame('Dominik', $model->getName());
+        self::assertSame('Name', $model->getName());
     }
 
     /**
@@ -83,14 +117,22 @@ class DeserializerIntegrationTest extends TestCase
     {
         return new class() {
             /**
-             * @var string
+             * @var string|null
              */
             private $name;
 
             /**
-             * @return string
+             * @param string $name
              */
-            public function getName(): string
+            public function setName(string $name)
+            {
+                $this->name = $name;
+            }
+
+            /**
+             * @return string|null
+             */
+            public function getName()
             {
                 return $this->name;
             }

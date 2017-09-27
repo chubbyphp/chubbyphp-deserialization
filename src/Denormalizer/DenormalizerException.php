@@ -17,12 +17,12 @@ final class DenormalizerException extends \RuntimeException
     }
 
     /**
-     * @param string $path
+     * @param array $paths
      *
      * @return self
      */
-    public static function createNotAllowedAddtionalField(string $path): self
+    public static function createNotAllowedAddtionalFields(array $paths): self
     {
-        return new self(sprintf('There is an additional field at path: %s', $path));
+        return new self(sprintf('There are additional field(s) at paths: %s', implode(', ', $paths)));
     }
 }

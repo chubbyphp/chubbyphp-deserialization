@@ -55,24 +55,31 @@ final class Denormalizer implements DenormalizerInterface
             $object = $factory();
         }
 
-        $fieldDenormalizerMappings = $this->getFieldDenormalizerMappings($objectMapping);
-
-        foreach ($data as $field => $value) {
-            $subPath = '' === $path ? $field : $path.'.'.$field;
-
-            if (!isset($fieldDenormalizerMappings[$field])) {
-                if (!$context->isAllowedAdditionalFields()) {
-                    throw DenormalizerException::createNotAllowedAddtionalField($subPath);
-                }
-
+        foreach ($objectMapping->getDenormalizingFieldMappings() as $denormalizingFieldMapping) {
+            $name = $denormalizingFieldMapping->getName();
+            if (!isset($data[$name]) && !$context->isReplaceMode()) {
                 continue;
             }
 
-            $fieldMapping = $fieldDenormalizerMappings[$field];
+            $fieldDenormalizer = $denormalizingFieldMapping->getFieldDenormalizer();
 
-            if ($this->isWithinGroup($context, $fieldMapping)) {
-                $fieldMapping->getFieldDenormalizer()->denormalizeField($subPath, $object, $value, $this, $context);
+            $value = $data[$name] ?? $fieldDenormalizer->getDefault();
+
+            unset($data[$name]);
+
+            if (!$this->isWithinGroup($context, $denormalizingFieldMapping)) {
+                continue;
             }
+
+            $subPath = $this->getSubPathByName($path, $name);
+
+            $fieldDenormalizer->denormalizeField($subPath, $object, $value, $this, $context);
+        }
+
+        if ([] !== $data && !$context->isAllowedAdditionalFields()) {
+            throw DenormalizerException::createNotAllowedAddtionalFields(
+                $this->getSubPathsByNames($path, array_keys($data))
+            );
         }
 
         return $object;
@@ -90,21 +97,6 @@ final class Denormalizer implements DenormalizerInterface
         }
 
         throw DenormalizerException::createMissingMapping($class);
-    }
-
-    /**
-     * @param DenormalizingObjectMappingInterface $objectMapping
-     *
-     * @return DenormalizingFieldMappingInterface[]
-     */
-    private function getFieldDenormalizerMappings(DenormalizingObjectMappingInterface $objectMapping): array
-    {
-        $fieldMappings = [];
-        foreach ($objectMapping->getDenormalizingFieldMappings() as $denormalizingFieldMapping) {
-            $fieldMappings[$denormalizingFieldMapping->getName()] = $denormalizingFieldMapping;
-        }
-
-        return $fieldMappings;
     }
 
     /**
@@ -128,5 +120,32 @@ final class Denormalizer implements DenormalizerInterface
         }
 
         return false;
+    }
+
+    /**
+     * @param string $path
+     * @param string $name
+     *
+     * @return string
+     */
+    private function getSubPathByName(string $path, string $name): string
+    {
+        return '' === $path ? $name : $path.'.'.$name;
+    }
+
+    /**
+     * @param string $path
+     * @param array  $names
+     *
+     * @return array
+     */
+    private function getSubPathsByNames(string $path, array $names): array
+    {
+        $subPaths = [];
+        foreach ($names as $name) {
+            $subPaths[] = $this->getSubPathByName($path, $name);
+        }
+
+        return $subPaths;
     }
 }

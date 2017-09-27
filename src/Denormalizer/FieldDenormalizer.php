@@ -14,12 +14,14 @@ final class FieldDenormalizer implements FieldDenormalizerInterface
     private $accessor;
 
     /**
-     * @param AccessorInterface $accessor
-     * @param array             $groups
+     * @var mixed
      */
-    public function __construct(AccessorInterface $accessor)
+    private $default;
+
+    public function __construct(AccessorInterface $accessor, $default = null)
     {
         $this->accessor = $accessor;
+        $this->default = $default;
     }
 
     /**
@@ -37,5 +39,13 @@ final class FieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context = null
     ) {
         $this->accessor->setValue($object, $value);
+    }
+
+    /**
+     * @return mixed|null
+     */
+    public function getDefault()
+    {
+        return $this->default;
     }
 }

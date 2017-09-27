@@ -7,12 +7,17 @@ namespace Chubbyphp\Deserialization\Denormalizer;
 interface DenormalizerContextInterface
 {
     /**
-     * @return string[]
+     * @return bool
      */
-    public function getGroups(): array;
+    public function isReplaceMode(): bool;
 
     /**
      * @return bool
      */
     public function isAllowedAdditionalFields(): bool;
+
+    /**
+     * @return string[]
+     */
+    public function getGroups(): array;
 }
