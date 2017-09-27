@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Decoder;
 
+use Chubbyphp\Deserialization\Decoder\DecoderException;
 use Chubbyphp\Deserialization\Decoder\XmlDecoderType;
 
 /**
@@ -158,5 +159,13 @@ EOD;
         $decoder = new XmlDecoderType();
 
         self::assertEquals($expectedData, $decoder->decode($xml));
+    }
+
+    public function testInvalidDecode()
+    {
+        self::expectException(DecoderException::class);
+        self::expectExceptionMessage('Data is not parsable with content-type: application/xml');
+        $transformer = new XmlDecoderType();
+        $transformer->decode('====');
     }
 }

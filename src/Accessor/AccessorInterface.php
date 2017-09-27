@@ -9,6 +9,8 @@ interface AccessorInterface
     /**
      * @param object $object
      * @param mixed  $value
+     *
+     * @throws AccessorException
      */
     public function setValue($object, $value);
 
@@ -16,6 +18,8 @@ interface AccessorInterface
      * @param object $object
      *
      * @return mixed
+     *
+     * @throws AccessorException
      */
     public function getValue($object);
 }

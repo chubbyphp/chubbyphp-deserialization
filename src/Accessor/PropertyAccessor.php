@@ -25,9 +25,15 @@ final class PropertyAccessor implements AccessorInterface
      */
     public function setValue($object, $value)
     {
-        $reflectionProperty = new \ReflectionProperty(get_class($object), $this->property);
-        $reflectionProperty->setAccessible(true);
+        $class = get_class($object);
 
+        try {
+            $reflectionProperty = new \ReflectionProperty($class, $this->property);
+        } catch (\ReflectionException $e) {
+            throw AccessorException::createMissingProperty($class, $this->property);
+        }
+
+        $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($object, $value);
     }
 
@@ -38,7 +44,14 @@ final class PropertyAccessor implements AccessorInterface
      */
     public function getValue($object)
     {
-        $reflectionProperty = new \ReflectionProperty(get_class($object), $this->property);
+        $class = get_class($object);
+
+        try {
+            $reflectionProperty = new \ReflectionProperty($class, $this->property);
+        } catch (\ReflectionException $e) {
+            throw AccessorException::createMissingProperty($class, $this->property);
+        }
+
         $reflectionProperty->setAccessible(true);
 
         return $reflectionProperty->getValue($object);

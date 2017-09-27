@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Decoder;
 
+use Chubbyphp\Deserialization\Decoder\DecoderException;
 use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
 
 /**
@@ -160,5 +161,13 @@ EOD;
         $decoder = new JsonDecoderType();
 
         self::assertEquals($expectedData, $decoder->decode($json));
+    }
+
+    public function testInvalidDecode()
+    {
+        self::expectException(DecoderException::class);
+        self::expectExceptionMessage('Data is not parsable with content-type: application/json');
+        $transformer = new JsonDecoderType();
+        $transformer->decode('====');
     }
 }

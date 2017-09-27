@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Decoder;
 
+use Chubbyphp\Deserialization\Decoder\DecoderException;
 use Chubbyphp\Deserialization\Decoder\YamlDecoderType;
 
 /**
@@ -125,5 +126,13 @@ EOD;
         $decoder = new YamlDecoderType();
 
         self::assertEquals($expectedData, $decoder->decode($yaml));
+    }
+
+    public function testInvalidDecode()
+    {
+        self::expectException(DecoderException::class);
+        self::expectExceptionMessage('Data is not parsable with content-type: application/x-yaml');
+        $transformer = new YamlDecoderType();
+        $transformer->decode('====');
     }
 }

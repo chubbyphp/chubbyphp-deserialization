@@ -14,6 +14,9 @@ use Chubbyphp\Tests\Deserialization\Resources\Mapping\DenormalizationModelMappin
 use Chubbyphp\Tests\Deserialization\Resources\Model\Model;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * @coversNothing
+ */
 class DeserializerTest extends TestCase
 {
     public function testDenormalizeByClass()

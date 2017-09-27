@@ -23,15 +23,13 @@ final class MethodAccessor implements AccessorInterface
      * @param object $object
      * @param mixed  $value
      *
-     * @throws \RuntimeException
+     * @throws AccessorException
      */
     public function setValue($object, $value)
     {
         $set = 'set'.ucfirst($this->property);
         if (!method_exists($object, $set)) {
-            throw new \RuntimeException(
-                sprintf('Missing method to set property %s on class %s', $this->property, get_class($object))
-            );
+            throw AccessorException::createMissingMethod(get_class($object), [$set]);
         }
 
         return $object->$set($value);
@@ -42,7 +40,7 @@ final class MethodAccessor implements AccessorInterface
      *
      * @return mixed
      *
-     * @throws \RuntimeException
+     * @throws AccessorException
      */
     public function getValue($object)
     {
@@ -62,8 +60,6 @@ final class MethodAccessor implements AccessorInterface
             return $object->$is();
         }
 
-        throw new \RuntimeException(
-            sprintf('Missing method to get property %s on class %ss', $this->property, get_class($object))
-        );
+        throw AccessorException::createMissingMethod(get_class($object), [$get, $has, $is]);
     }
 }
