@@ -33,6 +33,7 @@ final class DenormalizingFieldMapping implements DenormalizingFieldMappingInterf
     public function __construct($name, array $groups = [], FieldDenormalizerInterface $fieldDenormalizer = null)
     {
         $this->name = $name;
+        $this->groups = $groups;
         $this->fieldDenormalizer = $fieldDenormalizer ?? new FieldDenormalizer(new PropertyAccessor($name));
     }
 
