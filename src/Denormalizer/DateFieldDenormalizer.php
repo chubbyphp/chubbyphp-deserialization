@@ -20,32 +20,24 @@ final class DateFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string                            $path
-     * @param object                            $object
-     * @param mixed                             $value
-     * @param DenormalizerInterface|null        $denormalizer
-     * @param DenormalizerContextInterface|null $context
+     * @param string                       $path
+     * @param object                       $object
+     * @param mixed                        $value
+     * @param DenormalizerContextInterface $context
+     * @param DenormalizerInterface|null   $denormalizer
      */
     public function denormalizeField(
         string $path,
         $object,
         $value,
-        DenormalizerInterface $denormalizer = null,
-        DenormalizerContextInterface $context = null
+        DenormalizerContextInterface $context,
+        DenormalizerInterface $denormalizer = null
     ) {
         try {
             $value = new \DateTime($value);
         } catch (\Exception $exception) {
         }
 
-        $this->fieldDenormalizer->denormalizeField($path, $object, $value, $denormalizer, $context);
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getDefault()
-    {
-        return $this->fieldDenormalizer->getDefault();
+        $this->fieldDenormalizer->denormalizeField($path, $object, $value, $context, $denormalizer);
     }
 }

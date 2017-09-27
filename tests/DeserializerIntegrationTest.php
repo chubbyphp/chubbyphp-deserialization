@@ -47,40 +47,6 @@ class DeserializerIntegrationTest extends TestCase
         self::assertSame('Name', $model->getName());
     }
 
-    public function testDenormalizeByObjectDefaultMode()
-    {
-        $deserializer = new Deserializer(
-            new Decoder([new JsonDecoderType()]),
-            new Denormalizer([$this->getModelMapping()])
-        );
-
-        $model = $this->getModel();
-        $model->setName('Name');
-
-        $data = json_encode([]);
-
-        $model = $deserializer->deserialize($model, $data, 'application/json');
-
-        self::assertSame('Name', $model->getName());
-    }
-
-    public function testDenormalizeByObjectReplaceMode()
-    {
-        $deserializer = new Deserializer(
-            new Decoder([new JsonDecoderType()]),
-            new Denormalizer([$this->getModelMapping()])
-        );
-
-        $model = $this->getModel();
-        $model->setName('Name');
-
-        $data = json_encode([]);
-
-        $model = $deserializer->deserialize($model, $data, 'application/json', (new DenormalizerContext())->setReplaceMode(true));
-
-        self::assertNull($model->getName());
-    }
-
     public function testDenormalizeWithAdditionalFieldsExpectsException()
     {
         self::expectException(DenormalizerException::class);

@@ -9,11 +9,6 @@ interface DenormalizerContextInterface
     /**
      * @return bool
      */
-    public function isReplaceMode(): bool;
-
-    /**
-     * @return bool
-     */
     public function isAllowedAdditionalFields(): bool;
 
     /**

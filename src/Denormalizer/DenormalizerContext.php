@@ -12,11 +12,6 @@ final class DenormalizerContext implements DenormalizerContextInterface
     private $allowedAdditionalFields = false;
 
     /**
-     * @var bool
-     */
-    private $replaceMode = false;
-
-    /**
      * @var string[]
      */
     private $groups = [];
@@ -39,26 +34,6 @@ final class DenormalizerContext implements DenormalizerContextInterface
     public function isAllowedAdditionalFields(): bool
     {
         return $this->allowedAdditionalFields;
-    }
-
-    /**
-     * @param bool $replaceMode
-     *
-     * @return self
-     */
-    public function setReplaceMode(bool $replaceMode): self
-    {
-        $this->replaceMode = $replaceMode;
-
-        return $this;
-    }
-
-    /**
-     * @return bool
-     */
-    public function isReplaceMode(): bool
-    {
-        return $this->replaceMode;
     }
 
     /**

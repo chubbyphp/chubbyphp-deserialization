@@ -6,6 +6,8 @@ namespace Chubbyphp\Deserialization\Denormalizer;
 
 use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizingObjectMappingInterface;
+use Psr\Log\LoggerInterface;
+use Psr\Log\NullLogger;
 
 final class Denormalizer implements DenormalizerInterface
 {
@@ -15,14 +17,22 @@ final class Denormalizer implements DenormalizerInterface
     private $objectMappings;
 
     /**
-     * @param DenormalizingObjectMappingInterface[] $objectMappings
+     * @var LoggerInterface
      */
-    public function __construct(array $objectMappings)
+    private $logger;
+
+    /**
+     * @param array                $objectMappings
+     * @param LoggerInterface|null $logger
+     */
+    public function __construct(array $objectMappings, LoggerInterface $logger = null)
     {
         $this->objectMappings = [];
         foreach ($objectMappings as $objectMapping) {
             $this->addObjectMapping($objectMapping);
         }
+
+        $this->logger = $logger ?? new NullLogger();
     }
 
     /**
@@ -56,30 +66,13 @@ final class Denormalizer implements DenormalizerInterface
         }
 
         foreach ($objectMapping->getDenormalizingFieldMappings() as $denormalizingFieldMapping) {
-            $name = $denormalizingFieldMapping->getName();
-            if (!isset($data[$name]) && !$context->isReplaceMode()) {
-                continue;
-            }
+            $this->denormalizeField($context, $denormalizingFieldMapping, $path, $data, $object);
 
-            $fieldDenormalizer = $denormalizingFieldMapping->getFieldDenormalizer();
-
-            $value = $data[$name] ?? $fieldDenormalizer->getDefault();
-
-            unset($data[$name]);
-
-            if (!$this->isWithinGroup($context, $denormalizingFieldMapping)) {
-                continue;
-            }
-
-            $subPath = $this->getSubPathByName($path, $name);
-
-            $fieldDenormalizer->denormalizeField($subPath, $object, $value, $this, $context);
+            unset($data[$denormalizingFieldMapping->getName()]);
         }
 
         if ([] !== $data && !$context->isAllowedAdditionalFields()) {
-            throw DenormalizerException::createNotAllowedAddtionalFields(
-                $this->getSubPathsByNames($path, array_keys($data))
-            );
+            $this->handleNotAllowedAddtionalFields($path, array_keys($data));
         }
 
         return $object;
@@ -96,7 +89,58 @@ final class Denormalizer implements DenormalizerInterface
             return $this->objectMappings[$class];
         }
 
-        throw DenormalizerException::createMissingMapping($class);
+        $exception = DenormalizerException::createMissingMapping($class);
+
+        $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+
+        throw $exception;
+    }
+
+    /**
+     * @param DenormalizerContextInterface       $context
+     * @param DenormalizingFieldMappingInterface $denormalizingFieldMapping
+     * @param string                             $path
+     * @param array                              $data
+     * @param $object
+     */
+    private function denormalizeField(
+        DenormalizerContextInterface $context,
+        DenormalizingFieldMappingInterface $denormalizingFieldMapping,
+        string $path,
+        array $data,
+        $object
+    ) {
+        $name = $denormalizingFieldMapping->getName();
+        if (!array_key_exists($name, $data)) {
+            return;
+        }
+
+        $fieldDenormalizer = $denormalizingFieldMapping->getFieldDenormalizer();
+
+        if (!$this->isWithinGroup($context, $denormalizingFieldMapping)) {
+            return;
+        }
+
+        $subPath = $this->getSubPathByName($path, $name);
+
+        $this->logger->info('deserialize: path {path}', ['path' => $subPath]);
+
+        $fieldDenormalizer->denormalizeField($subPath, $object, $data[$name], $context, $this);
+    }
+
+    /**
+     * @param string $path
+     * @param $names
+     */
+    private function handleNotAllowedAddtionalFields(string $path, $names)
+    {
+        $exception = DenormalizerException::createNotAllowedAddtionalFields(
+            $this->getSubPathsByNames($path, $names)
+        );
+
+        $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+
+        throw $exception;
     }
 
     /**
