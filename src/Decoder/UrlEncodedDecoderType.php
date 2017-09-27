@@ -30,7 +30,7 @@ final class UrlEncodedDecoderType implements DecoderTypeInterface
             throw DecoderException::createNotParsable($this->getContentType());
         }
 
-        return $this->cleanRawData($rawData);
+        return $this->fixValues($rawData);
     }
 
     /**
@@ -38,29 +38,41 @@ final class UrlEncodedDecoderType implements DecoderTypeInterface
      *
      * @return array
      */
-    private function cleanRawData(array $rawData): array
+    private function fixValues(array $rawData): array
     {
         $data = [];
         foreach ($rawData as $rawKey => $value) {
             $key = (string) (int) $rawKey === $rawData ? (int) $rawKey : $rawKey;
 
             if (is_array($value)) {
-                $data[$key] = $this->cleanRawData($value);
+                $data[$key] = $this->fixValues($value);
             } else {
-                if (is_numeric($value)) {
-                    if ((string) (int) $value === $value) {
-                        $value = (int) $value;
-                    } else {
-                        $value = (float) $value;
-                    }
-                } elseif ('' === $value) {
-                    $value = null;
-                }
-
-                $data[$key] = $value;
+                $data[$key] = $this->fixValue($value);
             }
         }
 
         return $data;
+    }
+
+    /**
+     * @param $value
+     *
+     * @return float|int|null|string
+     */
+    private function fixValue($value)
+    {
+        if (is_numeric($value)) {
+            if ((string) (int) $value === $value) {
+                return (int) $value;
+            }
+
+            return (float) $value;
+        }
+
+        if ('' === $value) {
+            return null;
+        }
+
+        return $value;
     }
 }
