@@ -6,6 +6,9 @@ namespace Chubbyphp\Tests\Deserialization\Decoder;
 
 use Chubbyphp\Deserialization\Decoder\XmlDecoderType;
 
+/**
+ * @covers \Chubbyphp\Deserialization\Decoder\XmlDecoderType
+ */
 class XmlDecoderTypeTest extends AbstractDecoderTypeTest
 {
     public function testGetContentType()

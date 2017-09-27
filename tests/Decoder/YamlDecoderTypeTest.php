@@ -6,6 +6,9 @@ namespace Chubbyphp\Tests\Deserialization\Decoder;
 
 use Chubbyphp\Deserialization\Decoder\YamlDecoderType;
 
+/**
+ * @covers \Chubbyphp\Deserialization\Decoder\YamlDecoderType
+ */
 class YamlDecoderTypeTest extends AbstractDecoderTypeTest
 {
     public function testGetContentType()

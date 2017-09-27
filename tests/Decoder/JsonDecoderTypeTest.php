@@ -6,6 +6,9 @@ namespace Chubbyphp\Tests\Deserialization\Decoder;
 
 use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
 
+/**
+ * @covers \Chubbyphp\Deserialization\Decoder\JsonDecoderType
+ */
 class JsonDecoderTypeTest extends AbstractDecoderTypeTest
 {
     public function testGetContentType()

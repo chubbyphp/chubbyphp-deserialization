@@ -6,6 +6,9 @@ namespace Chubbyphp\Tests\Deserialization\Decoder;
 
 use Chubbyphp\Deserialization\Decoder\UrlEncodedDecoderType;
 
+/**
+ * @covers \Chubbyphp\Deserialization\Decoder\UrlEncodedDecoderType
+ */
 class UrlEncodedDecoderTypeTest extends AbstractDecoderTypeTest
 {
     public function testGetContentType()
