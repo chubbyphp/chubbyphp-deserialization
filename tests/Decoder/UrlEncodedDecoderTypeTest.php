@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Decoder;
 
-use Chubbyphp\Deserialization\Decoder\DecoderException;
 use Chubbyphp\Deserialization\Decoder\UrlEncodedDecoderType;
+use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 /**
  * @covers \Chubbyphp\Deserialization\Decoder\UrlEncodedDecoderType
@@ -35,7 +35,7 @@ class UrlEncodedDecoderTypeTest extends AbstractDecoderTypeTest
 
     public function testInvalidDecode()
     {
-        self::expectException(DecoderException::class);
+        self::expectException(DeserializerRuntimeException::class);
         self::expectExceptionMessage('Data is not parsable with content-type: application/x-www-form-urlencoded');
         $transformer = new UrlEncodedDecoderType();
         $transformer->decode('====');

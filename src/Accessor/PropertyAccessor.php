@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Accessor;
 
+use Chubbyphp\Deserialization\DeserializerLogicException;
+
 final class PropertyAccessor implements AccessorInterface
 {
     /**
@@ -30,7 +32,7 @@ final class PropertyAccessor implements AccessorInterface
         try {
             $reflectionProperty = new \ReflectionProperty($class, $this->property);
         } catch (\ReflectionException $e) {
-            throw AccessorException::createMissingProperty($class, $this->property);
+            throw DeserializerLogicException::createMissingProperty($class, $this->property);
         }
 
         $reflectionProperty->setAccessible(true);
@@ -49,7 +51,7 @@ final class PropertyAccessor implements AccessorInterface
         try {
             $reflectionProperty = new \ReflectionProperty($class, $this->property);
         } catch (\ReflectionException $e) {
-            throw AccessorException::createMissingProperty($class, $this->property);
+            throw DeserializerLogicException::createMissingProperty($class, $this->property);
         }
 
         $reflectionProperty->setAccessible(true);

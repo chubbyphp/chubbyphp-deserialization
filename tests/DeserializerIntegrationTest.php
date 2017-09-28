@@ -7,9 +7,9 @@ namespace Chubbyphp\Tests\Deserialization;
 use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
-use Chubbyphp\Deserialization\Denormalizer\DenormalizerException;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizingContextBuilder;
 use Chubbyphp\Deserialization\Deserializer;
+use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizingObjectMappingInterface;
 use PHPUnit\Framework\TestCase;
@@ -49,7 +49,7 @@ class DeserializerIntegrationTest extends TestCase
 
     public function testDenormalizeWithAdditionalFieldsExpectsException()
     {
-        self::expectException(DenormalizerException::class);
+        self::expectException(DeserializerRuntimeException::class);
         self::expectExceptionMessage('There are additional field(s) at paths: unknownField');
 
         $deserializer = new Deserializer(

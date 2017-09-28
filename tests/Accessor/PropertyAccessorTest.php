@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Accessor;
 
-use Chubbyphp\Deserialization\Accessor\AccessorException;
 use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
+use Chubbyphp\Deserialization\DeserializerLogicException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -38,7 +38,7 @@ class PropertyAccessorTest extends TestCase
 
     public function testMissingSet()
     {
-        self::expectException(AccessorException::class);
+        self::expectException(DeserializerLogicException::class);
 
         $object = new class() {
         };
@@ -73,7 +73,7 @@ class PropertyAccessorTest extends TestCase
 
     public function testMissingGet()
     {
-        self::expectException(AccessorException::class);
+        self::expectException(DeserializerLogicException::class);
 
         $object = new class() {
         };

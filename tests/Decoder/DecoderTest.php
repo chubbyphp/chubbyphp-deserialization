@@ -5,8 +5,8 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Decoder;
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
-use Chubbyphp\Deserialization\Decoder\DecoderException;
 use Chubbyphp\Deserialization\Decoder\DecoderTypeInterface;
+use Chubbyphp\Deserialization\DeserializerLogicException;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,7 +30,7 @@ class DecoderTest extends TestCase
 
     public function testDecodeWithMissingType()
     {
-        self::expectException(DecoderException::class);
+        self::expectException(DeserializerLogicException::class);
         self::expectExceptionMessage('There is no decoder for content-type: application/xml');
 
         $decoder = new Decoder([$this->getDecoderType()]);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Decoder;
 
+use Chubbyphp\Deserialization\DeserializerLogicException;
+
 final class Decoder implements DecoderInterface
 {
     /**
@@ -44,7 +46,7 @@ final class Decoder implements DecoderInterface
      *
      * @return array
      *
-     * @throws DecoderException
+     * @throws DeserializerLogicException
      */
     public function decode(string $data, string $contentType): array
     {
@@ -52,6 +54,6 @@ final class Decoder implements DecoderInterface
             return $this->decoders[$contentType]->decode($data);
         }
 
-        throw DecoderException::createMissing($contentType);
+        throw DeserializerLogicException::createMissingContentType($contentType);
     }
 }

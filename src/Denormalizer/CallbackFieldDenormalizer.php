@@ -27,18 +27,18 @@ final class CallbackFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string                            $path
-     * @param object                            $object
-     * @param mixed                             $value
-     * @param DenormalizerInterface|null        $denormalizer
-     * @param DenormalizerContextInterface|null $context
+     * @param string                       $path
+     * @param object                       $object
+     * @param mixed                        $value
+     * @param DenormalizerContextInterface $context
+     * @param DenormalizerInterface|null   $denormalizer
      */
     public function denormalizeField(
         string $path,
         $object,
         $value,
-        DenormalizerInterface $denormalizer = null,
-        DenormalizerContextInterface $context = null
+        DenormalizerContextInterface $context,
+        DenormalizerInterface $denormalizer = null
     ) {
         $callback = $this->callback;
 

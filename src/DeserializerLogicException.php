@@ -2,10 +2,30 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Deserialization\Accessor;
+namespace Chubbyphp\Deserialization;
 
-final class AccessorException extends \RuntimeException
+final class DeserializerLogicException extends \LogicException
 {
+    /**
+     * @param string $contentType
+     *
+     * @return self
+     */
+    public static function createMissingContentType(string $contentType): self
+    {
+        return new self(sprintf('There is no decoder for content-type: %s', $contentType));
+    }
+
+    /**
+     * @param string $class
+     *
+     * @return self
+     */
+    public static function createMissingMapping(string $class): self
+    {
+        return new self(sprintf('There is no mapping for class: %s', $class));
+    }
+
     /**
      * @param string $class
      * @param array  $methods

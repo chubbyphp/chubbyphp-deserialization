@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Denormalizer;
 
+use Chubbyphp\Deserialization\DeserializerLogicException;
+use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizingObjectMappingInterface;
 use Psr\Log\LoggerInterface;
@@ -51,7 +53,8 @@ final class Denormalizer implements DenormalizerInterface
      *
      * @return object
      *
-     * @throws DenormalizerException
+     * @throws DeserializerLogicException
+     * @throws DeserializerRuntimeException
      */
     public function denormalize($object, array $data, DenormalizerContextInterface $context = null, string $path = '')
     {
@@ -93,7 +96,7 @@ final class Denormalizer implements DenormalizerInterface
             return $this->objectMappings[$class];
         }
 
-        $exception = DenormalizerException::createMissingMapping($class);
+        $exception = DeserializerLogicException::createMissingMapping($class);
 
         $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
 
@@ -138,7 +141,7 @@ final class Denormalizer implements DenormalizerInterface
      */
     private function handleNotAllowedAddtionalFields(string $path, $names)
     {
-        $exception = DenormalizerException::createNotAllowedAddtionalFields(
+        $exception = DeserializerRuntimeException::createNotAllowedAddtionalFields(
             $this->getSubPathsByNames($path, $names)
         );
 

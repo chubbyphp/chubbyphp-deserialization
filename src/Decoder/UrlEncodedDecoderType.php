@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Decoder;
 
+use Chubbyphp\Deserialization\DeserializerRuntimeException;
+
 final class UrlEncodedDecoderType implements DecoderTypeInterface
 {
     /**
@@ -19,7 +21,7 @@ final class UrlEncodedDecoderType implements DecoderTypeInterface
      *
      * @return array
      *
-     * @throws DecoderException
+     * @throws DeserializerRuntimeException
      */
     public function decode(string $data): array
     {
@@ -27,7 +29,7 @@ final class UrlEncodedDecoderType implements DecoderTypeInterface
         parse_str($data, $rawData);
 
         if ('' !== $data && [] === $rawData) {
-            throw DecoderException::createNotParsable($this->getContentType());
+            throw DeserializerRuntimeException::createNotParsable($this->getContentType());
         }
 
         return $this->fixValues($rawData);

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Decoder;
 
+use Chubbyphp\Deserialization\DeserializerRuntimeException;
+
 final class XmlDecoderType implements DecoderTypeInterface
 {
     /**
@@ -19,14 +21,14 @@ final class XmlDecoderType implements DecoderTypeInterface
      *
      * @return array
      *
-     * @throws DecoderException
+     * @throws DeserializerRuntimeException
      */
     public function decode(string $data): array
     {
         $document = new \DOMDocument();
 
         if (!@$document->loadXML($data)) {
-            throw DecoderException::createNotParsable($this->getContentType());
+            throw DeserializerRuntimeException::createNotParsable($this->getContentType());
         }
 
         return $this->transformType($document->getElementsByTagName('object')->item(0));

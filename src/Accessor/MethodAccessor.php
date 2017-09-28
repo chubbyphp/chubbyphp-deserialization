@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Accessor;
 
+use Chubbyphp\Deserialization\DeserializerLogicException;
+
 final class MethodAccessor implements AccessorInterface
 {
     /**
@@ -23,13 +25,13 @@ final class MethodAccessor implements AccessorInterface
      * @param object $object
      * @param mixed  $value
      *
-     * @throws AccessorException
+     * @throws DeserializerLogicException
      */
     public function setValue($object, $value)
     {
         $set = 'set'.ucfirst($this->property);
         if (!method_exists($object, $set)) {
-            throw AccessorException::createMissingMethod(get_class($object), [$set]);
+            throw DeserializerLogicException::createMissingMethod(get_class($object), [$set]);
         }
 
         return $object->$set($value);
@@ -40,7 +42,7 @@ final class MethodAccessor implements AccessorInterface
      *
      * @return mixed
      *
-     * @throws AccessorException
+     * @throws DeserializerLogicException
      */
     public function getValue($object)
     {
@@ -60,6 +62,6 @@ final class MethodAccessor implements AccessorInterface
             return $object->$is();
         }
 
-        throw AccessorException::createMissingMethod(get_class($object), [$get, $has, $is]);
+        throw DeserializerLogicException::createMissingMethod(get_class($object), [$get, $has, $is]);
     }
 }
