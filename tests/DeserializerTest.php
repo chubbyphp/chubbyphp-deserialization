@@ -19,16 +19,16 @@ class DeserializerTest extends TestCase
     {
         $deserializer = new Deserializer($this->getDecoder(), $this->getDenormalizer());
 
-        $model = new \stdClass();
+        $object = new \stdClass();
 
         $deserializer->deserialize(
-            $model,
+            $object,
             '{"name": "Name"}',
             'application/json',
             $this->getDenormalizerContext()
         );
 
-        self::assertSame('Name', $model->name);
+        self::assertSame('Name', $object->name);
     }
 
     /**

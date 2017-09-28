@@ -23,28 +23,28 @@ class DeserializerIntegrationTest extends TestCase
     {
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
-            new Denormalizer([$this->getModelMapping()])
+            new Denormalizer([$this->getObjectMapping()])
         );
 
         $data = json_encode(['name' => 'Name']);
 
-        $model = $deserializer->deserialize(get_class($this->getModel()), $data, 'application/json');
+        $object = $deserializer->deserialize(get_class($this->getObject()), $data, 'application/json');
 
-        self::assertSame('Name', $model->getName());
+        self::assertSame('Name', $object->getName());
     }
 
     public function testDenormalizeByObject()
     {
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
-            new Denormalizer([$this->getModelMapping()])
+            new Denormalizer([$this->getObjectMapping()])
         );
 
         $data = json_encode(['name' => 'Name']);
 
-        $model = $deserializer->deserialize($this->getModel(), $data, 'application/json');
+        $object = $deserializer->deserialize($this->getObject(), $data, 'application/json');
 
-        self::assertSame('Name', $model->getName());
+        self::assertSame('Name', $object->getName());
     }
 
     public function testDenormalizeWithAdditionalFieldsExpectsException()
@@ -54,37 +54,37 @@ class DeserializerIntegrationTest extends TestCase
 
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
-            new Denormalizer([$this->getModelMapping()])
+            new Denormalizer([$this->getObjectMapping()])
         );
 
         $data = json_encode(['name' => 'Name', 'unknownField' => 'value']);
 
-        $deserializer->deserialize($this->getModel(), $data, 'application/json');
+        $deserializer->deserialize($this->getObject(), $data, 'application/json');
     }
 
     public function testDenormalizeWithAllowedAdditionalFields()
     {
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
-            new Denormalizer([$this->getModelMapping()])
+            new Denormalizer([$this->getObjectMapping()])
         );
 
         $data = json_encode(['name' => 'Name', 'unknownField' => 'value']);
 
-        $model = $deserializer->deserialize(
-            $this->getModel(),
+        $object = $deserializer->deserialize(
+            $this->getObject(),
             $data,
             'application/json',
             DenormalizingContextBuilder::create()->setAllowedAdditionalFields(true)->getContext()
         );
 
-        self::assertSame('Name', $model->getName());
+        self::assertSame('Name', $object->getName());
     }
 
     /**
      * @return object
      */
-    public function getModel()
+    public function getObject()
     {
         return new class() {
             /**
@@ -113,7 +113,7 @@ class DeserializerIntegrationTest extends TestCase
     /**
      * @return object
      */
-    private function getModelMapping()
+    private function getObjectMapping()
     {
         return new class($this) implements DenormalizingObjectMappingInterface {
             /**
@@ -134,7 +134,7 @@ class DeserializerIntegrationTest extends TestCase
              */
             public function getClass(): string
             {
-                return get_class($this->test->getModel());
+                return get_class($this->test->getObject());
             }
 
             /**
@@ -145,7 +145,7 @@ class DeserializerIntegrationTest extends TestCase
             public function getFactory(string $type = null): callable
             {
                 return function () {
-                    return $this->test->getModel();
+                    return $this->test->getObject();
                 };
             }
 

@@ -15,7 +15,7 @@ class PropertyAccessorTest extends TestCase
 {
     public function testSetValue()
     {
-        $model = new class() {
+        $object = new class() {
             /**
              * @var string
              */
@@ -31,25 +31,25 @@ class PropertyAccessorTest extends TestCase
         };
 
         $accessor = new PropertyAccessor('name');
-        $accessor->setValue($model, 'Name');
+        $accessor->setValue($object, 'Name');
 
-        self::assertSame('Name', $model->getName());
+        self::assertSame('Name', $object->getName());
     }
 
     public function testMissingSet()
     {
         self::expectException(AccessorException::class);
 
-        $model = new class() {
+        $object = new class() {
         };
 
         $accessor = new PropertyAccessor('name');
-        $accessor->setValue($model, 'Name');
+        $accessor->setValue($object, 'Name');
     }
 
     public function testGetValue()
     {
-        $model = new class() {
+        $object = new class() {
             /**
              * @var string
              */
@@ -64,21 +64,21 @@ class PropertyAccessorTest extends TestCase
             }
         };
 
-        $model->setName('Name');
+        $object->setName('Name');
 
         $accessor = new PropertyAccessor('name');
 
-        self::assertSame('Name', $accessor->getValue($model));
+        self::assertSame('Name', $accessor->getValue($object));
     }
 
     public function testMissingGet()
     {
         self::expectException(AccessorException::class);
 
-        $model = new class() {
+        $object = new class() {
         };
 
         $accessor = new PropertyAccessor('name');
-        $accessor->getValue($model);
+        $accessor->getValue($object);
     }
 }

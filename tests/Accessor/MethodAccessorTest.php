@@ -15,7 +15,7 @@ class MethodAccessorTest extends TestCase
 {
     public function testSetValue()
     {
-        $model = new class() {
+        $object = new class() {
             /**
              * @var string
              */
@@ -39,25 +39,25 @@ class MethodAccessorTest extends TestCase
         };
 
         $accessor = new MethodAccessor('name');
-        $accessor->setValue($model, 'Name');
+        $accessor->setValue($object, 'Name');
 
-        self::assertSame('Name', $model->getName());
+        self::assertSame('Name', $object->getName());
     }
 
     public function testMissingSet()
     {
         self::expectException(AccessorException::class);
 
-        $model = new class() {
+        $object = new class() {
         };
 
         $accessor = new MethodAccessor('name');
-        $accessor->setValue($model, 'Name');
+        $accessor->setValue($object, 'Name');
     }
 
     public function testGetValue()
     {
-        $model = new class() {
+        $object = new class() {
             /**
              * @var string
              */
@@ -80,16 +80,16 @@ class MethodAccessorTest extends TestCase
             }
         };
 
-        $model->setName('Name');
+        $object->setName('Name');
 
         $accessor = new MethodAccessor('name');
 
-        self::assertSame('Name', $accessor->getValue($model));
+        self::assertSame('Name', $accessor->getValue($object));
     }
 
     public function testHasValue()
     {
-        $model = new class() {
+        $object = new class() {
             /**
              * @var string
              */
@@ -112,16 +112,16 @@ class MethodAccessorTest extends TestCase
             }
         };
 
-        $model->setName('Name');
+        $object->setName('Name');
 
         $accessor = new MethodAccessor('name');
 
-        self::assertTrue($accessor->getValue($model));
+        self::assertTrue($accessor->getValue($object));
     }
 
     public function testIsValue()
     {
-        $model = new class() {
+        $object = new class() {
             /**
              * @var string
              */
@@ -144,21 +144,21 @@ class MethodAccessorTest extends TestCase
             }
         };
 
-        $model->setName('Name');
+        $object->setName('Name');
 
         $accessor = new MethodAccessor('name');
 
-        self::assertTrue($accessor->getValue($model));
+        self::assertTrue($accessor->getValue($object));
     }
 
     public function testMissingGet()
     {
         self::expectException(AccessorException::class);
 
-        $model = new class() {
+        $object = new class() {
         };
 
         $accessor = new MethodAccessor('name');
-        $accessor->getValue($model);
+        $accessor->getValue($object);
     }
 }
