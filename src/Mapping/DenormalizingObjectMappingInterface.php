@@ -13,6 +13,7 @@ interface DenormalizingObjectMappingInterface
 
     /**
      * @param string|null $type
+     *
      * @return callable
      */
     public function getFactory(string $type = null): callable;

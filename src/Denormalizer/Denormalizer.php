@@ -55,7 +55,7 @@ final class Denormalizer implements DenormalizerInterface
      */
     public function denormalize($object, array $data, DenormalizerContextInterface $context = null, string $path = '')
     {
-        $context = $context ?? new DenormalizerContext();
+        $context = $context ?? DenormalizingContextBuilder::create()->getContext();
 
         $class = is_object($object) ? get_class($object) : $object;
         $objectMapping = $this->getObjectMapping($class);
@@ -74,7 +74,6 @@ final class Denormalizer implements DenormalizerInterface
 
             unset($data[$denormalizingFieldMapping->getName()]);
         }
-
 
         if ([] !== $data && !$context->isAllowedAdditionalFields()) {
             $this->handleNotAllowedAddtionalFields($path, array_keys($data));

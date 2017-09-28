@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Mapping;
 
-use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
-use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 
 final class DenormalizingFieldMapping implements DenormalizingFieldMappingInterface
@@ -26,15 +24,15 @@ final class DenormalizingFieldMapping implements DenormalizingFieldMappingInterf
     private $fieldDenormalizer;
 
     /**
-     * @param string                          $name
-     * @param array                           $groups
-     * @param FieldDenormalizerInterface|null $fieldDenormalizer
+     * @param string                     $name
+     * @param array                      $groups
+     * @param FieldDenormalizerInterface $fieldDenormalizer
      */
-    public function __construct($name, array $groups = [], FieldDenormalizerInterface $fieldDenormalizer = null)
+    public function __construct($name, array $groups = [], FieldDenormalizerInterface $fieldDenormalizer)
     {
         $this->name = $name;
         $this->groups = $groups;
-        $this->fieldDenormalizer = $fieldDenormalizer ?? new FieldDenormalizer(new PropertyAccessor($name));
+        $this->fieldDenormalizer = $fieldDenormalizer;
     }
 
     /**

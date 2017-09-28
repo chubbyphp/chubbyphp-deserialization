@@ -7,10 +7,10 @@ namespace Chubbyphp\Tests\Deserialization;
 use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
-use Chubbyphp\Deserialization\Denormalizer\DenormalizerContext;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerException;
+use Chubbyphp\Deserialization\Denormalizer\DenormalizingContextBuilder;
 use Chubbyphp\Deserialization\Deserializer;
-use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMapping;
+use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizingObjectMappingInterface;
 use PHPUnit\Framework\TestCase;
 
@@ -71,7 +71,12 @@ class DeserializerIntegrationTest extends TestCase
 
         $data = json_encode(['name' => 'Name', 'unknownField' => 'value']);
 
-        $model = $deserializer->deserialize($this->getModel(), $data, 'application/json', (new DenormalizerContext())->setAllowedAdditionalFields(true));
+        $model = $deserializer->deserialize(
+            $this->getModel(),
+            $data,
+            'application/json',
+            DenormalizingContextBuilder::create()->setAllowedAdditionalFields(true)->getContext()
+        );
 
         self::assertSame('Name', $model->getName());
     }
@@ -134,6 +139,7 @@ class DeserializerIntegrationTest extends TestCase
 
             /**
              * @param string|null $type
+             *
              * @return callable
              */
             public function getFactory(string $type = null): callable
@@ -146,7 +152,7 @@ class DeserializerIntegrationTest extends TestCase
             public function getDenormalizingFieldMappings(): array
             {
                 return [
-                    new DenormalizingFieldMapping('name'),
+                    DenormalizingFieldMappingBuilder::create('name')->getMapping(),
                 ];
             }
         };

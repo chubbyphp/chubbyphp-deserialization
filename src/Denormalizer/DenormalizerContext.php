@@ -17,15 +17,13 @@ final class DenormalizerContext implements DenormalizerContextInterface
     private $groups = [];
 
     /**
-     * @param bool $allowedAdditionalFields
-     *
-     * @return self
+     * @param bool     $allowedAdditionalFields
+     * @param string[] $groups
      */
-    public function setAllowedAdditionalFields(bool $allowedAdditionalFields): self
+    public function __construct($allowedAdditionalFields, array $groups)
     {
         $this->allowedAdditionalFields = $allowedAdditionalFields;
-
-        return $this;
+        $this->groups = $groups;
     }
 
     /**
@@ -34,18 +32,6 @@ final class DenormalizerContext implements DenormalizerContextInterface
     public function isAllowedAdditionalFields(): bool
     {
         return $this->allowedAdditionalFields;
-    }
-
-    /**
-     * @param string[] $groups
-     *
-     * @return self
-     */
-    public function setGroups(array $groups): self
-    {
-        $this->groups = $groups;
-
-        return $this;
     }
 
     /**
