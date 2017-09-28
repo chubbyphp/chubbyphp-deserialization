@@ -28,15 +28,18 @@ class DeserializerLogicExceptionTest extends TestCase
 
     public function testCreateMissingMethod()
     {
-        $exception = DeserializerLogicException::createMissingMethod(\stdClass::class, ['setName']);
+        $exception = DeserializerLogicException::createMissingMethod(\stdClass::class, ['getName', 'hasName']);
 
-        self::assertSame('Class stdClass does not contain an accessable method(s) setName', $exception->getMessage());
+        self::assertSame(
+            'There are no accessible method(s) "getName", "hasName", within class: stdClass',
+            $exception->getMessage()
+        );
     }
 
     public function testCreateNotParsable()
     {
         $exception = DeserializerLogicException::createMissingProperty(\stdClass::class, 'name');
 
-        self::assertSame('Class stdClass does not contain property name', $exception->getMessage());
+        self::assertSame('There is no property "name" within class: stdClass', $exception->getMessage());
     }
 }

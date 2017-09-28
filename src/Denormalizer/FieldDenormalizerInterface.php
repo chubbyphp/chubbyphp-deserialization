@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Denormalizer;
 
+use Chubbyphp\Deserialization\DeserializerRuntimeException;
+
 interface FieldDenormalizerInterface
 {
     /**
@@ -12,6 +14,7 @@ interface FieldDenormalizerInterface
      * @param mixed                        $value
      * @param DenormalizerContextInterface $context
      * @param DenormalizerInterface|null   $denormalizer
+     * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
         string $path,

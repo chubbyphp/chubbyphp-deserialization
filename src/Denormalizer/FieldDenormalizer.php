@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Deserialization\Denormalizer;
 
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
+use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 final class FieldDenormalizer implements FieldDenormalizerInterface
 {
@@ -13,6 +14,9 @@ final class FieldDenormalizer implements FieldDenormalizerInterface
      */
     private $accessor;
 
+    /**
+     * @param AccessorInterface $accessor
+     */
     public function __construct(AccessorInterface $accessor)
     {
         $this->accessor = $accessor;
@@ -24,6 +28,7 @@ final class FieldDenormalizer implements FieldDenormalizerInterface
      * @param mixed                        $value
      * @param DenormalizerContextInterface $context
      * @param DenormalizerInterface|null   $denormalizer
+     * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
         string $path,

@@ -7,6 +7,16 @@ namespace Chubbyphp\Deserialization;
 final class DeserializerRuntimeException extends \RuntimeException
 {
     /**
+     * @param string $path
+     *
+     * @return self
+     */
+    public static function createInvalidType(string $path, string $type): self
+    {
+        return new self(sprintf('There is an invalid type "%s" at path: %s', $type, $path));
+    }
+
+    /**
      * @param string $contentType
      *
      * @return self

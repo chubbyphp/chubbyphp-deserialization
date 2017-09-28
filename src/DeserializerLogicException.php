@@ -17,6 +17,16 @@ final class DeserializerLogicException extends \LogicException
     }
 
     /**
+     * @param string $path
+     *
+     * @return self
+     */
+    public static function createMissingDenormalizer(string $path): self
+    {
+        return new self(sprintf('There is no denormalizer at path: %s', $path));
+    }
+
+    /**
      * @param string $class
      *
      * @return self
@@ -35,7 +45,7 @@ final class DeserializerLogicException extends \LogicException
     public static function createMissingMethod(string $class, array $methods): self
     {
         return new self(
-            sprintf('Class %s does not contain an accessable method(s) %s', $class, implode(', ', $methods))
+            sprintf('There are no accessible method(s) "%s", within class: %s', implode('", "', $methods), $class)
         );
     }
 
@@ -47,6 +57,6 @@ final class DeserializerLogicException extends \LogicException
      */
     public static function createMissingProperty(string $class, string $property): self
     {
-        return new self(sprintf('Class %s does not contain property %s', $class, $property));
+        return new self(sprintf('There is no property "%s" within class: %s', $property, $class));
     }
 }

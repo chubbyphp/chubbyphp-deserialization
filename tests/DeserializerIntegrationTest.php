@@ -4,8 +4,10 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization;
 
+use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
 use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
+use Chubbyphp\Deserialization\Denormalizer\CollectionFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizingContextBuilder;
 use Chubbyphp\Deserialization\Deserializer;
@@ -23,28 +25,42 @@ class DeserializerIntegrationTest extends TestCase
     {
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
-            new Denormalizer([$this->getObjectMapping()])
+            new Denormalizer([$this->getChildObjectMapping(), $this->getParentObjectMapping()])
         );
 
-        $data = json_encode(['name' => 'Name']);
+        $data = json_encode(['name' => 'Name', 'children' => [['name' => 'Name']]]);
 
-        $object = $deserializer->deserialize(get_class($this->getObject()), $data, 'application/json');
+        $parentObject = $deserializer->deserialize(get_class($this->getParentObject()), $data, 'application/json');
 
-        self::assertSame('Name', $object->getName());
+        self::assertSame('Name', $parentObject->getName());
+        self::assertCount(1, $parentObject->getChildren());
+        self::assertSame('Name', $parentObject->getChildren()[0]->getName());
     }
 
     public function testDenormalizeByObject()
     {
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
-            new Denormalizer([$this->getObjectMapping()])
+            new Denormalizer([$this->getChildObjectMapping(), $this->getParentObjectMapping()])
         );
 
-        $data = json_encode(['name' => 'Name']);
+        $data = json_encode(['name' => 'Name', 'children' => [['name' => 'Name']]]);
 
-        $object = $deserializer->deserialize($this->getObject(), $data, 'application/json');
+        $childrenObject1 = $this->getChildObject();
+        $childrenObject1->setName('oldName1');
 
-        self::assertSame('Name', $object->getName());
+        $childrenObject2 = $this->getChildObject();
+        $childrenObject2->setName('oldNam2');
+
+        $parentObject = $this->getParentObject();
+        $parentObject->setName('oldName');
+        $parentObject->setChildren([$childrenObject1, $childrenObject2]);
+
+        $parentObject = $deserializer->deserialize($this->getParentObject(), $data, 'application/json');
+
+        self::assertSame('Name', $parentObject->getName());
+        self::assertCount(1, $parentObject->getChildren());
+        self::assertSame('Name', $parentObject->getChildren()[0]->getName());
     }
 
     public function testDenormalizeWithAdditionalFieldsExpectsException()
@@ -54,25 +70,25 @@ class DeserializerIntegrationTest extends TestCase
 
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
-            new Denormalizer([$this->getObjectMapping()])
+            new Denormalizer([$this->getChildObjectMapping(), $this->getParentObjectMapping()])
         );
 
         $data = json_encode(['name' => 'Name', 'unknownField' => 'value']);
 
-        $deserializer->deserialize($this->getObject(), $data, 'application/json');
+        $deserializer->deserialize($this->getParentObject(), $data, 'application/json');
     }
 
     public function testDenormalizeWithAllowedAdditionalFields()
     {
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
-            new Denormalizer([$this->getObjectMapping()])
+            new Denormalizer([$this->getChildObjectMapping(), $this->getParentObjectMapping()])
         );
 
         $data = json_encode(['name' => 'Name', 'unknownField' => 'value']);
 
         $object = $deserializer->deserialize(
-            $this->getObject(),
+            $this->getParentObject(),
             $data,
             'application/json',
             DenormalizingContextBuilder::create()->setAllowedAdditionalFields(true)->getContext()
@@ -84,7 +100,7 @@ class DeserializerIntegrationTest extends TestCase
     /**
      * @return object
      */
-    public function getObject()
+    public function getChildObject()
     {
         return new class() {
             /**
@@ -93,11 +109,15 @@ class DeserializerIntegrationTest extends TestCase
             private $name;
 
             /**
-             * @param string $name
+             * @param null|string $name
+             *
+             * @return self
              */
-            public function setName(string $name)
+            public function setName(string $name = null): self
             {
                 $this->name = $name;
+
+                return $this;
             }
 
             /**
@@ -113,7 +133,65 @@ class DeserializerIntegrationTest extends TestCase
     /**
      * @return object
      */
-    private function getObjectMapping()
+    public function getParentObject()
+    {
+        return new class() {
+            /**
+             * @var string|null
+             */
+            private $name;
+
+            /**
+             * @var object[]
+             */
+            private $children;
+
+            /**
+             * @param null|string $name
+             *
+             * @return self
+             */
+            public function setName(string $name = null): self
+            {
+                $this->name = $name;
+
+                return $this;
+            }
+
+            /**
+             * @return string|null
+             */
+            public function getName()
+            {
+                return $this->name;
+            }
+
+            /**
+             * @return object[]
+             */
+            public function getChildren(): array
+            {
+                return $this->children;
+            }
+
+            /**
+             * @param object[] $children
+             *
+             * @return self
+             */
+            public function setChildren(array $children): self
+            {
+                $this->children = $children;
+
+                return $this;
+            }
+        };
+    }
+
+    /**
+     * @return object
+     */
+    private function getChildObjectMapping()
     {
         return new class($this) implements DenormalizingObjectMappingInterface {
             /**
@@ -134,7 +212,7 @@ class DeserializerIntegrationTest extends TestCase
              */
             public function getClass(): string
             {
-                return get_class($this->test->getObject());
+                return get_class($this->test->getChildObject());
             }
 
             /**
@@ -145,7 +223,7 @@ class DeserializerIntegrationTest extends TestCase
             public function getFactory(string $type = null): callable
             {
                 return function () {
-                    return $this->test->getObject();
+                    return $this->test->getChildObject();
                 };
             }
 
@@ -153,6 +231,57 @@ class DeserializerIntegrationTest extends TestCase
             {
                 return [
                     DenormalizingFieldMappingBuilder::create('name')->getMapping(),
+                ];
+            }
+        };
+    }
+
+    /**
+     * @return object
+     */
+    private function getParentObjectMapping()
+    {
+        return new class($this) implements DenormalizingObjectMappingInterface {
+            /**
+             * @var TestCase
+             */
+            private $test;
+
+            /**
+             * @param DeserializerIntegrationTest $test
+             */
+            public function __construct(DeserializerIntegrationTest $test)
+            {
+                $this->test = $test;
+            }
+
+            /**
+             * @return string
+             */
+            public function getClass(): string
+            {
+                return get_class($this->test->getParentObject());
+            }
+
+            /**
+             * @param string|null $type
+             *
+             * @return callable
+             */
+            public function getFactory(string $type = null): callable
+            {
+                return function () {
+                    return $this->test->getParentObject();
+                };
+            }
+
+            public function getDenormalizingFieldMappings(): array
+            {
+                return [
+                    DenormalizingFieldMappingBuilder::create('name')->getMapping(),
+                    DenormalizingFieldMappingBuilder::create('children')->setFieldDenormalizer(
+                        new CollectionFieldDenormalizer(get_class($this->test->getChildObject()), new PropertyAccessor('children'))
+                    )->getMapping(),
                 ];
             }
         };

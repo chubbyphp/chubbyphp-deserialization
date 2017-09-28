@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Denormalizer;
 
+use Chubbyphp\Deserialization\DeserializerRuntimeException;
+
 final class DateFieldDenormalizer implements FieldDenormalizerInterface
 {
     /**
@@ -25,6 +27,7 @@ final class DateFieldDenormalizer implements FieldDenormalizerInterface
      * @param mixed                        $value
      * @param DenormalizerContextInterface $context
      * @param DenormalizerInterface|null   $denormalizer
+     * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
         string $path,
