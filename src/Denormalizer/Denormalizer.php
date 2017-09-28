@@ -60,8 +60,12 @@ final class Denormalizer implements DenormalizerInterface
         $class = is_object($object) ? get_class($object) : $object;
         $objectMapping = $this->getObjectMapping($class);
 
+        $type = $data['_type'] ?? null;
+
+        unset($data['_type']);
+
         if (!is_object($object)) {
-            $factory = $objectMapping->getFactory();
+            $factory = $objectMapping->getFactory($type);
             $object = $factory();
         }
 
@@ -70,6 +74,7 @@ final class Denormalizer implements DenormalizerInterface
 
             unset($data[$denormalizingFieldMapping->getName()]);
         }
+
 
         if ([] !== $data && !$context->isAllowedAdditionalFields()) {
             $this->handleNotAllowedAddtionalFields($path, array_keys($data));

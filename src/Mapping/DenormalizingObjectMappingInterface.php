@@ -12,9 +12,10 @@ interface DenormalizingObjectMappingInterface
     public function getClass(): string;
 
     /**
+     * @param string|null $type
      * @return callable
      */
-    public function getFactory(): callable;
+    public function getFactory(string $type = null): callable;
 
     /**
      * @return DenormalizingFieldMappingInterface[]
