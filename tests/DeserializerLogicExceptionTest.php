@@ -19,6 +19,13 @@ class DeserializerLogicExceptionTest extends TestCase
         self::assertSame('There is no decoder for content-type: application/json', $exception->getMessage());
     }
 
+    public function testCreateMissingDenormalizer()
+    {
+        $exception = DeserializerLogicException::createMissingDenormalizer('path1');
+
+        self::assertSame('There is no denormalizer at path: path1', $exception->getMessage());
+    }
+
     public function testCreateMissingMapping()
     {
         $exception = DeserializerLogicException::createMissingMapping(\stdClass::class);

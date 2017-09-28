@@ -21,7 +21,7 @@ final class CollectionFieldDenormalizer implements FieldDenormalizerInterface
     private $accessor;
 
     /**
-     * @param string $class
+     * @param string            $class
      * @param AccessorInterface $accessor
      */
     public function __construct(string $class, AccessorInterface $accessor)
@@ -36,6 +36,7 @@ final class CollectionFieldDenormalizer implements FieldDenormalizerInterface
      * @param mixed                        $value
      * @param DenormalizerContextInterface $context
      * @param DenormalizerInterface|null   $denormalizer
+     *
      * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
@@ -57,7 +58,7 @@ final class CollectionFieldDenormalizer implements FieldDenormalizerInterface
 
         $newChildObjects = [];
         foreach ($value as $i => $subValue) {
-            $subPath = $path . '[' . $i . ']';
+            $subPath = $path.'['.$i.']';
 
             if (!is_array($subValue)) {
                 throw DeserializerRuntimeException::createInvalidType($subPath, 'object');

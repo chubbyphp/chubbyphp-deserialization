@@ -12,6 +12,13 @@ use PHPUnit\Framework\TestCase;
  */
 class DeserializerRuntimeExceptionTest extends TestCase
 {
+    public function testCreateInvalidType()
+    {
+        $exception = DeserializerRuntimeException::createInvalidType('path1', 'array');
+
+        self::assertSame('There is an invalid type "array" at path: path1', $exception->getMessage());
+    }
+
     public function testCreateNotParsable()
     {
         $exception = DeserializerRuntimeException::createNotParsable('application/json');

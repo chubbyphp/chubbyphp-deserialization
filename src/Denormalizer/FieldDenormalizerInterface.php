@@ -14,6 +14,7 @@ interface FieldDenormalizerInterface
      * @param mixed                        $value
      * @param DenormalizerContextInterface $context
      * @param DenormalizerInterface|null   $denormalizer
+     *
      * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
