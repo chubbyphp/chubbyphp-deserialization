@@ -13,15 +13,9 @@ final class FieldDenormalizer implements FieldDenormalizerInterface
      */
     private $accessor;
 
-    /**
-     * @var mixed
-     */
-    private $default;
-
-    public function __construct(AccessorInterface $accessor, $default = null)
+    public function __construct(AccessorInterface $accessor)
     {
         $this->accessor = $accessor;
-        $this->default = $default;
     }
 
     /**
