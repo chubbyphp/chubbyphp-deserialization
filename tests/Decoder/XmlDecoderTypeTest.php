@@ -28,7 +28,7 @@ class XmlDecoderTypeTest extends AbstractDecoderTypeTest
     {
         $xml = <<<EOD
 <?xml version="1.0" encoding="UTF-8"?>
-<object value="search">
+<object type="search">
   <page type="integer">1</page>
   <perPage type="integer">10</perPage>
   <search></search>
@@ -36,7 +36,7 @@ class XmlDecoderTypeTest extends AbstractDecoderTypeTest
   <order type="string">asc</order>
   <meta-embedded>
     <mainItem>
-      <object value="item">
+      <object type="item">
         <id type="string">id1</id>
         <name type="string">A fancy Name</name>
         <treeValues>
@@ -63,7 +63,7 @@ class XmlDecoderTypeTest extends AbstractDecoderTypeTest
       </object>
     </mainItem>
     <items>
-      <object value="item" key="0">
+      <object type="item" key="0">
         <id type="string">id1</id>
         <name type="string">A fancy Name</name>
         <treeValues>
@@ -88,7 +88,7 @@ class XmlDecoderTypeTest extends AbstractDecoderTypeTest
           </delete>
         </meta-links>
       </object>
-      <object value="item" key="1">
+      <object type="item" key="1">
         <id type="string">id2</id>
         <name type="string">B fancy Name</name>
         <treeValues>
@@ -114,7 +114,7 @@ class XmlDecoderTypeTest extends AbstractDecoderTypeTest
           </delete>
         </meta-links>
       </object>
-      <object value="item" key="2">
+      <object type="item" key="2">
         <id type="string">id3</id>
         <name type="string">C fancy Name</name>
         <treeValues>
