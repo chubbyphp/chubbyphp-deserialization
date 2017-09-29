@@ -37,6 +37,7 @@ final class CollectionFieldDenormalizer implements FieldDenormalizerInterface
      * @param DenormalizerContextInterface $context
      * @param DenormalizerInterface|null   $denormalizer
      *
+     * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
