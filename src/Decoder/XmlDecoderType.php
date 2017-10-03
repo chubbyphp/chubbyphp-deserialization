@@ -63,7 +63,10 @@ final class XmlDecoderType implements DecoderTypeInterface
                 continue;
             }
 
-            if ('object' === $childNode->nodeName && !$childNode->hasAttribute('key')) {
+            if ('object' === $childNode->nodeName
+                && $childNode->hasAttribute('type')
+                && !$childNode->hasAttribute('key')
+            ) {
                 return $this->transformType($childNode);
             }
 
