@@ -58,7 +58,7 @@ final class Denormalizer implements DenormalizerInterface
      */
     public function denormalize($object, array $data, DenormalizerContextInterface $context = null, string $path = '')
     {
-        $context = $context ?? DenormalizingContextBuilder::create()->getContext();
+        $context = $context ?? DenormalizerContextBuilder::create()->getContext();
 
         $class = is_object($object) ? get_class($object) : $object;
         $objectMapping = $this->getObjectMapping($class);

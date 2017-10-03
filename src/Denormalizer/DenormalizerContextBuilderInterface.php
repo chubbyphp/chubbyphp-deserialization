@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Denormalizer;
 
-interface DenormalizingContextBuilderInterface
+interface DenormalizerContextBuilderInterface
 {
     /**
-     * @return DenormalizingContextBuilderInterface
+     * @return DenormalizerContextBuilderInterface
      */
-    public static function create(): DenormalizingContextBuilderInterface;
+    public static function create(): DenormalizerContextBuilderInterface;
 
     /**
      * @param bool $allowedAdditionalFields

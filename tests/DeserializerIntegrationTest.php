@@ -9,7 +9,7 @@ use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
 use Chubbyphp\Deserialization\Denormalizer\CollectionFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
-use Chubbyphp\Deserialization\Denormalizer\DenormalizingContextBuilder;
+use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextBuilder;
 use Chubbyphp\Deserialization\Deserializer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingBuilder;
@@ -91,7 +91,7 @@ class DeserializerIntegrationTest extends TestCase
             $this->getParentObject(),
             $data,
             'application/json',
-            DenormalizingContextBuilder::create()->setAllowedAdditionalFields(true)->getContext()
+            DenormalizerContextBuilder::create()->setAllowedAdditionalFields(true)->getContext()
         );
 
         self::assertSame('Name', $object->getName());

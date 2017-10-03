@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Denormalizer;
 
-final class DenormalizingContextBuilder implements DenormalizingContextBuilderInterface
+final class DenormalizerContextBuilder implements DenormalizerContextBuilderInterface
 {
     /**
      * @var bool
@@ -21,9 +21,9 @@ final class DenormalizingContextBuilder implements DenormalizingContextBuilderIn
     }
 
     /**
-     * @return DenormalizingContextBuilderInterface
+     * @return DenormalizerContextBuilderInterface
      */
-    public static function create(): DenormalizingContextBuilderInterface
+    public static function create(): DenormalizerContextBuilderInterface
     {
         $self = new self();
         $self->allowedAdditionalFields = false;
@@ -35,9 +35,9 @@ final class DenormalizingContextBuilder implements DenormalizingContextBuilderIn
     /**
      * @param bool $allowedAdditionalFields
      *
-     * @return DenormalizingContextBuilderInterface
+     * @return DenormalizerContextBuilderInterface
      */
-    public function setAllowedAdditionalFields(bool $allowedAdditionalFields): DenormalizingContextBuilderInterface
+    public function setAllowedAdditionalFields(bool $allowedAdditionalFields): DenormalizerContextBuilderInterface
     {
         $this->allowedAdditionalFields = $allowedAdditionalFields;
 
@@ -47,9 +47,9 @@ final class DenormalizingContextBuilder implements DenormalizingContextBuilderIn
     /**
      * @param string[] $groups
      *
-     * @return DenormalizingContextBuilderInterface
+     * @return DenormalizerContextBuilderInterface
      */
-    public function setGroups(array $groups): DenormalizingContextBuilderInterface
+    public function setGroups(array $groups): DenormalizerContextBuilderInterface
     {
         $this->groups = $groups;
 
