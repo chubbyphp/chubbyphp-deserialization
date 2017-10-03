@@ -20,7 +20,7 @@ final class DenormalizerContext implements DenormalizerContextInterface
      * @param bool     $allowedAdditionalFields
      * @param string[] $groups
      */
-    public function __construct($allowedAdditionalFields, array $groups)
+    public function __construct($allowedAdditionalFields = false, array $groups = [])
     {
         $this->allowedAdditionalFields = $allowedAdditionalFields;
         $this->groups = $groups;
