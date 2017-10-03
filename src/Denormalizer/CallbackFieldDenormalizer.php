@@ -14,18 +14,11 @@ final class CallbackFieldDenormalizer implements FieldDenormalizerInterface
     private $callback;
 
     /**
-     * @var array
-     */
-    private $groups;
-
-    /**
      * @param callable $callback
-     * @param array    $groups
      */
-    public function __construct(callable $callback, array $groups = [])
+    public function __construct(callable $callback)
     {
         $this->callback = $callback;
-        $this->groups = $groups;
     }
 
     /**
@@ -46,14 +39,6 @@ final class CallbackFieldDenormalizer implements FieldDenormalizerInterface
     ) {
         $callback = $this->callback;
 
-        $callback($path, $object, $value, $denormalizer, $context);
-    }
-
-    /**
-     * @return array
-     */
-    public function getGroups(): array
-    {
-        return $this->groups;
+        $callback($path, $object, $value, $context, $denormalizer);
     }
 }
