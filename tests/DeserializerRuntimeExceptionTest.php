@@ -14,9 +14,9 @@ class DeserializerRuntimeExceptionTest extends TestCase
 {
     public function testCreateInvalidType()
     {
-        $exception = DeserializerRuntimeException::createInvalidType('path1', 'array');
+        $exception = DeserializerRuntimeException::createInvalidType('path1', 'null', 'array');
 
-        self::assertSame('There is an invalid type "array" at path: path1', $exception->getMessage());
+        self::assertSame('There is an invalid type "null", needed "array" at path: path1', $exception->getMessage());
     }
 
     public function testCreateNotParsable()

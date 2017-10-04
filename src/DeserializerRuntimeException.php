@@ -8,12 +8,16 @@ final class DeserializerRuntimeException extends \RuntimeException
 {
     /**
      * @param string $path
+     * @param string $givenType
+     * @param string $wishedType
      *
      * @return self
      */
-    public static function createInvalidType(string $path, string $type): self
+    public static function createInvalidType(string $path, string $givenType, string $wishedType): self
     {
-        return new self(sprintf('There is an invalid type "%s" at path: %s', $type, $path));
+        return new self(
+            sprintf('There is an invalid type "%s", needed "%s" at path: %s', $givenType, $wishedType, $path)
+        );
     }
 
     /**
