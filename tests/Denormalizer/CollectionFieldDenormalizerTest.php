@@ -92,6 +92,7 @@ class CollectionFieldDenormalizerTest extends TestCase
 
             /**
              * @param array $children
+             *
              * @return self
              */
             public function setChildren(array $children): self
@@ -165,7 +166,7 @@ class CollectionFieldDenormalizerTest extends TestCase
 
         return $context;
     }
-    
+
     /**
      * @return DenormalizerInterface
      */
