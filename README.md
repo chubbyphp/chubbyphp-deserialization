@@ -95,6 +95,7 @@ echo $model->getName(); // 'name'
 namespace MyProject\Deserialization;
 
 use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingBuilder;
+use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizingObjectMappingInterface;
 use MyProject\Model\Model;
 
