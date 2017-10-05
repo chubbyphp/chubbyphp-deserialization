@@ -31,6 +31,62 @@ composer require chubbyphp/chubbyphp-deserialization "~2.0@dev"
 
 ## Usage
 
+### Decoder
+
+```php
+<?php
+
+use Chubbyphp\Deserialization\Decoder\Decoder;
+use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
+
+$decoder = new Decoder([new JsonDecoderType]);
+
+$data = $decoder->decode('{"name": "name"}', 'application/json');
+print_r($data); // ['name' => 'name']
+```
+
+### Denormalizer
+
+```php
+<?php
+
+use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
+use MyProject\Deserialization\ModelMapping;
+use MyProject\Model\Model;
+
+$logger = ...;
+
+$denormalizer = new Denormalizer([new ModelMapping()], $logger);
+
+$model = $denormalizer->denormalize(Model::class, ['name' => 'name']);
+
+echo $model->getName(); // 'name'
+```
+
+### Deserializer
+
+```php
+<?php
+
+use Chubbyphp\Deserialization\Decoder\Decoder;
+use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
+use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
+use Chubbyphp\Deserialization\Deserializer;
+use MyProject\Deserialization\ModelMapping;
+use MyProject\Model\Model;
+
+$logger = ...;
+
+$deserializer = new Deserializer(
+    new Decoder([new JsonDecoderType]),
+    new Denormalizer([new ModelMapping()], $logger)
+);
+
+$model = $deserializer->deserialize(Model::class, '{"name": "name"}', 'application/json');
+
+echo $model->getName(); // 'name'
+```
+
 ## Copyright
 
 Dominik Zogg 2017
