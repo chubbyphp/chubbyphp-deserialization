@@ -89,6 +89,8 @@ final class Denormalizer implements DenormalizerInterface
      * @param string $class
      *
      * @return DenormalizingObjectMappingInterface
+     *
+     * @throws DeserializerLogicException
      */
     private function getObjectMapping(string $class): DenormalizingObjectMappingInterface
     {
@@ -108,7 +110,7 @@ final class Denormalizer implements DenormalizerInterface
      * @param DenormalizingFieldMappingInterface $denormalizingFieldMapping
      * @param string                             $path
      * @param array                              $data
-     * @param $object
+     * @param object                             $object
      */
     private function denormalizeField(
         DenormalizerContextInterface $context,
@@ -137,9 +139,9 @@ final class Denormalizer implements DenormalizerInterface
 
     /**
      * @param string $path
-     * @param $names
+     * @param array  $names
      */
-    private function handleNotAllowedAddtionalFields(string $path, $names)
+    private function handleNotAllowedAddtionalFields(string $path, array $names)
     {
         $exception = DeserializerRuntimeException::createNotAllowedAddtionalFields(
             $this->getSubPathsByNames($path, $names)

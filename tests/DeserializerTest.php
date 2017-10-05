@@ -39,12 +39,14 @@ class DeserializerTest extends TestCase
         /** @var DecoderInterface|\PHPUnit_Framework_MockObject_MockObject $decoder */
         $decoder = $this->getMockBuilder(DecoderInterface::class)->getMockForAbstractClass();
 
-        $decoder->expects(self::any())->method('decode')->willReturnCallback(function (string $data, string $contentType) {
-            self::assertSame('{"name": "Name"}', $data);
-            self::assertSame('application/json', $contentType);
+        $decoder->expects(self::any())->method('decode')->willReturnCallback(
+            function (string $data, string $contentType) {
+                self::assertSame('{"name": "Name"}', $data);
+                self::assertSame('application/json', $contentType);
 
-            return json_decode($data, true);
-        });
+                return json_decode($data, true);
+            }
+        );
 
         return $decoder;
     }

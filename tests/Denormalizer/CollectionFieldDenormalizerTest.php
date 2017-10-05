@@ -36,7 +36,13 @@ class CollectionFieldDenormalizerTest extends TestCase
         $parent = $this->getParent();
 
         $fieldDenormalizer = new CollectionFieldDenormalizer(get_class($this->getChild()), $this->getAccessor());
-        $fieldDenormalizer->denormalizeField('children', $parent, null, $this->getDenormalizerContext(), $this->getDenormalizer());
+        $fieldDenormalizer->denormalizeField(
+            'children',
+            $parent,
+            null,
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
     }
 
     public function testDenormalizeFieldWithArrayButNullChildDenormalizer()
@@ -47,7 +53,13 @@ class CollectionFieldDenormalizerTest extends TestCase
         $parent = $this->getParent();
 
         $fieldDenormalizer = new CollectionFieldDenormalizer(get_class($this->getChild()), $this->getAccessor());
-        $fieldDenormalizer->denormalizeField('children', $parent, [null], $this->getDenormalizerContext(), $this->getDenormalizer());
+        $fieldDenormalizer->denormalizeField(
+            'children',
+            $parent,
+            [null],
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
     }
 
     public function testDenormalizeFieldWithNewChild()
@@ -55,7 +67,13 @@ class CollectionFieldDenormalizerTest extends TestCase
         $parent = $this->getParent();
 
         $fieldDenormalizer = new CollectionFieldDenormalizer(get_class($this->getChild()), $this->getAccessor());
-        $fieldDenormalizer->denormalizeField('children', $parent, [['name' => 'name']], $this->getDenormalizerContext(), $this->getDenormalizer());
+        $fieldDenormalizer->denormalizeField(
+            'children',
+            $parent,
+            [['name' => 'name']],
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
 
         self::assertSame('name', $parent->getChildren()[0]->getName());
     }
@@ -66,7 +84,13 @@ class CollectionFieldDenormalizerTest extends TestCase
         $parent->setChildren([$this->getChild()]);
 
         $fieldDenormalizer = new CollectionFieldDenormalizer(get_class($this->getChild()), $this->getAccessor());
-        $fieldDenormalizer->denormalizeField('children', $parent, [['name' => 'name']], $this->getDenormalizerContext(), $this->getDenormalizer());
+        $fieldDenormalizer->denormalizeField(
+            'children',
+            $parent,
+            [['name' => 'name']],
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
 
         self::assertSame('name', $parent->getChildren()[0]->getName());
     }

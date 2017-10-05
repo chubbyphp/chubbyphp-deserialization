@@ -61,8 +61,9 @@ final class DenormalizingFieldMappingBuilder implements DenormalizingFieldMappin
      *
      * @return DenormalizingFieldMappingBuilderInterface
      */
-    public function setFieldDenormalizer(FieldDenormalizerInterface $fieldDenormalizer): DenormalizingFieldMappingBuilderInterface
-    {
+    public function setFieldDenormalizer(
+        FieldDenormalizerInterface $fieldDenormalizer
+    ): DenormalizingFieldMappingBuilderInterface {
         $this->fieldDenormalizer = $fieldDenormalizer;
 
         return $this;

@@ -94,7 +94,11 @@ class DenormalizerTest extends TestCase
             $this->getDenormalizingObjectMapping(['read']),
         ]);
 
-        $object = $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name'], $this->getDenormalizerContext(false, ['read']));
+        $object = $denormalizer->denormalize(
+            get_class($this->getObject()),
+            ['name' => 'name'],
+            $this->getDenormalizerContext(false, ['read'])
+        );
 
         self::assertSame('name', $object->getName());
     }
@@ -105,7 +109,11 @@ class DenormalizerTest extends TestCase
             $this->getDenormalizingObjectMapping(),
         ]);
 
-        $object = $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name'], $this->getDenormalizerContext(false, ['read']));
+        $object = $denormalizer->denormalize(
+            get_class($this->getObject()),
+            ['name' => 'name'],
+            $this->getDenormalizerContext(false, ['read'])
+        );
 
         self::assertNull($object->getName());
     }
@@ -187,8 +195,10 @@ class DenormalizerTest extends TestCase
      *
      * @return DenormalizerContextInterface
      */
-    private function getDenormalizerContext(bool $allowedAdditionalFields = false, array $groups = []): DenormalizerContextInterface
-    {
+    private function getDenormalizerContext(
+        bool $allowedAdditionalFields = false,
+        array $groups = []
+    ): DenormalizerContextInterface {
         /** @var DenormalizerContextInterface|\PHPUnit_Framework_MockObject_MockObject $context */
         $context = $this->getMockBuilder(DenormalizerContextInterface::class)
             ->setMethods([])

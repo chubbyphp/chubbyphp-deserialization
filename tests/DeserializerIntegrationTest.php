@@ -280,7 +280,10 @@ class DeserializerIntegrationTest extends TestCase
                 return [
                     DenormalizingFieldMappingBuilder::create('name')->getMapping(),
                     DenormalizingFieldMappingBuilder::create('children')->setFieldDenormalizer(
-                        new CollectionFieldDenormalizer(get_class($this->test->getChildObject()), new PropertyAccessor('children'))
+                        new CollectionFieldDenormalizer(
+                            get_class($this->test->getChildObject()),
+                            new PropertyAccessor('children')
+                        )
                     )->getMapping(),
                 ];
             }
