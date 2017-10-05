@@ -128,6 +128,29 @@ EOD;
         self::assertEquals($expectedData, $decoder->decode($yaml));
     }
 
+    public function testTypes()
+    {
+        $yaml = <<<EOD
+id: id1
+name: 'A fancy Name'
+treeValues:
+    1:
+        2: 3
+progress: 76.8
+active: true
+EOD;
+
+        $decoder = new YamlDecoderType();
+
+        $data = $decoder->decode($yaml);
+
+        self::assertSame('id1', $data['id']);
+        self::assertSame('A fancy Name', $data['name']);
+        self::assertSame([1 => [2 => 3]], $data['treeValues']);
+        self::assertSame(76.8, $data['progress']);
+        self::assertSame(true, $data['active']);
+    }
+
     public function testInvalidDecode()
     {
         self::expectException(DeserializerRuntimeException::class);

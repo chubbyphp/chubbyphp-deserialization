@@ -33,6 +33,21 @@ class UrlEncodedDecoderTypeTest extends AbstractDecoderTypeTest
         self::assertEquals($expectedData, $decoder->decode($urlEncoded));
     }
 
+    public function testTypes()
+    {
+        $urlEncoded = 'id=id1&name=A+fancy+Name&treeValues[1][2]=3&progress=76.8&active=1';
+
+        $decoder = new UrlEncodedDecoderType();
+
+        $data = $decoder->decode($urlEncoded);
+
+        self::assertSame('id1', $data['id']);
+        self::assertSame('A fancy Name', $data['name']);
+        self::assertSame([1 => [2 => 3]], $data['treeValues']);
+        self::assertSame(76.8, $data['progress']);
+        //self::assertSame(true, $data['active']); // to idea to solve this in general
+    }
+
     public function testInvalidDecode()
     {
         self::expectException(DeserializerRuntimeException::class);

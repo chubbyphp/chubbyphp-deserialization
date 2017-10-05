@@ -161,6 +161,33 @@ EOD;
         self::assertEquals($expectedData, $decoder->decode($xml));
     }
 
+    public function testTypes()
+    {
+        $xml = <<<EOD
+<object type="item">
+  <id type="string">id1</id>
+  <name type="string">A fancy Name</name>
+  <treeValues>
+    <treeValue key="1">
+      <treeValue type="integer" key="2">3</treeValue>
+    </treeValue>
+  </treeValues>
+  <progress type="float">76.8</progress>
+  <active type="boolean">true</active>
+</object>
+EOD;
+
+        $decoder = new XmlDecoderType();
+
+        $data = $decoder->decode($xml);
+
+        self::assertSame('id1', $data['id']);
+        self::assertSame('A fancy Name', $data['name']);
+        self::assertSame([1 => [2 => 3]], $data['treeValues']);
+        self::assertSame(76.8, $data['progress']);
+        self::assertSame(true, $data['active']);
+    }
+
     public function testInvalidDecode()
     {
         self::expectException(DeserializerRuntimeException::class);
