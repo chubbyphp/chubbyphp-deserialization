@@ -57,11 +57,11 @@ final class UrlEncodedDecoderType implements DecoderTypeInterface
     }
 
     /**
-     * @param $value
+     * @param string $value
      *
-     * @return float|int|null|string
+     * @return mixed
      */
-    private function fixValue($value)
+    private function fixValue(string $value)
     {
         if (is_numeric($value)) {
             if ((string) (int) $value === $value) {
