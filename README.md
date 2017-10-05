@@ -41,8 +41,8 @@ use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
 
 $decoder = new Decoder([new JsonDecoderType]);
 
-$data = $decoder->decode('{"name": "name"}', 'application/json');
-print_r($data); // ['name' => 'name']
+$data = $decoder->decode('{"name": "php"}', 'application/json');
+print_r($data); // ['name' => 'php']
 ```
 
 ### Denormalizer
@@ -58,9 +58,9 @@ $logger = ...;
 
 $denormalizer = new Denormalizer([new ModelMapping()], $logger);
 
-$model = $denormalizer->denormalize(Model::class, ['name' => 'name']);
+$model = $denormalizer->denormalize(Model::class, ['name' => 'php']);
 
-echo $model->getName(); // 'name'
+echo $model->getName(); // 'php'
 ```
 
 ### Deserializer
@@ -82,9 +82,9 @@ $deserializer = new Deserializer(
     new Denormalizer([new ModelMapping()], $logger)
 );
 
-$model = $deserializer->deserialize(Model::class, '{"name": "name"}', 'application/json');
+$model = $deserializer->deserialize(Model::class, '{"name": "php"}', 'application/json');
 
-echo $model->getName(); // 'name'
+echo $model->getName(); // 'php'
 ```
 
 ### Mapping
