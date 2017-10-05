@@ -87,6 +87,51 @@ $model = $deserializer->deserialize(Model::class, '{"name": "name"}', 'applicati
 echo $model->getName(); // 'name'
 ```
 
+### Mapping
+
+```php
+<?php
+
+namespace MyProject\Deserialization;
+
+use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingBuilder;
+use Chubbyphp\Deserialization\Mapping\DenormalizingObjectMappingInterface;
+use MyProject\Model\Model;
+
+final class ModelMapping implements DenormalizingObjectMappingInterface
+{
+    /**
+     * @return string
+     */
+    public function getClass(): string
+    {
+        return Model::class;
+    }
+
+    /**
+     * @param string|null $type
+     *
+     * @return callable
+     */
+    public function getFactory(string $type = null): callable
+    {
+        return function () {
+            return new Model();
+        };
+    }
+
+    /**
+     * @return DenormalizingFieldMappingInterface[]
+     */
+    public function getDenormalizingFieldMappings(): array
+    {
+        return [
+            DenormalizingFieldMappingBuilder::create('name')->getMapping(),
+        ];
+    }
+}
+```
+
 ## Copyright
 
 Dominik Zogg 2017
