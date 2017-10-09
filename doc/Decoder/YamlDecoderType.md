@@ -6,7 +6,8 @@
 use Chubbyphp\Deserialization\Decoder\YamlDecoderType;
 
 $transformer = new YamlDecoderType();
-$transformer->getContentType(); // 'application/x-yaml'
+
+echo $transformer->getContentType(); // 'application/x-yaml'
 
 print_r($transformer->decode('name: php')); // ['name' => 'php']
 ```
