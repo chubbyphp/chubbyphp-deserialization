@@ -31,6 +31,11 @@ composer require chubbyphp/chubbyphp-deserialization "~2.0@dev"
 
 ## Usage
 
+### Accessor
+
+ * [MethodAccessor][2]
+ * [PropertyAccessor][3]
+
 ### Decoder
 
 ```php
@@ -44,6 +49,11 @@ $decoder = new Decoder([new JsonDecoderType]);
 $data = $decoder->decode('{"name": "php"}', 'application/json');
 print_r($data); // ['name' => 'php']
 ```
+
+ * [JsonDecoderType][4]
+ * [UrlEncodedDecoderType][5]
+ * [XmlDecoderType][6]
+ * [YamlDecoderType][7]
 
 ### Denormalizer
 
@@ -143,3 +153,11 @@ Dominik Zogg 2017
 
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-deserialization
+
+[2]: doc/Accessor/MethodAccessor.md
+[3]: doc/Accessor/PropertyAccessor.md
+
+[4]: doc/Decoder/JsonDecoderType.md
+[5]: doc/Decoder/UrlEncodedDecoderType.md
+[6]: doc/Decoder/XmlDecoderType.md
+[7]: doc/Decoder/YamlDecoderType.md
