@@ -47,6 +47,7 @@ use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
 $decoder = new Decoder([new JsonDecoderType]);
 
 $data = $decoder->decode('{"name": "php"}', 'application/json');
+
 print_r($data); // ['name' => 'php']
 ```
 

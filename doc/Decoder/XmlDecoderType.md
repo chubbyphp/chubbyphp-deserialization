@@ -7,5 +7,6 @@ use Chubbyphp\Deserialization\Decoder\XmlDecoderType;
 
 $transformer = new XmlDecoderType();
 $transformer->getContentType(); // 'application/xml'
-$transformer->decode('<name type="string">php</name>'); // ['name' => 'php']
+
+print_r($transformer->decode('<name type="string">php</name>')); // ['name' => 'php']
 ```
