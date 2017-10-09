@@ -26,10 +26,7 @@ final class DeserializationProviderTest extends TestCase
         self::assertTrue(isset($container['deserializer']));
 
         self::assertTrue(isset($container['deserializer.decoder']));
-        self::assertTrue(isset($container['deserializer.decodertype.json']));
-        self::assertTrue(isset($container['deserializer.decodertype.urlencoded']));
-        self::assertTrue(isset($container['deserializer.decodertype.xml']));
-        self::assertTrue(isset($container['deserializer.decodertype.yaml']));
+        self::assertTrue(isset($container['deserializer.decodertypes']));
 
         self::assertTrue(isset($container['deserializer.denormalizer.objectmappings']));
         self::assertTrue(isset($container['deserializer.denormalizer']));
@@ -37,10 +34,11 @@ final class DeserializationProviderTest extends TestCase
         self::assertInstanceOf(Deserializer::class, $container['deserializer']);
 
         self::assertInstanceOf(Decoder::class, $container['deserializer.decoder']);
-        self::assertInstanceOf(JsonDecoderType::class, $container['deserializer.decodertype.json']);
-        self::assertInstanceOf(UrlEncodedDecoderType::class, $container['deserializer.decodertype.urlencoded']);
-        self::assertInstanceOf(XmlDecoderType::class, $container['deserializer.decodertype.xml']);
-        self::assertInstanceOf(YamlDecoderType::class, $container['deserializer.decodertype.yaml']);
+        self::assertInternalType('array', $container['deserializer.decodertypes']);
+        self::assertInstanceOf(JsonDecoderType::class, $container['deserializer.decodertypes'][0]);
+        self::assertInstanceOf(UrlEncodedDecoderType::class, $container['deserializer.decodertypes'][1]);
+        self::assertInstanceOf(XmlDecoderType::class, $container['deserializer.decodertypes'][2]);
+        self::assertInstanceOf(YamlDecoderType::class, $container['deserializer.decodertypes'][3]);
 
         self::assertInstanceOf(Denormalizer::class, $container['deserializer.denormalizer']);
         self::assertInternalType('array', $container['deserializer.denormalizer.objectmappings']);

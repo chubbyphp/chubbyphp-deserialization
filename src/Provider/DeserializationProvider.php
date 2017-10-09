@@ -13,6 +13,7 @@ use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Deserializer;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
+use Symfony\Component\Yaml\Yaml;
 
 final class DeserializationProvider implements ServiceProviderInterface
 {
@@ -26,28 +27,21 @@ final class DeserializationProvider implements ServiceProviderInterface
         };
 
         $container['deserializer.decoder'] = function () use ($container) {
-            return new Decoder([
-                $container['deserializer.decodertype.json'],
-                $container['deserializer.decodertype.urlencoded'],
-                $container['deserializer.decodertype.xml'],
-                $container['deserializer.decodertype.yaml'],
-            ]);
+            return new Decoder($container['deserializer.decodertypes']);
         };
 
-        $container['deserializer.decodertype.json'] = function () {
-            return new JsonDecoderType();
-        };
+        $container['deserializer.decodertypes'] = function () {
+            $decoderTypes = [];
 
-        $container['deserializer.decodertype.urlencoded'] = function () {
-            return new UrlEncodedDecoderType();
-        };
+            $decoderTypes[] = new JsonDecoderType();
+            $decoderTypes[] = new UrlEncodedDecoderType();
+            $decoderTypes[] = new XmlDecoderType();
 
-        $container['deserializer.decodertype.xml'] = function () {
-            return new XmlDecoderType();
-        };
+            if (class_exists(Yaml::class)) {
+                $decoderTypes[] = new YamlDecoderType();
+            }
 
-        $container['deserializer.decodertype.yaml'] = function () {
-            return new YamlDecoderType();
+            return $decoderTypes;
         };
 
         $container['deserializer.denormalizer'] = function () use ($container) {
