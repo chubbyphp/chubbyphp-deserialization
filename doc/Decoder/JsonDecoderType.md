@@ -7,5 +7,5 @@ use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
 
 $transformer = new JsonDecoderType();
 $transformer->getContentType(); // 'application/json'
-$transformer->decode('{"key": "value"}'); // ['key' => 'value']
+$transformer->decode('{"name": "php"}'); // ['name' => 'php']
 ```
