@@ -102,6 +102,9 @@ use MyProject\Model\Model;
 final class ModelMapping implements DenormalizationObjectMappingInterface
 {
     /**
+     * @param string      $class
+     * @param string|null $type
+     *
      * @return bool
      */
     public function isDenormalizationResponsible(string $class, string $type = null): bool
