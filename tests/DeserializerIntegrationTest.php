@@ -208,12 +208,11 @@ class DeserializerIntegrationTest extends TestCase
             }
 
             /**
-             * @param string      $class
-             * @param string|null $type
+             * @param string $class
              *
              * @return bool
              */
-            public function isDenormalizationResponsible(string $class, string $type = null): bool
+            public function isDenormalizationResponsible(string $class): bool
             {
                 return get_class($this->test->getChildObject()) === $class;
             }
@@ -264,12 +263,11 @@ class DeserializerIntegrationTest extends TestCase
             }
 
             /**
-             * @param string      $class
-             * @param string|null $type
+             * @param string $class
              *
              * @return bool
              */
-            public function isDenormalizationResponsible(string $class, string $type = null): bool
+            public function isDenormalizationResponsible(string $class): bool
             {
                 return get_class($this->test->getParentObject()) === $class;
             }

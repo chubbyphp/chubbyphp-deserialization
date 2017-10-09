@@ -87,16 +87,15 @@ final class Denormalizer implements DenormalizerInterface
 
     /**
      * @param string $class
-     * @param string $type
      *
      * @return DenormalizationObjectMappingInterface
      *
      * @throws DeserializerLogicException
      */
-    private function getObjectMapping(string $class, string $type = null): DenormalizationObjectMappingInterface
+    private function getObjectMapping(string $class): DenormalizationObjectMappingInterface
     {
         foreach ($this->objectMappings as $objectMapping) {
-            if ($objectMapping->isDenormalizationResponsible($class, $type)) {
+            if ($objectMapping->isDenormalizationResponsible($class)) {
                 return $objectMapping;
             }
         }
