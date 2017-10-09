@@ -11,25 +11,25 @@ final class Decoder implements DecoderInterface
     /**
      * @var DecoderTypeInterface[]
      */
-    private $decoders;
+    private $decoderTypes;
 
     /**
-     * @param DecoderTypeInterface[] $decoders
+     * @param DecoderTypeInterface[] $decoderTypes
      */
-    public function __construct(array $decoders)
+    public function __construct(array $decoderTypes)
     {
-        $this->decoders = [];
-        foreach ($decoders as $decoder) {
-            $this->addDecoder($decoder);
+        $this->decoderTypes = [];
+        foreach ($decoderTypes as $decoderType) {
+            $this->addDecoderType($decoderType);
         }
     }
 
     /**
-     * @param DecoderTypeInterface $decoder
+     * @param DecoderTypeInterface $decoderType
      */
-    private function addDecoder(DecoderTypeInterface $decoder)
+    private function addDecoderType(DecoderTypeInterface $decoderType)
     {
-        $this->decoders[$decoder->getContentType()] = $decoder;
+        $this->decoderTypes[$decoderType->getContentType()] = $decoderType;
     }
 
     /**
@@ -37,7 +37,7 @@ final class Decoder implements DecoderInterface
      */
     public function getContentTypes(): array
     {
-        return array_keys($this->decoders);
+        return array_keys($this->decoderTypes);
     }
 
     /**
@@ -50,8 +50,8 @@ final class Decoder implements DecoderInterface
      */
     public function decode(string $data, string $contentType): array
     {
-        if (isset($this->decoders[$contentType])) {
-            return $this->decoders[$contentType]->decode($data);
+        if (isset($this->decoderTypes[$contentType])) {
+            return $this->decoderTypes[$contentType]->decode($data);
         }
 
         throw DeserializerLogicException::createMissingContentType($contentType);
