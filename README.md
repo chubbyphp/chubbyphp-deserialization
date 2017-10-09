@@ -125,6 +125,8 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
     }
 
     /**
+     * @param string|null $type
+     *
      * @return DenormalizationFieldMappingInterface[]
      */
     public function getDenormalizationFieldMappings(string $type = null): array
