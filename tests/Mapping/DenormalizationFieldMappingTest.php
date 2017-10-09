@@ -5,24 +5,24 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Mapping;
 
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
-use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMapping;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMapping;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\Deserialization\Mapping\DenormalizingFieldMapping
+ * @covers \Chubbyphp\Deserialization\Mapping\DenormalizationFieldMapping
  */
-class DenormalizingFieldMappingTest extends TestCase
+class DenormalizationFieldMappingTest extends TestCase
 {
     public function testGetName()
     {
-        $fieldMapping = new DenormalizingFieldMapping('name', ['group1'], $this->getFieldDenormalizer());
+        $fieldMapping = new DenormalizationFieldMapping('name', ['group1'], $this->getFieldDenormalizer());
 
         self::assertSame('name', $fieldMapping->getName());
     }
 
     public function testGetGroups()
     {
-        $fieldMapping = new DenormalizingFieldMapping('name', ['group1'], $this->getFieldDenormalizer());
+        $fieldMapping = new DenormalizationFieldMapping('name', ['group1'], $this->getFieldDenormalizer());
 
         self::assertSame(['group1'], $fieldMapping->getGroups());
     }
@@ -31,7 +31,7 @@ class DenormalizingFieldMappingTest extends TestCase
     {
         $fieldDenormalizer = $this->getFieldDenormalizer();
 
-        $fieldMapping = new DenormalizingFieldMapping('name', ['group1'], $fieldDenormalizer);
+        $fieldMapping = new DenormalizationFieldMapping('name', ['group1'], $fieldDenormalizer);
 
         self::assertSame($fieldDenormalizer, $fieldMapping->getFieldDenormalizer());
     }

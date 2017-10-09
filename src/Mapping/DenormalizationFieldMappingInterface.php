@@ -6,7 +6,7 @@ namespace Chubbyphp\Deserialization\Mapping;
 
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 
-interface DenormalizingFieldMappingInterface
+interface DenormalizationFieldMappingInterface
 {
     /**
      * @return string

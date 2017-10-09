@@ -94,19 +94,19 @@ echo $model->getName(); // 'php'
 
 namespace MyProject\Deserialization;
 
-use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingBuilder;
-use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingInterface;
-use Chubbyphp\Deserialization\Mapping\DenormalizingObjectMappingInterface;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
+use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use MyProject\Model\Model;
 
-final class ModelMapping implements DenormalizingObjectMappingInterface
+final class ModelMapping implements DenormalizationObjectMappingInterface
 {
     /**
-     * @return string
+     * @return bool
      */
-    public function getClass(): string
+    public function isDenormalizationResponsible(string $class, string $type = null): bool
     {
-        return Model::class;
+        return Model::class === $class;
     }
 
     /**
@@ -114,7 +114,7 @@ final class ModelMapping implements DenormalizingObjectMappingInterface
      *
      * @return callable
      */
-    public function getFactory(string $type = null): callable
+    public function getDenormalizationFactory(string $type = null): callable
     {
         return function () {
             return new Model();
@@ -122,12 +122,12 @@ final class ModelMapping implements DenormalizingObjectMappingInterface
     }
 
     /**
-     * @return DenormalizingFieldMappingInterface[]
+     * @return DenormalizationFieldMappingInterface[]
      */
-    public function getDenormalizingFieldMappings(): array
+    public function getDenormalizationFieldMappings(string $type = null): array
     {
         return [
-            DenormalizingFieldMappingBuilder::create('name')->getMapping(),
+            DenormalizationFieldMappingBuilder::create('name')->getMapping(),
         ];
     }
 }

@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Mapping;
 
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
-use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingBuilder;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingBuilder
+ * @covers \Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder
  */
-class DenormalizingFieldMappingBuilderTest extends TestCase
+class DenormalizationFieldMappingBuilderTest extends TestCase
 {
     public function testGetDefaultMapping()
     {
-        $fieldMapping = DenormalizingFieldMappingBuilder::create('name')->getMapping();
+        $fieldMapping = DenormalizationFieldMappingBuilder::create('name')->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame([], $fieldMapping->getGroups());
@@ -26,7 +26,7 @@ class DenormalizingFieldMappingBuilderTest extends TestCase
     {
         $denormalizer = $this->getFieldDenormalizer();
 
-        $fieldMapping = DenormalizingFieldMappingBuilder::create('name')
+        $fieldMapping = DenormalizationFieldMappingBuilder::create('name')
             ->setGroups(['group1'])
             ->setFieldDenormalizer($denormalizer)
             ->getMapping();

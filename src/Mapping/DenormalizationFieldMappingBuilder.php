@@ -8,7 +8,7 @@ use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 
-final class DenormalizingFieldMappingBuilder implements DenormalizingFieldMappingBuilderInterface
+final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMappingBuilderInterface
 {
     /**
      * @var string
@@ -32,9 +32,9 @@ final class DenormalizingFieldMappingBuilder implements DenormalizingFieldMappin
     /**
      * @param string $name
      *
-     * @return DenormalizingFieldMappingBuilderInterface
+     * @return DenormalizationFieldMappingBuilderInterface
      */
-    public static function create(string $name): DenormalizingFieldMappingBuilderInterface
+    public static function create(string $name): DenormalizationFieldMappingBuilderInterface
     {
         $self = new self();
         $self->name = $name;
@@ -47,9 +47,9 @@ final class DenormalizingFieldMappingBuilder implements DenormalizingFieldMappin
     /**
      * @param array $groups
      *
-     * @return DenormalizingFieldMappingBuilderInterface
+     * @return DenormalizationFieldMappingBuilderInterface
      */
-    public function setGroups(array $groups): DenormalizingFieldMappingBuilderInterface
+    public function setGroups(array $groups): DenormalizationFieldMappingBuilderInterface
     {
         $this->groups = $groups;
 
@@ -59,21 +59,21 @@ final class DenormalizingFieldMappingBuilder implements DenormalizingFieldMappin
     /**
      * @param FieldDenormalizerInterface $fieldDenormalizer
      *
-     * @return DenormalizingFieldMappingBuilderInterface
+     * @return DenormalizationFieldMappingBuilderInterface
      */
     public function setFieldDenormalizer(
         FieldDenormalizerInterface $fieldDenormalizer
-    ): DenormalizingFieldMappingBuilderInterface {
+    ): DenormalizationFieldMappingBuilderInterface {
         $this->fieldDenormalizer = $fieldDenormalizer;
 
         return $this;
     }
 
     /**
-     * @return DenormalizingFieldMappingInterface
+     * @return DenormalizationFieldMappingInterface
      */
-    public function getMapping(): DenormalizingFieldMappingInterface
+    public function getMapping(): DenormalizationFieldMappingInterface
     {
-        return new DenormalizingFieldMapping($this->name, $this->groups, $this->fieldDenormalizer);
+        return new DenormalizationFieldMapping($this->name, $this->groups, $this->fieldDenormalizer);
     }
 }

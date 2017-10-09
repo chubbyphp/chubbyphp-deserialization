@@ -6,7 +6,7 @@ namespace Chubbyphp\Deserialization\Mapping;
 
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 
-interface DenormalizingFieldMappingBuilderInterface
+interface DenormalizationFieldMappingBuilderInterface
 {
     /**
      * @param string $name
@@ -30,7 +30,7 @@ interface DenormalizingFieldMappingBuilderInterface
     public function setFieldDenormalizer(FieldDenormalizerInterface $fieldDenormalizer): self;
 
     /**
-     * @return DenormalizingFieldMappingInterface
+     * @return DenormalizationFieldMappingInterface
      */
-    public function getMapping(): DenormalizingFieldMappingInterface;
+    public function getMapping(): DenormalizationFieldMappingInterface;
 }

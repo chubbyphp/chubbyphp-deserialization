@@ -12,8 +12,8 @@ use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextBuilder;
 use Chubbyphp\Deserialization\Deserializer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingBuilder;
-use Chubbyphp\Deserialization\Mapping\DenormalizingObjectMappingInterface;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
+use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -193,7 +193,7 @@ class DeserializerIntegrationTest extends TestCase
      */
     private function getChildObjectMapping()
     {
-        return new class($this) implements DenormalizingObjectMappingInterface {
+        return new class($this) implements DenormalizationObjectMappingInterface {
             /**
              * @var TestCase
              */
@@ -208,11 +208,14 @@ class DeserializerIntegrationTest extends TestCase
             }
 
             /**
-             * @return string
+             * @param string      $class
+             * @param string|null $type
+             *
+             * @return bool
              */
-            public function getClass(): string
+            public function isDenormalizationResponsible(string $class, string $type = null): bool
             {
-                return get_class($this->test->getChildObject());
+                return get_class($this->test->getChildObject()) === $class;
             }
 
             /**
@@ -220,17 +223,22 @@ class DeserializerIntegrationTest extends TestCase
              *
              * @return callable
              */
-            public function getFactory(string $type = null): callable
+            public function getDenormalizationFactory(string $type = null): callable
             {
                 return function () {
                     return $this->test->getChildObject();
                 };
             }
 
-            public function getDenormalizingFieldMappings(): array
+            /**
+             * @param string|null $type
+             *
+             * @return array
+             */
+            public function getDenormalizationFieldMappings(string $type = null): array
             {
                 return [
-                    DenormalizingFieldMappingBuilder::create('name')->getMapping(),
+                    DenormalizationFieldMappingBuilder::create('name')->getMapping(),
                 ];
             }
         };
@@ -241,7 +249,7 @@ class DeserializerIntegrationTest extends TestCase
      */
     private function getParentObjectMapping()
     {
-        return new class($this) implements DenormalizingObjectMappingInterface {
+        return new class($this) implements DenormalizationObjectMappingInterface {
             /**
              * @var TestCase
              */
@@ -256,11 +264,14 @@ class DeserializerIntegrationTest extends TestCase
             }
 
             /**
-             * @return string
+             * @param string      $class
+             * @param string|null $type
+             *
+             * @return bool
              */
-            public function getClass(): string
+            public function isDenormalizationResponsible(string $class, string $type = null): bool
             {
-                return get_class($this->test->getParentObject());
+                return get_class($this->test->getParentObject()) === $class;
             }
 
             /**
@@ -268,18 +279,23 @@ class DeserializerIntegrationTest extends TestCase
              *
              * @return callable
              */
-            public function getFactory(string $type = null): callable
+            public function getDenormalizationFactory(string $type = null): callable
             {
                 return function () {
                     return $this->test->getParentObject();
                 };
             }
 
-            public function getDenormalizingFieldMappings(): array
+            /**
+             * @param string|null $type
+             *
+             * @return array
+             */
+            public function getDenormalizationFieldMappings(string $type = null): array
             {
                 return [
-                    DenormalizingFieldMappingBuilder::create('name')->getMapping(),
-                    DenormalizingFieldMappingBuilder::create('children')->setFieldDenormalizer(
+                    DenormalizationFieldMappingBuilder::create('name')->getMapping(),
+                    DenormalizationFieldMappingBuilder::create('children')->setFieldDenormalizer(
                         new CollectionFieldDenormalizer(
                             get_class($this->test->getChildObject()),
                             new PropertyAccessor('children')

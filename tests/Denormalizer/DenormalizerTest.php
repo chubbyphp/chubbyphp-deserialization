@@ -10,8 +10,8 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingInterface;
-use Chubbyphp\Deserialization\Mapping\DenormalizingObjectMappingInterface;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
+use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -22,7 +22,7 @@ class DenormalizerTest extends TestCase
     public function testDenormalizeWithNew()
     {
         $denormalizer = new Denormalizer([
-            $this->getDenormalizingObjectMapping(),
+            $this->getDenormalizationObjectMapping(),
         ]);
 
         $object = $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name']);
@@ -33,7 +33,7 @@ class DenormalizerTest extends TestCase
     public function testDenormalizeWithExisting()
     {
         $denormalizer = new Denormalizer([
-            $this->getDenormalizingObjectMapping(),
+            $this->getDenormalizationObjectMapping(),
         ]);
 
         $object = $denormalizer->denormalize($this->getObject(), ['name' => 'name']);
@@ -47,7 +47,7 @@ class DenormalizerTest extends TestCase
         self::expectExceptionMessage('There are additional field(s) at paths: value');
 
         $denormalizer = new Denormalizer([
-            $this->getDenormalizingObjectMapping(),
+            $this->getDenormalizationObjectMapping(),
         ]);
 
         $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name', 'value' => 'value']);
@@ -56,7 +56,7 @@ class DenormalizerTest extends TestCase
     public function testDenormalizeWithAdditionalDataAndAllowIt()
     {
         $denormalizer = new Denormalizer([
-            $this->getDenormalizingObjectMapping(),
+            $this->getDenormalizationObjectMapping(),
         ]);
 
         $object = $denormalizer->denormalize(
@@ -80,7 +80,7 @@ class DenormalizerTest extends TestCase
     public function testDenormalizeWithNoData()
     {
         $denormalizer = new Denormalizer([
-            $this->getDenormalizingObjectMapping(),
+            $this->getDenormalizationObjectMapping(),
         ]);
 
         $object = $denormalizer->denormalize(get_class($this->getObject()), []);
@@ -91,7 +91,7 @@ class DenormalizerTest extends TestCase
     public function testDenormalizeWithGroups()
     {
         $denormalizer = new Denormalizer([
-            $this->getDenormalizingObjectMapping(['read']),
+            $this->getDenormalizationObjectMapping(['read']),
         ]);
 
         $object = $denormalizer->denormalize(
@@ -106,7 +106,7 @@ class DenormalizerTest extends TestCase
     public function testDenormalizeWithGroupsButNoGroupOnField()
     {
         $denormalizer = new Denormalizer([
-            $this->getDenormalizingObjectMapping(),
+            $this->getDenormalizationObjectMapping(),
         ]);
 
         $object = $denormalizer->denormalize(
@@ -121,27 +121,31 @@ class DenormalizerTest extends TestCase
     /**
      * @param array $groups
      *
-     * @return DenormalizingObjectMappingInterface
+     * @return DenormalizationObjectMappingInterface
      */
-    private function getDenormalizingObjectMapping(array $groups = []): DenormalizingObjectMappingInterface
+    private function getDenormalizationObjectMapping(array $groups = []): DenormalizationObjectMappingInterface
     {
-        /** @var DenormalizingObjectMappingInterface|\PHPUnit_Framework_MockObject_MockObject $objectMapping */
-        $objectMapping = $this->getMockBuilder(DenormalizingObjectMappingInterface::class)
+        /** @var DenormalizationObjectMappingInterface|\PHPUnit_Framework_MockObject_MockObject $objectMapping */
+        $objectMapping = $this->getMockBuilder(DenormalizationObjectMappingInterface::class)
             ->setMethods([])
             ->getMockForAbstractClass();
 
         $object = $this->getObject();
 
-        $objectMapping->expects(self::any())->method('getClass')->willReturn(get_class($object));
+        $objectMapping->expects(self::any())->method('isDenormalizationResponsible')->willReturnCallback(
+            function (string $class) use ($object) {
+                return get_class($object) === $class;
+            }
+        );
 
-        $objectMapping->expects(self::any())->method('getFactory')->willReturnCallback(function () use ($object) {
+        $objectMapping->expects(self::any())->method('getDenormalizationFactory')->willReturnCallback(function () use ($object) {
             return function () use ($object) {
                 return clone $object;
             };
         });
 
-        $objectMapping->expects(self::any())->method('getDenormalizingFieldMappings')->willReturn([
-            $this->getDenormalizingFieldMapping($groups),
+        $objectMapping->expects(self::any())->method('getDenormalizationFieldMappings')->willReturn([
+            $this->getDenormalizationFieldMapping($groups),
         ]);
 
         return $objectMapping;
@@ -150,12 +154,12 @@ class DenormalizerTest extends TestCase
     /**
      * @param array $groups
      *
-     * @return DenormalizingFieldMappingInterface
+     * @return DenormalizationFieldMappingInterface
      */
-    private function getDenormalizingFieldMapping(array $groups = []): DenormalizingFieldMappingInterface
+    private function getDenormalizationFieldMapping(array $groups = []): DenormalizationFieldMappingInterface
     {
-        /** @var DenormalizingFieldMappingInterface|\PHPUnit_Framework_MockObject_MockObject $fieldMapping */
-        $fieldMapping = $this->getMockBuilder(DenormalizingFieldMappingInterface::class)
+        /** @var DenormalizationFieldMappingInterface|\PHPUnit_Framework_MockObject_MockObject $fieldMapping */
+        $fieldMapping = $this->getMockBuilder(DenormalizationFieldMappingInterface::class)
             ->setMethods([])
             ->getMockForAbstractClass();
 

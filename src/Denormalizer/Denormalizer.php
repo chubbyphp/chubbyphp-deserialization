@@ -6,15 +6,15 @@ namespace Chubbyphp\Deserialization\Denormalizer;
 
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Chubbyphp\Deserialization\Mapping\DenormalizingFieldMappingInterface;
-use Chubbyphp\Deserialization\Mapping\DenormalizingObjectMappingInterface;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
+use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
 final class Denormalizer implements DenormalizerInterface
 {
     /**
-     * @var DenormalizingObjectMappingInterface[]
+     * @var DenormalizationObjectMappingInterface[]
      */
     private $objectMappings;
 
@@ -38,11 +38,11 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param DenormalizingObjectMappingInterface $objectMapping
+     * @param DenormalizationObjectMappingInterface $objectMapping
      */
-    private function addObjectMapping(DenormalizingObjectMappingInterface $objectMapping)
+    private function addObjectMapping(DenormalizationObjectMappingInterface $objectMapping)
     {
-        $this->objectMappings[$objectMapping->getClass()] = $objectMapping;
+        $this->objectMappings[] = $objectMapping;
     }
 
     /**
@@ -68,14 +68,14 @@ final class Denormalizer implements DenormalizerInterface
         unset($data['_type']);
 
         if (!is_object($object)) {
-            $factory = $objectMapping->getFactory($type);
+            $factory = $objectMapping->getDenormalizationFactory($type);
             $object = $factory();
         }
 
-        foreach ($objectMapping->getDenormalizingFieldMappings() as $denormalizingFieldMapping) {
-            $this->denormalizeField($context, $denormalizingFieldMapping, $path, $data, $object);
+        foreach ($objectMapping->getDenormalizationFieldMappings($type) as $denormalizationFieldMapping) {
+            $this->denormalizeField($context, $denormalizationFieldMapping, $path, $data, $object);
 
-            unset($data[$denormalizingFieldMapping->getName()]);
+            unset($data[$denormalizationFieldMapping->getName()]);
         }
 
         if ([] !== $data && !$context->isAllowedAdditionalFields()) {
@@ -87,15 +87,18 @@ final class Denormalizer implements DenormalizerInterface
 
     /**
      * @param string $class
+     * @param string $type
      *
-     * @return DenormalizingObjectMappingInterface
+     * @return DenormalizationObjectMappingInterface
      *
      * @throws DeserializerLogicException
      */
-    private function getObjectMapping(string $class): DenormalizingObjectMappingInterface
+    private function getObjectMapping(string $class, string $type = null): DenormalizationObjectMappingInterface
     {
-        if (isset($this->objectMappings[$class])) {
-            return $this->objectMappings[$class];
+        foreach ($this->objectMappings as $objectMapping) {
+            if ($objectMapping->isDenormalizationResponsible($class, $type)) {
+                return $objectMapping;
+            }
         }
 
         $exception = DeserializerLogicException::createMissingMapping($class);
@@ -106,27 +109,27 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param DenormalizerContextInterface       $context
-     * @param DenormalizingFieldMappingInterface $denormalizingFieldMapping
-     * @param string                             $path
-     * @param array                              $data
-     * @param object                             $object
+     * @param DenormalizerContextInterface         $context
+     * @param DenormalizationFieldMappingInterface $denormalizationFieldMapping
+     * @param string                               $path
+     * @param array                                $data
+     * @param object                               $object
      */
     private function denormalizeField(
         DenormalizerContextInterface $context,
-        DenormalizingFieldMappingInterface $denormalizingFieldMapping,
+        DenormalizationFieldMappingInterface $denormalizationFieldMapping,
         string $path,
         array $data,
         $object
     ) {
-        $name = $denormalizingFieldMapping->getName();
+        $name = $denormalizationFieldMapping->getName();
         if (!array_key_exists($name, $data)) {
             return;
         }
 
-        $fieldDenormalizer = $denormalizingFieldMapping->getFieldDenormalizer();
+        $fieldDenormalizer = $denormalizationFieldMapping->getFieldDenormalizer();
 
-        if (!$this->isWithinGroup($context, $denormalizingFieldMapping)) {
+        if (!$this->isWithinGroup($context, $denormalizationFieldMapping)) {
             return;
         }
 
@@ -153,14 +156,14 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param DenormalizerContextInterface       $context
-     * @param DenormalizingFieldMappingInterface $fieldMapping
+     * @param DenormalizerContextInterface         $context
+     * @param DenormalizationFieldMappingInterface $fieldMapping
      *
      * @return bool
      */
     private function isWithinGroup(
         DenormalizerContextInterface $context,
-        DenormalizingFieldMappingInterface $fieldMapping
+        DenormalizationFieldMappingInterface $fieldMapping
     ): bool {
         if ([] === $groups = $context->getGroups()) {
             return true;
