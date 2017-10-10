@@ -120,7 +120,7 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
     public function getDenormalizationClassToTypeMappings(): array
     {
         return [
-            new DenormalizationClassToTypeMapping(Model::class), ['model'])
+            new DenormalizationClassToTypeMapping(Model::class, ['model'])
         ];
     }
 
