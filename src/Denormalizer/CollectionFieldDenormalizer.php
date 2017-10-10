@@ -52,7 +52,7 @@ final class CollectionFieldDenormalizer implements FieldDenormalizerInterface
         }
 
         if (!is_array($value)) {
-            throw DeserializerRuntimeException::createInvalidType($path, gettype($value), 'array');
+            throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
         }
 
         $existingChildObjects = $this->accessor->getValue($object) ?? [];
@@ -62,7 +62,7 @@ final class CollectionFieldDenormalizer implements FieldDenormalizerInterface
             $subPath = $path.'['.$i.']';
 
             if (!is_array($subValue)) {
-                throw DeserializerRuntimeException::createInvalidType($subPath, gettype($value), 'object');
+                throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($value), 'object');
             }
 
             if (isset($existingChildObjects[$i])) {

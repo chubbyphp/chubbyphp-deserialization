@@ -20,7 +20,7 @@ class CollectionFieldDenormalizerTest extends TestCase
     public function testDenormalizeFieldWithMissingDenormalizer()
     {
         self::expectException(DeserializerLogicException::class);
-        self::expectExceptionMessage('There is no denormalizer at path: children');
+        self::expectExceptionMessage('There is no denormalizer at path: "children"');
 
         $parent = $this->getParent();
 
@@ -31,7 +31,7 @@ class CollectionFieldDenormalizerTest extends TestCase
     public function testDenormalizeFieldWithoutArrayDenormalizer()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid type "NULL", needed "array" at path: children');
+        self::expectExceptionMessage('There is an invalid data type "NULL", needed "array" at path: "children"');
 
         $parent = $this->getParent();
 
@@ -48,7 +48,7 @@ class CollectionFieldDenormalizerTest extends TestCase
     public function testDenormalizeFieldWithArrayButNullChildDenormalizer()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid type "array", needed "object" at path: children[0]');
+        self::expectExceptionMessage('There is an invalid data type "array", needed "object" at path: "children[0]"');
 
         $parent = $this->getParent();
 

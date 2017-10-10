@@ -191,7 +191,7 @@ EOD;
     public function testInvalidDecode()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Data is not parsable with content-type: application/xml');
+        self::expectExceptionMessage('Data is not parsable with content-type: "application/xml"');
         $transformer = new XmlDecoderType();
         $transformer->decode('====');
     }

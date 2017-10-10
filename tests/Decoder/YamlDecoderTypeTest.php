@@ -154,7 +154,7 @@ EOD;
     public function testInvalidDecode()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Data is not parsable with content-type: application/x-yaml');
+        self::expectExceptionMessage('Data is not parsable with content-type: "application/x-yaml"');
         $transformer = new YamlDecoderType();
         $transformer->decode('====');
     }

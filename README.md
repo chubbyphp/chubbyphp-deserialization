@@ -105,6 +105,8 @@ echo $model->getName(); // 'php'
 
 namespace MyProject\Deserialization;
 
+use Chubbyphp\Deserialization\Mapping\DenormalizationClassToTypeMapping;
+use Chubbyphp\Deserialization\Mapping\DenormalizationClassToTypeMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
@@ -113,21 +115,21 @@ use MyProject\Model\Model;
 final class ModelMapping implements DenormalizationObjectMappingInterface
 {
     /**
-     * @param string $class
-     *
-     * @return bool
+     * @return DenormalizationClassToTypeMappingInterface[]
      */
-    public function isDenormalizationResponsible(string $class): bool
+    public function getDenormalizationClassToTypeMappings(): array
     {
-        return Model::class === $class;
+        return [
+            new DenormalizationClassToTypeMapping(Model::class), ['model'])
+        ];
     }
 
     /**
-     * @param string|null $type
+     * @param string $type
      *
      * @return callable
      */
-    public function getDenormalizationFactory(string $type = null): callable
+    public function getDenormalizationFactory(string $type): callable
     {
         return function () {
             return new Model();
@@ -135,11 +137,11 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
     }
 
     /**
-     * @param string|null $type
+     * @param string $type
      *
      * @return DenormalizationFieldMappingInterface[]
      */
-    public function getDenormalizationFieldMappings(string $type = null): array
+    public function getDenormalizationFieldMappings(string $type): array
     {
         return [
             DenormalizationFieldMappingBuilder::create('name')->getMapping(),

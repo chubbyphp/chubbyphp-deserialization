@@ -193,7 +193,7 @@ EOD;
     public function testInvalidDecode()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Data is not parsable with content-type: application/json');
+        self::expectExceptionMessage('Data is not parsable with content-type: "application/json"');
         $transformer = new JsonDecoderType();
         $transformer->decode('====');
     }

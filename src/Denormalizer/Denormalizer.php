@@ -14,9 +14,14 @@ use Psr\Log\NullLogger;
 final class Denormalizer implements DenormalizerInterface
 {
     /**
-     * @var DenormalizationObjectMappingInterface[]
+     * @var array
      */
     private $objectMappings;
+
+    /**
+     * @var array
+     */
+    private $classToTypeMappings;
 
     /**
      * @var LoggerInterface
@@ -30,6 +35,7 @@ final class Denormalizer implements DenormalizerInterface
     public function __construct(array $objectMappings, LoggerInterface $logger = null)
     {
         $this->objectMappings = [];
+        $this->classToTypeMappings = [];
         foreach ($objectMappings as $objectMapping) {
             $this->addObjectMapping($objectMapping);
         }
@@ -42,7 +48,12 @@ final class Denormalizer implements DenormalizerInterface
      */
     private function addObjectMapping(DenormalizationObjectMappingInterface $objectMapping)
     {
-        $this->objectMappings[] = $objectMapping;
+        foreach ($objectMapping->getDenormalizationClassToTypeMappings() as $classToTypeMapping) {
+            $this->objectMappings[$classToTypeMapping->getClass()] = [
+                'mapping' => $objectMapping,
+                'types' => $classToTypeMapping->getTypes(),
+            ];
+        }
     }
 
     /**
@@ -63,7 +74,7 @@ final class Denormalizer implements DenormalizerInterface
         $class = is_object($object) ? get_class($object) : $object;
         $objectMapping = $this->getObjectMapping($class);
 
-        $type = $data['_type'] ?? null;
+        $type = $this->getType($path, $class, $data['_type'] ?? null);
 
         unset($data['_type']);
 
@@ -94,15 +105,47 @@ final class Denormalizer implements DenormalizerInterface
      */
     private function getObjectMapping(string $class): DenormalizationObjectMappingInterface
     {
-        foreach ($this->objectMappings as $objectMapping) {
-            if ($objectMapping->isDenormalizationResponsible($class)) {
-                return $objectMapping;
-            }
+        if (isset($this->objectMappings[$class])) {
+            return $this->objectMappings[$class]['mapping'];
         }
 
         $exception = DeserializerLogicException::createMissingMapping($class);
 
         $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+
+        throw $exception;
+    }
+
+    /**
+     * @param string      $path
+     * @param string      $class
+     * @param string|null $type
+     *
+     * @return string
+     */
+    private function getType(string $path, string $class, string $type = null): string
+    {
+        $allowedTypes = $this->objectMappings[$class]['types'];
+
+        if (null !== $type) {
+            if (in_array($type, $allowedTypes, true)) {
+                return $type;
+            }
+
+            $exception = DeserializerRuntimeException::createInvalidObjectType($path, $type, $allowedTypes);
+
+            $this->logger->notice('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+
+            throw $exception;
+        }
+
+        if (1 === count($allowedTypes)) {
+            return reset($allowedTypes);
+        }
+
+        $exception = DeserializerRuntimeException::createMissingObjectType($path, $allowedTypes);
+
+        $this->logger->notice('deserialize: {exception}', ['exception' => $exception->getMessage()]);
 
         throw $exception;
     }
@@ -149,7 +192,7 @@ final class Denormalizer implements DenormalizerInterface
             $this->getSubPathsByNames($path, $names)
         );
 
-        $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+        $this->logger->notice('deserialize: {exception}', ['exception' => $exception->getMessage()]);
 
         throw $exception;
     }

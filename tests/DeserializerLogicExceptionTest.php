@@ -16,21 +16,21 @@ class DeserializerLogicExceptionTest extends TestCase
     {
         $exception = DeserializerLogicException::createMissingContentType('application/json');
 
-        self::assertSame('There is no decoder for content-type: application/json', $exception->getMessage());
+        self::assertSame('There is no decoder for content-type: "application/json"', $exception->getMessage());
     }
 
     public function testCreateMissingDenormalizer()
     {
         $exception = DeserializerLogicException::createMissingDenormalizer('path1');
 
-        self::assertSame('There is no denormalizer at path: path1', $exception->getMessage());
+        self::assertSame('There is no denormalizer at path: "path1"', $exception->getMessage());
     }
 
     public function testCreateMissingMapping()
     {
         $exception = DeserializerLogicException::createMissingMapping(\stdClass::class);
 
-        self::assertSame('There is no mapping for class: stdClass', $exception->getMessage());
+        self::assertSame('There is no mapping for class: "stdClass"', $exception->getMessage());
     }
 
     public function testCreateMissingMethod()
@@ -38,7 +38,7 @@ class DeserializerLogicExceptionTest extends TestCase
         $exception = DeserializerLogicException::createMissingMethod(\stdClass::class, ['getName', 'hasName']);
 
         self::assertSame(
-            'There are no accessible method(s) "getName", "hasName", within class: stdClass',
+            'There are no accessible method(s) "getName", "hasName", within class: "stdClass"',
             $exception->getMessage()
         );
     }
@@ -47,6 +47,6 @@ class DeserializerLogicExceptionTest extends TestCase
     {
         $exception = DeserializerLogicException::createMissingProperty(\stdClass::class, 'name');
 
-        self::assertSame('There is no property "name" within class: stdClass', $exception->getMessage());
+        self::assertSame('There is no property "name" within class: "stdClass"', $exception->getMessage());
     }
 }

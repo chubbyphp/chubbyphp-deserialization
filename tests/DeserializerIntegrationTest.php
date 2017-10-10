@@ -12,6 +12,8 @@ use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextBuilder;
 use Chubbyphp\Deserialization\Deserializer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Chubbyphp\Deserialization\Mapping\DenormalizationClassToTypeMapping;
+use Chubbyphp\Deserialization\Mapping\DenormalizationClassToTypeMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use PHPUnit\Framework\TestCase;
@@ -66,7 +68,7 @@ class DeserializerIntegrationTest extends TestCase
     public function testDenormalizeWithAdditionalFieldsExpectsException()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There are additional field(s) at paths: unknownField');
+        self::expectExceptionMessage('There are additional field(s) at paths: "unknownField"');
 
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
@@ -208,13 +210,13 @@ class DeserializerIntegrationTest extends TestCase
             }
 
             /**
-             * @param string $class
-             *
-             * @return bool
+             * @return DenormalizationClassToTypeMappingInterface[]
              */
-            public function isDenormalizationResponsible(string $class): bool
+            public function getDenormalizationClassToTypeMappings(): array
             {
-                return get_class($this->test->getChildObject()) === $class;
+                return [
+                    new DenormalizationClassToTypeMapping(get_class($this->test->getChildObject()), ['child']),
+                ];
             }
 
             /**
@@ -260,6 +262,16 @@ class DeserializerIntegrationTest extends TestCase
             public function __construct(DeserializerIntegrationTest $test)
             {
                 $this->test = $test;
+            }
+
+            /**
+             * @return DenormalizationClassToTypeMappingInterface[]
+             */
+            public function getDenormalizationClassToTypeMappings(): array
+            {
+                return [
+                    new DenormalizationClassToTypeMapping(get_class($this->test->getParentObject()), ['parent']),
+                ];
             }
 
             /**

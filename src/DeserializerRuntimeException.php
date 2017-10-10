@@ -13,10 +13,46 @@ final class DeserializerRuntimeException extends \RuntimeException
      *
      * @return self
      */
-    public static function createInvalidType(string $path, string $givenType, string $wishedType): self
+    public static function createInvalidDataType(string $path, string $givenType, string $wishedType): self
     {
         return new self(
-            sprintf('There is an invalid type "%s", needed "%s" at path: %s', $givenType, $wishedType, $path)
+            sprintf('There is an invalid data type "%s", needed "%s" at path: "%s"', $givenType, $wishedType, $path)
+        );
+    }
+
+    /**
+     * @param string $path
+     * @param string $givenType
+     * @param array  $allowedTypes
+     *
+     * @return self
+     */
+    public static function createInvalidObjectType(string $path, string $givenType, array $allowedTypes): self
+    {
+        return new self(
+            sprintf(
+                'There is an invalid object type "%s", allowed types are "%s" at path: "%s"',
+                $givenType,
+                implode('", "', $allowedTypes),
+                $path
+            )
+        );
+    }
+
+    /**
+     * @param string $path
+     * @param array  $allowedTypes
+     *
+     * @return self
+     */
+    public static function createMissingObjectType(string $path, array $allowedTypes): self
+    {
+        return new self(
+            sprintf(
+                'Missing object type, allowed types are "%s" at path: "%s"',
+                implode('", "', $allowedTypes),
+                $path
+            )
         );
     }
 
@@ -27,7 +63,7 @@ final class DeserializerRuntimeException extends \RuntimeException
      */
     public static function createNotParsable(string $contentType): self
     {
-        return new self(sprintf('Data is not parsable with content-type: %s', $contentType));
+        return new self(sprintf('Data is not parsable with content-type: "%s"', $contentType));
     }
 
     /**
@@ -37,6 +73,6 @@ final class DeserializerRuntimeException extends \RuntimeException
      */
     public static function createNotAllowedAddtionalFields(array $paths): self
     {
-        return new self(sprintf('There are additional field(s) at paths: %s', implode(', ', $paths)));
+        return new self(sprintf('There are additional field(s) at paths: "%s"', implode('", "', $paths)));
     }
 }
