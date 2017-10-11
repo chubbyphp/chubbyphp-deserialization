@@ -14,7 +14,7 @@ use Psr\Log\NullLogger;
 final class Denormalizer implements DenormalizerInterface
 {
     /**
-     * @var array
+     * @var DenormalizationObjectMappingInterface[]
      */
     private $objectMappings;
 
@@ -48,12 +48,7 @@ final class Denormalizer implements DenormalizerInterface
      */
     private function addObjectMapping(DenormalizationObjectMappingInterface $objectMapping)
     {
-        foreach ($objectMapping->getDenormalizationClassToTypeMappings() as $classToTypeMapping) {
-            $this->objectMappings[$classToTypeMapping->getClass()] = [
-                'mapping' => $objectMapping,
-                'types' => $classToTypeMapping->getTypes(),
-            ];
-        }
+        $this->objectMappings[$objectMapping->getClass()] = $objectMapping;
     }
 
     /**
@@ -74,7 +69,7 @@ final class Denormalizer implements DenormalizerInterface
         $class = is_object($object) ? get_class($object) : $object;
         $objectMapping = $this->getObjectMapping($class);
 
-        $type = $this->getType($path, $class, $data['_type'] ?? null);
+        $type = $data['_type'] ?? null;
 
         unset($data['_type']);
 
@@ -106,46 +101,12 @@ final class Denormalizer implements DenormalizerInterface
     private function getObjectMapping(string $class): DenormalizationObjectMappingInterface
     {
         if (isset($this->objectMappings[$class])) {
-            return $this->objectMappings[$class]['mapping'];
+            return $this->objectMappings[$class];
         }
 
         $exception = DeserializerLogicException::createMissingMapping($class);
 
         $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
-
-        throw $exception;
-    }
-
-    /**
-     * @param string      $path
-     * @param string      $class
-     * @param string|null $type
-     *
-     * @return string
-     */
-    private function getType(string $path, string $class, string $type = null): string
-    {
-        $allowedTypes = $this->objectMappings[$class]['types'];
-
-        if (null !== $type) {
-            if (in_array($type, $allowedTypes, true)) {
-                return $type;
-            }
-
-            $exception = DeserializerRuntimeException::createInvalidObjectType($path, $type, $allowedTypes);
-
-            $this->logger->notice('deserialize: {exception}', ['exception' => $exception->getMessage()]);
-
-            throw $exception;
-        }
-
-        if (1 === count($allowedTypes)) {
-            return reset($allowedTypes);
-        }
-
-        $exception = DeserializerRuntimeException::createMissingObjectType($path, $allowedTypes);
-
-        $this->logger->notice('deserialize: {exception}', ['exception' => $exception->getMessage()]);
 
         throw $exception;
     }

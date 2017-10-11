@@ -12,8 +12,6 @@ use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextBuilder;
 use Chubbyphp\Deserialization\Deserializer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Chubbyphp\Deserialization\Mapping\DenormalizationClassToTypeMapping;
-use Chubbyphp\Deserialization\Mapping\DenormalizationClassToTypeMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use PHPUnit\Framework\TestCase;
@@ -210,13 +208,11 @@ class DeserializerIntegrationTest extends TestCase
             }
 
             /**
-             * @return DenormalizationClassToTypeMappingInterface[]
+             * @return string
              */
-            public function getDenormalizationClassToTypeMappings(): array
+            public function getClass(): string
             {
-                return [
-                    new DenormalizationClassToTypeMapping(get_class($this->test->getChildObject()), ['child']),
-                ];
+                return get_class($this->test->getChildObject());
             }
 
             /**
@@ -265,13 +261,11 @@ class DeserializerIntegrationTest extends TestCase
             }
 
             /**
-             * @return DenormalizationClassToTypeMappingInterface[]
+             * @return string
              */
-            public function getDenormalizationClassToTypeMappings(): array
+            public function getClass(): string
             {
-                return [
-                    new DenormalizationClassToTypeMapping(get_class($this->test->getParentObject()), ['parent']),
-                ];
+                return get_class($this->test->getParentObject());
             }
 
             /**

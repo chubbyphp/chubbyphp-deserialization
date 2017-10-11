@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Mapping;
 
-use Chubbyphp\Deserialization\Mapping\DenormalizationClassToTypeMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use Chubbyphp\Deserialization\Mapping\LazyDenormalizationObjectMapping;
@@ -20,8 +19,6 @@ class LazyDenormalizationObjectMappingTest extends TestCase
     {
         $denormalizationFieldMappings = [$this->getDenormalizationFieldMapping()];
 
-        $denormalizationClassToTypeMappings = [$this->getDenormalizationClassToTypeMapping(\stdClass::class, ['type'])];
-
         $factory = function () {
         };
 
@@ -29,9 +26,9 @@ class LazyDenormalizationObjectMappingTest extends TestCase
             'service' => $this->getDenormalizationObjectMapping($factory, $denormalizationFieldMappings),
         ]);
 
-        $objectMapping = new LazyDenormalizationObjectMapping($container, 'service', $denormalizationClassToTypeMappings);
+        $objectMapping = new LazyDenormalizationObjectMapping($container, 'service', \stdClass::class);
 
-        self::assertEquals($denormalizationClassToTypeMappings, $objectMapping->getDenormalizationClassToTypeMappings());
+        self::assertEquals(\stdClass::class, $objectMapping->getClass());
         self::assertSame($factory, $objectMapping->getDenormalizationFactory('type'));
         self::assertSame($denormalizationFieldMappings, $objectMapping->getDenormalizationFieldMappings('type'));
     }
@@ -86,26 +83,5 @@ class LazyDenormalizationObjectMappingTest extends TestCase
     private function getDenormalizationFieldMapping(): DenormalizationFieldMappingInterface
     {
         return $this->getMockBuilder(DenormalizationFieldMappingInterface::class)->getMockForAbstractClass();
-    }
-
-    /**
-     * @param string $class
-     * @param array  $types
-     *
-     * @return DenormalizationClassToTypeMappingInterface
-     */
-    private function getDenormalizationClassToTypeMapping(string $class, array $types): DenormalizationClassToTypeMappingInterface
-    {
-        /** @var DenormalizationClassToTypeMappingInterface|\PHPUnit_Framework_MockObject_MockObject $mapping */
-        $mapping = $this
-            ->getMockBuilder(DenormalizationClassToTypeMappingInterface::class)
-            ->setMethods(['getClass', 'getTypes'])
-            ->getMockForAbstractClass()
-        ;
-
-        $mapping->expects(self::any())->method('getClass')->willReturn($class);
-        $mapping->expects(self::any())->method('getTypes')->willReturn($types);
-
-        return $mapping;
     }
 }

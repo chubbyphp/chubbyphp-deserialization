@@ -19,20 +19,6 @@ class DeserializerRuntimeExceptionTest extends TestCase
         self::assertSame('There is an invalid data type "null", needed "array" at path: "path1"', $exception->getMessage());
     }
 
-    public function testCreateInvalidObjectType()
-    {
-        $exception = DeserializerRuntimeException::createInvalidObjectType('path1', 'child', ['parent']);
-
-        self::assertSame('There is an invalid object type "child", allowed types are "parent" at path: "path1"', $exception->getMessage());
-    }
-
-    public function testCreateMissingObjectType()
-    {
-        $exception = DeserializerRuntimeException::createMissingObjectType('path1', ['parent']);
-
-        self::assertSame('Missing object type, allowed types are "parent" at path: "path1"', $exception->getMessage());
-    }
-
     public function testCreateNotParsable()
     {
         $exception = DeserializerRuntimeException::createNotParsable('application/json');

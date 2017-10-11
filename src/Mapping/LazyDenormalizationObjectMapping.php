@@ -19,46 +19,46 @@ final class LazyDenormalizationObjectMapping implements DenormalizationObjectMap
     private $serviceId;
 
     /**
-     * @var DenormalizationClassToTypeMappingInterface[]
+     * @var string
      */
-    private $denormalizationClassToTypeMappings;
+    private $class;
 
     /**
-     * @param ContainerInterface                           $container
-     * @param string                                       $serviceId
-     * @param DenormalizationClassToTypeMappingInterface[] $denormalizationClassToTypeMappings
+     * @param ContainerInterface $container
+     * @param string             $serviceId
+     * @param string             $class
      */
-    public function __construct(ContainerInterface $container, $serviceId, array $denormalizationClassToTypeMappings)
+    public function __construct(ContainerInterface $container, $serviceId, string $class)
     {
         $this->container = $container;
         $this->serviceId = $serviceId;
-        $this->denormalizationClassToTypeMappings = $denormalizationClassToTypeMappings;
+        $this->class = $class;
     }
 
     /**
-     * @return DenormalizationClassToTypeMappingInterface[]
+     * @return string
      */
-    public function getDenormalizationClassToTypeMappings(): array
+    public function getClass(): string
     {
-        return $this->denormalizationClassToTypeMappings;
+        return $this->class;
     }
 
     /**
-     * @param string $type
+     * @param string|null $type
      *
      * @return callable
      */
-    public function getDenormalizationFactory(string $type): callable
+    public function getDenormalizationFactory(string $type = null): callable
     {
         return $this->container->get($this->serviceId)->getDenormalizationFactory($type);
     }
 
     /**
-     * @param string $type
+     * @param string|null $type
      *
      * @return DenormalizationFieldMappingInterface[]
      */
-    public function getDenormalizationFieldMappings(string $type): array
+    public function getDenormalizationFieldMappings(string $type = null): array
     {
         return $this->container->get($this->serviceId)->getDenormalizationFieldMappings($type);
     }

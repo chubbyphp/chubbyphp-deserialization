@@ -7,21 +7,21 @@ namespace Chubbyphp\Deserialization\Mapping;
 interface DenormalizationObjectMappingInterface
 {
     /**
-     * @return DenormalizationClassToTypeMappingInterface[]
+     * @return string
      */
-    public function getDenormalizationClassToTypeMappings(): array;
+    public function getClass(): string;
 
     /**
-     * @param string $type
+     * @param string|null $type
      *
      * @return callable
      */
-    public function getDenormalizationFactory(string $type): callable;
+    public function getDenormalizationFactory(string $type = null): callable;
 
     /**
-     * @param string $type
+     * @param string|null $type
      *
      * @return DenormalizationFieldMappingInterface[]
      */
-    public function getDenormalizationFieldMappings(string $type): array;
+    public function getDenormalizationFieldMappings(string $type = null): array;
 }

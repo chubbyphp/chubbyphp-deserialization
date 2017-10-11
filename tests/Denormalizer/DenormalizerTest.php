@@ -10,7 +10,6 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Chubbyphp\Deserialization\Mapping\DenormalizationClassToTypeMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use PHPUnit\Framework\TestCase;
@@ -119,48 +118,12 @@ class DenormalizerTest extends TestCase
         self::assertNull($object->getName());
     }
 
-    public function testDenormalizeWithType()
-    {
-        $denormalizer = new Denormalizer([
-            $this->getDenormalizationObjectMapping(),
-        ]);
-
-        $object = $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name', '_type' => 'object']);
-
-        self::assertSame('name', $object->getName());
-    }
-
-    public function testDenormalizeWithInvalidType()
-    {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid object type "object2", allowed types are "object" at path: ""');
-
-        $denormalizer = new Denormalizer([
-            $this->getDenormalizationObjectMapping(),
-        ]);
-
-        $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name', '_type' => 'object2']);
-    }
-
-    public function testDenormalizeWithMissingTypeCauseMultipleAreSupported()
-    {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Missing object type, allowed types are "object1", "object2" at path: ""');
-
-        $denormalizer = new Denormalizer([
-            $this->getDenormalizationObjectMapping([], ['object1', 'object2']),
-        ]);
-
-        $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name']);
-    }
-
     /**
      * @param array $groups
-     * @param array $types
      *
      * @return DenormalizationObjectMappingInterface
      */
-    private function getDenormalizationObjectMapping(array $groups = [], array $types = ['object']): DenormalizationObjectMappingInterface
+    private function getDenormalizationObjectMapping(array $groups = []): DenormalizationObjectMappingInterface
     {
         /** @var DenormalizationObjectMappingInterface|\PHPUnit_Framework_MockObject_MockObject $objectMapping */
         $objectMapping = $this->getMockBuilder(DenormalizationObjectMappingInterface::class)
@@ -169,11 +132,9 @@ class DenormalizerTest extends TestCase
 
         $object = $this->getObject();
 
-        $objectMapping->expects(self::any())->method('getDenormalizationClassToTypeMappings')->willReturnCallback(
-            function () use ($object, $types) {
-                return [
-                    $this->getDenormalizationClassToTypeMapping(get_class($object), $types),
-                ];
+        $objectMapping->expects(self::any())->method('getClass')->willReturnCallback(
+            function () use ($object) {
+                return get_class($object);
             }
         );
 
@@ -251,27 +212,6 @@ class DenormalizerTest extends TestCase
         $context->expects(self::any())->method('getGroups')->willReturn($groups);
 
         return $context;
-    }
-
-    /**
-     * @param string $class
-     * @param array  $types
-     *
-     * @return DenormalizationClassToTypeMappingInterface
-     */
-    private function getDenormalizationClassToTypeMapping(string $class, array $types): DenormalizationClassToTypeMappingInterface
-    {
-        /** @var DenormalizationClassToTypeMappingInterface|\PHPUnit_Framework_MockObject_MockObject $mapping */
-        $mapping = $this
-            ->getMockBuilder(DenormalizationClassToTypeMappingInterface::class)
-            ->setMethods(['getClass', 'getTypes'])
-            ->getMockForAbstractClass()
-        ;
-
-        $mapping->expects(self::any())->method('getClass')->willReturn($class);
-        $mapping->expects(self::any())->method('getTypes')->willReturn($types);
-
-        return $mapping;
     }
 
     /**

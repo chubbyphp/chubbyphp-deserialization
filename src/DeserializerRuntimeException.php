@@ -21,42 +21,6 @@ final class DeserializerRuntimeException extends \RuntimeException
     }
 
     /**
-     * @param string $path
-     * @param string $givenType
-     * @param array  $allowedTypes
-     *
-     * @return self
-     */
-    public static function createInvalidObjectType(string $path, string $givenType, array $allowedTypes): self
-    {
-        return new self(
-            sprintf(
-                'There is an invalid object type "%s", allowed types are "%s" at path: "%s"',
-                $givenType,
-                implode('", "', $allowedTypes),
-                $path
-            )
-        );
-    }
-
-    /**
-     * @param string $path
-     * @param array  $allowedTypes
-     *
-     * @return self
-     */
-    public static function createMissingObjectType(string $path, array $allowedTypes): self
-    {
-        return new self(
-            sprintf(
-                'Missing object type, allowed types are "%s" at path: "%s"',
-                implode('", "', $allowedTypes),
-                $path
-            )
-        );
-    }
-
-    /**
      * @param string $contentType
      *
      * @return self
