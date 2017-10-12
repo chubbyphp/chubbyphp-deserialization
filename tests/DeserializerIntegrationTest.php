@@ -216,11 +216,12 @@ class DeserializerIntegrationTest extends TestCase
             }
 
             /**
+             * @param string      $path
              * @param string|null $type
              *
              * @return callable
              */
-            public function getDenormalizationFactory(string $type = null): callable
+            public function getDenormalizationFactory(string $path, string $type = null): callable
             {
                 return function () {
                     return $this->test->getChildObject();
@@ -228,11 +229,12 @@ class DeserializerIntegrationTest extends TestCase
             }
 
             /**
+             * @param string      $path
              * @param string|null $type
              *
              * @return array
              */
-            public function getDenormalizationFieldMappings(string $type = null): array
+            public function getDenormalizationFieldMappings(string $path, string $type = null): array
             {
                 return [
                     DenormalizationFieldMappingBuilder::create('name')->getMapping(),
@@ -279,11 +281,12 @@ class DeserializerIntegrationTest extends TestCase
             }
 
             /**
+             * @param string      $path
              * @param string|null $type
              *
              * @return callable
              */
-            public function getDenormalizationFactory(string $type = null): callable
+            public function getDenormalizationFactory(string $path, string $type = null): callable
             {
                 return function () {
                     return $this->test->getParentObject();
@@ -291,11 +294,12 @@ class DeserializerIntegrationTest extends TestCase
             }
 
             /**
+             * @param string      $path
              * @param string|null $type
              *
              * @return array
              */
-            public function getDenormalizationFieldMappings(string $type = null): array
+            public function getDenormalizationFieldMappings(string $path, string $type = null): array
             {
                 return [
                     DenormalizationFieldMappingBuilder::create('name')->getMapping(),

@@ -39,4 +39,36 @@ final class DeserializerRuntimeException extends \RuntimeException
     {
         return new self(sprintf('There are additional field(s) at paths: "%s"', implode('", "', $paths)));
     }
+
+    /**
+     * @param string $path
+     * @param array  $supportedTypes
+     *
+     * @return self
+     */
+    public static function createMissingObjectType(string $path, array $supportedTypes)
+    {
+        return new self(sprintf(
+            'Missing object type, supported are "%s" at path: "%s"',
+            implode('", "', $supportedTypes),
+            $path
+        ));
+    }
+
+    /**
+     * @param string $path
+     * @param string $type
+     * @param array  $supportedTypes
+     *
+     * @return self
+     */
+    public static function createInvalidObjectType(string $path, string $type, array $supportedTypes)
+    {
+        return new self(sprintf(
+            'Unsupported object type "%s", supported are "%s" at path: "%s"',
+            $type,
+            implode('", "', $supportedTypes),
+            $path
+        ));
+    }
 }

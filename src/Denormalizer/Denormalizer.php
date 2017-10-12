@@ -74,11 +74,11 @@ final class Denormalizer implements DenormalizerInterface
         unset($data['_type']);
 
         if (!is_object($object)) {
-            $factory = $objectMapping->getDenormalizationFactory($type);
+            $factory = $objectMapping->getDenormalizationFactory($path, $type);
             $object = $factory();
         }
 
-        foreach ($objectMapping->getDenormalizationFieldMappings($type) as $denormalizationFieldMapping) {
+        foreach ($objectMapping->getDenormalizationFieldMappings($path, $type) as $denormalizationFieldMapping) {
             $this->denormalizeField($context, $denormalizationFieldMapping, $path, $data, $object);
 
             unset($data[$denormalizationFieldMapping->getName()]);

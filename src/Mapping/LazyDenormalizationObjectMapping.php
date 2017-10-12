@@ -44,21 +44,23 @@ final class LazyDenormalizationObjectMapping implements DenormalizationObjectMap
     }
 
     /**
+     * @param string      $path
      * @param string|null $type
      *
      * @return callable
      */
-    public function getDenormalizationFactory(string $type = null): callable
+    public function getDenormalizationFactory(string $path, string $type = null): callable
     {
         return $this->container->get($this->serviceId)->getDenormalizationFactory($type);
     }
 
     /**
+     * @param string      $path
      * @param string|null $type
      *
      * @return DenormalizationFieldMappingInterface[]
      */
-    public function getDenormalizationFieldMappings(string $type = null): array
+    public function getDenormalizationFieldMappings(string $path, string $type = null): array
     {
         return $this->container->get($this->serviceId)->getDenormalizationFieldMappings($type);
     }

@@ -32,4 +32,18 @@ class DeserializerRuntimeExceptionTest extends TestCase
 
         self::assertSame('There are additional field(s) at paths: "path1", "path2"', $exception->getMessage());
     }
+
+    public function testCreateMissingObjectType()
+    {
+        $exception = DeserializerRuntimeException::createMissingObjectType('path1', ['model']);
+
+        self::assertSame('Missing object type, supported are "model" at path: "path1"', $exception->getMessage());
+    }
+
+    public function testCreateInvalidObjectType()
+    {
+        $exception = DeserializerRuntimeException::createInvalidObjectType('path1', 'unknown', ['model']);
+
+        self::assertSame('Unsupported object type "unknown", supported are "model" at path: "path1"', $exception->getMessage());
+    }
 }

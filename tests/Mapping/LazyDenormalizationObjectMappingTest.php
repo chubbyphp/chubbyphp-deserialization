@@ -29,8 +29,8 @@ class LazyDenormalizationObjectMappingTest extends TestCase
         $objectMapping = new LazyDenormalizationObjectMapping($container, 'service', \stdClass::class);
 
         self::assertEquals(\stdClass::class, $objectMapping->getClass());
-        self::assertSame($factory, $objectMapping->getDenormalizationFactory('type'));
-        self::assertSame($denormalizationFieldMappings, $objectMapping->getDenormalizationFieldMappings('type'));
+        self::assertSame($factory, $objectMapping->getDenormalizationFactory('path', 'type'));
+        self::assertSame($denormalizationFieldMappings, $objectMapping->getDenormalizationFieldMappings('path', 'type'));
     }
 
     /**
