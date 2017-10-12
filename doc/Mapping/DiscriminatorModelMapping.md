@@ -45,14 +45,14 @@ final class AbstractModelMapping implements DenormalizationObjectMappingInterfac
     public function getDenormalizationFactory(string $type): callable
     {
         if (null === $type) {
-            throw DeserializerRuntimeException::createMissingObjectType();
+            throw DeserializerRuntimeException::createMissingObjectType(['model']);
         }
 
         switch ($type) {
             case 'model':
-                return $this->modelMapping->getDenormalizationFactory();
+                return $this->modelMapping->getDenormalizationFactory($type, ['model']);
         }
-    
+
         throw DeserializerRuntimeException::createInvalidObjectType();
     }
 
@@ -66,7 +66,7 @@ final class AbstractModelMapping implements DenormalizationObjectMappingInterfac
     public function getDenormalizationFieldMappings(string $type): array
     {
         if (null === $type) {
-            throw DeserializerRuntimeException::createMissingObjectType();
+            throw DeserializerRuntimeException::createMissingObjectType(['model']);
         }
 
         switch ($type) {
@@ -74,7 +74,7 @@ final class AbstractModelMapping implements DenormalizationObjectMappingInterfac
                 return $this->modelMapping->getDenormalizationFieldMappings();
         }
 
-        throw DeserializerRuntimeException::createInvalidObjectType();
+        throw DeserializerRuntimeException::createInvalidObjectType($type, ['model']);
     }
 }
 
