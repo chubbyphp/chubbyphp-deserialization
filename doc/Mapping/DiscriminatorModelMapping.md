@@ -58,7 +58,7 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
             throw DeserializerRuntimeException::createMissingObjectType($path, $this->supportedTypes);
         }
 
-        if ('model' === $type) {
+        if ('child-model' === $type) {
             return $this->modelMapping->getDenormalizationFactory($path);
         }
 
@@ -79,7 +79,7 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
             throw DeserializerRuntimeException::createMissingObjectType($path, $this->supportedTypes);
         }
 
-        if ('model' === $type) {
+        if ('child-model' === $type) {
             return $this->modelMapping->getDenormalizationFieldMappings($path);
         }
 

@@ -29,7 +29,7 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([
-                new BaseChildModelMapping($childModelMapping, ['model']),
+                new BaseChildModelMapping($childModelMapping, ['child-model']),
                 $childModelMapping,
                 new ParentModelMapping(),
             ])
@@ -39,7 +39,7 @@ class DeserializerIntegrationTest extends TestCase
             'name' => 'Name',
             'children' => [
                 [
-                    '_type' => 'model',
+                    '_type' => 'child-model',
                     'name' => 'Name',
                     'value' => 'Value',
                 ],
@@ -57,14 +57,14 @@ class DeserializerIntegrationTest extends TestCase
     public function testDenormalizeByClassAndMissingChildType()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Missing object type, supported are "model" at path: "children[0]"');
+        self::expectExceptionMessage('Missing object type, supported are "child-model" at path: "children[0]"');
 
         $childModelMapping = new ChildModelMapping();
 
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([
-                new BaseChildModelMapping($childModelMapping, ['model']),
+                new BaseChildModelMapping($childModelMapping, ['child-model']),
                 $childModelMapping,
                 new ParentModelMapping(),
             ])
@@ -86,14 +86,14 @@ class DeserializerIntegrationTest extends TestCase
     public function testDenormalizeByClassAndInvalidChildType()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Unsupported object type "unknown", supported are "model" at path: "children[0]"');
+        self::expectExceptionMessage('Unsupported object type "unknown", supported are "child-model" at path: "children[0]"');
 
         $childModelMapping = new ChildModelMapping();
 
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([
-                new BaseChildModelMapping($childModelMapping, ['model']),
+                new BaseChildModelMapping($childModelMapping, ['child-model']),
                 $childModelMapping,
                 new ParentModelMapping(),
             ])
@@ -120,7 +120,7 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([
-                new BaseChildModelMapping($childModelMapping, ['model']),
+                new BaseChildModelMapping($childModelMapping, ['child-model']),
                 $childModelMapping,
                 new ParentModelMapping(),
             ])
@@ -130,7 +130,7 @@ class DeserializerIntegrationTest extends TestCase
             'name' => 'Name',
             'children' => [
                 [
-                    '_type' => 'model',
+                    '_type' => 'child-model',
                     'name' => 'Name',
                     'value' => 'Value',
                 ],
@@ -165,7 +165,7 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([
-                new BaseChildModelMapping($childModelMapping, ['model']),
+                new BaseChildModelMapping($childModelMapping, ['child-model']),
                 $childModelMapping,
                 new ParentModelMapping(),
             ])
@@ -183,7 +183,7 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([
-                new BaseChildModelMapping($childModelMapping, ['model']),
+                new BaseChildModelMapping($childModelMapping, ['child-model']),
                 $childModelMapping,
                 new ParentModelMapping(),
             ])
