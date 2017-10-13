@@ -100,6 +100,8 @@ echo $model->getName(); // 'php'
 
 ### Mapping
 
+#### Simple
+
 ```php
 <?php
 
@@ -146,6 +148,10 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
 }
 ```
 
+#### Advanced
+
+ * [DiscriminatorModelMapping][8]
+
 ## Copyright
 
 Dominik Zogg 2017
@@ -160,3 +166,5 @@ Dominik Zogg 2017
 [5]: doc/Decoder/UrlEncodedDecoderType.md
 [6]: doc/Decoder/XmlDecoderType.md
 [7]: doc/Decoder/YamlDecoderType.md
+
+[8]: doc/Mapping/DiscriminatorModelMapping.md
