@@ -10,7 +10,7 @@ use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextBuilder;
 use Chubbyphp\Deserialization\Deserializer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Chubbyphp\Tests\Deserialization\Resources\Mapping\BaseModelMapping;
+use Chubbyphp\Tests\Deserialization\Resources\Mapping\BaseChildModelMapping;
 use Chubbyphp\Tests\Deserialization\Resources\Mapping\ChildModelMapping;
 use Chubbyphp\Tests\Deserialization\Resources\Mapping\ParentModelMapping;
 use Chubbyphp\Tests\Deserialization\Resources\Model\ChildModel;
@@ -29,19 +29,29 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([
-                new BaseModelMapping($childModelMapping, ['model']),
+                new BaseChildModelMapping($childModelMapping, ['model']),
                 $childModelMapping,
                 new ParentModelMapping(),
             ])
         );
 
-        $data = json_encode(['name' => 'Name', 'children' => [['_type' => 'model', 'name' => 'Name']]]);
+        $data = json_encode([
+            'name' => 'Name',
+            'children' => [
+                [
+                    '_type' => 'model',
+                    'name' => 'Name',
+                    'value' => 'Value',
+                ],
+            ],
+        ]);
 
         $parentObject = $deserializer->deserialize(ParentModel::class, $data, 'application/json');
 
         self::assertSame('Name', $parentObject->getName());
         self::assertCount(1, $parentObject->getChildren());
         self::assertSame('Name', $parentObject->getChildren()[0]->getName());
+        self::assertSame('Value', $parentObject->getChildren()[0]->getValue());
     }
 
     public function testDenormalizeByClassAndMissingChildType()
@@ -54,13 +64,21 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([
-                new BaseModelMapping($childModelMapping, ['model']),
+                new BaseChildModelMapping($childModelMapping, ['model']),
                 $childModelMapping,
                 new ParentModelMapping(),
             ])
         );
 
-        $data = json_encode(['name' => 'Name', 'children' => [['name' => 'Name']]]);
+        $data = json_encode([
+            'name' => 'Name',
+            'children' => [
+                [
+                    'name' => 'Name',
+                    'value' => 'Value',
+                ],
+            ],
+        ]);
 
         $deserializer->deserialize(ParentModel::class, $data, 'application/json');
     }
@@ -75,13 +93,22 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([
-                new BaseModelMapping($childModelMapping, ['model']),
+                new BaseChildModelMapping($childModelMapping, ['model']),
                 $childModelMapping,
                 new ParentModelMapping(),
             ])
         );
 
-        $data = json_encode(['name' => 'Name', 'children' => [['_type' => 'unknown', 'name' => 'Name']]]);
+        $data = json_encode([
+            'name' => 'Name',
+            'children' => [
+                [
+                    '_type' => 'unknown',
+                    'name' => 'Name',
+                    'value' => 'Value',
+                ],
+            ],
+        ]);
 
         $deserializer->deserialize(ParentModel::class, $data, 'application/json');
     }
@@ -93,13 +120,22 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([
-                new BaseModelMapping($childModelMapping, ['model']),
+                new BaseChildModelMapping($childModelMapping, ['model']),
                 $childModelMapping,
                 new ParentModelMapping(),
             ])
         );
 
-        $data = json_encode(['name' => 'Name', 'children' => [['_type' => 'model', 'name' => 'Name']]]);
+        $data = json_encode([
+            'name' => 'Name',
+            'children' => [
+                [
+                    '_type' => 'model',
+                    'name' => 'Name',
+                    'value' => 'Value',
+                ],
+            ],
+        ]);
 
         $childrenObject1 = new ChildModel();
         $childrenObject1->setName('oldName1');
@@ -116,6 +152,7 @@ class DeserializerIntegrationTest extends TestCase
         self::assertSame('Name', $parentObject->getName());
         self::assertCount(1, $parentObject->getChildren());
         self::assertSame('Name', $parentObject->getChildren()[0]->getName());
+        self::assertSame('Value', $parentObject->getChildren()[0]->getValue());
     }
 
     public function testDenormalizeWithAdditionalFieldsExpectsException()
@@ -128,7 +165,7 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([
-                new BaseModelMapping($childModelMapping, ['model']),
+                new BaseChildModelMapping($childModelMapping, ['model']),
                 $childModelMapping,
                 new ParentModelMapping(),
             ])
@@ -146,7 +183,7 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonDecoderType()]),
             new Denormalizer([
-                new BaseModelMapping($childModelMapping, ['model']),
+                new BaseChildModelMapping($childModelMapping, ['model']),
                 $childModelMapping,
                 new ParentModelMapping(),
             ])

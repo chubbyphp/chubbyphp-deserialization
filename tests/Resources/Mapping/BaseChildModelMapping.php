@@ -9,7 +9,7 @@ use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use Chubbyphp\Tests\Deserialization\Resources\Model\AbstractChildModel;
 
-final class BaseModelMapping implements DenormalizationObjectMappingInterface
+final class BaseChildModelMapping implements DenormalizationObjectMappingInterface
 {
     /**
      * @var ChildModelMapping
