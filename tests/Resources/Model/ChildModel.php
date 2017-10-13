@@ -4,29 +4,29 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Resources\Model;
 
-final class Model extends AbstractModel
+final class ChildModel extends AbstractChildModel
 {
     /**
      * @var string
      */
-    private $type;
+    private $value;
 
     /**
      * @return string
      */
-    public function getType(): string
+    public function getValue(): string
     {
-        return $this->type;
+        return $this->value;
     }
 
     /**
-     * @param string $type
+     * @param string $value
      *
      * @return self
      */
-    public function setType(string $type): self
+    public function setValue(string $value): self
     {
-        $this->type = $type;
+        $this->value = $value;
 
         return $this;
     }

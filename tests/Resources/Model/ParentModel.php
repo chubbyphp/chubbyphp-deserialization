@@ -4,12 +4,17 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Resources\Model;
 
-abstract class AbstractModel
+final class ParentModel
 {
     /**
      * @var string
      */
     private $name;
+
+    /**
+     * @var ChildModel[]
+     */
+    private $children;
 
     /**
      * @return string
@@ -27,6 +32,26 @@ abstract class AbstractModel
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return ChildModel[]
+     */
+    public function getChildren(): array
+    {
+        return $this->children;
+    }
+
+    /**
+     * @param ChildModel[] $children
+     *
+     * @return self
+     */
+    public function setChildren(array $children): self
+    {
+        $this->children = $children;
 
         return $this;
     }

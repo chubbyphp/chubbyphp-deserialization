@@ -7,12 +7,12 @@ namespace Chubbyphp\Tests\Deserialization\Resources\Mapping;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
-use Chubbyphp\Tests\Deserialization\Resources\Model\AbstractModel;
+use Chubbyphp\Tests\Deserialization\Resources\Model\AbstractChildModel;
 
 final class BaseModelMapping implements DenormalizationObjectMappingInterface
 {
     /**
-     * @var ModelMapping
+     * @var ChildModelMapping
      */
     private $modelMapping;
 
@@ -22,10 +22,10 @@ final class BaseModelMapping implements DenormalizationObjectMappingInterface
     private $supportedTypes;
 
     /**
-     * @param ModelMapping $modelMapping
-     * @param array        $supportedTypes
+     * @param ChildModelMapping $modelMapping
+     * @param array             $supportedTypes
      */
-    public function __construct(ModelMapping $modelMapping, array $supportedTypes)
+    public function __construct(ChildModelMapping $modelMapping, array $supportedTypes)
     {
         $this->modelMapping = $modelMapping;
         $this->supportedTypes = $supportedTypes;
@@ -36,7 +36,7 @@ final class BaseModelMapping implements DenormalizationObjectMappingInterface
      */
     public function getClass(): string
     {
-        return AbstractModel::class;
+        return AbstractChildModel::class;
     }
 
     /**
@@ -53,7 +53,7 @@ final class BaseModelMapping implements DenormalizationObjectMappingInterface
             throw DeserializerRuntimeException::createMissingObjectType($path, $this->supportedTypes);
         }
 
-        if ($type === 'model') {
+        if ('model' === $type) {
             return $this->modelMapping->getDenormalizationFactory($path);
         }
 
@@ -74,7 +74,7 @@ final class BaseModelMapping implements DenormalizationObjectMappingInterface
             throw DeserializerRuntimeException::createMissingObjectType($path, $this->supportedTypes);
         }
 
-        if ($type === 'model') {
+        if ('model' === $type) {
             return $this->modelMapping->getDenormalizationFieldMappings($path);
         }
 
