@@ -55,7 +55,6 @@ $decoder = new Decoder([
 ]);
 
 print_r($decoder->getContentTypes());
-
 //[
 //    'application/json',
 //    'application/x-www-form-urlencoded',
@@ -67,7 +66,6 @@ print_r($decoder->decode(
     '{"name": "php"}',
     'application/json'
 ));
-
 // ['name' => 'php']
 ```
 
@@ -97,7 +95,8 @@ $model = $denormalizer->denormalize(
     ['name' => 'php']
 );
 
-echo $model->getName(); // 'php'
+echo $model->getName();
+// 'php'
 ```
 
 ### Deserializer
@@ -135,7 +134,8 @@ $model = $deserializer->deserialize(
     'application/json'
 );
 
-echo $model->getName(); // 'php'
+echo $model->getName();
+// 'php'
 ```
 
 ### Mapping
