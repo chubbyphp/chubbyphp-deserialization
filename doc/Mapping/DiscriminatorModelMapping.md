@@ -30,8 +30,10 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
      * @param ChildModelMapping $modelMapping
      * @param array             $supportedTypes
      */
-    public function __construct(ChildModelMapping $modelMapping, array $supportedTypes)
-    {
+    public function __construct(
+        ChildModelMapping $modelMapping,
+        array $supportedTypes
+    ) {
         $this->modelMapping = $modelMapping;
         $this->supportedTypes = $supportedTypes;
     }
@@ -52,17 +54,27 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
      *
      * @throws DeserializerRuntimeException
      */
-    public function getDenormalizationFactory(string $path, string $type = null): callable
-    {
+    public function getDenormalizationFactory(
+        string $path,
+        string $type = null
+    ): callable {
         if (null === $type) {
-            throw DeserializerRuntimeException::createMissingObjectType($path, $this->supportedTypes);
+            throw DeserializerRuntimeException::createMissingObjectType(
+                $path,
+                $this->supportedTypes
+            );
         }
 
         if ('child-model' === $type) {
-            return $this->modelMapping->getDenormalizationFactory($path);
+            return $this->modelMapping
+                ->getDenormalizationFactory($path);
         }
 
-        throw DeserializerRuntimeException::createInvalidObjectType($path, $type, $this->supportedTypes);
+        throw DeserializerRuntimeException::createInvalidObjectType(
+            $path,
+            $type,
+            $this->supportedTypes
+        );
     }
 
     /**
@@ -73,17 +85,27 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
      *
      * @throws DeserializerRuntimeException
      */
-    public function getDenormalizationFieldMappings(string $path, string $type = null): array
-    {
+    public function getDenormalizationFieldMappings(
+        string $path,
+        string $type = null
+    ): array {
         if (null === $type) {
-            throw DeserializerRuntimeException::createMissingObjectType($path, $this->supportedTypes);
+            throw DeserializerRuntimeException::createMissingObjectType(
+                $path,
+                $this->supportedTypes
+            );
         }
 
         if ('child-model' === $type) {
-            return $this->modelMapping->getDenormalizationFieldMappings($path);
+            return $this->modelMapping
+                ->getDenormalizationFieldMappings($path);
         }
 
-        throw DeserializerRuntimeException::createInvalidObjectType($path, $type, $this->supportedTypes);
+        throw DeserializerRuntimeException::createInvalidObjectType(
+            $path,
+            $type,
+            $this->supportedTypes
+        );
     }
 }
 ```
@@ -119,8 +141,10 @@ final class ChildModelMapping implements DenormalizationObjectMappingInterface
      *
      * @throws DeserializerRuntimeException
      */
-    public function getDenormalizationFactory(string $path, string $type = null): callable
-    {
+    public function getDenormalizationFactory(
+        string $path,
+        string $type = null
+    ): callable {
         return function () {
             return new ChildModel();
         };
@@ -134,8 +158,9 @@ final class ChildModelMapping implements DenormalizationObjectMappingInterface
      *
      * @throws DeserializerRuntimeException
      */
-    public function getDenormalizationFieldMappings(string $path, string $type = null): array
-    {
+    public function getDenormalizationFieldMappings(
+        string $path, string $type = null
+    ): array {
         return [
             DenormalizationFieldMappingBuilder::create('name')->getMapping(),
             DenormalizationFieldMappingBuilder::create('value')->getMapping(),
@@ -178,8 +203,10 @@ final class ParentModelMapping implements DenormalizationObjectMappingInterface
      *
      * @throws DeserializerRuntimeException
      */
-    public function getDenormalizationFactory(string $path, string $type = null): callable
-    {
+    public function getDenormalizationFactory(
+        string $path,
+        string $type = null
+    ): callable {
         return function () {
             return new ParentModel();
         };
@@ -193,13 +220,21 @@ final class ParentModelMapping implements DenormalizationObjectMappingInterface
      *
      * @throws DeserializerRuntimeException
      */
-    public function getDenormalizationFieldMappings(string $path, string $type = null): array
-    {
+    public function getDenormalizationFieldMappings(
+        string $path,
+        string $type = null
+    ): array {
         return [
-            DenormalizationFieldMappingBuilder::create('name')->getMapping(),
-            DenormalizationFieldMappingBuilder::create('children')->setFieldDenormalizer(
-                new CollectionFieldDenormalizer(AbstractChildModel::class, new PropertyAccessor('children'))
-            )->getMapping(),
+            DenormalizationFieldMappingBuilder::create('name')
+                ->getMapping(),
+            DenormalizationFieldMappingBuilder::create('children')
+                ->setFieldDenormalizer(
+                    new CollectionFieldDenormalizer(
+                        AbstractChildModel::class,
+                        new PropertyAccessor('children')
+                    )
+                )
+                ->getMapping(),
         ];
     }
 }
