@@ -25,6 +25,8 @@ $fieldDenormalizer->denormalize(
     $denormalizer
 )
 
-echo $parentModel->getChildren()[0]->getName();
+echo $parentModel
+    ->getChildren()[0]
+    ->getName();
 // 'php'
 ```

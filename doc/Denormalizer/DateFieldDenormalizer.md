@@ -24,6 +24,7 @@ $fieldDenormalizer->denormalize(
     $context
 )
 
-echo $model->getAt()->format('Y-m-d H:i:s');
+echo $model->getAt()
+    ->format('Y-m-d H:i:s');
 // '2017-01-01 22:00:00'
 ```
