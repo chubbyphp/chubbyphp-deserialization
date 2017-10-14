@@ -104,6 +104,9 @@ echo $model->getName();
  * [DateFieldDenormalizer][10]
  * [FieldDenormalizer][11]
 
+ * [DenormalizerContext][12]
+ * [DenormalizerContextBuilder][13]
+
 ### Deserializer
 
 ```php
@@ -223,5 +226,8 @@ Dominik Zogg 2017
 [9]: doc/Denormalizer/CollectionFieldDenormalizer.md
 [10]: doc/Denormalizer/DateFieldDenormalizer.md
 [11]: doc/Denormalizer/FieldDenormalizer.md
+
+[12]: doc/Denormalizer/DenormalizerContext.md
+[13]: doc/Denormalizer/DenormalizerContextBuilder.md
 
 [20]: doc/Mapping/DiscriminatorModelMapping.md
