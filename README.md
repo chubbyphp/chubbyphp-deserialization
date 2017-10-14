@@ -154,10 +154,15 @@ echo $model->getName();
 
 ### Mapping
 
+#### DenormalizationFieldMapping
+
+ * [DenormalizationFieldMapping][14]
+ * [DenormalizationFieldMappingBuilder][15]
+
 #### DenormalizationObjectMapping
 
- * [AdvancedDenormalizationObjectMapping][14]
- * [SimpleDenormalizationObjectMapping][15]
+ * [AdvancedDenormalizationObjectMapping][16]
+ * [SimpleDenormalizationObjectMapping][17]
 
 ## Copyright
 
@@ -182,5 +187,7 @@ Dominik Zogg 2017
 [12]: doc/Denormalizer/DenormalizerContext.md
 [13]: doc/Denormalizer/DenormalizerContextBuilder.md
 
-[14]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
-[15]: doc/Mapping/SimpleDenormalizationObjectMapping.md
+[14]: doc/Mapping/DenormalizationFieldMapping.md
+[15]: doc/Mapping/DenormalizationFieldMappingBuilder.md
+[16]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
+[17]: doc/Mapping/SimpleDenormalizationObjectMapping.md
