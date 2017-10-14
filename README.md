@@ -168,6 +168,10 @@ echo $model->getName();
 
  * [LazyDenormalizationObjectMapping][18]
 
+### Provider
+
+* [DeserializationProvider][19]
+
 ## Copyright
 
 Dominik Zogg 2017
@@ -198,3 +202,5 @@ Dominik Zogg 2017
 [17]: doc/Mapping/SimpleDenormalizationObjectMapping.md
 
 [18]: doc/Mapping/LazyDenormalizationObjectMapping.md
+
+[19]: doc/Provider/DeserializationProvider.md
