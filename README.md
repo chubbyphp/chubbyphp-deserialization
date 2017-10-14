@@ -43,12 +43,15 @@ composer require chubbyphp/chubbyphp-deserialization "~2.0@alpha"
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
 
-$decoder = new Decoder([new JsonTypeDecoder]);
+$decoder = new Decoder([new JsonTypeDecoder, UrlEncodedTypeDecoder, XmlTypeDecoder, YamlTypeDecoder]);
 
-$data = $decoder->decode('{"name": "php"}', 'application/json');
+print_r($decoder->getContentTypes()); // ['application/json', 'application/x-www-form-urlencoded', 'application/xml', application/x-yaml']
 
-print_r($data); // ['name' => 'php']
+print_r($decoder->decode('{"name": "php"}', 'application/json')); // ['name' => 'php']
 ```
 
  * [JsonTypeDecoder][4]
