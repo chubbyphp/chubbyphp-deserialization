@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization;
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
-use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
+use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextBuilder;
 use Chubbyphp\Deserialization\Deserializer;
@@ -27,7 +27,7 @@ class DeserializerIntegrationTest extends TestCase
         $childModelMapping = new ChildModelMapping();
 
         $deserializer = new Deserializer(
-            new Decoder([new JsonDecoderType()]),
+            new Decoder([new JsonTypeDecoder()]),
             new Denormalizer([
                 new BaseChildModelMapping($childModelMapping, ['child-model']),
                 $childModelMapping,
@@ -62,7 +62,7 @@ class DeserializerIntegrationTest extends TestCase
         $childModelMapping = new ChildModelMapping();
 
         $deserializer = new Deserializer(
-            new Decoder([new JsonDecoderType()]),
+            new Decoder([new JsonTypeDecoder()]),
             new Denormalizer([
                 new BaseChildModelMapping($childModelMapping, ['child-model']),
                 $childModelMapping,
@@ -91,7 +91,7 @@ class DeserializerIntegrationTest extends TestCase
         $childModelMapping = new ChildModelMapping();
 
         $deserializer = new Deserializer(
-            new Decoder([new JsonDecoderType()]),
+            new Decoder([new JsonTypeDecoder()]),
             new Denormalizer([
                 new BaseChildModelMapping($childModelMapping, ['child-model']),
                 $childModelMapping,
@@ -118,7 +118,7 @@ class DeserializerIntegrationTest extends TestCase
         $childModelMapping = new ChildModelMapping();
 
         $deserializer = new Deserializer(
-            new Decoder([new JsonDecoderType()]),
+            new Decoder([new JsonTypeDecoder()]),
             new Denormalizer([
                 new BaseChildModelMapping($childModelMapping, ['child-model']),
                 $childModelMapping,
@@ -163,7 +163,7 @@ class DeserializerIntegrationTest extends TestCase
         $childModelMapping = new ChildModelMapping();
 
         $deserializer = new Deserializer(
-            new Decoder([new JsonDecoderType()]),
+            new Decoder([new JsonTypeDecoder()]),
             new Denormalizer([
                 new BaseChildModelMapping($childModelMapping, ['child-model']),
                 $childModelMapping,
@@ -181,7 +181,7 @@ class DeserializerIntegrationTest extends TestCase
         $childModelMapping = new ChildModelMapping();
 
         $deserializer = new Deserializer(
-            new Decoder([new JsonDecoderType()]),
+            new Decoder([new JsonTypeDecoder()]),
             new Denormalizer([
                 new BaseChildModelMapping($childModelMapping, ['child-model']),
                 $childModelMapping,

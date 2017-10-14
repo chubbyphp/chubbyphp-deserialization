@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Decoder;
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
-use Chubbyphp\Deserialization\Decoder\DecoderTypeInterface;
+use Chubbyphp\Deserialization\Decoder\TypeDecoderInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use PHPUnit\Framework\TestCase;
 
@@ -16,14 +16,14 @@ class DecoderTest extends TestCase
 {
     public function testGetContentTypes()
     {
-        $decoder = new Decoder([$this->getDecoderType()]);
+        $decoder = new Decoder([$this->getTypeDecoder()]);
 
         self::assertSame(['application/json'], $decoder->getContentTypes());
     }
 
     public function testDecode()
     {
-        $decoder = new Decoder([$this->getDecoderType()]);
+        $decoder = new Decoder([$this->getTypeDecoder()]);
 
         self::assertSame(['key' => 'value'], $decoder->decode('{"key": "value"}', 'application/json'));
     }
@@ -33,18 +33,18 @@ class DecoderTest extends TestCase
         self::expectException(DeserializerLogicException::class);
         self::expectExceptionMessage('There is no decoder for content-type: "application/xml"');
 
-        $decoder = new Decoder([$this->getDecoderType()]);
+        $decoder = new Decoder([$this->getTypeDecoder()]);
 
         $decoder->decode('<key>value</key>', 'application/xml');
     }
 
     /**
-     * @return DecoderTypeInterface
+     * @return TypeDecoderInterface
      */
-    private function getDecoderType(): DecoderTypeInterface
+    private function getTypeDecoder(): TypeDecoderInterface
     {
-        /** @var DecoderTypeInterface|\PHPUnit_Framework_MockObject_MockObject $decoderType */
-        $decoderType = $this->getMockBuilder(DecoderTypeInterface::class)
+        /** @var TypeDecoderInterface|\PHPUnit_Framework_MockObject_MockObject $decoderType */
+        $decoderType = $this->getMockBuilder(TypeDecoderInterface::class)
             ->setMethods(['getContentType', 'decode'])
             ->getMockForAbstractClass();
 

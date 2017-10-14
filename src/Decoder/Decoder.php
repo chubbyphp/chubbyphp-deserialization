@@ -9,25 +9,25 @@ use Chubbyphp\Deserialization\DeserializerLogicException;
 final class Decoder implements DecoderInterface
 {
     /**
-     * @var DecoderTypeInterface[]
+     * @var TypeDecoderInterface[]
      */
     private $decoderTypes;
 
     /**
-     * @param DecoderTypeInterface[] $decoderTypes
+     * @param TypeDecoderInterface[] $decoderTypes
      */
     public function __construct(array $decoderTypes)
     {
         $this->decoderTypes = [];
         foreach ($decoderTypes as $decoderType) {
-            $this->addDecoderType($decoderType);
+            $this->addTypeDecoder($decoderType);
         }
     }
 
     /**
-     * @param DecoderTypeInterface $decoderType
+     * @param TypeDecoderInterface $decoderType
      */
-    private function addDecoderType(DecoderTypeInterface $decoderType)
+    private function addTypeDecoder(TypeDecoderInterface $decoderType)
     {
         $this->decoderTypes[$decoderType->getContentType()] = $decoderType;
     }

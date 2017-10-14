@@ -6,7 +6,7 @@ namespace Chubbyphp\Tests\Deserialization\Decoder;
 
 use PHPUnit\Framework\TestCase;
 
-abstract class AbstractDecoderTypeTest extends TestCase
+abstract class AbstractTypeDecoderTest extends TestCase
 {
     /**
      * @return array

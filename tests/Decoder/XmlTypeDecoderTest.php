@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Decoder;
 
-use Chubbyphp\Deserialization\Decoder\XmlDecoderType;
+use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 /**
- * @covers \Chubbyphp\Deserialization\Decoder\XmlDecoderType
+ * @covers \Chubbyphp\Deserialization\Decoder\XmlTypeDecoder
  */
-class XmlDecoderTypeTest extends AbstractDecoderTypeTest
+class XmlTypeDecoderTest extends AbstractTypeDecoderTest
 {
     public function testGetContentType()
     {
-        $decoder = new XmlDecoderType();
+        $decoder = new XmlTypeDecoder();
 
         self::assertSame('application/xml', $decoder->getContentType());
     }
@@ -156,7 +156,7 @@ class XmlDecoderTypeTest extends AbstractDecoderTypeTest
 </object>
 EOD;
 
-        $decoder = new XmlDecoderType();
+        $decoder = new XmlTypeDecoder();
 
         self::assertEquals($expectedData, $decoder->decode($xml));
     }
@@ -177,7 +177,7 @@ EOD;
 </object>
 EOD;
 
-        $decoder = new XmlDecoderType();
+        $decoder = new XmlTypeDecoder();
 
         $data = $decoder->decode($xml);
 
@@ -192,7 +192,7 @@ EOD;
     {
         self::expectException(DeserializerRuntimeException::class);
         self::expectExceptionMessage('Data is not parsable with content-type: "application/xml"');
-        $transformer = new XmlDecoderType();
-        $transformer->decode('====');
+        $decoderType = new XmlTypeDecoder();
+        $decoderType->decode('====');
     }
 }

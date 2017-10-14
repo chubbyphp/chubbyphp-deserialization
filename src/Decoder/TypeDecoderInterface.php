@@ -6,7 +6,7 @@ namespace Chubbyphp\Deserialization\Decoder;
 
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
-interface DecoderTypeInterface
+interface TypeDecoderInterface
 {
     /**
      * @return string

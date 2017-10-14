@@ -42,19 +42,19 @@ composer require chubbyphp/chubbyphp-deserialization "~2.0@alpha"
 <?php
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
-use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
+use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
 
-$decoder = new Decoder([new JsonDecoderType]);
+$decoder = new Decoder([new JsonTypeDecoder]);
 
 $data = $decoder->decode('{"name": "php"}', 'application/json');
 
 print_r($data); // ['name' => 'php']
 ```
 
- * [JsonDecoderType][4]
- * [UrlEncodedDecoderType][5]
- * [XmlDecoderType][6]
- * [YamlDecoderType][7]
+ * [JsonTypeDecoder][4]
+ * [UrlEncodedTypeDecoder][5]
+ * [XmlTypeDecoder][6]
+ * [YamlTypeDecoder][7]
 
 ### Denormalizer
 
@@ -80,7 +80,7 @@ echo $model->getName(); // 'php'
 <?php
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
-use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
+use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Deserializer;
 use MyProject\Deserialization\ModelMapping;
@@ -89,7 +89,7 @@ use MyProject\Model\Model;
 $logger = ...;
 
 $deserializer = new Deserializer(
-    new Decoder([new JsonDecoderType]),
+    new Decoder([new JsonTypeDecoder]),
     new Denormalizer([new ModelMapping()], $logger)
 );
 
@@ -162,9 +162,9 @@ Dominik Zogg 2017
 [2]: doc/Accessor/MethodAccessor.md
 [3]: doc/Accessor/PropertyAccessor.md
 
-[4]: doc/Decoder/JsonDecoderType.md
-[5]: doc/Decoder/UrlEncodedDecoderType.md
-[6]: doc/Decoder/XmlDecoderType.md
-[7]: doc/Decoder/YamlDecoderType.md
+[4]: doc/Decoder/JsonTypeDecoder.md
+[5]: doc/Decoder/UrlEncodedTypeDecoder.md
+[6]: doc/Decoder/XmlTypeDecoder.md
+[7]: doc/Decoder/YamlTypeDecoder.md
 
 [8]: doc/Mapping/DiscriminatorModelMapping.md

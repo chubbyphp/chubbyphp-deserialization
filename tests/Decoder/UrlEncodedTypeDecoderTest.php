@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Decoder;
 
-use Chubbyphp\Deserialization\Decoder\UrlEncodedDecoderType;
+use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 /**
- * @covers \Chubbyphp\Deserialization\Decoder\UrlEncodedDecoderType
+ * @covers \Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder
  */
-class UrlEncodedDecoderTypeTest extends AbstractDecoderTypeTest
+class UrlEncodedTypeDecoderTest extends AbstractTypeDecoderTest
 {
     public function testGetContentType()
     {
-        $decoder = new UrlEncodedDecoderType();
+        $decoder = new UrlEncodedTypeDecoder();
 
         self::assertSame('application/x-www-form-urlencoded', $decoder->getContentType());
     }
@@ -26,7 +26,7 @@ class UrlEncodedDecoderTypeTest extends AbstractDecoderTypeTest
      */
     public function testDecode(array $expectedData)
     {
-        $decoder = new UrlEncodedDecoderType();
+        $decoder = new UrlEncodedTypeDecoder();
 
         $urlEncoded = 'page=1&perPage=10&search=&sort=name&order=asc&_embedded[mainItem][id]=id1&_embedded[mainItem][name]=A+fancy+Name&_embedded[mainItem][treeValues][1][2]=3&_embedded[mainItem][progress]=76.8&_embedded[mainItem][active]=1&_embedded[mainItem][_type]=item&_embedded[mainItem][_links][read][href]=http%3A%2F%2Ftest.com%2Fitems%2Fid1&_embedded[mainItem][_links][read][method]=GET&_embedded[mainItem][_links][update][href]=http%3A%2F%2Ftest.com%2Fitems%2Fid1&_embedded[mainItem][_links][update][method]=PUT&_embedded[mainItem][_links][delete][href]=http%3A%2F%2Ftest.com%2Fitems%2Fid1&_embedded[mainItem][_links][delete][method]=DELETE&_embedded[items][0][id]=id1&_embedded[items][0][name]=A+fancy+Name&_embedded[items][0][treeValues][1][2]=3&_embedded[items][0][progress]=76.8&_embedded[items][0][active]=1&_embedded[items][0][_type]=item&_embedded[items][0][_links][read][href]=http%3A%2F%2Ftest.com%2Fitems%2Fid1&_embedded[items][0][_links][read][method]=GET&_embedded[items][0][_links][update][href]=http%3A%2F%2Ftest.com%2Fitems%2Fid1&_embedded[items][0][_links][update][method]=PUT&_embedded[items][0][_links][delete][href]=http%3A%2F%2Ftest.com%2Fitems%2Fid1&_embedded[items][0][_links][delete][method]=DELETE&_embedded[items][1][id]=id2&_embedded[items][1][name]=B+fancy+Name&_embedded[items][1][treeValues][1][2]=3&_embedded[items][1][treeValues][1][3]=4&_embedded[items][1][progress]=24.7&_embedded[items][1][active]=1&_embedded[items][1][_type]=item&_embedded[items][1][_links][read][href]=http%3A%2F%2Ftest.com%2Fitems%2Fid2&_embedded[items][1][_links][read][method]=GET&_embedded[items][1][_links][update][href]=http%3A%2F%2Ftest.com%2Fitems%2Fid2&_embedded[items][1][_links][update][method]=PUT&_embedded[items][1][_links][delete][href]=http%3A%2F%2Ftest.com%2Fitems%2Fid2&_embedded[items][1][_links][delete][method]=DELETE&_embedded[items][2][id]=id3&_embedded[items][2][name]=C+fancy+Name&_embedded[items][2][treeValues][1][2]=3&_embedded[items][2][treeValues][1][3]=4&_embedded[items][2][treeValues][1][6]=7&_embedded[items][2][progress]=100&_embedded[items][2][active]=&_embedded[items][2][_type]=item&_embedded[items][2][_links][read][href]=http%3A%2F%2Ftest.com%2Fitems%2Fid3&_embedded[items][2][_links][read][method]=GET&_embedded[items][2][_links][update][href]=http%3A%2F%2Ftest.com%2Fitems%2Fid3&_embedded[items][2][_links][update][method]=PUT&_embedded[items][2][_links][delete][href]=http%3A%2F%2Ftest.com%2Fitems%2Fid3&_embedded[items][2][_links][delete][method]=DELETE&_links[self][href]=http%3A%2F%2Ftest.com%2Fitems%2F%3Fpage%3D1%26perPage%3D10%26sort%3Dname%26order%3Dasc&_links[self][method]=GET&_links[create][href]=http%3A%2F%2Ftest.com%2Fitems%2F&_links[create][method]=POST&_type=search';
 
@@ -37,7 +37,7 @@ class UrlEncodedDecoderTypeTest extends AbstractDecoderTypeTest
     {
         $urlEncoded = 'id=id1&name=A+fancy+Name&treeValues[1][2]=3&progress=76.8&active=1';
 
-        $decoder = new UrlEncodedDecoderType();
+        $decoder = new UrlEncodedTypeDecoder();
 
         $data = $decoder->decode($urlEncoded);
 
@@ -52,7 +52,7 @@ class UrlEncodedDecoderTypeTest extends AbstractDecoderTypeTest
     {
         self::expectException(DeserializerRuntimeException::class);
         self::expectExceptionMessage('Data is not parsable with content-type: "application/x-www-form-urlencoded"');
-        $transformer = new UrlEncodedDecoderType();
-        $transformer->decode('====');
+        $decoderType = new UrlEncodedTypeDecoder();
+        $decoderType->decode('====');
     }
 }

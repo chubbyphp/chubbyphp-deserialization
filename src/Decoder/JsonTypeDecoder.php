@@ -5,16 +5,15 @@ declare(strict_types=1);
 namespace Chubbyphp\Deserialization\Decoder;
 
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Symfony\Component\Yaml\Yaml;
 
-final class YamlDecoderType implements DecoderTypeInterface
+final class JsonTypeDecoder implements TypeDecoderInterface
 {
     /**
      * @return string
      */
     public function getContentType(): string
     {
-        return 'application/x-yaml';
+        return 'application/json';
     }
 
     /**
@@ -27,7 +26,7 @@ final class YamlDecoderType implements DecoderTypeInterface
     public function decode(string $data): array
     {
         try {
-            return Yaml::parse($data);
+            return json_decode($data, true);
         } catch (\TypeError $e) {
             throw DeserializerRuntimeException::createNotParsable($this->getContentType());
         }

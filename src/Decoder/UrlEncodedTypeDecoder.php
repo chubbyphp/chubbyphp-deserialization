@@ -6,7 +6,7 @@ namespace Chubbyphp\Deserialization\Decoder;
 
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
-final class UrlEncodedDecoderType implements DecoderTypeInterface
+final class UrlEncodedTypeDecoder implements TypeDecoderInterface
 {
     /**
      * @return string

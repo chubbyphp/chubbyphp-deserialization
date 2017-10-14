@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Decoder;
 
-use Chubbyphp\Deserialization\Decoder\YamlDecoderType;
+use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 /**
- * @covers \Chubbyphp\Deserialization\Decoder\YamlDecoderType
+ * @covers \Chubbyphp\Deserialization\Decoder\YamlTypeDecoder
  */
-class YamlDecoderTypeTest extends AbstractDecoderTypeTest
+class YamlTypeDecoderTest extends AbstractTypeDecoderTest
 {
     public function testGetContentType()
     {
-        $decoder = new YamlDecoderType();
+        $decoder = new YamlTypeDecoder();
 
         self::assertSame('application/x-yaml', $decoder->getContentType());
     }
@@ -123,7 +123,7 @@ _links:
 _type: search
 EOD;
 
-        $decoder = new YamlDecoderType();
+        $decoder = new YamlTypeDecoder();
 
         self::assertEquals($expectedData, $decoder->decode($yaml));
     }
@@ -140,7 +140,7 @@ progress: 76.8
 active: true
 EOD;
 
-        $decoder = new YamlDecoderType();
+        $decoder = new YamlTypeDecoder();
 
         $data = $decoder->decode($yaml);
 
@@ -155,7 +155,7 @@ EOD;
     {
         self::expectException(DeserializerRuntimeException::class);
         self::expectExceptionMessage('Data is not parsable with content-type: "application/x-yaml"');
-        $transformer = new YamlDecoderType();
-        $transformer->decode('====');
+        $decoderType = new YamlTypeDecoder();
+        $decoderType->decode('====');
     }
 }

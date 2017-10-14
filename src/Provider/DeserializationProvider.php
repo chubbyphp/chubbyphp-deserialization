@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Chubbyphp\Deserialization\Provider;
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
-use Chubbyphp\Deserialization\Decoder\JsonDecoderType;
-use Chubbyphp\Deserialization\Decoder\UrlEncodedDecoderType;
-use Chubbyphp\Deserialization\Decoder\XmlDecoderType;
-use Chubbyphp\Deserialization\Decoder\YamlDecoderType;
+use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Deserializer;
 use Pimple\Container;
@@ -33,12 +33,12 @@ final class DeserializationProvider implements ServiceProviderInterface
         $container['deserializer.decodertypes'] = function () {
             $decoderTypes = [];
 
-            $decoderTypes[] = new JsonDecoderType();
-            $decoderTypes[] = new UrlEncodedDecoderType();
-            $decoderTypes[] = new XmlDecoderType();
+            $decoderTypes[] = new JsonTypeDecoder();
+            $decoderTypes[] = new UrlEncodedTypeDecoder();
+            $decoderTypes[] = new XmlTypeDecoder();
 
             if (class_exists(Yaml::class)) {
-                $decoderTypes[] = new YamlDecoderType();
+                $decoderTypes[] = new YamlTypeDecoder();
             }
 
             return $decoderTypes;
