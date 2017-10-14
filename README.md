@@ -49,9 +49,9 @@ use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
 
 $decoder = new Decoder([
     new JsonTypeDecoder(),
-    UrlEncodedTypeDecoder(),
-    XmlTypeDecoder(),
-    YamlTypeDecoder()
+    new UrlEncodedTypeDecoder(),
+    new XmlTypeDecoder(),
+    new YamlTypeDecoder()
 ]);
 
 print_r($decoder->getContentTypes());
@@ -63,7 +63,10 @@ print_r($decoder->getContentTypes());
 //    'application/x-yaml'
 //]
 
-print_r($decoder->decode('{"name": "php"}', 'application/json'));
+print_r($decoder->decode(
+    '{"name": "php"}',
+    'application/json'
+));
 
 // ['name' => 'php']
 ```
@@ -84,9 +87,15 @@ use MyProject\Model\Model;
 
 $logger = ...;
 
-$denormalizer = new Denormalizer([new ModelMapping()], $logger);
+$denormalizer = new Denormalizer(
+    [new ModelMapping()],
+    $logger
+);
 
-$model = $denormalizer->denormalize(Model::class, ['name' => 'php']);
+$model = $denormalizer->denormalize(
+    Model::class,
+    ['name' => 'php']
+);
 
 echo $model->getName(); // 'php'
 ```
@@ -98,6 +107,9 @@ echo $model->getName(); // 'php'
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Deserializer;
 use MyProject\Deserialization\ModelMapping;
@@ -106,8 +118,15 @@ use MyProject\Model\Model;
 $logger = ...;
 
 $deserializer = new Deserializer(
-    new Decoder([new JsonTypeDecoder]),
-    new Denormalizer([new ModelMapping()], $logger)
+    new Decoder([
+        new JsonTypeDecoder(),
+        new UrlEncodedTypeDecoder(),
+        new XmlTypeDecoder(),
+        new YamlTypeDecoder()
+    ]),
+    new Denormalizer([
+        new ModelMapping()
+    ], $logger)
 );
 
 $model = $deserializer->deserialize(
