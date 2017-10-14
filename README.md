@@ -99,6 +99,11 @@ echo $model->getName();
 // 'php'
 ```
 
+ * [CallbackFieldDenormalizer][8]
+ * [CollectionFieldDenormalizer][9]
+ * [DateFieldDenormalizer][10]
+ * [FieldDenormalizer][11]
+
 ### Deserializer
 
 ```php
@@ -197,7 +202,7 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
 
 #### Advanced
 
- * [DiscriminatorModelMapping][8]
+ * [DiscriminatorModelMapping][20]
 
 ## Copyright
 
@@ -214,4 +219,9 @@ Dominik Zogg 2017
 [6]: doc/Decoder/XmlTypeDecoder.md
 [7]: doc/Decoder/YamlTypeDecoder.md
 
-[8]: doc/Mapping/DiscriminatorModelMapping.md
+[8]: doc/Denormalizer/CallbackFieldDenormalizer.md
+[9]: doc/Denormalizer/CollectionFieldDenormalizer.md
+[10]: doc/Denormalizer/DateFieldDenormalizer.md
+[11]: doc/Denormalizer/FieldDenormalizer.md
+
+[20]: doc/Mapping/DiscriminatorModelMapping.md
