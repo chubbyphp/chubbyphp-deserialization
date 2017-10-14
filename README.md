@@ -47,11 +47,25 @@ use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
 
-$decoder = new Decoder([new JsonTypeDecoder, UrlEncodedTypeDecoder, XmlTypeDecoder, YamlTypeDecoder]);
+$decoder = new Decoder([
+    new JsonTypeDecoder(),
+    UrlEncodedTypeDecoder(),
+    XmlTypeDecoder(),
+    YamlTypeDecoder()
+]);
 
-print_r($decoder->getContentTypes()); // ['application/json', 'application/x-www-form-urlencoded', 'application/xml', application/x-yaml']
+print_r($decoder->getContentTypes());
 
-print_r($decoder->decode('{"name": "php"}', 'application/json')); // ['name' => 'php']
+//[
+//    'application/json',
+//    'application/x-www-form-urlencoded',
+//    'application/xml',
+//    'application/x-yaml'
+//]
+
+print_r($decoder->decode('{"name": "php"}', 'application/json'));
+
+// ['name' => 'php']
 ```
 
  * [JsonTypeDecoder][4]
@@ -96,7 +110,11 @@ $deserializer = new Deserializer(
     new Denormalizer([new ModelMapping()], $logger)
 );
 
-$model = $deserializer->deserialize(Model::class, '{"name": "php"}', 'application/json');
+$model = $deserializer->deserialize(
+    Model::class,
+    '{"name": "php"}',
+    'application/json'
+);
 
 echo $model->getName(); // 'php'
 ```
