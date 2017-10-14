@@ -2,6 +2,8 @@
 
 ## Mapping
 
+### ModelMapping
+
 ```php
 <?php
 
@@ -56,6 +58,8 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
 ```
 
 ## Model
+
+### Model
 
 ```php
 <?php
