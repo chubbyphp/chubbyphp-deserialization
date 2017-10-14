@@ -164,6 +164,10 @@ echo $model->getName();
  * [AdvancedDenormalizationObjectMapping][16]
  * [SimpleDenormalizationObjectMapping][17]
 
+#### LazyDenormalizationObjectMapping
+
+ * [LazyDenormalizationObjectMapping][18]
+
 ## Copyright
 
 Dominik Zogg 2017
@@ -189,5 +193,8 @@ Dominik Zogg 2017
 
 [14]: doc/Mapping/DenormalizationFieldMapping.md
 [15]: doc/Mapping/DenormalizationFieldMappingBuilder.md
+
 [16]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
 [17]: doc/Mapping/SimpleDenormalizationObjectMapping.md
+
+[18]: doc/Mapping/LazyDenormalizationObjectMapping.md
