@@ -163,26 +163,29 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
     }
 
     /**
-     * @param string $type
+     * @param string|null $type
      *
      * @return callable
      */
-    public function getDenormalizationFactory(string $type): callable
-    {
+    public function getDenormalizationFactory(
+        string $type = null
+    ): callable {
         return function () {
             return new Model();
         };
     }
 
     /**
-     * @param string $type
+     * @param string|null $type
      *
      * @return DenormalizationFieldMappingInterface[]
      */
-    public function getDenormalizationFieldMappings(string $type): array
-    {
+    public function getDenormalizationFieldMappings(
+        string $type = null
+    ): array {
         return [
-            DenormalizationFieldMappingBuilder::create('name')->getMapping(),
+            DenormalizationFieldMappingBuilder::create('name')
+                ->getMapping(),
         ];
     }
 }
