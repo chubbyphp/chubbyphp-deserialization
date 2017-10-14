@@ -1,4 +1,4 @@
-# DiscriminatorModelMapping
+# AdvancedDenormalizationObjectMapping
 
 ## Mapping
 

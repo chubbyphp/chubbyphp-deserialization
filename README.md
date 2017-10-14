@@ -69,6 +69,8 @@ print_r($decoder->decode(
 // ['name' => 'php']
 ```
 
+#### Type Decoder
+
  * [JsonTypeDecoder][4]
  * [UrlEncodedTypeDecoder][5]
  * [XmlTypeDecoder][6]
@@ -152,64 +154,10 @@ echo $model->getName();
 
 ### Mapping
 
-#### Simple
+#### DenormalizationObjectMapping
 
-```php
-<?php
-
-namespace MyProject\Deserialization;
-
-use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
-use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
-use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
-use MyProject\Model\Model;
-
-final class ModelMapping implements DenormalizationObjectMappingInterface
-{
-    /**
-     * @return string
-     */
-    public function getClass(): string
-    {
-        return Model::class;
-    }
-
-    /**
-     * @param string      $path
-     * @param string|null $type
-     *
-     * @return callable
-     */
-    public function getDenormalizationFactory(
-        string $path,
-        string $type = null
-    ): callable {
-        return function () {
-            return new Model();
-        };
-    }
-
-    /**
-     * @param string      $path
-     * @param string|null $type
-     *
-     * @return DenormalizationFieldMappingInterface[]
-     */
-    public function getDenormalizationFieldMappings(
-        string $path,
-        string $type = null
-    ): array {
-        return [
-            DenormalizationFieldMappingBuilder::create('name')
-                ->getMapping(),
-        ];
-    }
-}
-```
-
-#### Advanced
-
- * [DiscriminatorModelMapping][20]
+ * [AdvancedDenormalizationObjectMapping][14]
+ * [SimpleDenormalizationObjectMapping][15]
 
 ## Copyright
 
@@ -234,4 +182,5 @@ Dominik Zogg 2017
 [12]: doc/Denormalizer/DenormalizerContext.md
 [13]: doc/Denormalizer/DenormalizerContextBuilder.md
 
-[20]: doc/Mapping/DiscriminatorModelMapping.md
+[14]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
+[15]: doc/Mapping/SimpleDenormalizationObjectMapping.md
