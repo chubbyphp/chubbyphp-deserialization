@@ -31,6 +31,17 @@ class DenormalizerTest extends TestCase
         self::assertSame('name', $object->getName());
     }
 
+    public function testDenormalizeWithNewAndType()
+    {
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
+            $this->getDenormalizationObjectMapping(),
+        ]));
+
+        $object = $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name', '_type' => 'object']);
+
+        self::assertSame('name', $object->getName());
+    }
+
     public function testDenormalizeWithExisting()
     {
         $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
@@ -121,6 +132,7 @@ class DenormalizerTest extends TestCase
 
     /**
      * @param DenormalizationObjectMappingInterface[] $denormalizationObjectMappings
+     *
      * @return DenormalizerObjectMappingRegistryInterface
      */
     private function getDenormalizerObjectMappingRegistry(array $denormalizationObjectMappings): DenormalizerObjectMappingRegistryInterface

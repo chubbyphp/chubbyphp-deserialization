@@ -28,7 +28,7 @@ class DeserializerRuntimeExceptionTest extends TestCase
 
     public function testCreateNotAllowedAddtionalFields()
     {
-        $exception = DeserializerRuntimeException::createNotAllowedAddtionalFields(['path1', 'path2']);
+        $exception = DeserializerRuntimeException::createNotAllowedAdditionalFields(['path1', 'path2']);
 
         self::assertSame('There are additional field(s) at paths: "path1", "path2"', $exception->getMessage());
     }

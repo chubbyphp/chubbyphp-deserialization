@@ -35,7 +35,7 @@ final class DeserializerRuntimeException extends \RuntimeException
      *
      * @return self
      */
-    public static function createNotAllowedAddtionalFields(array $paths): self
+    public static function createNotAllowedAdditionalFields(array $paths): self
     {
         return new self(sprintf('There are additional field(s) at paths: "%s"', implode('", "', $paths)));
     }
