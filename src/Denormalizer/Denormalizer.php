@@ -14,14 +14,9 @@ use Psr\Log\NullLogger;
 final class Denormalizer implements DenormalizerInterface
 {
     /**
-     * @var DenormalizationObjectMappingInterface[]
+     * @var DenormalizerObjectMappingRegistryInterface
      */
-    private $objectMappings;
-
-    /**
-     * @var array
-     */
-    private $classToTypeMappings;
+    private $denormalizerObjectMappingRegistry;
 
     /**
      * @var LoggerInterface
@@ -29,26 +24,15 @@ final class Denormalizer implements DenormalizerInterface
     private $logger;
 
     /**
-     * @param array                $objectMappings
-     * @param LoggerInterface|null $logger
+     * @param DenormalizerObjectMappingRegistryInterface $denormalizerObjectMappingRegistry
+     * @param LoggerInterface|null                       $logger
      */
-    public function __construct(array $objectMappings, LoggerInterface $logger = null)
-    {
-        $this->objectMappings = [];
-        $this->classToTypeMappings = [];
-        foreach ($objectMappings as $objectMapping) {
-            $this->addObjectMapping($objectMapping);
-        }
-
+    public function __construct(
+        DenormalizerObjectMappingRegistryInterface $denormalizerObjectMappingRegistry,
+        LoggerInterface $logger = null
+    ) {
+        $this->denormalizerObjectMappingRegistry = $denormalizerObjectMappingRegistry;
         $this->logger = $logger ?? new NullLogger();
-    }
-
-    /**
-     * @param DenormalizationObjectMappingInterface $objectMapping
-     */
-    private function addObjectMapping(DenormalizationObjectMappingInterface $objectMapping)
-    {
-        $this->objectMappings[$objectMapping->getClass()] = $objectMapping;
     }
 
     /**
@@ -88,7 +72,7 @@ final class Denormalizer implements DenormalizerInterface
         }
 
         if ([] !== $data && !$context->isAllowedAdditionalFields()) {
-            $this->handleNotAllowedAddtionalFields($path, array_keys($data));
+            $this->handleNotAllowedAdditionalFields($path, array_keys($data));
         }
 
         return $object;
@@ -103,15 +87,13 @@ final class Denormalizer implements DenormalizerInterface
      */
     private function getObjectMapping(string $class): DenormalizationObjectMappingInterface
     {
-        if (isset($this->objectMappings[$class])) {
-            return $this->objectMappings[$class];
+        try {
+            return $this->denormalizerObjectMappingRegistry->getObjectMapping($class);
+        } catch (DeserializerLogicException $exception) {
+            $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+
+            throw $exception;
         }
-
-        $exception = DeserializerLogicException::createMissingMapping($class);
-
-        $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
-
-        throw $exception;
     }
 
     /**
@@ -150,9 +132,9 @@ final class Denormalizer implements DenormalizerInterface
      * @param string $path
      * @param array  $names
      */
-    private function handleNotAllowedAddtionalFields(string $path, array $names)
+    private function handleNotAllowedAdditionalFields(string $path, array $names)
     {
-        $exception = DeserializerRuntimeException::createNotAllowedAddtionalFields(
+        $exception = DeserializerRuntimeException::createNotAllowedAdditionalFields(
             $this->getSubPathsByNames($path, $names)
         );
 

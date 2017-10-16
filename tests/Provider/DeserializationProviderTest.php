@@ -8,6 +8,7 @@ use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
+use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Provider\DeserializationProvider;
 use Chubbyphp\Deserialization\Deserializer;
 use PHPUnit\Framework\TestCase;
@@ -28,8 +29,9 @@ final class DeserializationProviderTest extends TestCase
         self::assertTrue(isset($container['deserializer.decoder']));
         self::assertTrue(isset($container['deserializer.decodertypes']));
 
-        self::assertTrue(isset($container['deserializer.denormalizer.objectmappings']));
         self::assertTrue(isset($container['deserializer.denormalizer']));
+        self::assertTrue(isset($container['deserializer.denormalizer.objectmappingregistry']));
+        self::assertTrue(isset($container['deserializer.denormalizer.objectmappings']));
 
         self::assertInstanceOf(Deserializer::class, $container['deserializer']);
 
@@ -41,6 +43,7 @@ final class DeserializationProviderTest extends TestCase
         self::assertInstanceOf(YamlTypeDecoder::class, $container['deserializer.decodertypes'][3]);
 
         self::assertInstanceOf(Denormalizer::class, $container['deserializer.denormalizer']);
+        self::assertInstanceOf(DenormalizerObjectMappingRegistry::class, $container['deserializer.denormalizer.objectmappingregistry']);
         self::assertInternalType('array', $container['deserializer.denormalizer.objectmappings']);
     }
 }

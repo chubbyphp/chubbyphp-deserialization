@@ -10,6 +10,7 @@ use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
+use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
@@ -46,9 +47,13 @@ final class DeserializationProvider implements ServiceProviderInterface
 
         $container['deserializer.denormalizer'] = function () use ($container) {
             return new Denormalizer(
-                $container['deserializer.denormalizer.objectmappings'],
+                $container['deserializer.denormalizer.objectmappingregistry'],
                 $container['logger'] ?? null
             );
+        };
+
+        $container['deserializer.denormalizer.objectmappingregistry'] = function () use ($container) {
+            return new DenormalizerObjectMappingRegistry($container['deserializer.denormalizer.objectmappings']);
         };
 
         $container['deserializer.denormalizer.objectmappings'] = function () {

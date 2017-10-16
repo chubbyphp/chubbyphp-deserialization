@@ -7,6 +7,7 @@ namespace Chubbyphp\Tests\Deserialization\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
+use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistryInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
@@ -21,9 +22,9 @@ class DenormalizerTest extends TestCase
 {
     public function testDenormalizeWithNew()
     {
-        $denormalizer = new Denormalizer([
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
             $this->getDenormalizationObjectMapping(),
-        ]);
+        ]));
 
         $object = $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name']);
 
@@ -32,9 +33,9 @@ class DenormalizerTest extends TestCase
 
     public function testDenormalizeWithExisting()
     {
-        $denormalizer = new Denormalizer([
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
             $this->getDenormalizationObjectMapping(),
-        ]);
+        ]));
 
         $object = $denormalizer->denormalize($this->getObject(), ['name' => 'name']);
 
@@ -46,18 +47,18 @@ class DenormalizerTest extends TestCase
         self::expectException(DeserializerRuntimeException::class);
         self::expectExceptionMessage('There are additional field(s) at paths: "value"');
 
-        $denormalizer = new Denormalizer([
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
             $this->getDenormalizationObjectMapping(),
-        ]);
+        ]));
 
         $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name', 'value' => 'value']);
     }
 
     public function testDenormalizeWithAdditionalDataAndAllowIt()
     {
-        $denormalizer = new Denormalizer([
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
             $this->getDenormalizationObjectMapping(),
-        ]);
+        ]));
 
         $object = $denormalizer->denormalize(
             get_class($this->getObject()),
@@ -72,16 +73,16 @@ class DenormalizerTest extends TestCase
     {
         self::expectException(DeserializerLogicException::class);
 
-        $denormalizer = new Denormalizer([]);
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([]));
 
         $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name']);
     }
 
     public function testDenormalizeWithNoData()
     {
-        $denormalizer = new Denormalizer([
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
             $this->getDenormalizationObjectMapping(),
-        ]);
+        ]));
 
         $object = $denormalizer->denormalize(get_class($this->getObject()), []);
 
@@ -90,9 +91,9 @@ class DenormalizerTest extends TestCase
 
     public function testDenormalizeWithGroups()
     {
-        $denormalizer = new Denormalizer([
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
             $this->getDenormalizationObjectMapping(['read']),
-        ]);
+        ]));
 
         $object = $denormalizer->denormalize(
             get_class($this->getObject()),
@@ -105,9 +106,9 @@ class DenormalizerTest extends TestCase
 
     public function testDenormalizeWithGroupsButNoGroupOnField()
     {
-        $denormalizer = new Denormalizer([
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
             $this->getDenormalizationObjectMapping(),
-        ]);
+        ]));
 
         $object = $denormalizer->denormalize(
             get_class($this->getObject()),
@@ -116,6 +117,36 @@ class DenormalizerTest extends TestCase
         );
 
         self::assertNull($object->getName());
+    }
+
+    /**
+     * @param DenormalizationObjectMappingInterface[] $denormalizationObjectMappings
+     * @return DenormalizerObjectMappingRegistryInterface
+     */
+    private function getDenormalizerObjectMappingRegistry(array $denormalizationObjectMappings): DenormalizerObjectMappingRegistryInterface
+    {
+        /** @var DenormalizerObjectMappingRegistryInterface|\PHPUnit_Framework_MockObject_MockObject $objectMappingRegistry */
+        $objectMappingRegistry = $this->getMockBuilder(DenormalizerObjectMappingRegistryInterface::class)
+            ->setMethods(['getObjectMapping'])
+            ->getMockForAbstractClass();
+
+        $objectMappingRegistry->__mapppings = [];
+
+        foreach ($denormalizationObjectMappings as $denormalizationObjectMapping) {
+            $objectMappingRegistry->__mapppings[$denormalizationObjectMapping->getClass()] = $denormalizationObjectMapping;
+        }
+
+        $objectMappingRegistry->expects(self::any())->method('getObjectMapping')->willReturnCallback(
+            function (string $class) use ($objectMappingRegistry) {
+                if (isset($objectMappingRegistry->__mapppings[$class])) {
+                    return $objectMappingRegistry->__mapppings[$class];
+                }
+
+                throw DeserializerLogicException::createMissingMapping($class);
+            }
+        );
+
+        return $objectMappingRegistry;
     }
 
     /**

@@ -8,6 +8,7 @@ use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextBuilder;
+use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Tests\Deserialization\Resources\Mapping\BaseChildModelMapping;
@@ -28,11 +29,13 @@ class DeserializerIntegrationTest extends TestCase
 
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
-            new Denormalizer([
-                new BaseChildModelMapping($childModelMapping, ['child-model']),
-                $childModelMapping,
-                new ParentModelMapping(),
-            ])
+            new Denormalizer(
+                new DenormalizerObjectMappingRegistry([
+                    new BaseChildModelMapping($childModelMapping, ['child-model']),
+                    $childModelMapping,
+                    new ParentModelMapping(),
+                ])
+            )
         );
 
         $data = json_encode([
@@ -63,11 +66,13 @@ class DeserializerIntegrationTest extends TestCase
 
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
-            new Denormalizer([
-                new BaseChildModelMapping($childModelMapping, ['child-model']),
-                $childModelMapping,
-                new ParentModelMapping(),
-            ])
+            new Denormalizer(
+                new DenormalizerObjectMappingRegistry([
+                    new BaseChildModelMapping($childModelMapping, ['child-model']),
+                    $childModelMapping,
+                    new ParentModelMapping(),
+                ])
+            )
         );
 
         $data = json_encode([
@@ -92,11 +97,13 @@ class DeserializerIntegrationTest extends TestCase
 
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
-            new Denormalizer([
-                new BaseChildModelMapping($childModelMapping, ['child-model']),
-                $childModelMapping,
-                new ParentModelMapping(),
-            ])
+            new Denormalizer(
+                new DenormalizerObjectMappingRegistry([
+                    new BaseChildModelMapping($childModelMapping, ['child-model']),
+                    $childModelMapping,
+                    new ParentModelMapping(),
+                ])
+            )
         );
 
         $data = json_encode([
@@ -119,11 +126,13 @@ class DeserializerIntegrationTest extends TestCase
 
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
-            new Denormalizer([
-                new BaseChildModelMapping($childModelMapping, ['child-model']),
-                $childModelMapping,
-                new ParentModelMapping(),
-            ])
+            new Denormalizer(
+                new DenormalizerObjectMappingRegistry([
+                    new BaseChildModelMapping($childModelMapping, ['child-model']),
+                    $childModelMapping,
+                    new ParentModelMapping(),
+                ])
+            )
         );
 
         $data = json_encode([
@@ -164,11 +173,13 @@ class DeserializerIntegrationTest extends TestCase
 
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
-            new Denormalizer([
-                new BaseChildModelMapping($childModelMapping, ['child-model']),
-                $childModelMapping,
-                new ParentModelMapping(),
-            ])
+            new Denormalizer(
+                new DenormalizerObjectMappingRegistry([
+                    new BaseChildModelMapping($childModelMapping, ['child-model']),
+                    $childModelMapping,
+                    new ParentModelMapping(),
+                ])
+            )
         );
 
         $data = json_encode(['name' => 'Name', 'unknownField' => 'value']);
@@ -182,11 +193,13 @@ class DeserializerIntegrationTest extends TestCase
 
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
-            new Denormalizer([
-                new BaseChildModelMapping($childModelMapping, ['child-model']),
-                $childModelMapping,
-                new ParentModelMapping(),
-            ])
+            new Denormalizer(
+                new DenormalizerObjectMappingRegistry([
+                    new BaseChildModelMapping($childModelMapping, ['child-model']),
+                    $childModelMapping,
+                    new ParentModelMapping(),
+                ])
+            )
         );
 
         $data = json_encode(['name' => 'Name', 'unknownField' => 'value']);
