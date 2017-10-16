@@ -82,13 +82,14 @@ print_r($decoder->decode(
 <?php
 
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
+use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use MyProject\Deserialization\ModelMapping;
 use MyProject\Model\Model;
 
 $logger = ...;
 
 $denormalizer = new Denormalizer(
-    [new ModelMapping()],
+    new DenormalizerObjectMappingRegistry([new ModelMapping()]),
     $logger
 );
 
@@ -113,6 +114,11 @@ echo $model->getName();
  * [DenormalizerContext][12]
  * [DenormalizerContextBuilder][13]
 
+
+### DenormalizerObjectMappingRegistry
+
+* [DenormalizerObjectMappingRegistry][14]
+
 ### Deserializer
 
 ```php
@@ -124,6 +130,7 @@ use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
+use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;
 use MyProject\Deserialization\ModelMapping;
 use MyProject\Model\Model;
@@ -137,9 +144,9 @@ $deserializer = new Deserializer(
         new XmlTypeDecoder(),
         new YamlTypeDecoder()
     ]),
-    new Denormalizer([
+    new Denormalizer(new DenormalizerObjectMappingRegistry([
         new ModelMapping()
-    ], $logger)
+    ]), $logger)
 );
 
 $model = $deserializer->deserialize(
@@ -156,21 +163,21 @@ echo $model->getName();
 
 #### DenormalizationFieldMapping
 
- * [DenormalizationFieldMapping][14]
- * [DenormalizationFieldMappingBuilder][15]
+ * [DenormalizationFieldMapping][15]
+ * [DenormalizationFieldMappingBuilder][16]
 
 #### DenormalizationObjectMapping
 
- * [AdvancedDenormalizationObjectMapping][16]
- * [SimpleDenormalizationObjectMapping][17]
+ * [AdvancedDenormalizationObjectMapping][17]
+ * [SimpleDenormalizationObjectMapping][18]
 
 #### LazyDenormalizationObjectMapping
 
- * [LazyDenormalizationObjectMapping][18]
+ * [LazyDenormalizationObjectMapping][19]
 
 ### Provider
 
-* [DeserializationProvider][19]
+* [DeserializationProvider][20]
 
 ## Copyright
 
@@ -195,12 +202,14 @@ Dominik Zogg 2017
 [12]: doc/Denormalizer/DenormalizerContext.md
 [13]: doc/Denormalizer/DenormalizerContextBuilder.md
 
-[14]: doc/Mapping/DenormalizationFieldMapping.md
-[15]: doc/Mapping/DenormalizationFieldMappingBuilder.md
+[14]: doc/Denormalizer/DenormalizerObjectMappingRegistry.md
 
-[16]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
-[17]: doc/Mapping/SimpleDenormalizationObjectMapping.md
+[15]: doc/Mapping/DenormalizationFieldMapping.md
+[16]: doc/Mapping/DenormalizationFieldMappingBuilder.md
 
-[18]: doc/Mapping/LazyDenormalizationObjectMapping.md
+[17]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
+[18]: doc/Mapping/SimpleDenormalizationObjectMapping.md
 
-[19]: doc/Provider/DeserializationProvider.md
+[19]: doc/Mapping/LazyDenormalizationObjectMapping.md
+
+[20]: doc/Provider/DeserializationProvider.md
