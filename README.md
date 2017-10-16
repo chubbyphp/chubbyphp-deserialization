@@ -89,7 +89,9 @@ use MyProject\Model\Model;
 $logger = ...;
 
 $denormalizer = new Denormalizer(
-    new DenormalizerObjectMappingRegistry([new ModelMapping()]),
+    new DenormalizerObjectMappingRegistry([
+        new ModelMapping()
+    ]),
     $logger
 );
 
@@ -144,9 +146,12 @@ $deserializer = new Deserializer(
         new XmlTypeDecoder(),
         new YamlTypeDecoder()
     ]),
-    new Denormalizer(new DenormalizerObjectMappingRegistry([
-        new ModelMapping()
-    ]), $logger)
+    new Denormalizer(
+        new DenormalizerObjectMappingRegistry([
+            new ModelMapping()
+        ]),
+        $logger
+    )
 );
 
 $model = $deserializer->deserialize(
