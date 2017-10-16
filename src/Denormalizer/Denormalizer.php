@@ -69,9 +69,12 @@ final class Denormalizer implements DenormalizerInterface
         $class = is_object($object) ? get_class($object) : $object;
         $objectMapping = $this->getObjectMapping($class);
 
-        $type = $data['_type'] ?? null;
+        $type = null;
+        if (isset($data['_type'])) {
+            $type = $data['_type'];
 
-        unset($data['_type']);
+            unset($data['_type']);
+        }
 
         if (!is_object($object)) {
             $factory = $objectMapping->getDenormalizationFactory($path, $type);
