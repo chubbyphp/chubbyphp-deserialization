@@ -4,10 +4,13 @@
 <?php
 
 use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
+use MyProject\Model\Model;
+
+$model = new Model;
 
 $accessor = new PropertyAccessor('name');
-$accessor->setValue($object, 'php');
+$accessor->setValue($model, 'php');
 
-echo $accessor->getValue($object);
+echo $accessor->getValue($model);
 // 'php'
 ```
