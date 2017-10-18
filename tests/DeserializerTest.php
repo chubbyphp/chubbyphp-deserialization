@@ -23,12 +23,48 @@ class DeserializerTest extends TestCase
 
         $deserializer->deserialize(
             $object,
-            '{"name": "Name"}',
+            '{"name": "php"}',
             'application/json',
             $this->getDenormalizerContext()
         );
 
-        self::assertSame('Name', $object->name);
+        self::assertSame('php', $object->name);
+    }
+
+    public function testDecode()
+    {
+        $deserializer = new Deserializer($this->getDecoder(), $this->getDenormalizer());
+
+        $data = $deserializer->decode(
+            '{"name": "php"}',
+            'application/json'
+        );
+
+        self::assertEquals(['name' => 'php'], $data);
+    }
+
+    public function testGetContentTypes()
+    {
+        $deserializer = new Deserializer($this->getDecoder(), $this->getDenormalizer());
+
+        $contentTypes = $deserializer->getContentTypes();
+
+        self::assertEquals(['application/json'], $contentTypes);
+    }
+
+    public function testDenormalize()
+    {
+        $deserializer = new Deserializer($this->getDecoder(), $this->getDenormalizer());
+
+        $object = new \stdClass();
+
+        $deserializer->denormalize(
+            $object,
+            ['name' => 'php'],
+            $this->getDenormalizerContext()
+        );
+
+        self::assertSame('php', $object->name);
     }
 
     /**
@@ -39,9 +75,11 @@ class DeserializerTest extends TestCase
         /** @var DecoderInterface|\PHPUnit_Framework_MockObject_MockObject $decoder */
         $decoder = $this->getMockBuilder(DecoderInterface::class)->getMockForAbstractClass();
 
+        $decoder->expects(self::any())->method('getContentTypes')->willReturn(['application/json']);
+
         $decoder->expects(self::any())->method('decode')->willReturnCallback(
             function (string $data, string $contentType) {
-                self::assertSame('{"name": "Name"}', $data);
+                self::assertSame('{"name": "php"}', $data);
                 self::assertSame('application/json', $contentType);
 
                 return json_decode($data, true);
@@ -61,7 +99,7 @@ class DeserializerTest extends TestCase
 
         $decoder->expects(self::any())->method('denormalize')->willReturnCallback(
             function ($object, array $data, DenormalizerContextInterface $context = null, string $path = '') {
-                self::assertSame(['name' => 'Name'], $data);
+                self::assertSame(['name' => 'php'], $data);
                 self::assertNotNull($context);
                 self::assertSame('', $path);
 
