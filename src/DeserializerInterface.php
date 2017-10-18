@@ -15,6 +15,7 @@ interface DeserializerInterface extends DecoderInterface, DenormalizerInterface
      * @param string                       $data
      * @param string                       $contentType
      * @param DenormalizerContextInterface $context
+     * @param string                       $path
      *
      * @return object
      */
@@ -22,6 +23,7 @@ interface DeserializerInterface extends DecoderInterface, DenormalizerInterface
         $object,
         string $data,
         string $contentType,
-        DenormalizerContextInterface $context = null
+        DenormalizerContextInterface $context = null,
+        string $path = ''
     );
 }
