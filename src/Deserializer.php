@@ -46,4 +46,41 @@ final class Deserializer implements DeserializerInterface
     ) {
         return $this->denormalizer->denormalize($object, $this->decoder->decode($data, $contentType), $context);
     }
+
+    /**
+     * @return string[]
+     */
+    public function getContentTypes(): array
+    {
+        return $this->decoder->getContentTypes();
+    }
+
+    /**
+     * @param string $data
+     * @param string $contentType
+     *
+     * @return array
+     *
+     * @throws DeserializerLogicException
+     */
+    public function decode(string $data, string $contentType): array
+    {
+        return $this->decoder->decode($data, $contentType);
+    }
+
+    /**
+     * @param object|string                     $object
+     * @param array                             $data
+     * @param DenormalizerContextInterface|null $context
+     * @param string                            $path
+     *
+     * @return object
+     *
+     * @throws DeserializerLogicException
+     * @throws DeserializerRuntimeException
+     */
+    public function denormalize($object, array $data, DenormalizerContextInterface $context = null, string $path = '')
+    {
+        return $this->denormalizer->denormalize($object, $data, $context, $path);
+    }
 }
