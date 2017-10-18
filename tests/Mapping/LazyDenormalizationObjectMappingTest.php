@@ -71,8 +71,15 @@ class LazyDenormalizationObjectMappingTest extends TestCase
             ->getMockForAbstractClass()
         ;
 
-        $mapping->expects(self::any())->method('getDenormalizationFactory')->willReturn($denormalizationFactory);
-        $mapping->expects(self::any())->method('getDenormalizationFieldMappings')->willReturn($denormalizationFieldMappings);
+        $mapping->expects(self::any())
+            ->method('getDenormalizationFactory')
+            ->with(self::equalTo('path'), self::equalTo('type'))
+            ->willReturn($denormalizationFactory);
+
+        $mapping->expects(self::any())
+            ->method('getDenormalizationFieldMappings')
+            ->with(self::equalTo('path'), self::equalTo('type'))
+            ->willReturn($denormalizationFieldMappings);
 
         return $mapping;
     }
