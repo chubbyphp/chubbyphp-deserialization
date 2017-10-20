@@ -49,4 +49,11 @@ class DeserializerLogicExceptionTest extends TestCase
 
         self::assertSame('There is no property "name" within class: "stdClass"', $exception->getMessage());
     }
+
+    public function testCreateFactoryDoesNotReturnObject()
+    {
+        $exception = DeserializerLogicException::createFactoryDoesNotReturnObject('path', 'string');
+
+        self::assertSame('Factory does not return object, "string" given at path: "path"', $exception->getMessage());
+    }
 }

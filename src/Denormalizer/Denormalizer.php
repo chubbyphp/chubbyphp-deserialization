@@ -61,8 +61,7 @@ final class Denormalizer implements DenormalizerInterface
         }
 
         if (!is_object($object)) {
-            $factory = $objectMapping->getDenormalizationFactory($path, $type);
-            $object = $factory();
+            $object = $this->createNewObject($objectMapping, $path, $type);
         }
 
         foreach ($objectMapping->getDenormalizationFieldMappings($path, $type) as $denormalizationFieldMapping) {
@@ -94,6 +93,32 @@ final class Denormalizer implements DenormalizerInterface
 
             throw $exception;
         }
+    }
+
+    /**
+     * @param DenormalizationObjectMappingInterface $objectMapping
+     * @param string                                $path
+     * @param string|null                           $type
+     *
+     * @return object
+     */
+    private function createNewObject(
+        DenormalizationObjectMappingInterface $objectMapping,
+        string $path,
+        string $type = null
+    ) {
+        $factory = $objectMapping->getDenormalizationFactory($path, $type);
+        $object = $factory();
+
+        if (is_object($object)) {
+            return $object;
+        }
+
+        $exception = DeserializerLogicException::createFactoryDoesNotReturnObject($path, gettype($object));
+
+        $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+
+        throw $exception;
     }
 
     /**

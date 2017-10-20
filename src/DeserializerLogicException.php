@@ -59,4 +59,15 @@ final class DeserializerLogicException extends \LogicException
     {
         return new self(sprintf('There is no property "%s" within class: "%s"', $property, $class));
     }
+
+    /**
+     * @param string $path
+     * @param string $dataType
+     *
+     * @return self
+     */
+    public static function createFactoryDoesNotReturnObject(string $path, string $dataType): self
+    {
+        return new self(sprintf('Factory does not return object, "%s" given at path: "%s"', $dataType, $path));
+    }
 }

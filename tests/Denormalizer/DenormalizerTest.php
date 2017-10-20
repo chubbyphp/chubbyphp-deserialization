@@ -53,6 +53,23 @@ class DenormalizerTest extends TestCase
         self::assertSame('name', $object->getName());
     }
 
+    public function testDenormalizeWithNotWorkingFactory()
+    {
+        self::expectException(DeserializerLogicException::class);
+        self::expectExceptionMessage('Factory does not return object, "string" given at path: ""');
+
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
+            $this->getDenormalizationObjectMapping(
+                [],
+                function () {
+                    return 'string';
+                }
+            ),
+        ]));
+
+        $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name', '_type' => 'object']);
+    }
+
     public function testDenormalizeWithAdditionalData()
     {
         self::expectException(DeserializerRuntimeException::class);
@@ -162,12 +179,15 @@ class DenormalizerTest extends TestCase
     }
 
     /**
-     * @param array $groups
+     * @param array         $groups
+     * @param callable|null $factory
      *
      * @return DenormalizationObjectMappingInterface
      */
-    private function getDenormalizationObjectMapping(array $groups = []): DenormalizationObjectMappingInterface
-    {
+    private function getDenormalizationObjectMapping(
+        array $groups = [],
+        callable $factory = null
+    ): DenormalizationObjectMappingInterface {
         /** @var DenormalizationObjectMappingInterface|\PHPUnit_Framework_MockObject_MockObject $objectMapping */
         $objectMapping = $this->getMockBuilder(DenormalizationObjectMappingInterface::class)
             ->setMethods([])
@@ -181,10 +201,14 @@ class DenormalizerTest extends TestCase
             }
         );
 
-        $objectMapping->expects(self::any())->method('getDenormalizationFactory')->willReturnCallback(function () use ($object) {
-            return function () use ($object) {
+        if (null === $factory) {
+            $factory = function () use ($object) {
                 return clone $object;
             };
+        }
+
+        $objectMapping->expects(self::any())->method('getDenormalizationFactory')->willReturnCallback(function () use ($object, $factory) {
+            return $factory;
         });
 
         $objectMapping->expects(self::any())->method('getDenormalizationFieldMappings')->willReturn([
