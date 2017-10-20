@@ -56,10 +56,9 @@ final class ReferenceFieldDenormalizer implements FieldDenormalizerInterface
         }
 
         if (is_array($value)) {
-            $this->accessor->setValue(
-                $object,
-                $denormalizer->denormalize($this->accessor->getValue($object) ?? $this->class, $value, $context)
-            );
+            $existingValue = $this->accessor->getValue($object) ?? $this->class;
+
+            $this->accessor->setValue($object, $denormalizer->denormalize($existingValue, $value, $context));
 
             return;
         }
@@ -67,10 +66,7 @@ final class ReferenceFieldDenormalizer implements FieldDenormalizerInterface
         if (is_string($value)) {
             $repository = $this->repository;
 
-            $this->accessor->setValue(
-                $object,
-                $repository($this->class, $value)
-            );
+            $this->accessor->setValue($object, $repository($this->class, $value));
 
             return;
         }
