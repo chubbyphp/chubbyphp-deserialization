@@ -19,14 +19,14 @@ $fieldDenormalizer = new CallbackFieldDenormalizer(
     ) {
         $object->setName($value);
     }
-)
+);
 
-$fieldDenormalizer->denormalize(
+$fieldDenormalizer->denormalizedenormalizeField(
     'name',
     $model,
     'php',
     $context
-)
+);
 
 echo $model->getName();
 // 'php'

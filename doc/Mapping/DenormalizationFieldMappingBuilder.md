@@ -7,7 +7,7 @@ use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 
-$fieldMapping = new DenormalizationFieldMappingBuilder('name')
+$fieldMapping = DenormalizationFieldMappingBuilder::create('name')
     ->setGroups(['group1'])
     ->setFieldDenormalizer(
         new FieldDenormalizer(
@@ -22,5 +22,7 @@ echo $fieldMapping->getName();
 print_r($fieldMapping->getGroups());
 // ['group1']
 
-$fieldMapping->getFieldDenormalizer()->denormalizeField(...);
+$fieldMapping
+    ->getFieldDenormalizer()
+    ->denormalizeField(...);
 ```

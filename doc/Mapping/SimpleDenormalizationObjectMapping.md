@@ -34,7 +34,7 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
         string $path,
         string $type = null
     ): callable {
-        return function () {
+        return function () {
             return new Model();
         };
     }

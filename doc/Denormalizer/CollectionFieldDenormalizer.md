@@ -13,17 +13,17 @@ $context = ...;
 $denormalizer = ...;
 
 $fieldDenormalizer = new CollectionFieldDenormalizer(
-    ChildModel::class
+    ChildModel::class,
     new PropertyAccessor('children')
-)
+);
 
-$fieldDenormalizer->denormalize(
+$fieldDenormalizer->denormalizeField(
     'children',
     $parentModel,
-    [['name' => 'php'],
+    [['name' => 'php']],
     $context,
     $denormalizer
-)
+);
 
 echo $parentModel
     ->getChildren()[0]

@@ -5,7 +5,7 @@
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextBuilder;
 
-$context = new DenormalizerContextBuilder::create()
+$context = DenormalizerContextBuilder::create()
     ->setAllowedAdditionalFields(true)
     ->setGroups(['group1'])
     ->getContext();

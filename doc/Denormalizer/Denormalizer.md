@@ -8,7 +8,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use MyProject\Deserialization\ModelMapping;
 use MyProject\Model\Model;
 
-$logger = ...;
+$logger = ...;
 
 $denormalizer = new Denormalizer(
     new DenormalizerObjectMappingRegistry([

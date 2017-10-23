@@ -15,14 +15,14 @@ $fieldDenormalizer = new DateFieldDenormalizer(
     new FieldDenormalizer(
         new PropertyAccessor('at')
     )
-)
+);
 
-$fieldDenormalizer->denormalize(
+$fieldDenormalizer->denormalizeField(
     'at',
     $model,
     new \DateTime('2017-01-01 22:00:00'),
     $context
-)
+);
 
 echo $model->getAt()
     ->format('Y-m-d H:i:s');

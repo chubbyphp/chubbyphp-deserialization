@@ -12,14 +12,14 @@ $context = ...;
 
 $fieldDenormalizer = new FieldDenormalizer(
     new PropertyAccessor('name')
-)
+);
 
-$fieldDenormalizer->denormalize(
+$fieldDenormalizer->denormalizeField(
     'name',
     $model,
     'php',
     $context
-)
+);
 
 echo $model->getName();
 // 'php'
