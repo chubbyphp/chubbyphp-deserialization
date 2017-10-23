@@ -57,16 +57,17 @@ composer require chubbyphp/chubbyphp-deserialization "~2.0@alpha"
  * [CollectionFieldDenormalizer][11]
  * [DateFieldDenormalizer][12]
  * [FieldDenormalizer][13]
+ * [ReferenceFieldDenormalizer][14]
 
 #### Denormalizer Context
 
- * [DenormalizerContext][14]
- * [DenormalizerContextBuilder][15]
+ * [DenormalizerContext][15]
+ * [DenormalizerContextBuilder][16]
 
 
 ### DenormalizerObjectMappingRegistry
 
-* [DenormalizerObjectMappingRegistry][16]
+* [DenormalizerObjectMappingRegistry][17]
 
 ### Deserializer
 
@@ -137,21 +138,21 @@ echo $model->getName();
 
 #### DenormalizationFieldMapping
 
- * [DenormalizationFieldMapping][17]
- * [DenormalizationFieldMappingBuilder][18]
+ * [DenormalizationFieldMapping][18]
+ * [DenormalizationFieldMappingBuilder][19]
 
 #### DenormalizationObjectMapping
 
- * [AdvancedDenormalizationObjectMapping][19]
- * [SimpleDenormalizationObjectMapping][20]
+ * [AdvancedDenormalizationObjectMapping][20]
+ * [SimpleDenormalizationObjectMapping][21]
 
 #### LazyDenormalizationObjectMapping
 
- * [LazyDenormalizationObjectMapping][21]
+ * [LazyDenormalizationObjectMapping][22]
 
 ### Provider
 
-* [DeserializationProvider][22]
+* [DeserializationProvider][23]
 
 ## Copyright
 
@@ -176,18 +177,19 @@ Dominik Zogg 2017
 [11]: doc/Denormalizer/CollectionFieldDenormalizer.md
 [12]: doc/Denormalizer/DateFieldDenormalizer.md
 [13]: doc/Denormalizer/FieldDenormalizer.md
+[14]: doc/Denormalizer/ReferenceFieldDenormalizer.md
 
-[14]: doc/Denormalizer/DenormalizerContext.md
-[15]: doc/Denormalizer/DenormalizerContextBuilder.md
+[15]: doc/Denormalizer/DenormalizerContext.md
+[16]: doc/Denormalizer/DenormalizerContextBuilder.md
 
-[16]: doc/Denormalizer/DenormalizerObjectMappingRegistry.md
+[17]: doc/Denormalizer/DenormalizerObjectMappingRegistry.md
 
-[17]: doc/Mapping/DenormalizationFieldMapping.md
-[18]: doc/Mapping/DenormalizationFieldMappingBuilder.md
+[18]: doc/Mapping/DenormalizationFieldMapping.md
+[19]: doc/Mapping/DenormalizationFieldMappingBuilder.md
 
-[19]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
-[20]: doc/Mapping/SimpleDenormalizationObjectMapping.md
+[20]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
+[22]: doc/Mapping/SimpleDenormalizationObjectMapping.md
 
-[21]: doc/Mapping/LazyDenormalizationObjectMapping.md
+[22]: doc/Mapping/LazyDenormalizationObjectMapping.md
 
-[22]: doc/Provider/DeserializationProvider.md
+[23]: doc/Provider/DeserializationProvider.md
