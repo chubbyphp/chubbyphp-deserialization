@@ -25,10 +25,10 @@ final class JsonTypeDecoder implements TypeDecoderInterface
      */
     public function decode(string $data): array
     {
-        try {
-            return json_decode($data, true);
-        } catch (\TypeError $e) {
+        if (false === is_array($json = json_decode($data, true)) || JSON_ERROR_NONE !== json_last_error()) {
             throw DeserializerRuntimeException::createNotParsable($this->getContentType());
         }
+
+        return $json;
     }
 }

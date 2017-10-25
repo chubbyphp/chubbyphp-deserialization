@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Deserialization\Decoder;
 
 use Chubbyphp\Deserialization\DeserializerLogicException;
+use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 interface DecoderInterface
 {
@@ -20,6 +21,7 @@ interface DecoderInterface
      * @return array
      *
      * @throws DeserializerLogicException
+     * @throws DeserializerRuntimeException
      */
     public function decode(string $data, string $contentType): array;
 }
