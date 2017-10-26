@@ -24,8 +24,8 @@ final class DenormalizerContext implements DenormalizerContextInterface
     private $request;
 
     /**
-     * @param bool     $allowedAdditionalFields
-     * @param string[] $groups
+     * @param bool                        $allowedAdditionalFields
+     * @param string[]                    $groups
      * @param ServerRequestInterface|null $request
      */
     public function __construct(
