@@ -27,7 +27,7 @@ A simple deserialization.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "~2.0@alpha"
+composer require chubbyphp/chubbyphp-deserialization "~2.0@beta"
 ```
 
 ## Usage
