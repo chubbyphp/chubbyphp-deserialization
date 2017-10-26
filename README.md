@@ -189,7 +189,7 @@ Dominik Zogg 2017
 [19]: doc/Mapping/DenormalizationFieldMappingBuilder.md
 
 [20]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
-[22]: doc/Mapping/SimpleDenormalizationObjectMapping.md
+[21]: doc/Mapping/SimpleDenormalizationObjectMapping.md
 
 [22]: doc/Mapping/LazyDenormalizationObjectMapping.md
 
