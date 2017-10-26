@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Denormalizer;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 final class DenormalizerContextBuilder implements DenormalizerContextBuilderInterface
 {
     /**
@@ -15,6 +17,11 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
      * @var string[]
      */
     private $groups;
+
+    /**
+     * @var ServerRequestInterface|null
+     */
+    private $request;
 
     private function __construct()
     {
@@ -57,10 +64,22 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     }
 
     /**
+     * @param ServerRequestInterface|null $request
+     *
+     * @return DenormalizerContextBuilderInterface
+     */
+    public function setRequest(ServerRequestInterface $request = null): DenormalizerContextBuilderInterface
+    {
+        $this->request = $request;
+
+        return $this;
+    }
+
+    /**
      * @return DenormalizerContextInterface
      */
     public function getContext(): DenormalizerContextInterface
     {
-        return new DenormalizerContext($this->allowedAdditionalFields, $this->groups);
+        return new DenormalizerContext($this->allowedAdditionalFields, $this->groups, $this->request);
     }
 }

@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Denormalizer;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 interface DenormalizerContextInterface
 {
     /**
@@ -15,4 +17,9 @@ interface DenormalizerContextInterface
      * @return string[]
      */
     public function getGroups(): array;
+
+    /**
+     * @return ServerRequestInterface|null
+     */
+    public function getRequest();
 }

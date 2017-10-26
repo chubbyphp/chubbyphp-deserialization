@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Denormalizer;
 
+use Psr\Http\Message\ServerRequestInterface;
+
 final class DenormalizerContext implements DenormalizerContextInterface
 {
     /**
@@ -17,13 +19,23 @@ final class DenormalizerContext implements DenormalizerContextInterface
     private $groups = [];
 
     /**
+     * @var ServerRequestInterface|null
+     */
+    private $request;
+
+    /**
      * @param bool     $allowedAdditionalFields
      * @param string[] $groups
+     * @param ServerRequestInterface|null $request
      */
-    public function __construct($allowedAdditionalFields = false, array $groups = [])
-    {
+    public function __construct(
+        bool $allowedAdditionalFields = false,
+        array $groups = [],
+        ServerRequestInterface $request = null
+    ) {
         $this->allowedAdditionalFields = $allowedAdditionalFields;
         $this->groups = $groups;
+        $this->request = $request;
     }
 
     /**
@@ -40,5 +52,13 @@ final class DenormalizerContext implements DenormalizerContextInterface
     public function getGroups(): array
     {
         return $this->groups;
+    }
+
+    /**
+     * @return ServerRequestInterface|null
+     */
+    public function getRequest()
+    {
+        return $this->request;
     }
 }
