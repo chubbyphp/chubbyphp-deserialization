@@ -64,6 +64,7 @@ final class Deserializer implements DeserializerInterface
      * @return array
      *
      * @throws DeserializerLogicException
+     * @throws DeserializerRuntimeException
      */
     public function decode(string $data, string $contentType): array
     {
