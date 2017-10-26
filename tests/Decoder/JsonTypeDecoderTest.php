@@ -197,4 +197,12 @@ EOD;
         $decoderType = new JsonTypeDecoder();
         $decoderType->decode('====');
     }
+
+    public function testNotArrayDecode()
+    {
+        self::expectException(DeserializerRuntimeException::class);
+        self::expectExceptionMessage('Data is not parsable with content-type: "application/json"');
+        $decoderType = new JsonTypeDecoder();
+        $decoderType->decode('null');
+    }
 }
