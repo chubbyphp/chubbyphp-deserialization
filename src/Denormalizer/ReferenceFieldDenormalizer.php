@@ -16,7 +16,7 @@ final class ReferenceFieldDenormalizer implements FieldDenormalizerInterface
     private $class;
 
     /**
-     * @var callable
+     * @var callable|null
      */
     private $repository;
 
@@ -27,10 +27,10 @@ final class ReferenceFieldDenormalizer implements FieldDenormalizerInterface
 
     /**
      * @param string            $class
-     * @param callable          $repository
+     * @param callable|null     $repository
      * @param AccessorInterface $accessor
      */
-    public function __construct($class, callable $repository, AccessorInterface $accessor)
+    public function __construct($class, callable $repository = null, AccessorInterface $accessor)
     {
         $this->class = $class;
         $this->repository = $repository;
@@ -64,7 +64,9 @@ final class ReferenceFieldDenormalizer implements FieldDenormalizerInterface
         }
 
         if (is_string($value)) {
-            $repository = $this->repository;
+            if (null === $repository = $this->repository) {
+                throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
+            }
 
             $this->accessor->setValue($object, $repository($this->class, $value));
 

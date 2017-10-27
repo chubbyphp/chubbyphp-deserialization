@@ -91,6 +91,28 @@ class ReferenceFieldDenormalizerTest extends TestCase
         self::assertSame('php', $reference->getName());
     }
 
+    public function testDenormalizeFieldWithStringAndWithoutRepository()
+    {
+        self::expectException(DeserializerRuntimeException::class);
+        self::expectExceptionMessage('There is an invalid data type "string", needed "array" at path: "reference"');
+
+        $fieldDenormalizer = new ReferenceFieldDenormalizer(
+            get_class($this->getReference()),
+            null,
+            $this->getAccessor()
+        );
+
+        $object = $this->getObject();
+
+        $fieldDenormalizer->denormalizeField(
+            'reference',
+            $object,
+            '60a9ee14-64d6-4992-8042-8d1528ac02d6',
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
+    }
+
     public function testDenormalizeFieldWithWrongType()
     {
         self::expectException(DeserializerRuntimeException::class);
