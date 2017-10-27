@@ -8,6 +8,9 @@ use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
+/**
+ * @deprecated 1.0-beta use EmbedManyFieldDenormalizer or ReferenceManyFieldDenormalizer
+ */
 final class CollectionFieldDenormalizer implements FieldDenormalizerInterface
 {
     /**
