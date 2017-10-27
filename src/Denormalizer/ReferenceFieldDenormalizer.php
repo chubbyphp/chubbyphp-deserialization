@@ -9,7 +9,7 @@ use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 /**
- * @deprecated 1.0-beta use EmbedOneFieldDenormalizer or ReferenceOneFieldDenormalizer
+ * @deprecated 2.0-beta use EmbedOneFieldDenormalizer or ReferenceOneFieldDenormalizer
  */
 final class ReferenceFieldDenormalizer implements FieldDenormalizerInterface
 {
