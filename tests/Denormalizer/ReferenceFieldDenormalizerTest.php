@@ -33,7 +33,7 @@ class ReferenceFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField(
             'reference',
             $object,
-            ['name' => 'name'],
+            ['name' => 'php'],
             $this->getDenormalizerContext()
         );
     }
