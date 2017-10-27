@@ -55,20 +55,24 @@ composer require chubbyphp/chubbyphp-deserialization "~2.0@beta"
 #### Field Denormalizer
 
  * [CallbackFieldDenormalizer][10]
- * [CollectionFieldDenormalizer][11]
- * [DateFieldDenormalizer][12]
- * [FieldDenormalizer][13]
- * [ReferenceFieldDenormalizer][14]
+ * [DateFieldDenormalizer][11]
+ * [FieldDenormalizer][12]
+ 
+##### Relation Field Denormalizer
+
+ * [EmbedManyFieldDenormalizer][13]
+ * [EmbedOneFieldDenormalizer][14]
+ * [ReferenceManyFieldDenormalizer][15]
+ * [ReferenceOneFieldDenormalizer][16]
 
 #### Denormalizer Context
 
- * [DenormalizerContext][15]
- * [DenormalizerContextBuilder][16]
-
+ * [DenormalizerContext][17]
+ * [DenormalizerContextBuilder][18]
 
 ### DenormalizerObjectMappingRegistry
 
-* [DenormalizerObjectMappingRegistry][17]
+* [DenormalizerObjectMappingRegistry][19]
 
 ### Deserializer
 
@@ -139,21 +143,21 @@ echo $model->getName();
 
 #### DenormalizationFieldMapping
 
- * [DenormalizationFieldMapping][18]
- * [DenormalizationFieldMappingBuilder][19]
+ * [DenormalizationFieldMapping][20]
+ * [DenormalizationFieldMappingBuilder][21]
 
 #### DenormalizationObjectMapping
 
- * [AdvancedDenormalizationObjectMapping][20]
- * [SimpleDenormalizationObjectMapping][21]
+ * [AdvancedDenormalizationObjectMapping][22]
+ * [SimpleDenormalizationObjectMapping][23]
 
 #### LazyDenormalizationObjectMapping
 
- * [LazyDenormalizationObjectMapping][22]
+ * [LazyDenormalizationObjectMapping][24]
 
 ### Provider
 
-* [DeserializationProvider][23]
+* [DeserializationProvider][25]
 
 ## Copyright
 
@@ -175,22 +179,25 @@ Dominik Zogg 2017
 [9]: doc/Denormalizer/Denormalizer.md
 
 [10]: doc/Denormalizer/CallbackFieldDenormalizer.md
-[11]: doc/Denormalizer/CollectionFieldDenormalizer.md
-[12]: doc/Denormalizer/DateFieldDenormalizer.md
-[13]: doc/Denormalizer/FieldDenormalizer.md
-[14]: doc/Denormalizer/ReferenceFieldDenormalizer.md
+[11]: doc/Denormalizer/DateFieldDenormalizer.md
+[12]: doc/Denormalizer/FieldDenormalizer.md
 
-[15]: doc/Denormalizer/DenormalizerContext.md
-[16]: doc/Denormalizer/DenormalizerContextBuilder.md
+[13]: doc/Denormalizer/Relation/EmbedManyFieldDenormalizer.md
+[14]: doc/Denormalizer/Relation/EmbedOneFieldDenormalizer.md
+[15]: doc/Denormalizer/Relation/ReferenceManyFieldDenormalizer.md
+[16]: doc/Denormalizer/Relation/ReferenceOneFieldDenormalizer.md
 
-[17]: doc/Denormalizer/DenormalizerObjectMappingRegistry.md
+[17]: doc/Denormalizer/DenormalizerContext.md
+[18]: doc/Denormalizer/DenormalizerContextBuilder.md
 
-[18]: doc/Mapping/DenormalizationFieldMapping.md
-[19]: doc/Mapping/DenormalizationFieldMappingBuilder.md
+[19]: doc/Denormalizer/DenormalizerObjectMappingRegistry.md
 
-[20]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
-[21]: doc/Mapping/SimpleDenormalizationObjectMapping.md
+[20]: doc/Mapping/DenormalizationFieldMapping.md
+[21]: doc/Mapping/DenormalizationFieldMappingBuilder.md
 
-[22]: doc/Mapping/LazyDenormalizationObjectMapping.md
+[22]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
+[23]: doc/Mapping/SimpleDenormalizationObjectMapping.md
 
-[23]: doc/Provider/DeserializationProvider.md
+[24]: doc/Mapping/LazyDenormalizationObjectMapping.md
+
+[25]: doc/Provider/DeserializationProvider.md
