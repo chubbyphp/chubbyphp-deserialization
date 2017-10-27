@@ -65,7 +65,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
             $subPath = $path.'['.$i.']';
 
             if (!is_array($subValue)) {
-                throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($value), 'array');
+                throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'array');
             }
 
             if (isset($existingChildObjects[$i])) {

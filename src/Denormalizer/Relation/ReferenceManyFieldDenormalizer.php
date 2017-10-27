@@ -61,10 +61,10 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
             $subPath = $path.'['.$i.']';
 
             if (!is_string($subValue)) {
-                throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($value), 'string');
+                throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'string');
             }
 
-            $newChildObjects[$i] = $repository($value);
+            $newChildObjects[$i] = $repository($subValue);
         }
 
         $this->accessor->setValue($object, $newChildObjects);
