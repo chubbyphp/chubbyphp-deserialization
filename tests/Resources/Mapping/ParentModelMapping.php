@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Resources\Mapping;
 
 use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
-use Chubbyphp\Deserialization\Denormalizer\CollectionFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
@@ -51,7 +51,7 @@ final class ParentModelMapping implements DenormalizationObjectMappingInterface
         return [
             DenormalizationFieldMappingBuilder::create('name')->getMapping(),
             DenormalizationFieldMappingBuilder::create('children')->setFieldDenormalizer(
-                new CollectionFieldDenormalizer(AbstractChildModel::class, new PropertyAccessor('children'))
+                new EmbedManyFieldDenormalizer(AbstractChildModel::class, new PropertyAccessor('children'))
             )->getMapping(),
         ];
     }

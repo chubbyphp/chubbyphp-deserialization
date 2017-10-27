@@ -177,7 +177,7 @@ final class ChildModelMapping implements DenormalizationObjectMappingInterface
 namespace MyProject\Mapping;
 
 use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
-use Chubbyphp\Deserialization\Denormalizer\CollectionFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
@@ -229,7 +229,7 @@ final class ParentModelMapping implements DenormalizationObjectMappingInterface
                 ->getMapping(),
             DenormalizationFieldMappingBuilder::create('children')
                 ->setFieldDenormalizer(
-                    new CollectionFieldDenormalizer(
+                    new EmbedManyFieldDenormalizer(
                         AbstractChildModel::class,
                         new PropertyAccessor('children')
                     )
