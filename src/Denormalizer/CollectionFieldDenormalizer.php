@@ -62,7 +62,7 @@ final class CollectionFieldDenormalizer implements FieldDenormalizerInterface
             $subPath = $path.'['.$i.']';
 
             if (!is_array($subValue)) {
-                throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($value), 'object');
+                throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'array');
             }
 
             if (isset($existingChildObjects[$i])) {

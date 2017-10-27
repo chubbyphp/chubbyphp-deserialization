@@ -48,7 +48,7 @@ class CollectionFieldDenormalizerTest extends TestCase
     public function testDenormalizeFieldWithArrayButNullChildDenormalizer()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid data type "array", needed "object" at path: "children[0]"');
+        self::expectExceptionMessage('There is an invalid data type "NULL", needed "array" at path: "children[0]"');
 
         $parent = $this->getParent();
 
