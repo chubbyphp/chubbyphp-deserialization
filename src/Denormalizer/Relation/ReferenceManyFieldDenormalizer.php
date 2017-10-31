@@ -50,6 +50,12 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
     ) {
+        if (null === $value) {
+            $this->accessor->setValue($object, $value);
+
+            return;
+        }
+
         if (!is_array($value)) {
             throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
         }

@@ -31,8 +31,39 @@ class EmbedManyFieldDenormalizerTest extends TestCase
     public function testDenormalizeFieldWithoutArrayDenormalizer()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid data type "NULL", needed "array" at path: "children"');
+        self::expectExceptionMessage('There is an invalid data type "string", needed "array" at path: "children"');
 
+        $parent = $this->getParent();
+
+        $fieldDenormalizer = new EmbedManyFieldDenormalizer(get_class($this->getChild()), $this->getAccessor());
+        $fieldDenormalizer->denormalizeField(
+            'children',
+            $parent,
+            'test',
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
+    }
+
+    public function testDenormalizeFieldWithArrayButStringChildDenormalizer()
+    {
+        self::expectException(DeserializerRuntimeException::class);
+        self::expectExceptionMessage('There is an invalid data type "string", needed "array" at path: "children[0]"');
+
+        $parent = $this->getParent();
+
+        $fieldDenormalizer = new EmbedManyFieldDenormalizer(get_class($this->getChild()), $this->getAccessor());
+        $fieldDenormalizer->denormalizeField(
+            'children',
+            $parent,
+            ['test'],
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
+    }
+
+    public function testDenormalizeFieldWithNull()
+    {
         $parent = $this->getParent();
 
         $fieldDenormalizer = new EmbedManyFieldDenormalizer(get_class($this->getChild()), $this->getAccessor());
@@ -40,26 +71,10 @@ class EmbedManyFieldDenormalizerTest extends TestCase
             'children',
             $parent,
             null,
-            $this->getDenormalizerContext(),
-            $this->getDenormalizer()
+            $this->getDenormalizerContext()
         );
-    }
 
-    public function testDenormalizeFieldWithArrayButNullChildDenormalizer()
-    {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid data type "NULL", needed "array" at path: "children[0]"');
-
-        $parent = $this->getParent();
-
-        $fieldDenormalizer = new EmbedManyFieldDenormalizer(get_class($this->getChild()), $this->getAccessor());
-        $fieldDenormalizer->denormalizeField(
-            'children',
-            $parent,
-            [null],
-            $this->getDenormalizerContext(),
-            $this->getDenormalizer()
-        );
+        self::assertNull($parent->getChildren());
     }
 
     public function testDenormalizeFieldWithNewChild()
@@ -102,24 +117,24 @@ class EmbedManyFieldDenormalizerTest extends TestCase
     {
         return new class() {
             /**
-             * @var array
+             * @var array|null
              */
-            private $children = [];
+            private $children;
 
             /**
-             * @return array
+             * @return array|null
              */
-            public function getChildren(): array
+            public function getChildren()
             {
                 return $this->children;
             }
 
             /**
-             * @param array $children
+             * @param array|null $children
              *
              * @return self
              */
-            public function setChildren(array $children): self
+            public function setChildren(array $children = null): self
             {
                 $this->children = $children;
 

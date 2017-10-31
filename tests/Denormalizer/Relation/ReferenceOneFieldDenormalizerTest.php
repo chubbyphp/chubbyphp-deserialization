@@ -16,6 +16,25 @@ use PHPUnit\Framework\TestCase;
  */
 class ReferenceOneFieldDenormalizerTest extends TestCase
 {
+    public function testDenormalizeFieldWithNull()
+    {
+        $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
+            function (string $id) {},
+            $this->getAccessor()
+        );
+
+        $object = $this->getObject();
+
+        $fieldDenormalizer->denormalizeField(
+            'reference',
+            $object,
+            null,
+            $this->getDenormalizerContext()
+        );
+
+        self::assertNull($object->getReference());
+    }
+
     public function testDenormalizeField()
     {
         $fieldDenormalizer = new ReferenceOneFieldDenormalizer(

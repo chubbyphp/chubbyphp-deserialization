@@ -37,6 +37,25 @@ class EmbedOneFieldDenormalizerTest extends TestCase
         );
     }
 
+    public function testDenormalizeFieldWithNull()
+    {
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
+            get_class($this->getReference()),
+            $this->getAccessor()
+        );
+
+        $object = $this->getObject();
+
+        $fieldDenormalizer->denormalizeField(
+            'reference',
+            $object,
+            null,
+            $this->getDenormalizerContext()
+        );
+
+        self::assertNull($object->getReference());
+    }
+
     public function testDenormalizeField()
     {
         $fieldDenormalizer = new EmbedOneFieldDenormalizer(

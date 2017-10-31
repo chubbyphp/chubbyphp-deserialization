@@ -48,6 +48,12 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
     ) {
+        if (null === $value) {
+            $this->accessor->setValue($object, $value);
+
+            return;
+        }
+
         if (is_string($value)) {
             $repository = $this->repository;
 

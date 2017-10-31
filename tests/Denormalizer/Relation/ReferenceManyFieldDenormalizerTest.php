@@ -19,7 +19,7 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
     public function testDenormalizeFieldWithoutArrayDenormalizer()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid data type "NULL", needed "array" at path: "children"');
+        self::expectExceptionMessage('There is an invalid data type "double", needed "array" at path: "children"');
 
         $parent = $this->getParent();
 
@@ -27,7 +27,7 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField(
             'children',
             $parent,
-            null,
+            18.9,
             $this->getDenormalizerContext(),
             $this->getDenormalizer()
         );
@@ -36,7 +36,7 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
     public function testDenormalizeFieldWithArrayButNullChildDenormalizer()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid data type "NULL", needed "string" at path: "children[0]"');
+        self::expectExceptionMessage('There is an invalid data type "double", needed "string" at path: "children[0]"');
 
         $parent = $this->getParent();
 
@@ -44,10 +44,29 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField(
             'children',
             $parent,
-            [null],
+            [18.9],
             $this->getDenormalizerContext(),
             $this->getDenormalizer()
         );
+    }
+
+    public function testDenormalizeFieldWithNull()
+    {
+        $parent = $this->getParent();
+
+        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
+            function (string $id) {},
+            $this->getAccessor()
+        );
+
+        $fieldDenormalizer->denormalizeField(
+            'children',
+            $parent,
+            null,
+            $this->getDenormalizerContext()
+        );
+
+        self::assertNull($parent->getChildren());
     }
 
     public function testDenormalizeField()
@@ -81,24 +100,24 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
     {
         return new class() {
             /**
-             * @var array
+             * @var array|null
              */
-            private $children = [];
+            private $children;
 
             /**
-             * @return array
+             * @return array|null
              */
-            public function getChildren(): array
+            public function getChildren()
             {
                 return $this->children;
             }
 
             /**
-             * @param array $children
+             * @param array|null $children
              *
              * @return self
              */
-            public function setChildren(array $children): self
+            public function setChildren(array $children = null): self
             {
                 $this->children = $children;
 
