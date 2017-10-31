@@ -81,7 +81,7 @@ final class DeserializerRuntimeException extends \RuntimeException
     public static function createDataContainsNumericKey(string $path, array $numericKeys): self
     {
         return new self(sprintf(
-            'The data contains numeric keys "%s" (invalid property name) at path: "%s"',
+            'The data contains numeric key(s) "%s" at path: "%s"',
             implode('", "', $numericKeys),
             $path
         ));
