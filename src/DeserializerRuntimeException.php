@@ -46,7 +46,7 @@ final class DeserializerRuntimeException extends \RuntimeException
      *
      * @return self
      */
-    public static function createMissingObjectType(string $path, array $supportedTypes)
+    public static function createMissingObjectType(string $path, array $supportedTypes): self
     {
         return new self(sprintf(
             'Missing object type, supported are "%s" at path: "%s"',
@@ -62,12 +62,27 @@ final class DeserializerRuntimeException extends \RuntimeException
      *
      * @return self
      */
-    public static function createInvalidObjectType(string $path, string $type, array $supportedTypes)
+    public static function createInvalidObjectType(string $path, string $type, array $supportedTypes): self
     {
         return new self(sprintf(
             'Unsupported object type "%s", supported are "%s" at path: "%s"',
             $type,
             implode('", "', $supportedTypes),
+            $path
+        ));
+    }
+
+    /**
+     * @param string $path
+     * @param array  $numericKeys
+     *
+     * @return self
+     */
+    public static function createDataContainsNumericKey(string $path, array $numericKeys): self
+    {
+        return new self(sprintf(
+            'The data contains numeric keys "%s" (invalid property name) at path: "%s"',
+            implode('", "', $numericKeys),
             $path
         ));
     }

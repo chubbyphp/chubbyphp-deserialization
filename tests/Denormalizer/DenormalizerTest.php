@@ -53,6 +53,18 @@ class DenormalizerTest extends TestCase
         self::assertSame('name', $object->getName());
     }
 
+    public function testDenormalizeWithDataContainsNumericKeys()
+    {
+        self::expectException(DeserializerRuntimeException::class);
+        self::expectExceptionMessage('The data contains numeric keys "0" (invalid property name) at path: ""');
+
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
+            $this->getDenormalizationObjectMapping(),
+        ]));
+
+        $denormalizer->denormalize(get_class($this->getObject()), ['test']);
+    }
+
     public function testDenormalizeWithNotWorkingFactory()
     {
         self::expectException(DeserializerLogicException::class);
