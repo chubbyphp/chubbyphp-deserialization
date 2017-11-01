@@ -46,14 +46,4 @@ class DeserializerRuntimeExceptionTest extends TestCase
 
         self::assertSame('Unsupported object type "unknown", supported are "model" at path: "path1"', $exception->getMessage());
     }
-
-    public function testCreateDataContainsNumericKey()
-    {
-        $exception = DeserializerRuntimeException::createDataContainsNumericKey('path1', [0]);
-
-        self::assertSame(
-            'The data contains numeric key(s) "0" at path: "path1"',
-            $exception->getMessage()
-        );
-    }
 }

@@ -56,7 +56,7 @@ class DenormalizerTest extends TestCase
     public function testDenormalizeWithDataContainsNumericKeys()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('The data contains numeric key(s) "0" at path: ""');
+        self::expectExceptionMessage('There are additional field(s) at paths: "0"');
 
         $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
             $this->getDenormalizationObjectMapping(),

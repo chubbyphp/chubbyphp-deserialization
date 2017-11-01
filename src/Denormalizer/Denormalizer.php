@@ -48,8 +48,6 @@ final class Denormalizer implements DenormalizerInterface
      */
     public function denormalize($object, array $data, DenormalizerContextInterface $context = null, string $path = '')
     {
-        $this->checkDataContainsNumericKey($path, $data);
-
         $context = $context ?? DenormalizerContextBuilder::create()->getContext();
 
         $class = is_object($object) ? get_class($object) : $object;
@@ -77,33 +75,6 @@ final class Denormalizer implements DenormalizerInterface
         }
 
         return $object;
-    }
-
-    /**
-     * @param string $path
-     * @param array  $data
-     *
-     * @throws DeserializerRuntimeException
-     */
-    private function checkDataContainsNumericKey(string $path, array $data)
-    {
-        $numericKeys = [];
-
-        foreach ($data as $key => $value) {
-            if (is_numeric($key)) {
-                $numericKeys[] = $key;
-            }
-        }
-
-        if ([] === $numericKeys) {
-            return;
-        }
-
-        $exception = DeserializerRuntimeException::createDataContainsNumericKey($path, $numericKeys);
-
-        $this->logger->notice('deserialize: {exception}', ['exception' => $exception->getMessage()]);
-
-        throw $exception;
     }
 
     /**
@@ -221,14 +192,14 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param string $path
-     * @param string $name
+     * @param string     $path
+     * @param string|int $name
      *
      * @return string
      */
-    private function getSubPathByName(string $path, string $name): string
+    private function getSubPathByName(string $path, $name): string
     {
-        return '' === $path ? $name : $path.'.'.$name;
+        return '' === $path ? (string) $name : $path.'.'.$name;
     }
 
     /**

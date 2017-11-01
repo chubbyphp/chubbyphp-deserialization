@@ -71,19 +71,4 @@ final class DeserializerRuntimeException extends \RuntimeException
             $path
         ));
     }
-
-    /**
-     * @param string $path
-     * @param array  $numericKeys
-     *
-     * @return self
-     */
-    public static function createDataContainsNumericKey(string $path, array $numericKeys): self
-    {
-        return new self(sprintf(
-            'The data contains numeric key(s) "%s" at path: "%s"',
-            implode('", "', $numericKeys),
-            $path
-        ));
-    }
 }
