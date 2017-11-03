@@ -63,7 +63,7 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
         if (is_array($value)) {
             $existingValue = $this->accessor->getValue($object) ?? $this->class;
 
-            $this->accessor->setValue($object, $denormalizer->denormalize($existingValue, $value, $context));
+            $this->accessor->setValue($object, $denormalizer->denormalize($existingValue, $value, $context, $path));
 
             return;
         }
