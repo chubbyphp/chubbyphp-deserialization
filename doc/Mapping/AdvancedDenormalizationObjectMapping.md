@@ -93,7 +93,7 @@ final class BaseManyModelMapping implements DenormalizationObjectMappingInterfac
 
     /**
      * @param ManyModelMapping $modelMapping
-     * @param array             $supportedTypes
+     * @param array            $supportedTypes
      */
     public function __construct(
         ManyModelMapping $modelMapping,
