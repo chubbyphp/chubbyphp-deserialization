@@ -8,16 +8,16 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
-use Chubbyphp\Tests\Deserialization\Resources\Model\ChildModel;
+use Chubbyphp\Tests\Deserialization\Resources\Model\OneModel;
 
-final class ChildModelMapping implements DenormalizationObjectMappingInterface
+final class OneModelMapping implements DenormalizationObjectMappingInterface
 {
     /**
      * @return string
      */
     public function getClass(): string
     {
-        return ChildModel::class;
+        return OneModel::class;
     }
 
     /**
@@ -31,7 +31,7 @@ final class ChildModelMapping implements DenormalizationObjectMappingInterface
     public function getDenormalizationFactory(string $path, string $type = null): callable
     {
         return function () {
-            return new ChildModel();
+            return new OneModel();
         };
     }
 

@@ -2,7 +2,72 @@
 
 ## Mapping
 
-### BaseChildModelMapping
+### ModelMapping
+
+```php
+<?php
+
+namespace MyProject\Mapping;
+
+use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
+use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedOneFieldDenormalizer;
+use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
+use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
+use MyProject\Model\AbstractManyModel;
+use MyProject\Model\Model;
+
+final class ModelMapping implements DenormalizationObjectMappingInterface
+{
+    /**
+     * @return string
+     */
+    public function getClass(): string
+    {
+        return Model::class;
+    }
+
+    /**
+     * @param string      $path
+     * @param string|null $type
+     *
+     * @return callable
+     *
+     * @throws DeserializerRuntimeException
+     */
+    public function getDenormalizationFactory(string $path, string $type = null): callable
+    {
+        return function () {
+            return new Model();
+        };
+    }
+
+    /**
+     * @param string      $path
+     * @param string|null $type
+     *
+     * @return DenormalizationFieldMappingInterface[]
+     *
+     * @throws DeserializerRuntimeException
+     */
+    public function getDenormalizationFieldMappings(string $path, string $type = null): array
+    {
+        return [
+            DenormalizationFieldMappingBuilder::create('name')->getMapping(),
+            DenormalizationFieldMappingBuilder::create('one')->setFieldDenormalizer(
+                new EmbedOneFieldDenormalizer(OneModel::class, new PropertyAccessor('one'))
+            )->getMapping(),
+            DenormalizationFieldMappingBuilder::create('manies')->setFieldDenormalizer(
+                new EmbedManyFieldDenormalizer(AbstractManyModel::class, new PropertyAccessor('manies'))
+            )->getMapping(),
+        ];
+    }
+}
+```
+
+### BaseManyModelMapping
 
 ```php
 <?php
@@ -12,12 +77,12 @@ namespace MyProject\Mapping;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
-use MyProject\Model\AbstractChildModel;
+use MyProject\Model\AbstractManyModel;
 
-final class BaseChildModelMapping implements DenormalizationObjectMappingInterface
+final class BaseManyModelMapping implements DenormalizationObjectMappingInterface
 {
     /**
-     * @var ChildModelMapping
+     * @var ManyModelMapping
      */
     private $modelMapping;
 
@@ -27,11 +92,11 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
     private $supportedTypes;
 
     /**
-     * @param ChildModelMapping $modelMapping
+     * @param ManyModelMapping $modelMapping
      * @param array             $supportedTypes
      */
     public function __construct(
-        ChildModelMapping $modelMapping,
+        ManyModelMapping $modelMapping,
         array $supportedTypes
     ) {
         $this->modelMapping = $modelMapping;
@@ -43,7 +108,7 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
      */
     public function getClass(): string
     {
-        return AbstractChildModel::class;
+        return AbstractManyModel::class;
     }
 
     /**
@@ -65,7 +130,7 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
             );
         }
 
-        if ('child-model' === $type) {
+        if ('many-model' === $type) {
             return $this->modelMapping
                 ->getDenormalizationFactory($path);
         }
@@ -96,7 +161,7 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
             );
         }
 
-        if ('child-model' === $type) {
+        if ('many-model' === $type) {
             return $this->modelMapping
                 ->getDenormalizationFieldMappings($path);
         }
@@ -110,7 +175,7 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
 }
 ```
 
-### ChildModelMapping
+### ManyModelMapping
 
 ```php
 <?php
@@ -121,16 +186,16 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
-use MyProject\Model\ChildModel;
+use MyProject\Model\ManyModel;
 
-final class ChildModelMapping implements DenormalizationObjectMappingInterface
+final class ManyModelMapping implements DenormalizationObjectMappingInterface
 {
     /**
      * @return string
      */
     public function getClass(): string
     {
-        return ChildModel::class;
+        return ManyModel::class;
     }
 
     /**
@@ -146,7 +211,7 @@ final class ChildModelMapping implements DenormalizationObjectMappingInterface
         string $type = null
     ): callable {
         return function () {
-            return new ChildModel();
+            return new ManyModel();
         };
     }
 
@@ -169,30 +234,27 @@ final class ChildModelMapping implements DenormalizationObjectMappingInterface
 }
 ```
 
-### ParentModelMapping
+### OneModelMapping
 
 ```php
 <?php
 
 namespace MyProject\Mapping;
 
-use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
-use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
-use MyProject\Model\AbstractChildModel;
-use MyProject\Model\ParentModel;
+use MyProject\Model\OneModel;
 
-final class ParentModelMapping implements DenormalizationObjectMappingInterface
+final class OneModelMapping implements DenormalizationObjectMappingInterface
 {
     /**
      * @return string
      */
     public function getClass(): string
     {
-        return ParentModel::class;
+        return OneModel::class;
     }
 
     /**
@@ -208,7 +270,7 @@ final class ParentModelMapping implements DenormalizationObjectMappingInterface
         string $type = null
     ): callable {
         return function () {
-            return new ParentModel();
+            return new OneModel();
         };
     }
 
@@ -221,20 +283,11 @@ final class ParentModelMapping implements DenormalizationObjectMappingInterface
      * @throws DeserializerRuntimeException
      */
     public function getDenormalizationFieldMappings(
-        string $path,
-        string $type = null
+        string $path, string $type = null
     ): array {
         return [
-            DenormalizationFieldMappingBuilder::create('name')
-                ->getMapping(),
-            DenormalizationFieldMappingBuilder::create('children')
-                ->setFieldDenormalizer(
-                    new EmbedManyFieldDenormalizer(
-                        AbstractChildModel::class,
-                        new PropertyAccessor('children')
-                    )
-                )
-                ->getMapping(),
+            DenormalizationFieldMappingBuilder::create('name')->getMapping(),
+            DenormalizationFieldMappingBuilder::create('value')->getMapping(),
         ];
     }
 }
@@ -242,14 +295,98 @@ final class ParentModelMapping implements DenormalizationObjectMappingInterface
 
 ## Model
 
-### AbstractChildModel
+### Model
 
 ```php
 <?php
 
 namespace MyProject\Model;
 
-abstract class AbstractChildModel
+final class Model
+{
+    /**
+     * @var string
+     */
+    private $name;
+
+    /**
+     * @var OneModel|null
+     */
+    private $one;
+
+    /**
+     * @var AbstractManyModel[]
+     */
+    private $manies;
+
+    /**
+     * @return string
+     */
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return self
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    /**
+     * @return OneModel|null
+     */
+    public function getOne()
+    {
+        return $this->one;
+    }
+
+    /**
+     * @param OneModel|null $one
+     * @return self
+     */
+    public function setOne(OneModel $one = null)
+    {
+        $this->one = $one;
+
+        return $this;
+    }
+
+    /**
+     * @return AbstractManyModel[]
+     */
+    public function getManies(): array
+    {
+        return $this->manies;
+    }
+
+    /**
+     * @param AbstractManyModel[] $manies
+     * @return self
+     */
+    public function setManies(array $manies): self
+    {
+        $this->manies = $manies;
+
+        return $this;
+    }
+}
+```
+
+### AbstractManyModel
+
+```php
+<?php
+
+namespace MyProject\Model;
+
+abstract class AbstractManyModel
 {
     /**
      * @var string
@@ -278,14 +415,14 @@ abstract class AbstractChildModel
 }
 ```
 
-### ChildModel
+### ManyModel
 
 ```php
 <?php
 
 namespace MyProject\Model;
 
-final class ChildModel extends AbstractChildModel
+final class ManyModel extends AbstractManyModel
 {
     /**
      * @var string
@@ -314,14 +451,14 @@ final class ChildModel extends AbstractChildModel
 }
 ```
 
-### ParentModel
+### ManyModel
 
 ```php
 <?php
 
 namespace MyProject\Model;
 
-final class ParentModel
+final class OneModel
 {
     /**
      * @var string
@@ -329,9 +466,9 @@ final class ParentModel
     private $name;
 
     /**
-     * @var ChildModel[]
+     * @var string
      */
-    private $children;
+    private $value;
 
     /**
      * @return string
@@ -343,7 +480,6 @@ final class ParentModel
 
     /**
      * @param string $name
-     *
      * @return self
      */
     public function setName(string $name): self
@@ -354,23 +490,23 @@ final class ParentModel
     }
 
     /**
-     * @return ChildModel[]
+     * @return string
      */
-    public function getChildren(): array
+    public function getValue(): string
     {
-        return $this->children;
+        return $this->value;
     }
 
     /**
-     * @param ChildModel[] $children
-     *
+     * @param string $value
      * @return self
      */
-    public function setChildren(array $children): self
+    public function setValue(string $value): self
     {
-        $this->children = $children;
+        $this->value = $value;
 
         return $this;
     }
 }
 ```
+

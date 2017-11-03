@@ -4,23 +4,20 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Resources\Mapping;
 
-use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
-use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
-use Chubbyphp\Tests\Deserialization\Resources\Model\AbstractChildModel;
-use Chubbyphp\Tests\Deserialization\Resources\Model\ParentModel;
+use Chubbyphp\Tests\Deserialization\Resources\Model\ManyModel;
 
-final class ParentModelMapping implements DenormalizationObjectMappingInterface
+final class ManyModelMapping implements DenormalizationObjectMappingInterface
 {
     /**
      * @return string
      */
     public function getClass(): string
     {
-        return ParentModel::class;
+        return ManyModel::class;
     }
 
     /**
@@ -34,7 +31,7 @@ final class ParentModelMapping implements DenormalizationObjectMappingInterface
     public function getDenormalizationFactory(string $path, string $type = null): callable
     {
         return function () {
-            return new ParentModel();
+            return new ManyModel();
         };
     }
 
@@ -50,9 +47,7 @@ final class ParentModelMapping implements DenormalizationObjectMappingInterface
     {
         return [
             DenormalizationFieldMappingBuilder::create('name')->getMapping(),
-            DenormalizationFieldMappingBuilder::create('children')->setFieldDenormalizer(
-                new EmbedManyFieldDenormalizer(AbstractChildModel::class, new PropertyAccessor('children'))
-            )->getMapping(),
+            DenormalizationFieldMappingBuilder::create('value')->getMapping(),
         ];
     }
 }

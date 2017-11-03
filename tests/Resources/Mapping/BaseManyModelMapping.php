@@ -7,12 +7,12 @@ namespace Chubbyphp\Tests\Deserialization\Resources\Mapping;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
-use Chubbyphp\Tests\Deserialization\Resources\Model\AbstractChildModel;
+use Chubbyphp\Tests\Deserialization\Resources\Model\AbstractManyModel;
 
-final class BaseChildModelMapping implements DenormalizationObjectMappingInterface
+final class BaseManyModelMapping implements DenormalizationObjectMappingInterface
 {
     /**
-     * @var ChildModelMapping
+     * @var ManyModelMapping
      */
     private $modelMapping;
 
@@ -22,10 +22,10 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
     private $supportedTypes;
 
     /**
-     * @param ChildModelMapping $modelMapping
-     * @param array             $supportedTypes
+     * @param ManyModelMapping $modelMapping
+     * @param array            $supportedTypes
      */
-    public function __construct(ChildModelMapping $modelMapping, array $supportedTypes)
+    public function __construct(ManyModelMapping $modelMapping, array $supportedTypes)
     {
         $this->modelMapping = $modelMapping;
         $this->supportedTypes = $supportedTypes;
@@ -36,7 +36,7 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
      */
     public function getClass(): string
     {
-        return AbstractChildModel::class;
+        return AbstractManyModel::class;
     }
 
     /**
@@ -53,7 +53,7 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
             throw DeserializerRuntimeException::createMissingObjectType($path, $this->supportedTypes);
         }
 
-        if ('child-model' === $type) {
+        if ('many-model' === $type) {
             return $this->modelMapping->getDenormalizationFactory($path);
         }
 
@@ -74,7 +74,7 @@ final class BaseChildModelMapping implements DenormalizationObjectMappingInterfa
             throw DeserializerRuntimeException::createMissingObjectType($path, $this->supportedTypes);
         }
 
-        if ('child-model' === $type) {
+        if ('many-model' === $type) {
             return $this->modelMapping->getDenormalizationFieldMappings($path);
         }
 

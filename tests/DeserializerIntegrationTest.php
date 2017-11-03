@@ -11,12 +11,15 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextBuilder;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Chubbyphp\Tests\Deserialization\Resources\Mapping\BaseChildModelMapping;
-use Chubbyphp\Tests\Deserialization\Resources\Mapping\ChildModelMapping;
-use Chubbyphp\Tests\Deserialization\Resources\Mapping\ParentModelMapping;
-use Chubbyphp\Tests\Deserialization\Resources\Model\ChildModel;
-use Chubbyphp\Tests\Deserialization\Resources\Model\ParentModel;
+use Chubbyphp\Tests\Deserialization\Resources\Mapping\BaseManyModelMapping;
+use Chubbyphp\Tests\Deserialization\Resources\Mapping\ManyModelMapping;
+use Chubbyphp\Tests\Deserialization\Resources\Mapping\ModelMapping;
+use Chubbyphp\Tests\Deserialization\Resources\Mapping\OneModelMapping;
+use Chubbyphp\Tests\Deserialization\Resources\Model\ManyModel;
+use Chubbyphp\Tests\Deserialization\Resources\Model\Model;
+use Chubbyphp\Tests\Deserialization\Resources\Model\OneModel;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\AbstractLogger;
 
 /**
  * @coversNothing
@@ -25,59 +28,126 @@ class DeserializerIntegrationTest extends TestCase
 {
     public function testDenormalizeByClass()
     {
-        $childModelMapping = new ChildModelMapping();
+        $childModelMapping = new ManyModelMapping();
+
+        $logger = $this->getLogger();
 
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
             new Denormalizer(
                 new DenormalizerObjectMappingRegistry([
-                    new BaseChildModelMapping($childModelMapping, ['child-model']),
+                    new BaseManyModelMapping($childModelMapping, ['many-model']),
                     $childModelMapping,
-                    new ParentModelMapping(),
-                ])
+                    new ModelMapping(),
+                    new OneModelMapping(),
+                ]),
+                $logger
             )
         );
 
         $data = json_encode([
             'name' => 'Name',
-            'children' => [
+            'one' => [
+                'name' => 'Name',
+                'value' => 'Value',
+            ],
+            'manies' => [
                 [
-                    '_type' => 'child-model',
+                    '_type' => 'many-model',
                     'name' => 'Name',
                     'value' => 'Value',
                 ],
             ],
         ]);
 
-        $parentObject = $deserializer->deserialize(ParentModel::class, $data, 'application/json');
+        $model = $deserializer->deserialize(Model::class, $data, 'application/json');
 
-        self::assertSame('Name', $parentObject->getName());
-        self::assertCount(1, $parentObject->getChildren());
-        self::assertSame('Name', $parentObject->getChildren()[0]->getName());
-        self::assertSame('Value', $parentObject->getChildren()[0]->getValue());
+        self::assertSame('Name', $model->getName());
+        self::assertInstanceOf(OneModel::class, $model->getOne());
+        self::assertSame('Name', $model->getOne()->getName());
+        self::assertSame('Value', $model->getOne()->getValue());
+        self::assertCount(1, $model->getManies());
+        self::assertInstanceOf(ManyModel::class, $model->getManies()[0]);
+        self::assertSame('Name', $model->getManies()[0]->getName());
+        self::assertSame('Value', $model->getManies()[0]->getValue());
+
+        self::assertEquals(
+            [
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'name',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'one',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'one.name',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'one.value',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'manies',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'manies[0].name',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'manies[0].value',
+                    ],
+                ],
+            ],
+            $logger->getEntries()
+        );
     }
 
     public function testDenormalizeByClassAndMissingChildType()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Missing object type, supported are "child-model" at path: "children[0]"');
+        self::expectExceptionMessage('Missing object type, supported are "many-model" at path: "manies[0]"');
 
-        $childModelMapping = new ChildModelMapping();
+        $childModelMapping = new ManyModelMapping();
 
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
             new Denormalizer(
                 new DenormalizerObjectMappingRegistry([
-                    new BaseChildModelMapping($childModelMapping, ['child-model']),
+                    new BaseManyModelMapping($childModelMapping, ['many-model']),
                     $childModelMapping,
-                    new ParentModelMapping(),
+                    new ModelMapping(),
                 ])
             )
         );
 
         $data = json_encode([
             'name' => 'Name',
-            'children' => [
+            'manies' => [
                 [
                     'name' => 'Name',
                     'value' => 'Value',
@@ -85,30 +155,30 @@ class DeserializerIntegrationTest extends TestCase
             ],
         ]);
 
-        $deserializer->deserialize(ParentModel::class, $data, 'application/json');
+        $deserializer->deserialize(Model::class, $data, 'application/json');
     }
 
     public function testDenormalizeByClassAndInvalidChildType()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Unsupported object type "unknown", supported are "child-model" at path: "children[0]"');
+        self::expectExceptionMessage('Unsupported object type "unknown", supported are "many-model" at path: "manies[0]"');
 
-        $childModelMapping = new ChildModelMapping();
+        $childModelMapping = new ManyModelMapping();
 
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
             new Denormalizer(
                 new DenormalizerObjectMappingRegistry([
-                    new BaseChildModelMapping($childModelMapping, ['child-model']),
+                    new BaseManyModelMapping($childModelMapping, ['many-model']),
                     $childModelMapping,
-                    new ParentModelMapping(),
+                    new ModelMapping(),
                 ])
             )
         );
 
         $data = json_encode([
             'name' => 'Name',
-            'children' => [
+            'manies' => [
                 [
                     '_type' => 'unknown',
                     'name' => 'Name',
@@ -117,51 +187,121 @@ class DeserializerIntegrationTest extends TestCase
             ],
         ]);
 
-        $deserializer->deserialize(ParentModel::class, $data, 'application/json');
+        $deserializer->deserialize(Model::class, $data, 'application/json');
     }
 
     public function testDenormalizeByObject()
     {
-        $childModelMapping = new ChildModelMapping();
+        $childModelMapping = new ManyModelMapping();
+
+        $logger = $this->getLogger();
 
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
             new Denormalizer(
                 new DenormalizerObjectMappingRegistry([
-                    new BaseChildModelMapping($childModelMapping, ['child-model']),
+                    new BaseManyModelMapping($childModelMapping, ['many-model']),
                     $childModelMapping,
-                    new ParentModelMapping(),
-                ])
+                    new ModelMapping(),
+                    new OneModelMapping(),
+                ]),
+                $logger
             )
         );
 
         $data = json_encode([
             'name' => 'Name',
-            'children' => [
+            'one' => [
+                'name' => 'Name',
+                'value' => 'Value',
+            ],
+            'manies' => [
                 [
-                    '_type' => 'child-model',
+                    '_type' => 'many-model',
                     'name' => 'Name',
                     'value' => 'Value',
                 ],
             ],
         ]);
 
-        $childrenObject1 = new ChildModel();
-        $childrenObject1->setName('oldName1');
+        $oneModel = new OneModel();
 
-        $childrenObject2 = new ChildModel();
-        $childrenObject2->setName('oldNam2');
+        $manyModel1 = new ManyModel();
+        $manyModel1->setName('oldName1');
 
-        $parentObject = new ParentModel();
-        $parentObject->setName('oldName');
-        $parentObject->setChildren([$childrenObject1, $childrenObject2]);
+        $manyModel2 = new ManyModel();
+        $manyModel2->setName('oldNam2');
 
-        $parentObject = $deserializer->deserialize($parentObject, $data, 'application/json');
+        $model = new Model();
+        $model->setName('oldName');
+        $model->setOne($oneModel);
+        $model->setManies([$manyModel1, $manyModel2]);
 
-        self::assertSame('Name', $parentObject->getName());
-        self::assertCount(1, $parentObject->getChildren());
-        self::assertSame('Name', $parentObject->getChildren()[0]->getName());
-        self::assertSame('Value', $parentObject->getChildren()[0]->getValue());
+        $model = $deserializer->deserialize($model, $data, 'application/json');
+
+        self::assertSame('Name', $model->getName());
+        self::assertSame($oneModel, $model->getOne());
+        self::assertSame('Name', $model->getOne()->getName());
+        self::assertSame('Value', $model->getOne()->getValue());
+        self::assertCount(1, $model->getManies());
+        self::assertSame($manyModel1, $model->getManies()[0]);
+        self::assertSame('Name', $model->getManies()[0]->getName());
+        self::assertSame('Value', $model->getManies()[0]->getValue());
+
+        self::assertEquals(
+            [
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'name',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'one',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'one.name',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'one.value',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'manies',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'manies[0].name',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'manies[0].value',
+                    ],
+                ],
+            ],
+            $logger->getEntries()
+        );
     }
 
     public function testDenormalizeWithAdditionalFieldsExpectsException()
@@ -169,35 +309,35 @@ class DeserializerIntegrationTest extends TestCase
         self::expectException(DeserializerRuntimeException::class);
         self::expectExceptionMessage('There are additional field(s) at paths: "unknownField"');
 
-        $childModelMapping = new ChildModelMapping();
+        $childModelMapping = new ManyModelMapping();
 
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
             new Denormalizer(
                 new DenormalizerObjectMappingRegistry([
-                    new BaseChildModelMapping($childModelMapping, ['child-model']),
+                    new BaseManyModelMapping($childModelMapping, ['many-model']),
                     $childModelMapping,
-                    new ParentModelMapping(),
+                    new ModelMapping(),
                 ])
             )
         );
 
         $data = json_encode(['name' => 'Name', 'unknownField' => 'value']);
 
-        $deserializer->deserialize(ParentModel::class, $data, 'application/json');
+        $deserializer->deserialize(Model::class, $data, 'application/json');
     }
 
     public function testDenormalizeWithAllowedAdditionalFields()
     {
-        $childModelMapping = new ChildModelMapping();
+        $childModelMapping = new ManyModelMapping();
 
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
             new Denormalizer(
                 new DenormalizerObjectMappingRegistry([
-                    new BaseChildModelMapping($childModelMapping, ['child-model']),
+                    new BaseManyModelMapping($childModelMapping, ['many-model']),
                     $childModelMapping,
-                    new ParentModelMapping(),
+                    new ModelMapping(),
                 ])
             )
         );
@@ -205,12 +345,38 @@ class DeserializerIntegrationTest extends TestCase
         $data = json_encode(['name' => 'Name', 'unknownField' => 'value']);
 
         $object = $deserializer->deserialize(
-            ParentModel::class,
+            Model::class,
             $data,
             'application/json',
             DenormalizerContextBuilder::create()->setAllowedAdditionalFields(true)->getContext()
         );
 
         self::assertSame('Name', $object->getName());
+    }
+
+    /**
+     * @return AbstractLogger
+     */
+    private function getLogger()
+    {
+        return new class() extends AbstractLogger {
+            /**
+             * @var array
+             */
+            private $entries = [];
+
+            public function log($level, $message, array $context = [])
+            {
+                $this->entries[] = ['level' => $level, 'message' => $message, 'context' => $context];
+            }
+
+            /**
+             * @return array
+             */
+            public function getEntries(): array
+            {
+                return $this->entries;
+            }
+        };
     }
 }

@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Resources\Model;
 
-abstract class AbstractChildModel
+abstract class AbstractManyModel
 {
     /**
      * @var string
