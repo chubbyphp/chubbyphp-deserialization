@@ -9,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 final class DenormalizerContextBuilder implements DenormalizerContextBuilderInterface
 {
     /**
-     * @var bool
+     * @var array|null
      */
     private $allowedAdditionalFields;
 
@@ -33,18 +33,18 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     public static function create(): DenormalizerContextBuilderInterface
     {
         $self = new self();
-        $self->allowedAdditionalFields = false;
+        $self->allowedAdditionalFields = [];
         $self->groups = [];
 
         return $self;
     }
 
     /**
-     * @param bool $allowedAdditionalFields
+     * @param array|null $allowedAdditionalFields
      *
      * @return DenormalizerContextBuilderInterface
      */
-    public function setAllowedAdditionalFields(bool $allowedAdditionalFields): DenormalizerContextBuilderInterface
+    public function setAllowedAdditionalFields(?array $allowedAdditionalFields): DenormalizerContextBuilderInterface
     {
         $this->allowedAdditionalFields = $allowedAdditionalFields;
 

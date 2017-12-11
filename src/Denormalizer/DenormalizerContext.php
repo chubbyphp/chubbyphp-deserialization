@@ -9,9 +9,9 @@ use Psr\Http\Message\ServerRequestInterface;
 final class DenormalizerContext implements DenormalizerContextInterface
 {
     /**
-     * @var bool
+     * @var array|null
      */
-    private $allowedAdditionalFields = false;
+    private $allowedAdditionalFields;
 
     /**
      * @var string[]
@@ -24,12 +24,12 @@ final class DenormalizerContext implements DenormalizerContextInterface
     private $request;
 
     /**
-     * @param bool                        $allowedAdditionalFields
+     * @param array|null                  $allowedAdditionalFields
      * @param string[]                    $groups
      * @param ServerRequestInterface|null $request
      */
     public function __construct(
-        bool $allowedAdditionalFields = false,
+        ?array $allowedAdditionalFields = [],
         array $groups = [],
         ServerRequestInterface $request = null
     ) {
@@ -39,9 +39,9 @@ final class DenormalizerContext implements DenormalizerContextInterface
     }
 
     /**
-     * @return bool
+     * @return array|null
      */
-    public function isAllowedAdditionalFields(): bool
+    public function getAllowedAdditionalFields(): ?array
     {
         return $this->allowedAdditionalFields;
     }

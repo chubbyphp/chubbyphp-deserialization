@@ -14,11 +14,11 @@ interface DenormalizerContextBuilderInterface
     public static function create(): DenormalizerContextBuilderInterface;
 
     /**
-     * @param bool $allowedAdditionalFields
+     * @param array|null $allowedAdditionalFields
      *
      * @return self
      */
-    public function setAllowedAdditionalFields(bool $allowedAdditionalFields): self;
+    public function setAllowedAdditionalFields(?array $allowedAdditionalFields): self;
 
     /**
      * @param string[] $groups

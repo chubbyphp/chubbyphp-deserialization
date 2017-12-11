@@ -9,9 +9,9 @@ use Psr\Http\Message\ServerRequestInterface;
 interface DenormalizerContextInterface
 {
     /**
-     * @return bool
+     * @return array|null
      */
-    public function isAllowedAdditionalFields(): bool;
+    public function getAllowedAdditionalFields(): ?array;
 
     /**
      * @return string[]
