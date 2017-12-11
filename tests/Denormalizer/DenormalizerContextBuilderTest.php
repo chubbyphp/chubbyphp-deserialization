@@ -20,7 +20,7 @@ class DenormalizerContextBuilderTest extends TestCase
 
         self::assertInstanceOf(DenormalizerContextInterface::class, $context);
 
-        self::assertSame(false, $context->isAllowedAdditionalFields());
+        self::assertSame(null, $context->getAllowedAdditionalFields());
         self::assertSame([], $context->getGroups());
         self::assertNull($context->getRequest());
     }
@@ -30,14 +30,14 @@ class DenormalizerContextBuilderTest extends TestCase
         $request = $this->getRequest();
 
         $context = DenormalizerContextBuilder::create()
-            ->setAllowedAdditionalFields(true)
+            ->setAllowedAdditionalFields(['allowed_field'])
             ->setGroups(['group1'])
             ->setRequest($request)
             ->getContext();
 
         self::assertInstanceOf(DenormalizerContextInterface::class, $context);
 
-        self::assertSame(true, $context->isAllowedAdditionalFields());
+        self::assertSame(['allowed_field'], $context->getAllowedAdditionalFields());
         self::assertSame(['group1'], $context->getGroups());
         self::assertSame($request, $context->getRequest());
     }

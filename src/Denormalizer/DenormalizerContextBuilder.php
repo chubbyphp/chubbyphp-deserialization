@@ -33,7 +33,7 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     public static function create(): DenormalizerContextBuilderInterface
     {
         $self = new self();
-        $self->allowedAdditionalFields = [];
+        $self->allowedAdditionalFields = null;
         $self->groups = [];
 
         return $self;
@@ -44,8 +44,9 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
      *
      * @return DenormalizerContextBuilderInterface
      */
-    public function setAllowedAdditionalFields(?array $allowedAdditionalFields): DenormalizerContextBuilderInterface
-    {
+    public function setAllowedAdditionalFields(
+        array $allowedAdditionalFields = null
+    ): DenormalizerContextBuilderInterface {
         $this->allowedAdditionalFields = $allowedAdditionalFields;
 
         return $this;

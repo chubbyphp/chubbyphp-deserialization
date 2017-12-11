@@ -29,7 +29,7 @@ final class DenormalizerContext implements DenormalizerContextInterface
      * @param ServerRequestInterface|null $request
      */
     public function __construct(
-        ?array $allowedAdditionalFields = [],
+        array $allowedAdditionalFields = null,
         array $groups = [],
         ServerRequestInterface $request = null
     ) {
@@ -41,7 +41,7 @@ final class DenormalizerContext implements DenormalizerContextInterface
     /**
      * @return array|null
      */
-    public function getAllowedAdditionalFields(): ?array
+    public function getAllowedAdditionalFields()
     {
         return $this->allowedAdditionalFields;
     }

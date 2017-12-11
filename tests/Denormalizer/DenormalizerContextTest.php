@@ -17,7 +17,7 @@ class DenormalizerContextTest extends TestCase
     {
         $context = new DenormalizerContext();
 
-        self::assertSame(false, $context->isAllowedAdditionalFields());
+        self::assertSame(null, $context->getAllowedAdditionalFields());
         self::assertSame([], $context->getGroups());
         self::assertNull($context->getRequest());
     }
@@ -26,9 +26,9 @@ class DenormalizerContextTest extends TestCase
     {
         $request = $this->getRequest();
 
-        $context = new DenormalizerContext(true, ['group1'], $request);
+        $context = new DenormalizerContext(['allowed_field'], ['group1'], $request);
 
-        self::assertSame(true, $context->isAllowedAdditionalFields());
+        self::assertSame(['allowed_field'], $context->getAllowedAdditionalFields());
         self::assertSame(['group1'], $context->getGroups());
         self::assertSame($request, $context->getRequest());
     }

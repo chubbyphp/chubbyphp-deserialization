@@ -9,13 +9,13 @@ use Psr\Http\Message\ServerRequestInterface;
 $request = ...;
 
 $context = DenormalizerContextBuilder::create()
-    ->setAllowedAdditionalFields(true)
+    ->setAllowedAdditionalFields(['allowed_additional_field'])
     ->setGroups(['group1'])
     ->setRequest($request)
     ->getContext();
 
-echo $context->isAllowedAdditionalFields();
-// true
+echo $context->getAllowedAdditionalFields();
+// ['allowed_additional_field']
 
 print_r($context->getGroups());
 // ['group1']

@@ -11,7 +11,7 @@ interface DenormalizerContextInterface
     /**
      * @return array|null
      */
-    public function getAllowedAdditionalFields(): ?array;
+    public function getAllowedAdditionalFields();
 
     /**
      * @return string[]

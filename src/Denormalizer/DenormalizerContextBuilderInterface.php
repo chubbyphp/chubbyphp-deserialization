@@ -18,7 +18,7 @@ interface DenormalizerContextBuilderInterface
      *
      * @return self
      */
-    public function setAllowedAdditionalFields(?array $allowedAdditionalFields): self;
+    public function setAllowedAdditionalFields(array $allowedAdditionalFields = null): self;
 
     /**
      * @param string[] $groups
