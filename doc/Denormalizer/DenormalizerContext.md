@@ -8,10 +8,10 @@ use Psr\Http\Message\ServerRequestInterface;
 
 $request = ...;
 
-$context = new DenormalizerContext(true, ['group1'], $request);
+$context = new DenormalizerContext(['allowed_additional_field'], ['group1'], $request);
 
-echo $context->isAllowedAdditionalFields();
-// true
+echo $context->getAllowedAdditionalFields();
+// ['allowed_additional_field']
 
 print_r($context->getGroups());
 // ['group1']

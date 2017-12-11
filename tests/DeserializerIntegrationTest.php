@@ -324,7 +324,12 @@ class DeserializerIntegrationTest extends TestCase
 
         $data = json_encode(['name' => 'Name', 'unknownField' => 'value']);
 
-        $deserializer->deserialize(Model::class, $data, 'application/json');
+        $deserializer->deserialize(
+            Model::class,
+            $data,
+            'application/json',
+            DenormalizerContextBuilder::create()->setAllowedAdditionalFields([])->getContext()
+        );
     }
 
     public function testDenormalizeWithAllowedAdditionalFields()
@@ -347,8 +352,7 @@ class DeserializerIntegrationTest extends TestCase
         $object = $deserializer->deserialize(
             Model::class,
             $data,
-            'application/json',
-            DenormalizerContextBuilder::create()->setAllowedAdditionalFields(true)->getContext()
+            'application/json'
         );
 
         self::assertSame('Name', $object->getName());

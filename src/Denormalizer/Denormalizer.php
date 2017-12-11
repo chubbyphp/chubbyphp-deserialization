@@ -70,8 +70,10 @@ final class Denormalizer implements DenormalizerInterface
             unset($data[$denormalizationFieldMapping->getName()]);
         }
 
-        if ([] !== $data && !$context->isAllowedAdditionalFields()) {
-            $this->handleNotAllowedAdditionalFields($path, array_keys($data));
+        if (null !== $context->getAllowedAdditionalFields()
+            && [] !== $fields = array_diff(array_keys($data), $context->getAllowedAdditionalFields())
+        ) {
+            $this->handleNotAllowedAdditionalFields($path, $fields);
         }
 
         return $object;
