@@ -37,6 +37,10 @@ final class DateFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
     ) {
+        if (null === $value || '' === $value) {
+            return;
+        }
+
         try {
             $value = new \DateTime($value);
         } catch (\Exception $exception) {
