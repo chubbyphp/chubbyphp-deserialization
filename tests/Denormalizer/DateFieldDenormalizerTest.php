@@ -102,6 +102,30 @@ class DateFieldDenormalizerTest extends TestCase
         self::assertSame('0', $object->getDate());
     }
 
+    public function testDenormalizeArrayField()
+    {
+        $object = $this->getObject();
+        $object->setDate(new \DateTime('2016-01-01'));
+
+        $fieldDenormalizer = new DateFieldDenormalizer($this->getFieldDenormalizer());
+        $fieldDenormalizer->denormalizeField('date', $object, [], $this->getDenormalizerContext());
+
+        self::assertSame([], $object->getDate());
+    }
+
+    public function testDenormalizeObjectField()
+    {
+        $object = $this->getObject();
+        $object->setDate(new \DateTime('2016-01-01'));
+
+        $date = new \stdClass();
+
+        $fieldDenormalizer = new DateFieldDenormalizer($this->getFieldDenormalizer());
+        $fieldDenormalizer->denormalizeField('date', $object, $date, $this->getDenormalizerContext());
+
+        self::assertSame($date, $object->getDate());
+    }
+
     private function getObject()
     {
         return new class() {

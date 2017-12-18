@@ -11,7 +11,7 @@ interface DenormalizerContextBuilderInterface
     /**
      * @return self
      */
-    public static function create(): DenormalizerContextBuilderInterface;
+    public static function create(): self;
 
     /**
      * @param array|null $allowedAdditionalFields
