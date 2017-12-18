@@ -17,6 +17,7 @@ class DateFieldDenormalizerTest extends TestCase
     public function testDenormalizeField()
     {
         $object = $this->getObject();
+        $object->setDate(new \DateTime('2016-01-01'));
 
         $fieldDenormalizer = new DateFieldDenormalizer($this->getFieldDenormalizer());
         $fieldDenormalizer->denormalizeField('date', $object, '2017-01-01', $this->getDenormalizerContext());
@@ -27,6 +28,7 @@ class DateFieldDenormalizerTest extends TestCase
     public function testDenormalizeInvalidField()
     {
         $object = $this->getObject();
+        $object->setDate(new \DateTime('2016-01-01'));
 
         $fieldDenormalizer = new DateFieldDenormalizer($this->getFieldDenormalizer());
         $fieldDenormalizer->denormalizeField('date', $object, '2017-13-01', $this->getDenormalizerContext());
@@ -37,6 +39,7 @@ class DateFieldDenormalizerTest extends TestCase
     public function testDenormalizeEmptyField()
     {
         $object = $this->getObject();
+        $object->setDate(new \DateTime('2016-01-01'));
 
         $fieldDenormalizer = new DateFieldDenormalizer($this->getFieldDenormalizer());
         $fieldDenormalizer->denormalizeField('date', $object, '', $this->getDenormalizerContext());
@@ -44,14 +47,59 @@ class DateFieldDenormalizerTest extends TestCase
         self::assertSame('', $object->getDate());
     }
 
+    public function testDenormalizeWhitespaceOnlyField()
+    {
+        $object = $this->getObject();
+        $object->setDate(new \DateTime('2016-01-01'));
+
+        $fieldDenormalizer = new DateFieldDenormalizer($this->getFieldDenormalizer());
+        $fieldDenormalizer->denormalizeField('date', $object, '   ', $this->getDenormalizerContext());
+
+        self::assertSame('   ', $object->getDate());
+    }
+
     public function testDenormalizeNullField()
     {
         $object = $this->getObject();
+        $object->setDate(new \DateTime('2016-01-01'));
 
         $fieldDenormalizer = new DateFieldDenormalizer($this->getFieldDenormalizer());
         $fieldDenormalizer->denormalizeField('date', $object, null, $this->getDenormalizerContext());
 
         self::assertSame(null, $object->getDate());
+    }
+
+    public function testDenormalizeNullStringField()
+    {
+        $object = $this->getObject();
+        $object->setDate(new \DateTime('2016-01-01'));
+
+        $fieldDenormalizer = new DateFieldDenormalizer($this->getFieldDenormalizer());
+        $fieldDenormalizer->denormalizeField('date', $object, 'null', $this->getDenormalizerContext());
+
+        self::assertSame('null', $object->getDate());
+    }
+
+    public function testDenormalizeZeroField()
+    {
+        $object = $this->getObject();
+        $object->setDate(new \DateTime('2016-01-01'));
+
+        $fieldDenormalizer = new DateFieldDenormalizer($this->getFieldDenormalizer());
+        $fieldDenormalizer->denormalizeField('date', $object, 0, $this->getDenormalizerContext());
+
+        self::assertSame(0, $object->getDate());
+    }
+
+    public function testDenormalizeZeroStringField()
+    {
+        $object = $this->getObject();
+        $object->setDate(new \DateTime('2016-01-01'));
+
+        $fieldDenormalizer = new DateFieldDenormalizer($this->getFieldDenormalizer());
+        $fieldDenormalizer->denormalizeField('date', $object, '0', $this->getDenormalizerContext());
+
+        self::assertSame('0', $object->getDate());
     }
 
     private function getObject()
