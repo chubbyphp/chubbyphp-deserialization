@@ -79,6 +79,30 @@ class EmbedOneFieldDenormalizerTest extends TestCase
         self::assertSame('php', $reference->getName());
     }
 
+    public function testDenormalizeFieldWithExistingValue()
+    {
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
+            get_class($this->getReference()),
+            $this->getAccessor()
+        );
+
+        $reference = $this->getReference();
+
+        $object = $this->getObject();
+        $object->setReference($reference);
+
+        $fieldDenormalizer->denormalizeField(
+            'reference',
+            $object,
+            ['name' => 'php'],
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
+
+        self::assertInstanceOf(get_class($this->getReference()), $reference);
+        self::assertSame('php', $reference->getName());
+    }
+
     public function testDenormalizeFieldWithWrongType()
     {
         self::expectException(DeserializerRuntimeException::class);
