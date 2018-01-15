@@ -10,6 +10,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Doctrine\Common\Persistence\Proxy;
 
 final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
 {
@@ -62,7 +63,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
 
         $repository = $this->repository;
 
-        $newChildObjects = [];
+        $referencedObjects = [];
         foreach ($value as $i => $subValue) {
             $subPath = $path.'['.$i.']';
 
@@ -70,9 +71,19 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'string');
             }
 
-            $newChildObjects[$i] = $repository($subValue);
+            $referencedObject = $repository($subValue);
+
+            if (null !== $referencedObject) {
+                if (interface_exists('Doctrine\Common\Persistence\Proxy')
+                    && $referencedObject instanceof Proxy && !$referencedObject->__isInitialized()
+                ) {
+                    $referencedObject->__load();
+                }
+            }
+
+            $referencedObjects[$i] = $referencedObject;
         }
 
-        $this->accessor->setValue($object, $newChildObjects);
+        $this->accessor->setValue($object, $referencedObjects);
     }
 }

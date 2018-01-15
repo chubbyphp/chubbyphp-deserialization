@@ -62,18 +62,18 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
         }
 
         if (is_array($value)) {
-            $existingValue = $this->accessor->getValue($object);
-            if (null !== $existingValue) {
+            $embeddedObject = $this->accessor->getValue($object);
+            if (null !== $embeddedObject) {
                 if (interface_exists('Doctrine\Common\Persistence\Proxy')
-                    && $existingValue instanceof Proxy && !$existingValue->__isInitialized()
+                    && $embeddedObject instanceof Proxy && !$embeddedObject->__isInitialized()
                 ) {
-                    $existingValue->__load();
+                    $embeddedObject->__load();
                 }
             } else {
-                $existingValue = $this->class;
+                $embeddedObject = $this->class;
             }
 
-            $this->accessor->setValue($object, $denormalizer->denormalize($existingValue, $value, $context, $path));
+            $this->accessor->setValue($object, $denormalizer->denormalize($embeddedObject, $value, $context, $path));
 
             return;
         }
