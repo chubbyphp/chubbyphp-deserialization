@@ -7,6 +7,8 @@ namespace Chubbyphp\Tests\Deserialization\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
+use Chubbyphp\Tests\Deserialization\Resources\Model\AbstractManyModel;
+use Doctrine\Common\Persistence\Proxy;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,6 +39,19 @@ class DenormalizerObjectMappingRegistryTest extends TestCase
         $registry->getObjectMapping(get_class(new \stdClass()));
     }
 
+    public function testGetObjectMappingFromDoctrineProxy()
+    {
+        $object = $this->getProxyObject();
+
+        $registry = new DenormalizerObjectMappingRegistry([
+            $this->getDenormalizationProxyObjectMapping(),
+        ]);
+
+        $mapping = $registry->getObjectMapping(get_class($object));
+
+        self::assertInstanceOf(DenormalizationObjectMappingInterface::class, $mapping);
+    }
+
     /**
      * @return DenormalizationObjectMappingInterface
      */
@@ -52,6 +67,27 @@ class DenormalizerObjectMappingRegistryTest extends TestCase
         $objectMapping->expects(self::any())->method('getClass')->willReturnCallback(
             function () use ($object) {
                 return get_class($object);
+            }
+        );
+
+        return $objectMapping;
+    }
+
+    /**
+     * @return DenormalizationObjectMappingInterface
+     */
+    private function getDenormalizationProxyObjectMapping(): DenormalizationObjectMappingInterface
+    {
+        /** @var DenormalizationObjectMappingInterface|\PHPUnit_Framework_MockObject_MockObject $objectMapping */
+        $objectMapping = $this->getMockBuilder(DenormalizationObjectMappingInterface::class)
+            ->setMethods([])
+            ->getMockForAbstractClass();
+
+        $object = $this->getProxyObject();
+
+        $objectMapping->expects(self::any())->method('getClass')->willReturnCallback(
+            function () use ($object) {
+                return AbstractManyModel::class;
             }
         );
 
@@ -87,6 +123,34 @@ class DenormalizerObjectMappingRegistryTest extends TestCase
                 $this->name = $name;
 
                 return $this;
+            }
+        };
+    }
+
+    /**
+     * @return object
+     */
+    private function getProxyObject()
+    {
+        return new class() extends AbstractManyModel implements Proxy {
+            /**
+             * Initializes this proxy if its not yet initialized.
+             *
+             * Acts as a no-op if already initialized.
+             *
+             * @return void
+             */
+            public function __load()
+            {
+            }
+
+            /**
+             * Returns whether this proxy is initialized or not.
+             *
+             * @return bool
+             */
+            public function __isInitialized()
+            {
             }
         };
     }
