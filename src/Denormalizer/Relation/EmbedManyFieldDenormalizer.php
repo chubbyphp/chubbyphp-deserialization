@@ -10,6 +10,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Doctrine\Common\Persistence\Proxy;
 
 final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
 {
@@ -76,6 +77,12 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
 
             if (isset($existingChildObjects[$i])) {
                 $newChildObject = $existingChildObjects[$i];
+
+                if (interface_exists('Doctrine\Common\Persistence\Proxy')
+                    && $newChildObject instanceof Proxy && !$newChildObject->__isInitialized()
+                ) {
+                    $newChildObject->__load();
+                }
             } else {
                 $newChildObject = $this->class;
             }
