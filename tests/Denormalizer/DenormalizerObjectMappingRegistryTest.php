@@ -137,8 +137,6 @@ class DenormalizerObjectMappingRegistryTest extends TestCase
              * Initializes this proxy if its not yet initialized.
              *
              * Acts as a no-op if already initialized.
-             *
-             * @return void
              */
             public function __load()
             {

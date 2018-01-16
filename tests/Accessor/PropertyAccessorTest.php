@@ -45,13 +45,12 @@ class PropertyAccessorTest extends TestCase
              * Initializes this proxy if its not yet initialized.
              *
              * Acts as a no-op if already initialized.
-             *
-             * @return void
              */
             public function __load()
             {
                 // TODO: Implement __load() method.
             }
+
             /**
              * Returns whether this proxy is initialized or not.
              *
@@ -112,13 +111,12 @@ class PropertyAccessorTest extends TestCase
              * Initializes this proxy if its not yet initialized.
              *
              * Acts as a no-op if already initialized.
-             *
-             * @return void
              */
             public function __load()
             {
                 // TODO: Implement __load() method.
             }
+
             /**
              * Returns whether this proxy is initialized or not.
              *

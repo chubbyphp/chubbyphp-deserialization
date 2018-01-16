@@ -10,10 +10,12 @@ abstract class AbstractManyModel
      * @var string
      */
     protected $name;
+
     /**
      * @var string
      */
     private $address;
+
     /**
      * @return string
      */
@@ -21,6 +23,7 @@ abstract class AbstractManyModel
     {
         return $this->name;
     }
+
     /**
      * @param string $name
      *
@@ -29,8 +32,10 @@ abstract class AbstractManyModel
     public function setName(string $name): self
     {
         $this->name = $name;
+
         return $this;
     }
+
     /**
      * @return string
      */
@@ -38,6 +43,7 @@ abstract class AbstractManyModel
     {
         return $this->address;
     }
+
     /**
      * @param string $address
      */
