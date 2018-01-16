@@ -75,21 +75,34 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'array');
             }
 
-            if (isset($existingEmbeddedObjects[$i])) {
-                $embeddedObject = $existingEmbeddedObjects[$i];
-
-                if (interface_exists('Doctrine\Common\Persistence\Proxy')
-                    && $embeddedObject instanceof Proxy && !$embeddedObject->__isInitialized()
-                ) {
-                    $embeddedObject->__load();
-                }
-            } else {
-                $embeddedObject = $this->class;
-            }
+            $embeddedObject = $this->getEmbeddedObjectOrClass($i, $existingEmbeddedObjects);
 
             $embeddedObjects[$i] = $denormalizer->denormalize($embeddedObject, $subValue, $context, $subPath);
         }
 
         $this->accessor->setValue($object, $embeddedObjects);
+    }
+
+    /**
+     * @param string|int         $i
+     * @param array|\Traversable $existingEmbeddedObjects
+     *
+     * @return object|string
+     */
+    private function getEmbeddedObjectOrClass($i, $existingEmbeddedObjects)
+    {
+        if (isset($existingEmbeddedObjects[$i])) {
+            $embeddedObject = $existingEmbeddedObjects[$i];
+
+            if (interface_exists('Doctrine\Common\Persistence\Proxy')
+                && $embeddedObject instanceof Proxy && !$embeddedObject->__isInitialized()
+            ) {
+                $embeddedObject->__load();
+            }
+
+            return $embeddedObject;
+        }
+
+        return $this->class;
     }
 }
