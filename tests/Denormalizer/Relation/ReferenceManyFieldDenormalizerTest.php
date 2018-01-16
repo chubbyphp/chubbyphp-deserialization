@@ -9,6 +9,8 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceManyFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Doctrine\Common\Persistence\Proxy;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -93,6 +95,30 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
         self::assertSame('php', $parent->getChildren()[0]->getName());
     }
 
+    public function testDenormalizeFieldWithProxy()
+    {
+        $parent = $this->getParent();
+
+        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
+            function (string $id) {
+                self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
+
+                return $this->getDoctrineProxyChild()->setName('php');
+            },
+            $this->getAccessor()
+        );
+
+        $fieldDenormalizer->denormalizeField(
+            'children',
+            $parent,
+            ['60a9ee14-64d6-4992-8042-8d1528ac02d6'],
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
+
+        self::assertSame('php', $parent->getChildren()[0]->getName());
+    }
+
     /**
      * @return object
      */
@@ -157,6 +183,43 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
                 return $this;
             }
         };
+    }
+
+    /**
+     * @return Proxy|MockObject
+     */
+    private function getDoctrineProxyChild(): Proxy
+    {
+        /** @var Proxy|MockObject $child */
+        $child = $this->getMockBuilder(Proxy::class)
+            ->setMethods(['__load', '__isInitialized', 'getName', 'setName'])
+            ->getMockForAbstractClass();
+
+        $child
+            ->expects(self::once())
+            ->method('__isInitialized');
+
+        $child
+            ->expects(self::once())
+            ->method('__load');
+
+        $child
+            ->expects(self::once())
+            ->method('setName')
+            ->willReturnCallback(function ($name) use ($child) {
+                $child->__name = $name;
+
+                return $child;
+            });
+
+        $child
+            ->expects(self::once())
+            ->method('getName')
+            ->willReturnCallback(function () use ($child) {
+                return $child->__name;
+            });
+
+        return $child;
     }
 
     /**

@@ -10,6 +10,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Doctrine\Common\Persistence\Proxy;
 
 final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
 {
@@ -61,9 +62,18 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
         }
 
         if (is_array($value)) {
-            $existingValue = $this->accessor->getValue($object) ?? $this->class;
+            $embeddedObject = $this->accessor->getValue($object);
+            if (null !== $embeddedObject) {
+                if (interface_exists('Doctrine\Common\Persistence\Proxy')
+                    && $embeddedObject instanceof Proxy && !$embeddedObject->__isInitialized()
+                ) {
+                    $embeddedObject->__load();
+                }
+            } else {
+                $embeddedObject = $this->class;
+            }
 
-            $this->accessor->setValue($object, $denormalizer->denormalize($existingValue, $value, $context, $path));
+            $this->accessor->setValue($object, $denormalizer->denormalize($embeddedObject, $value, $context, $path));
 
             return;
         }

@@ -10,6 +10,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Doctrine\Common\Persistence\Proxy;
 
 final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
 {
@@ -64,9 +65,9 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
             throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
         }
 
-        $existingChildObjects = $this->accessor->getValue($object) ?? [];
+        $existingEmbeddedObjects = $this->accessor->getValue($object) ?? [];
 
-        $newChildObjects = [];
+        $embeddedObjects = [];
         foreach ($value as $i => $subValue) {
             $subPath = $path.'['.$i.']';
 
@@ -74,15 +75,21 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'array');
             }
 
-            if (isset($existingChildObjects[$i])) {
-                $newChildObject = $existingChildObjects[$i];
+            if (isset($existingEmbeddedObjects[$i])) {
+                $embeddedObject = $existingEmbeddedObjects[$i];
+
+                if (interface_exists('Doctrine\Common\Persistence\Proxy')
+                    && $embeddedObject instanceof Proxy && !$embeddedObject->__isInitialized()
+                ) {
+                    $embeddedObject->__load();
+                }
             } else {
-                $newChildObject = $this->class;
+                $embeddedObject = $this->class;
             }
 
-            $newChildObjects[$i] = $denormalizer->denormalize($newChildObject, $subValue, $context, $subPath);
+            $embeddedObjects[$i] = $denormalizer->denormalize($embeddedObject, $subValue, $context, $subPath);
         }
 
-        $this->accessor->setValue($object, $newChildObjects);
+        $this->accessor->setValue($object, $embeddedObjects);
     }
 }

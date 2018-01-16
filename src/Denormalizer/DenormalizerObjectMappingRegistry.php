@@ -42,6 +42,12 @@ final class DenormalizerObjectMappingRegistry implements DenormalizerObjectMappi
      */
     public function getObjectMapping(string $class): DenormalizationObjectMappingInterface
     {
+        $reflectionClass = new \ReflectionClass($class);
+
+        if (in_array('Doctrine\Common\Persistence\Proxy', $reflectionClass->getInterfaceNames(), true)) {
+            $class = $reflectionClass->getParentClass()->name;
+        }
+
         if (isset($this->objectMappings[$class])) {
             return $this->objectMappings[$class];
         }
