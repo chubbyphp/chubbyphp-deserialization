@@ -2,26 +2,47 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Deserialization\Denormalizer\Relation;
+namespace Chubbyphp\Tests\Deserialization\Denormalizer\Relation\Doctrine;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
-use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\Relation\Doctrine\EmbedOneFieldDenormalizer;
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
+use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Doctrine\Common\Persistence\Proxy;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer
+ * @covers \Chubbyphp\Deserialization\Denormalizer\Relation\Doctrine\EmbedOneFieldDenormalizer
  */
-class ReferenceOneFieldDenormalizerTest extends TestCase
+class EmbedOneFieldDenormalizerTest extends TestCase
 {
+    public function testDenormalizeFieldWithMissingDenormalizer()
+    {
+        self::expectException(DeserializerLogicException::class);
+        self::expectExceptionMessage('There is no denormalizer at path: "reference"');
+
+        $object = $this->getObject();
+
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
+            get_class($this->getReference()),
+            $this->getAccessor()
+        );
+
+        $fieldDenormalizer->denormalizeField(
+            'reference',
+            $object,
+            ['name' => 'name'],
+            $this->getDenormalizerContext()
+        );
+    }
+
     public function testDenormalizeFieldWithNull()
     {
-        $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
-            function (string $id) {},
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
+            get_class($this->getReference()),
             $this->getAccessor()
         );
 
@@ -39,12 +60,8 @@ class ReferenceOneFieldDenormalizerTest extends TestCase
 
     public function testDenormalizeField()
     {
-        $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
-            function (string $id) {
-                self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
-
-                return $this->getReference()->setName('php');
-            },
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
+            get_class($this->getReference()),
             $this->getAccessor()
         );
 
@@ -53,7 +70,7 @@ class ReferenceOneFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField(
             'reference',
             $object,
-            '60a9ee14-64d6-4992-8042-8d1528ac02d6',
+            ['name' => 'php'],
             $this->getDenormalizerContext(),
             $this->getDenormalizer()
         );
@@ -64,28 +81,49 @@ class ReferenceOneFieldDenormalizerTest extends TestCase
         self::assertSame('php', $reference->getName());
     }
 
-    public function testDenormalizeFieldWithProxy()
+    public function testDenormalizeFieldWithExistingValue()
     {
-        $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
-            function (string $id) {
-                self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
-
-                return $this->getDoctrineProxyReference()->setName('php');
-            },
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
+            get_class($this->getReference()),
             $this->getAccessor()
         );
 
+        $reference = $this->getReference();
+
         $object = $this->getObject();
+        $object->setReference($reference);
 
         $fieldDenormalizer->denormalizeField(
             'reference',
             $object,
-            '60a9ee14-64d6-4992-8042-8d1528ac02d6',
+            ['name' => 'php'],
             $this->getDenormalizerContext(),
             $this->getDenormalizer()
         );
 
-        $reference = $object->getReference();
+        self::assertInstanceOf(get_class($this->getReference()), $reference);
+        self::assertSame('php', $reference->getName());
+    }
+
+    public function testDenormalizeFieldWithExistingValueWhichIsProxy()
+    {
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
+            get_class($this->getReference()),
+            $this->getAccessor()
+        );
+
+        $reference = $this->getDoctrineProxyReference();
+
+        $object = $this->getObject();
+        $object->setReference($reference);
+
+        $fieldDenormalizer->denormalizeField(
+            'reference',
+            $object,
+            ['name' => 'php'],
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
 
         self::assertInstanceOf(Proxy::class, $reference);
         self::assertSame('php', $reference->getName());
@@ -94,10 +132,10 @@ class ReferenceOneFieldDenormalizerTest extends TestCase
     public function testDenormalizeFieldWithWrongType()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid data type "integer", needed "string" at path: "reference"');
+        self::expectExceptionMessage('There is an invalid data type "string", needed "array" at path: "reference"');
 
-        $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
-            function (string $id) {},
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
+            get_class($this->getReference()),
             $this->getAccessor()
         );
 
@@ -106,7 +144,7 @@ class ReferenceOneFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField(
             'reference',
             $object,
-            5,
+            'test',
             $this->getDenormalizerContext(),
             $this->getDenormalizer()
         );

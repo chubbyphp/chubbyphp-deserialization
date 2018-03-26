@@ -12,6 +12,9 @@ use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Doctrine\Common\Persistence\Proxy;
 
+/**
+ * @deprecated use Basic or Doctrine EmbedManyFieldDenormalizer
+ */
 final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
 {
     /**
@@ -65,9 +68,9 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
             throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
         }
 
-        $existingEmbeddedObjects = $this->accessor->getValue($object) ?? [];
+        $existEmbObjects = $this->accessor->getValue($object);
 
-        $embeddedObjects = [];
+        $embObjects = [];
         foreach ($value as $i => $subValue) {
             $subPath = $path.'['.$i.']';
 
@@ -75,34 +78,36 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'array');
             }
 
-            $embeddedObject = $this->getEmbeddedObjectOrClass($i, $existingEmbeddedObjects);
+            $embObject = $this->getEmbObjectOrClass($existEmbObjects[$i] ?? null);
 
-            $embeddedObjects[$i] = $denormalizer->denormalize($embeddedObject, $subValue, $context, $subPath);
+            $embObjects[$i] = $denormalizer->denormalize($embObject, $subValue, $context, $subPath);
         }
 
-        $this->accessor->setValue($object, $embeddedObjects);
+        $this->accessor->setValue($object, $embObjects);
     }
 
     /**
-     * @param string|int         $i
-     * @param array|\Traversable $existingEmbeddedObjects
+     * @param object|null $existEmbObject
      *
-     * @return object|string
+     * @return string
      */
-    private function getEmbeddedObjectOrClass($i, $existingEmbeddedObjects)
+    private function getEmbObjectOrClass($existEmbObject)
     {
-        if (isset($existingEmbeddedObjects[$i])) {
-            $embeddedObject = $existingEmbeddedObjects[$i];
-
-            if (interface_exists('Doctrine\Common\Persistence\Proxy')
-                && $embeddedObject instanceof Proxy && !$embeddedObject->__isInitialized()
-            ) {
-                $embeddedObject->__load();
-            }
-
-            return $embeddedObject;
+        if (null === $existEmbObject) {
+            return $this->class;
         }
 
-        return $this->class;
+        $this->resolveProxy($existEmbObject);
+
+        return $existEmbObject;
+    }
+
+    private function resolveProxy($refObject)
+    {
+        if (null !== $refObject && interface_exists('Doctrine\Common\Persistence\Proxy')
+            && $refObject instanceof Proxy && !$refObject->__isInitialized()
+        ) {
+            $refObject->__load();
+        }
     }
 }

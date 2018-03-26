@@ -67,6 +67,11 @@ class PropertyAccessorTest extends TestCase
         $accessor->setValue($object, 'Address');
 
         self::assertSame('Address', $accessor->getValue($object));
+
+        $error = error_get_last();
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame('"Chubbyphp\Tests\Deserialization\Resources\Model\AbstractManyModel" got a proxy "Doctrine\Common\Persistence\Proxy", use "Chubbyphp\Deserialization\Doctrine\Accessor\PropertyAccessor" instead of "Chubbyphp\Deserialization\Accessor\PropertyAccessor', $error['message']);
     }
 
     public function testMissingSet()
@@ -133,6 +138,11 @@ class PropertyAccessorTest extends TestCase
         $accessor = new PropertyAccessor('address');
 
         self::assertSame('Address', $accessor->getValue($object));
+
+        $error = error_get_last();
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame('"Chubbyphp\Tests\Deserialization\Resources\Model\AbstractManyModel" got a proxy "Doctrine\Common\Persistence\Proxy", use "Chubbyphp\Deserialization\Doctrine\Accessor\PropertyAccessor" instead of "Chubbyphp\Deserialization\Accessor\PropertyAccessor', $error['message']);
     }
 
     public function testMissingGet()

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Deserialization\Denormalizer\Relation;
+namespace Chubbyphp\Deserialization\Denormalizer\Relation\Basic;
 
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
@@ -10,11 +10,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Doctrine\Common\Persistence\Proxy;
 
-/**
- * @deprecated use Basic or Doctrine ReferenceManyFieldDenormalizer
- */
 final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
 {
     /**
@@ -74,22 +70,9 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'string');
             }
 
-            $refObject = $repository($subValue);
-
-            $this->resolveProxy($refObject);
-
-            $refObjects[$i] = $refObject;
+            $refObjects[$i] = $repository($subValue);
         }
 
         $this->accessor->setValue($object, $refObjects);
-    }
-
-    private function resolveProxy($refObject)
-    {
-        if (null !== $refObject && interface_exists('Doctrine\Common\Persistence\Proxy')
-            && $refObject instanceof Proxy && !$refObject->__isInitialized()
-        ) {
-            $refObject->__load();
-        }
     }
 }

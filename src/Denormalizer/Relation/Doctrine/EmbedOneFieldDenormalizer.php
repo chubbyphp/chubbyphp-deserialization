@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Deserialization\Denormalizer\Relation;
+namespace Chubbyphp\Deserialization\Denormalizer\Relation\Doctrine;
 
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
@@ -12,15 +12,12 @@ use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Doctrine\Common\Persistence\Proxy;
 
-/**
- * @deprecated use Basic or Doctrine ReferenceManyFieldDenormalizer
- */
-final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
+final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
 {
     /**
-     * @var callable
+     * @var string
      */
-    private $repository;
+    private $class;
 
     /**
      * @var AccessorInterface
@@ -28,12 +25,12 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     private $accessor;
 
     /**
-     * @param callable          $repository
+     * @param string            $class
      * @param AccessorInterface $accessor
      */
-    public function __construct(callable $repository, AccessorInterface $accessor)
+    public function __construct($class, AccessorInterface $accessor)
     {
-        $this->repository = $repository;
+        $this->class = $class;
         $this->accessor = $accessor;
     }
 
@@ -60,35 +57,38 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
             return;
         }
 
+        if (null === $denormalizer) {
+            throw DeserializerLogicException::createMissingDenormalizer($path);
+        }
+
         if (!is_array($value)) {
             throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
         }
 
-        $repository = $this->repository;
+        $embObject = $this->getEmbObjectOrClass($this->accessor->getValue($object));
 
-        $refObjects = [];
-        foreach ($value as $i => $subValue) {
-            $subPath = $path.'['.$i.']';
+        $this->accessor->setValue($object, $denormalizer->denormalize($embObject, $value, $context, $path));
+    }
 
-            if (!is_string($subValue)) {
-                throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'string');
-            }
-
-            $refObject = $repository($subValue);
-
-            $this->resolveProxy($refObject);
-
-            $refObjects[$i] = $refObject;
+    /**
+     * @param object|null $existEmbObject
+     *
+     * @return string
+     */
+    private function getEmbObjectOrClass($existEmbObject)
+    {
+        if (null === $existEmbObject) {
+            return $this->class;
         }
 
-        $this->accessor->setValue($object, $refObjects);
+        $this->resolveProxy($existEmbObject);
+
+        return $existEmbObject;
     }
 
     private function resolveProxy($refObject)
     {
-        if (null !== $refObject && interface_exists('Doctrine\Common\Persistence\Proxy')
-            && $refObject instanceof Proxy && !$refObject->__isInitialized()
-        ) {
+        if (null !== $refObject && $refObject instanceof Proxy && !$refObject->__isInitialized()) {
             $refObject->__load();
         }
     }

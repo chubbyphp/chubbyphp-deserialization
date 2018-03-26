@@ -2,20 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Deserialization\Denormalizer\Relation;
+namespace Chubbyphp\Deserialization\Denormalizer\Relation\Doctrine;
 
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
-use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Doctrine\Common\Persistence\Proxy;
 
-/**
- * @deprecated use Basic or Doctrine ReferenceManyFieldDenormalizer
- */
-final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
+final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
 {
     /**
      * @var callable
@@ -44,7 +40,6 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
      * @param DenormalizerContextInterface $context
      * @param DenormalizerInterface|null   $denormalizer
      *
-     * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
@@ -60,35 +55,22 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
             return;
         }
 
-        if (!is_array($value)) {
-            throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
+        if (!is_string($value)) {
+            throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'string');
         }
 
         $repository = $this->repository;
 
-        $refObjects = [];
-        foreach ($value as $i => $subValue) {
-            $subPath = $path.'['.$i.']';
+        $refObject = $repository($value);
 
-            if (!is_string($subValue)) {
-                throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'string');
-            }
+        $this->resolveProxy($refObject);
 
-            $refObject = $repository($subValue);
-
-            $this->resolveProxy($refObject);
-
-            $refObjects[$i] = $refObject;
-        }
-
-        $this->accessor->setValue($object, $refObjects);
+        $this->accessor->setValue($object, $refObject);
     }
 
     private function resolveProxy($refObject)
     {
-        if (null !== $refObject && interface_exists('Doctrine\Common\Persistence\Proxy')
-            && $refObject instanceof Proxy && !$refObject->__isInitialized()
-        ) {
+        if (null !== $refObject && $refObject instanceof Proxy && !$refObject->__isInitialized()) {
             $refObject->__load();
         }
     }

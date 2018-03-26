@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Tests\Deserialization\Denormalizer\Relation;
+namespace Chubbyphp\Tests\Deserialization\Denormalizer\Relation\Doctrine;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
-use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\Relation\Doctrine\ReferenceOneFieldDenormalizer;
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Doctrine\Common\Persistence\Proxy;
@@ -14,7 +14,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer
+ * @covers \Chubbyphp\Deserialization\Denormalizer\Relation\Doctrine\ReferenceOneFieldDenormalizer
  */
 class ReferenceOneFieldDenormalizerTest extends TestCase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Deserialization\Denormalizer\Relation;
+namespace Chubbyphp\Deserialization\Denormalizer\Relation\Doctrine;
 
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
@@ -10,11 +10,9 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\Proxy;
 
-/**
- * @deprecated use Basic or Doctrine ReferenceManyFieldDenormalizer
- */
 final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
 {
     /**
@@ -66,7 +64,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
 
         $repository = $this->repository;
 
-        $refObjects = [];
+        $refObjects = new ArrayCollection();
         foreach ($value as $i => $subValue) {
             $subPath = $path.'['.$i.']';
 
@@ -86,9 +84,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
 
     private function resolveProxy($refObject)
     {
-        if (null !== $refObject && interface_exists('Doctrine\Common\Persistence\Proxy')
-            && $refObject instanceof Proxy && !$refObject->__isInitialized()
-        ) {
+        if (null !== $refObject && $refObject instanceof Proxy && !$refObject->__isInitialized()) {
             $refObject->__load();
         }
     }
