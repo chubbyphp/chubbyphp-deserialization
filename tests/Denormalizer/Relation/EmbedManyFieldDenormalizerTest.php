@@ -10,6 +10,7 @@ use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\Proxy;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -129,6 +130,28 @@ class EmbedManyFieldDenormalizerTest extends TestCase
         self::assertSame('name', $parent->getChildren()[0]->getName());
     }
 
+    public function testDenormalizeFieldWithExistingChildAndCollection()
+    {
+        $parent = $this->getParent();
+        $parent->setChildren([$this->getChild()]);
+
+        $fieldDenormalizer = new EmbedManyFieldDenormalizer(
+            get_class($this->getChild()),
+            $this->getAccessor(),
+            ArrayCollection::class
+        );
+
+        $fieldDenormalizer->denormalizeField(
+            'children',
+            $parent,
+            [['name' => 'name']],
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
+
+        self::assertSame('name', $parent->getChildren()[0]->getName());
+    }
+
     /**
      * @return object
      */
@@ -149,11 +172,11 @@ class EmbedManyFieldDenormalizerTest extends TestCase
             }
 
             /**
-             * @param array|null $children
+             * @param array $children
              *
              * @return self
              */
-            public function setChildren(array $children = null): self
+            public function setChildren($children): self
             {
                 $this->children = $children;
 

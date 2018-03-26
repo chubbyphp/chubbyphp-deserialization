@@ -9,6 +9,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceManyFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Persistence\Proxy;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -119,6 +120,31 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
         self::assertSame('php', $parent->getChildren()[0]->getName());
     }
 
+    public function testDenormalizeFieldWithCollection()
+    {
+        $parent = $this->getParent();
+
+        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
+            function (string $id) {
+                self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
+
+                return $this->getChild()->setName('php');
+            },
+            $this->getAccessor(),
+            ArrayCollection::class
+        );
+
+        $fieldDenormalizer->denormalizeField(
+            'children',
+            $parent,
+            ['60a9ee14-64d6-4992-8042-8d1528ac02d6'],
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
+
+        self::assertSame('php', $parent->getChildren()[0]->getName());
+    }
+
     /**
      * @return object
      */
@@ -139,11 +165,11 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
             }
 
             /**
-             * @param array|null $children
+             * @param array $children
              *
              * @return self
              */
-            public function setChildren(array $children = null): self
+            public function setChildren($children): self
             {
                 $this->children = $children;
 

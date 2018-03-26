@@ -25,13 +25,20 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     private $accessor;
 
     /**
+     * @var string|null
+     */
+    private $collectionClass;
+
+    /**
      * @param string            $class
      * @param AccessorInterface $accessor
+     * @param string|null       $collectionClass
      */
-    public function __construct(string $class, AccessorInterface $accessor)
+    public function __construct(string $class, AccessorInterface $accessor, string $collectionClass = null)
     {
         $this->class = $class;
         $this->accessor = $accessor;
+        $this->collectionClass = $collectionClass;
     }
 
     /**
@@ -67,7 +74,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
 
         $existingEmbeddedObjects = $this->accessor->getValue($object) ?? [];
 
-        $embeddedObjects = [];
+        $embeddedObjects = $this->newCollection();
         foreach ($value as $i => $subValue) {
             $subPath = $path.'['.$i.']';
 
@@ -104,5 +111,19 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
         }
 
         return $this->class;
+    }
+
+    /**
+     * @return array|\ArrayAccess|\Traversable
+     */
+    private function newCollection()
+    {
+        if (null === $this->collectionClass) {
+            return [];
+        }
+
+        $collectionClass = $this->collectionClass;
+
+        return new $collectionClass();
     }
 }
