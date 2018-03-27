@@ -68,9 +68,9 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
             throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
         }
 
-        $embObject = $this->getEmbObjectOrClass($this->accessor->getValue($object));
+        $relatedObject = $this->getRelatedObjectOrClass($this->accessor->getValue($object));
 
-        $this->accessor->setValue($object, $denormalizer->denormalize($embObject, $value, $context, $path));
+        $this->accessor->setValue($object, $denormalizer->denormalize($relatedObject, $value, $context, $path));
     }
 
     /**
@@ -78,7 +78,7 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
      *
      * @return string
      */
-    private function getEmbObjectOrClass($existEmbObject)
+    private function getRelatedObjectOrClass($existEmbObject)
     {
         if (null === $existEmbObject) {
             return $this->class;
@@ -89,12 +89,12 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
         return $existEmbObject;
     }
 
-    private function resolveProxy($refObject)
+    private function resolveProxy($relatedObject)
     {
-        if (null !== $refObject && interface_exists('Doctrine\Common\Persistence\Proxy')
-            && $refObject instanceof Proxy && !$refObject->__isInitialized()
+        if (null !== $relatedObject && interface_exists('Doctrine\Common\Persistence\Proxy')
+            && $relatedObject instanceof Proxy && !$relatedObject->__isInitialized()
         ) {
-            $refObject->__load();
+            $relatedObject->__load();
         }
     }
 }
