@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Denormalizer\Relation;
 
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
+use Chubbyphp\Deserialization\Doctrine\CollectionFactory\CollectionFactory as DoctrineCollectionFactory;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceManyFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
@@ -93,6 +94,31 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
         self::assertSame('php', $parent->getChildren()[0]->getName());
     }
 
+    public function testDenormalizeFieldWithCollection()
+    {
+        $parent = $this->getParent();
+
+        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
+            function (string $id) {
+                self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
+
+                return $this->getChild()->setName('php');
+            },
+            $this->getAccessor(),
+            new DoctrineCollectionFactory()
+        );
+
+        $fieldDenormalizer->denormalizeField(
+            'children',
+            $parent,
+            ['60a9ee14-64d6-4992-8042-8d1528ac02d6'],
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
+
+        self::assertSame('php', $parent->getChildren()[0]->getName());
+    }
+
     /**
      * @return object
      */
@@ -100,12 +126,12 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
     {
         return new class() {
             /**
-             * @var array|null
+             * @var null|array|\Traversable
              */
             private $children;
 
             /**
-             * @return array|null
+             * @return null|array|\Traversable
              */
             public function getChildren()
             {
@@ -113,11 +139,11 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
             }
 
             /**
-             * @param array|null $children
+             * @param null|array|\Traversable $children
              *
              * @return self
              */
-            public function setChildren(array $children = null): self
+            public function setChildren($children): self
             {
                 $this->children = $children;
 

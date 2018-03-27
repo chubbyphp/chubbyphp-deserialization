@@ -4,6 +4,7 @@
 <?php
 
 use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
+use Chubbyphp\Deserialization\Doctrine\CollectionFactory\CollectionFactory as DoctrineCollectionFactory;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceManyFieldDenormalizer;
 use MyProject\Model\ParentModel;
 use MyProject\Model\ChildModel;
@@ -16,7 +17,8 @@ $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
     function (string $id) {
         return;
     },
-    new PropertyAccessor('children')
+    new PropertyAccessor('children'),
+    new DoctrineCollectionFactory() // if you work with doctrine collections
 );
 
 $fieldDenormalizer->denormalizeField(
