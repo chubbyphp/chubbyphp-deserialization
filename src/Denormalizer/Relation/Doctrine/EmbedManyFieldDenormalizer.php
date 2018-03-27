@@ -68,7 +68,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
 
         $existEmbObjects = $this->accessor->getValue($object);
 
-        $embObjects = new ArrayCollection();
+        $relatedObjects = new ArrayCollection();
         foreach ($value as $i => $subValue) {
             $subPath = $path.'['.$i.']';
 
@@ -76,12 +76,12 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'array');
             }
 
-            $embObject = $this->getEmbObjectOrClass($existEmbObjects[$i] ?? null);
+            $relatedObject = $this->getRelatedObjectOrClass($existEmbObjects[$i] ?? null);
 
-            $embObjects[$i] = $denormalizer->denormalize($embObject, $subValue, $context, $subPath);
+            $relatedObjects[$i] = $denormalizer->denormalize($relatedObject, $subValue, $context, $subPath);
         }
 
-        $this->accessor->setValue($object, $embObjects);
+        $this->accessor->setValue($object, $relatedObjects);
     }
 
     /**
@@ -89,7 +89,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
      *
      * @return string
      */
-    private function getEmbObjectOrClass($existEmbObject)
+    private function getRelatedObjectOrClass($existEmbObject)
     {
         if (null === $existEmbObject) {
             return $this->class;
@@ -100,10 +100,10 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
         return $existEmbObject;
     }
 
-    private function resolveProxy($refObject)
+    private function resolveProxy($relatedObject)
     {
-        if (null !== $refObject && $refObject instanceof Proxy && !$refObject->__isInitialized()) {
-            $refObject->__load();
+        if (null !== $relatedObject && $relatedObject instanceof Proxy && !$relatedObject->__isInitialized()) {
+            $relatedObject->__load();
         }
     }
 }

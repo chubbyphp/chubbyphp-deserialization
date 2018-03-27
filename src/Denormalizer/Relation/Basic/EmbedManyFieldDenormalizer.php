@@ -66,7 +66,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
 
         $existEmbObjects = $this->accessor->getValue($object);
 
-        $embObjects = [];
+        $relatedObjects = [];
         foreach ($value as $i => $subValue) {
             $subPath = $path.'['.$i.']';
 
@@ -74,11 +74,11 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'array');
             }
 
-            $embObject = $existEmbObjects[$i] ?? $this->class;
+            $relatedObject = $existEmbObjects[$i] ?? $this->class;
 
-            $embObjects[$i] = $denormalizer->denormalize($embObject, $subValue, $context, $subPath);
+            $relatedObjects[$i] = $denormalizer->denormalize($relatedObject, $subValue, $context, $subPath);
         }
 
-        $this->accessor->setValue($object, $embObjects);
+        $this->accessor->setValue($object, $relatedObjects);
     }
 }

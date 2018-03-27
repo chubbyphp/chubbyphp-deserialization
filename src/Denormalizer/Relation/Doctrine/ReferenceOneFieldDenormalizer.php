@@ -61,17 +61,17 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
 
         $repository = $this->repository;
 
-        $refObject = $repository($value);
+        $relatedObject = $repository($value);
 
-        $this->resolveProxy($refObject);
+        $this->resolveProxy($relatedObject);
 
-        $this->accessor->setValue($object, $refObject);
+        $this->accessor->setValue($object, $relatedObject);
     }
 
-    private function resolveProxy($refObject)
+    private function resolveProxy($relatedObject)
     {
-        if (null !== $refObject && $refObject instanceof Proxy && !$refObject->__isInitialized()) {
-            $refObject->__load();
+        if (null !== $relatedObject && $relatedObject instanceof Proxy && !$relatedObject->__isInitialized()) {
+            $relatedObject->__load();
         }
     }
 }
