@@ -24,13 +24,20 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     private $accessor;
 
     /**
+     * @var callable|null
+     */
+    private $collectionFactory;
+
+    /**
      * @param callable          $repository
      * @param AccessorInterface $accessor
+     * @param callable|null     $collectionFactory
      */
-    public function __construct(callable $repository, AccessorInterface $accessor)
+    public function __construct(callable $repository, AccessorInterface $accessor, callable $collectionFactory = null)
     {
         $this->repository = $repository;
         $this->accessor = $accessor;
+        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -62,7 +69,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
 
         $repository = $this->repository;
 
-        $relatedObjects = [];
+        $relatedObjects = $this->createCollection();
         foreach ($value as $i => $subValue) {
             $subPath = $path.'['.$i.']';
 
@@ -74,5 +81,19 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
         }
 
         $this->accessor->setValue($object, $relatedObjects);
+    }
+
+    /**
+     * @return array|\Traversable|\ArrayAccess
+     */
+    private function createCollection()
+    {
+        if (null === $this->collectionFactory) {
+            return [];
+        }
+
+        $collectionFactory = $this->collectionFactory;
+
+        return $collectionFactory();
     }
 }
