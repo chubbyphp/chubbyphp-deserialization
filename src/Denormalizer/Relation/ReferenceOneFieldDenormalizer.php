@@ -9,7 +9,6 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Doctrine\Common\Persistence\Proxy;
 
 final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
 {
@@ -61,19 +60,6 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
 
         $repository = $this->repository;
 
-        $relatedObject = $repository($value);
-
-        $this->resolveProxy($relatedObject);
-
-        $this->accessor->setValue($object, $relatedObject);
-    }
-
-    private function resolveProxy($relatedObject)
-    {
-        if (null !== $relatedObject && interface_exists('Doctrine\Common\Persistence\Proxy')
-            && $relatedObject instanceof Proxy && !$relatedObject->__isInitialized()
-        ) {
-            $relatedObject->__load();
-        }
+        $this->accessor->setValue($object, $repository($value));
     }
 }

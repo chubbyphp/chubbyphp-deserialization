@@ -10,7 +10,6 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Doctrine\Common\Persistence\Proxy;
 
 final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
 {
@@ -75,36 +74,11 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'array');
             }
 
-            $relatedObject = $this->getRelatedObjectOrClass($existEmbObjects[$i] ?? null);
+            $relatedObject = $existEmbObjects[$i] ?? $this->class;
 
             $relatedObjects[$i] = $denormalizer->denormalize($relatedObject, $subValue, $context, $subPath);
         }
 
         $this->accessor->setValue($object, $relatedObjects);
-    }
-
-    /**
-     * @param object|null $existEmbObject
-     *
-     * @return string
-     */
-    private function getRelatedObjectOrClass($existEmbObject)
-    {
-        if (null === $existEmbObject) {
-            return $this->class;
-        }
-
-        $this->resolveProxy($existEmbObject);
-
-        return $existEmbObject;
-    }
-
-    private function resolveProxy($relatedObject)
-    {
-        if (null !== $relatedObject && interface_exists('Doctrine\Common\Persistence\Proxy')
-            && $relatedObject instanceof Proxy && !$relatedObject->__isInitialized()
-        ) {
-            $relatedObject->__load();
-        }
     }
 }
