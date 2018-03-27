@@ -63,7 +63,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
 
         $repository = $this->repository;
 
-        $referencedObjects = [];
+        $refObjects = [];
         foreach ($value as $i => $subValue) {
             $subPath = $path.'['.$i.']';
 
@@ -71,19 +71,22 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'string');
             }
 
-            $referencedObject = $repository($subValue);
+            $refObject = $repository($subValue);
 
-            if (null !== $referencedObject) {
-                if (interface_exists('Doctrine\Common\Persistence\Proxy')
-                    && $referencedObject instanceof Proxy && !$referencedObject->__isInitialized()
-                ) {
-                    $referencedObject->__load();
-                }
-            }
+            $this->resolveProxy($refObject);
 
-            $referencedObjects[$i] = $referencedObject;
+            $refObjects[$i] = $refObject;
         }
 
-        $this->accessor->setValue($object, $referencedObjects);
+        $this->accessor->setValue($object, $refObjects);
+    }
+
+    private function resolveProxy($refObject)
+    {
+        if (null !== $refObject && interface_exists('Doctrine\Common\Persistence\Proxy')
+            && $refObject instanceof Proxy && !$refObject->__isInitialized()
+        ) {
+            $refObject->__load();
+        }
     }
 }

@@ -55,24 +55,25 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
             return;
         }
 
-        if (is_string($value)) {
-            $repository = $this->repository;
-
-            $referencedObject = $repository($value);
-
-            if (null !== $referencedObject) {
-                if (interface_exists('Doctrine\Common\Persistence\Proxy')
-                    && $referencedObject instanceof Proxy && !$referencedObject->__isInitialized()
-                ) {
-                    $referencedObject->__load();
-                }
-            }
-
-            $this->accessor->setValue($object, $referencedObject);
-
-            return;
+        if (!is_string($value)) {
+            throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'string');
         }
 
-        throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'string');
+        $repository = $this->repository;
+
+        $refObject = $repository($value);
+
+        $this->resolveProxy($refObject);
+
+        $this->accessor->setValue($object, $refObject);
+    }
+
+    private function resolveProxy($refObject)
+    {
+        if (null !== $refObject && interface_exists('Doctrine\Common\Persistence\Proxy')
+            && $refObject instanceof Proxy && !$refObject->__isInitialized()
+        ) {
+            $refObject->__load();
+        }
     }
 }

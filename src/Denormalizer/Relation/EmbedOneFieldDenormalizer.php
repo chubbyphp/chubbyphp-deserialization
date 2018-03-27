@@ -61,23 +61,37 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
             throw DeserializerLogicException::createMissingDenormalizer($path);
         }
 
-        if (is_array($value)) {
-            $embeddedObject = $this->accessor->getValue($object);
-            if (null !== $embeddedObject) {
-                if (interface_exists('Doctrine\Common\Persistence\Proxy')
-                    && $embeddedObject instanceof Proxy && !$embeddedObject->__isInitialized()
-                ) {
-                    $embeddedObject->__load();
-                }
-            } else {
-                $embeddedObject = $this->class;
-            }
-
-            $this->accessor->setValue($object, $denormalizer->denormalize($embeddedObject, $value, $context, $path));
-
-            return;
+        if (!is_array($value)) {
+            throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
         }
 
-        throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
+        $embObject = $this->getEmbObjectOrClass($this->accessor->getValue($object));
+
+        $this->accessor->setValue($object, $denormalizer->denormalize($embObject, $value, $context, $path));
+    }
+
+    /**
+     * @param object|null $existEmbObject
+     *
+     * @return string
+     */
+    private function getEmbObjectOrClass($existEmbObject)
+    {
+        if (null === $existEmbObject) {
+            return $this->class;
+        }
+
+        $this->resolveProxy($existEmbObject);
+
+        return $existEmbObject;
+    }
+
+    private function resolveProxy($refObject)
+    {
+        if (null !== $refObject && interface_exists('Doctrine\Common\Persistence\Proxy')
+            && $refObject instanceof Proxy && !$refObject->__isInitialized()
+        ) {
+            $refObject->__load();
+        }
     }
 }
