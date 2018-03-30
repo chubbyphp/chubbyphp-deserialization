@@ -5,12 +5,12 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Denormalizer\Relation;
 
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
-use Chubbyphp\Deserialization\Doctrine\CollectionFactory\CollectionFactory as DoctrineCollectionFactory;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Doctrine\Common\Collections\ArrayCollection;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -96,12 +96,14 @@ class EmbedManyFieldDenormalizerTest extends TestCase
 
     public function testDenormalizeFieldWithNewChildAndCollectionCallback()
     {
+        $children = new ArrayCollection([]);
+
         $parent = $this->getParent();
+        $parent->setChildren($children);
 
         $fieldDenormalizer = new EmbedManyFieldDenormalizer(
             get_class($this->getChild()),
-            $this->getAccessor(),
-            new DoctrineCollectionFactory()
+            $this->getAccessor()
         );
         $fieldDenormalizer->denormalizeField(
             'children',
@@ -110,6 +112,8 @@ class EmbedManyFieldDenormalizerTest extends TestCase
             $this->getDenormalizerContext(),
             $this->getDenormalizer()
         );
+
+        self::assertSame($children, $parent->getChildren());
 
         self::assertSame('name', $parent->getChildren()[0]->getName());
     }
@@ -133,13 +137,14 @@ class EmbedManyFieldDenormalizerTest extends TestCase
 
     public function testDenormalizeFieldWithExistingChildAndCollection()
     {
+        $children = new ArrayCollection([$this->getChild()]);
+
         $parent = $this->getParent();
-        $parent->setChildren([$this->getChild()]);
+        $parent->setChildren($children);
 
         $fieldDenormalizer = new EmbedManyFieldDenormalizer(
             get_class($this->getChild()),
-            $this->getAccessor(),
-            new DoctrineCollectionFactory()
+            $this->getAccessor()
         );
         $fieldDenormalizer->denormalizeField(
             'children',
@@ -148,6 +153,8 @@ class EmbedManyFieldDenormalizerTest extends TestCase
             $this->getDenormalizerContext(),
             $this->getDenormalizer()
         );
+
+        self::assertSame($children, $parent->getChildren());
 
         self::assertSame('name', $parent->getChildren()[0]->getName());
     }
