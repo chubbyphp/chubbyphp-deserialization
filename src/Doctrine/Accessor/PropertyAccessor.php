@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Deserialization\Accessor;
+namespace Chubbyphp\Deserialization\Doctrine\Accessor;
 
+use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
-use Chubbyphp\Deserialization\Doctrine\Accessor\PropertyAccessor as DoctrinePropertyAccessor;
 use Doctrine\Common\Persistence\Proxy;
 
 final class PropertyAccessor implements AccessorInterface
@@ -54,24 +54,12 @@ final class PropertyAccessor implements AccessorInterface
      */
     private function getClass($object): string
     {
-        if (interface_exists('Doctrine\Common\Persistence\Proxy') && $object instanceof Proxy) {
-            $parentClass = (new \ReflectionClass($object))->getParentClass()->name;
-            @trigger_error(
-                sprintf(
-                    'Use "%s" instead of "%s" for "%s:%s"',
-                    DoctrinePropertyAccessor::class,
-                    self::class,
-                    $parentClass,
-                    $this->property
-                ),
-                E_USER_DEPRECATED
-            );
-
+        if ($object instanceof Proxy) {
             if (!$object->__isInitialized()) {
                 $object->__load();
             }
 
-            return $parentClass;
+            return (new \ReflectionClass($object))->getParentClass()->name;
         }
 
         return get_class($object);

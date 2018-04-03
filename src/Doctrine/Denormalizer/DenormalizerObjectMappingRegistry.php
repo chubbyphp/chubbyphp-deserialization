@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Chubbyphp\Deserialization\Denormalizer;
+namespace Chubbyphp\Deserialization\Doctrine\Denormalizer;
 
+use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistryInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
-use Chubbyphp\Deserialization\Doctrine\Denormalizer\DenormalizerObjectMappingRegistry as DoctrineDenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use Doctrine\Common\Persistence\Proxy;
 
@@ -46,9 +46,7 @@ final class DenormalizerObjectMappingRegistry implements DenormalizerObjectMappi
     {
         $reflectionClass = new \ReflectionClass($class);
 
-        if (interface_exists('Doctrine\Common\Persistence\Proxy')
-            && in_array(Proxy::class, $reflectionClass->getInterfaceNames(), true)
-        ) {
+        if (in_array(Proxy::class, $reflectionClass->getInterfaceNames(), true)) {
             $parentClass = $reflectionClass->getParentClass()->name;
             @trigger_error(
                 sprintf(

@@ -36,6 +36,8 @@ class PropertyAccessorTest extends TestCase
         $accessor->setValue($object, 'Name');
 
         self::assertSame('Name', $object->getName());
+
+        self::assertNull(error_get_last());
     }
 
     public function testSetValueCanAccessPrivatePropertyThroughDoctrineProxyClass()
@@ -59,6 +61,15 @@ class PropertyAccessorTest extends TestCase
         $accessor->setValue($object, 'Address');
 
         self::assertSame('Address', $accessor->getValue($object));
+
+        $error = error_get_last();
+
+        error_clear_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame('Use "Chubbyphp\Deserialization\Doctrine\Accessor\PropertyAccessor" instead of "Chubbyphp\Deserialization\Accessor\PropertyAccessor" for "Chubbyphp\Tests\Deserialization\Resources\Model\AbstractManyModel:address"', $error['message']);
     }
 
     public function testMissingSet()
@@ -94,6 +105,8 @@ class PropertyAccessorTest extends TestCase
         $accessor = new PropertyAccessor('name');
 
         self::assertSame('Name', $accessor->getValue($object));
+
+        self::assertNull(error_get_last());
     }
 
     public function testGetValueCanAccessPrivatePropertyThroughDoctrineProxyClass()
@@ -117,6 +130,15 @@ class PropertyAccessorTest extends TestCase
         $accessor = new PropertyAccessor('address');
 
         self::assertSame('Address', $accessor->getValue($object));
+
+        $error = error_get_last();
+
+        error_clear_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame('Use "Chubbyphp\Deserialization\Doctrine\Accessor\PropertyAccessor" instead of "Chubbyphp\Deserialization\Accessor\PropertyAccessor" for "Chubbyphp\Tests\Deserialization\Resources\Model\AbstractManyModel:address"', $error['message']);
     }
 
     public function testMissingGet()

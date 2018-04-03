@@ -16,6 +16,16 @@ use PHPUnit\Framework\TestCase;
  */
 class DenormalizerObjectMappingRegistryTest extends TestCase
 {
+    public function testGetMissingObjectMapping()
+    {
+        self::expectException(DeserializerLogicException::class);
+        self::expectExceptionMessage('There is no mapping for class: "stdClass"');
+
+        $registry = new DenormalizerObjectMappingRegistry([]);
+
+        $registry->getObjectMapping(get_class(new \stdClass()));
+    }
+
     public function testGetObjectMapping()
     {
         $object = $this->getObject();
@@ -27,16 +37,8 @@ class DenormalizerObjectMappingRegistryTest extends TestCase
         $mapping = $registry->getObjectMapping(get_class($object));
 
         self::assertInstanceOf(DenormalizationObjectMappingInterface::class, $mapping);
-    }
 
-    public function testGetMissingObjectMapping()
-    {
-        self::expectException(DeserializerLogicException::class);
-        self::expectExceptionMessage('There is no mapping for class: "stdClass"');
-
-        $registry = new DenormalizerObjectMappingRegistry([]);
-
-        $registry->getObjectMapping(get_class(new \stdClass()));
+        //self::assertNull(error_get_last());
     }
 
     public function testGetObjectMappingFromDoctrineProxy()
@@ -50,6 +52,15 @@ class DenormalizerObjectMappingRegistryTest extends TestCase
         $mapping = $registry->getObjectMapping(get_class($object));
 
         self::assertInstanceOf(DenormalizationObjectMappingInterface::class, $mapping);
+
+        $error = error_get_last();
+
+        error_clear_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame('Use "Chubbyphp\Deserialization\Doctrine\Denormalizer\DenormalizerObjectMappingRegistry" instead of "Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry" for "Chubbyphp\Tests\Deserialization\Resources\Model\AbstractManyModel"', $error['message']);
     }
 
     /**
