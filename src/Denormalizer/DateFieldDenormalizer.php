@@ -46,6 +46,7 @@ final class DateFieldDenormalizer implements FieldDenormalizerInterface
         try {
             $value = new \DateTime($trimmedValue);
         } catch (\Exception $exception) {
+            error_clear_last();
         }
 
         $this->fieldDenormalizer->denormalizeField($path, $object, $value, $context, $denormalizer);
