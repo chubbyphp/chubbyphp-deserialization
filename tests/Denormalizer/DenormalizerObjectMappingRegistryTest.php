@@ -38,7 +38,7 @@ class DenormalizerObjectMappingRegistryTest extends TestCase
 
         self::assertInstanceOf(DenormalizationObjectMappingInterface::class, $mapping);
 
-        //self::assertNull(error_get_last());
+        self::assertNull(error_get_last());
     }
 
     public function testGetObjectMappingFromDoctrineProxy()
