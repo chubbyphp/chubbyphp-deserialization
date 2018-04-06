@@ -93,8 +93,6 @@ class DateFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField('date', $object, 0, $this->getDenormalizerContext());
 
         self::assertSame(0, $object->getDate());
-
-        self::assertNull(error_get_last());
     }
 
     public function testDenormalizeZeroStringField()
