@@ -47,18 +47,7 @@ final class DenormalizerObjectMappingRegistry implements DenormalizerObjectMappi
         $reflectionClass = new \ReflectionClass($class);
 
         if (in_array(Proxy::class, $reflectionClass->getInterfaceNames(), true)) {
-            $parentClass = $reflectionClass->getParentClass()->name;
-            @trigger_error(
-                sprintf(
-                    'Use "%s" instead of "%s" for "%s"',
-                    DoctrineDenormalizerObjectMappingRegistry::class,
-                    self::class,
-                    $parentClass
-                ),
-                E_USER_DEPRECATED
-            );
-
-            $class = $parentClass;
+            $class = ($reflectionClass->getParentClass())->name;
         }
 
         if (isset($this->objectMappings[$class])) {
