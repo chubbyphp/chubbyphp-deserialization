@@ -37,7 +37,7 @@ final class DateFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
     ) {
-        if (null === $value || !is_scalar($value) || '' === $trimmedValue = trim((string) $value)) {
+        if (!is_string($value) || '' === $trimmedValue = trim($value)) {
             $this->fieldDenormalizer->denormalizeField($path, $object, $value, $context, $denormalizer);
 
             return;
@@ -46,6 +46,7 @@ final class DateFieldDenormalizer implements FieldDenormalizerInterface
         try {
             $value = new \DateTime($trimmedValue);
         } catch (\Exception $exception) {
+            error_clear_last();
         }
 
         $this->fieldDenormalizer->denormalizeField($path, $object, $value, $context, $denormalizer);

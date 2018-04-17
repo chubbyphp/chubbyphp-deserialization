@@ -34,6 +34,8 @@ class DateFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField('date', $object, '2017-13-01', $this->getDenormalizerContext());
 
         self::assertSame('2017-13-01', $object->getDate());
+
+        self::assertNull(error_get_last());
     }
 
     public function testDenormalizeEmptyField()
@@ -78,6 +80,8 @@ class DateFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField('date', $object, 'null', $this->getDenormalizerContext());
 
         self::assertSame('null', $object->getDate());
+
+        self::assertNull(error_get_last());
     }
 
     public function testDenormalizeZeroField()
@@ -100,6 +104,8 @@ class DateFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField('date', $object, '0', $this->getDenormalizerContext());
 
         self::assertSame('0', $object->getDate());
+
+        self::assertNull(error_get_last());
     }
 
     public function testDenormalizeArrayField()

@@ -24,20 +24,13 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     private $accessor;
 
     /**
-     * @var callable|null
-     */
-    private $collectionFactory;
-
-    /**
      * @param string            $class
      * @param AccessorInterface $accessor
-     * @param callable|null     $collectionFactory
      */
-    public function __construct(string $class, AccessorInterface $accessor, callable $collectionFactory = null)
+    public function __construct(string $class, AccessorInterface $accessor)
     {
         $this->class = $class;
         $this->accessor = $accessor;
-        $this->collectionFactory = $collectionFactory;
     }
 
     /**
@@ -71,9 +64,46 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
             throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
         }
 
-        $existEmbObjects = $this->accessor->getValue($object);
+        $relatedObjects = $this->accessor->getValue($object) ?? [];
 
-        $relatedObjects = $this->createCollection();
+        $existEmbObjects = $this->cleanRelatedObjects($relatedObjects);
+        $this->assignRelatedObjects($path, $value, $relatedObjects, $existEmbObjects, $context, $denormalizer);
+
+        $this->accessor->setValue($object, $relatedObjects);
+    }
+
+    /**
+     * @param array|\Traversable|\ArrayAccess $relatedObjects
+     *
+     * @return array
+     */
+    private function cleanRelatedObjects(&$relatedObjects)
+    {
+        $existEmbObjects = [];
+        foreach ($relatedObjects as $i => $existEmbObject) {
+            $existEmbObjects[$i] = $existEmbObject;
+            unset($relatedObjects[$i]);
+        }
+
+        return $existEmbObjects;
+    }
+
+    /**
+     * @param string                          $path
+     * @param array                           $value
+     * @param array|\Traversable|\ArrayAccess $relatedObjects
+     * @param array                           $existEmbObjects
+     * @param DenormalizerContextInterface    $context
+     * @param DenormalizerInterface           $denormalizer
+     */
+    private function assignRelatedObjects(
+        string $path,
+        array $value,
+        &$relatedObjects,
+        array $existEmbObjects,
+        DenormalizerContextInterface $context,
+        DenormalizerInterface $denormalizer
+    ) {
         foreach ($value as $i => $subValue) {
             $subPath = $path.'['.$i.']';
 
@@ -85,21 +115,5 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
 
             $relatedObjects[$i] = $denormalizer->denormalize($relatedObject, $subValue, $context, $subPath);
         }
-
-        $this->accessor->setValue($object, $relatedObjects);
-    }
-
-    /**
-     * @return array|\Traversable|\ArrayAccess
-     */
-    private function createCollection()
-    {
-        if (null === $this->collectionFactory) {
-            return [];
-        }
-
-        $collectionFactory = $this->collectionFactory;
-
-        return $collectionFactory();
     }
 }
