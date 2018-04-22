@@ -22,13 +22,13 @@
         "symfony/yaml": "~2.7|~3.0"
     },
     "provide": {
-        "chubbyphp/chubbyphp-deserialization-doctrine": "self.version",
-        "chubbyphp/chubbyphp-deserialization-model": "self.version"
+        "chubbyphp/chubbyphp-deserialization-doctrine": "1.0",
+        "chubbyphp/chubbyphp-deserialization-model": "1.0"
     },
     "replace": {
         "chubbyphp/chubbyphp-deserialize": "self.version",
-        "chubbyphp/chubbyphp-deserialization-doctrine": "self.version",
-        "chubbyphp/chubbyphp-deserialization-model": "self.version"
+        "chubbyphp/chubbyphp-deserialization-doctrine": "1.0",
+        "chubbyphp/chubbyphp-deserialization-model": "1.0"
     },
     "autoload": {
         "psr-4": {
