@@ -22,7 +22,7 @@
     },
     "replace": {
         "chubbyphp/chubbyphp-deserialize": "self.version",
-        "cchubbyphp/chubbyphp-deserialization-doctrine": "self.version"
+        "chubbyphp/chubbyphp-deserialization-doctrine": "self.version"
     },
     "autoload": {
         "psr-4": {
