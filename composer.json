@@ -21,6 +21,10 @@
         "pimple/pimple": "~3.0",
         "symfony/yaml": "~2.7|~3.0"
     },
+    "provide": {
+        "chubbyphp/chubbyphp-deserialization-doctrine": "self.version",
+        "chubbyphp/chubbyphp-deserialization-model": "self.version"
+    },
     "replace": {
         "chubbyphp/chubbyphp-deserialize": "self.version",
         "chubbyphp/chubbyphp-deserialization-doctrine": "self.version",
