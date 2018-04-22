@@ -17,6 +17,7 @@ A simple deserialization.
 
 ## Suggest
 
+ * chubbyphp/chubbyphp-model: ~3.0
  * container-interop/container-interop: ~1.0
  * doctrine/common: ~2.2
  * pimple/pimple: ~3.0
@@ -56,6 +57,11 @@ $model->getName(); // name1
 
  * [PropertyModelCollectionDeserializer][2]
  * [PropertyModelReferenceDeserializer][3]
+
+#### Model
+
+ * [PropertyModelCollectionDeserializer][4]
+ * [PropertyModelReferenceDeserializer][5]
 
 ### Mapping
 
@@ -99,16 +105,16 @@ class ModelMapping implements ObjectMappingInterface
 }
 ```
 
- * [LazyObjectMapping][4]
- * [PropertyMapping][5]
+ * [LazyObjectMapping][6]
+ * [PropertyMapping][7]
 
 ### Provider
 
-* [ValidationProvider][6]
+* [ValidationProvider][8]
 
 ### Registry
 
-* [ObjectMappingRegistry][7]
+* [ObjectMappingRegistry][9]
 
 
 ### Transformer
@@ -134,10 +140,10 @@ $contentTypes = $transformer->getContentTypes();
 $data = $transformer->transform('{"key":"value"}', 'application/json');
 ```
 
-* [JsonTransformer][8]
-* [UrlEncodedTransformer][9]
-* [XmlTransformer][10]
-* [YamlTransformer][11]
+* [JsonTransformer][10]
+* [UrlEncodedTransformer][11]
+* [XmlTransformer][12]
+* [YamlTransformer][13]
 
 ## Copyright
 
@@ -149,16 +155,19 @@ Dominik Zogg 2017
 [2]: doc/Doctrine/Deserializer/PropertyModelCollectionDeserializer.md
 [3]: doc/Doctrine/Deserializer/PropertyModelReferenceDeserializer.md
 
-[4]: doc/Mapping/LazyObjectMapping.md
-[5]: doc/Mapping/PropertyMapping.md
+[4]: doc/Model/Deserializer/PropertyModelCollectionDeserializer.md
+[5]: doc/Model/Deserializer/PropertyModelReferenceDeserializer.md
 
-[6]: doc/Provider/DeserializationProvider.md
+[6]: doc/Mapping/LazyObjectMapping.md
+[7]: doc/Mapping/PropertyMapping.md
 
-[7]: doc/Registry/ObjectMappingRegistry.md
+[8]: doc/Provider/DeserializationProvider.md
 
-[8]: doc/Transformer/JsonTransformer.md
-[9]: doc/Transformer/UrlEncodedTransformer.md
-[10]: doc/Transformer/XmlTransformer.md
-[11]: doc/Transformer/YamlTransformer.md
+[9]: doc/Registry/ObjectMappingRegistry.md
+
+[10]: doc/Transformer/JsonTransformer.md
+[11]: doc/Transformer/UrlEncodedTransformer.md
+[12]: doc/Transformer/XmlTransformer.md
+[13]: doc/Transformer/YamlTransformer.md
 
 
