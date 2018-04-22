@@ -15,19 +15,24 @@
     },
     "require-dev": {
         "phpunit/phpunit": "~5.5",
+        "doctrine/common": "~2.2",
         "container-interop/container-interop": "~1.0",
         "pimple/pimple": "~3.0",
         "symfony/yaml": "~2.7|~3.0"
     },
     "replace": {
-        "chubbyphp/chubbyphp-deserialize": "self.version"
+        "chubbyphp/chubbyphp-deserialize": "self.version",
+        "cchubbyphp/chubbyphp-deserialization-doctrine": "self.version"
     },
     "autoload": {
-        "psr-4": { "Chubbyphp\\Deserialization\\": "src/" }
+        "psr-4": {
+          "Chubbyphp\\DeserializationDoctrine\\": "src/Doctrine",
+          "Chubbyphp\\Deserialization\\": "src/"
+        }
     },
     "extra": {
         "branch-alias": {
-            "dev-master": "1.1-dev"
+            "dev-master": "1.2-dev"
         }
     }
 }

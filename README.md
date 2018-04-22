@@ -18,6 +18,7 @@ A simple deserialization.
 ## Suggest
 
  * container-interop/container-interop: ~1.0
+ * doctrine/common: ~2.2
  * pimple/pimple: ~3.0
  * symfony/yaml: ~2.7|~3.0
 
@@ -26,7 +27,7 @@ A simple deserialization.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "~1.1"
+composer require chubbyphp/chubbyphp-deserialization "~1.2"
 ```
 
 ## Usage
@@ -50,6 +51,11 @@ $model->getName(); // name1
 $model = $deserializer->deserializeByObject(['name' => 'name1'], new Model);
 $model->getName(); // name1
 ```
+
+#### Doctrine
+
+ * [PropertyModelCollectionDeserializer][2]
+ * [PropertyModelReferenceDeserializer][3]
 
 ### Mapping
 
@@ -93,16 +99,16 @@ class ModelMapping implements ObjectMappingInterface
 }
 ```
 
- * [LazyObjectMapping][2]
- * [PropertyMapping][3]
+ * [LazyObjectMapping][4]
+ * [PropertyMapping][5]
 
 ### Provider
 
-* [ValidationProvider][4]
+* [ValidationProvider][6]
 
 ### Registry
 
-* [ObjectMappingRegistry][5]
+* [ObjectMappingRegistry][7]
 
 
 ### Transformer
@@ -128,10 +134,10 @@ $contentTypes = $transformer->getContentTypes();
 $data = $transformer->transform('{"key":"value"}', 'application/json');
 ```
 
-* [JsonTransformer][6]
-* [UrlEncodedTransformer][7]
-* [XmlTransformer][8]
-* [YamlTransformer][9]
+* [JsonTransformer][8]
+* [UrlEncodedTransformer][9]
+* [XmlTransformer][10]
+* [YamlTransformer][11]
 
 ## Copyright
 
@@ -140,15 +146,19 @@ Dominik Zogg 2017
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-deserialization
 
-[2]: doc/Mapping/LazyObjectMapping.md
-[3]: doc/Mapping/PropertyMapping.md
+[2]: doc/Doctrine/Deserializer/PropertyModelCollectionDeserializer.md
+[3]: doc/Doctrine/Deserializer/PropertyModelReferenceDeserializer.md
 
-[4]: doc/Provider/DeserializationProvider.md
+[4]: doc/Mapping/LazyObjectMapping.md
+[5]: doc/Mapping/PropertyMapping.md
 
-[5]: doc/Registry/ObjectMappingRegistry.md
+[6]: doc/Provider/DeserializationProvider.md
 
-[6]: doc/Transformer/JsonTransformer.md
-[7]: doc/Transformer/UrlEncodedTransformer.md
-[8]: doc/Transformer/XmlTransformer.md
-[9]: doc/Transformer/YamlTransformer.md
+[7]: doc/Registry/ObjectMappingRegistry.md
+
+[8]: doc/Transformer/JsonTransformer.md
+[9]: doc/Transformer/UrlEncodedTransformer.md
+[10]: doc/Transformer/XmlTransformer.md
+[11]: doc/Transformer/YamlTransformer.md
+
 
