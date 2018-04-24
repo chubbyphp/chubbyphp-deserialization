@@ -35,7 +35,7 @@ class UrlEncodedTypeDecoderTest extends AbstractTypeDecoderTest
 
     public function testTypes()
     {
-        $urlEncoded = 'id=id1&name=A+fancy+Name&treeValues[1][2]=3&progress=76.8&active=1&phone=0041000000000';
+        $urlEncoded = 'id=id1&name=A+fancy+Name&treeValues[1][2]=3&progress=76.8&active=true&phone=0041000000000';
 
         $decoder = new UrlEncodedTypeDecoder();
 
@@ -45,7 +45,7 @@ class UrlEncodedTypeDecoderTest extends AbstractTypeDecoderTest
         self::assertSame('A fancy Name', $data['name']);
         self::assertSame([1 => [2 => 3]], $data['treeValues']);
         self::assertSame(76.8, $data['progress']);
-        //self::assertSame(true, $data['active']); // to idea to solve this in general
+        self::assertSame(true, $data['active']);
         self::assertSame('0041000000000', $data['phone']);
     }
 
