@@ -175,7 +175,8 @@ EOD;
         }
     },
     "progress": 76.8,
-    "active": true
+    "active": true,
+    "phone": "0041000000000"
 }
 EOD;
 
@@ -188,6 +189,7 @@ EOD;
         self::assertSame([1 => [2 => 3]], $data['treeValues']);
         self::assertSame(76.8, $data['progress']);
         self::assertSame(true, $data['active']);
+        self::assertSame('0041000000000', $data['phone']);
     }
 
     public function testInvalidDecode()

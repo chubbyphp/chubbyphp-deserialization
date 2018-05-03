@@ -63,16 +63,24 @@ final class UrlEncodedTypeDecoder implements TypeDecoderInterface
      */
     private function fixValue(string $value)
     {
+        if ('' === $value) {
+            return null;
+        }
+
+        if ('true' === $value) {
+            return true;
+        }
+
+        if ('false' === $value) {
+            return false;
+        }
+
         if (is_numeric($value) && '0' !== $value[0]) {
             if ((string) (int) $value === $value) {
                 return (int) $value;
             }
 
             return (float) $value;
-        }
-
-        if ('' === $value) {
-            return null;
         }
 
         return $value;

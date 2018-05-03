@@ -174,6 +174,7 @@ EOD;
   </treeValues>
   <progress type="float">76.8</progress>
   <active type="boolean">true</active>
+  <phone type="string">0041000000000</phone>
 </object>
 EOD;
 
@@ -186,6 +187,7 @@ EOD;
         self::assertSame([1 => [2 => 3]], $data['treeValues']);
         self::assertSame(76.8, $data['progress']);
         self::assertSame(true, $data['active']);
+        self::assertSame('0041000000000', $data['phone']);
     }
 
     public function testInvalidDecode()
