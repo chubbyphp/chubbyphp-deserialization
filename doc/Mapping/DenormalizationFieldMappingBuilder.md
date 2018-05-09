@@ -6,6 +6,7 @@
 use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 
 $fieldMapping = DenormalizationFieldMappingBuilder::create('name')
     ->setGroups(['group1'])
@@ -14,6 +15,7 @@ $fieldMapping = DenormalizationFieldMappingBuilder::create('name')
             new PropertyAccessor('name')
         )
     )
+    ->setForceType(DenormalizationFieldMappingInterface::FORCETYPE_INT)
     ->getMapping();
 
 echo $fieldMapping->getName();
@@ -25,4 +27,7 @@ print_r($fieldMapping->getGroups());
 $fieldMapping
     ->getFieldDenormalizer()
     ->denormalizeField(...);
+
+print_r($fieldMapping->getForceType());
+// 'integer'
 ```

@@ -12,7 +12,8 @@ $fieldMapping = new DenormalizationFieldMapping(
     ['group1'],
     new FieldDenormalizer(
         new PropertyAccessor('name')
-    )
+    ),
+    DenormalizationFieldMapping::FORCETYPE_INT
 );
 
 echo $fieldMapping->getName();
@@ -24,4 +25,7 @@ print_r($fieldMapping->getGroups());
 $fieldMapping
     ->getFieldDenormalizer()
     ->denormalizeField(...);
+
+print_r($fieldMapping->getForceType());
+// 'integer'
 ```

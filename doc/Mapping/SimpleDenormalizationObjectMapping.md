@@ -51,6 +51,7 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
     ): array {
         return [
             DenormalizationFieldMappingBuilder::create('name')
+                ->setForceType(DenormalizationFieldMappingInterface::FORCETYPE_STRING)
                 ->getMapping(),
         ];
     }
