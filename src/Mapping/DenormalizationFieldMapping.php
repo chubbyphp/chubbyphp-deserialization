@@ -24,15 +24,26 @@ final class DenormalizationFieldMapping implements DenormalizationFieldMappingIn
     private $fieldDenormalizer;
 
     /**
+     * @var string|null
+     */
+    private $forceType;
+
+    /**
      * @param string                     $name
      * @param array                      $groups
      * @param FieldDenormalizerInterface $fieldDenormalizer
+     * @param string|null                $forceType
      */
-    public function __construct($name, array $groups = [], FieldDenormalizerInterface $fieldDenormalizer)
-    {
+    public function __construct(
+        $name,
+        array $groups = [],
+        FieldDenormalizerInterface $fieldDenormalizer,
+        string $forceType = null
+    ) {
         $this->name = $name;
         $this->groups = $groups;
         $this->fieldDenormalizer = $fieldDenormalizer;
+        $this->forceType = $forceType;
     }
 
     /**
@@ -57,5 +68,13 @@ final class DenormalizationFieldMapping implements DenormalizationFieldMappingIn
     public function getFieldDenormalizer(): FieldDenormalizerInterface
     {
         return $this->fieldDenormalizer;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getForceType()
+    {
+        return $this->forceType;
     }
 }

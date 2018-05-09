@@ -64,10 +64,10 @@ final class Denormalizer implements DenormalizerInterface
             $object = $this->createNewObject($objectMapping, $path, $type);
         }
 
-        foreach ($objectMapping->getDenormalizationFieldMappings($path, $type) as $denormalizationFieldMapping) {
-            $this->denormalizeField($context, $denormalizationFieldMapping, $path, $data, $object);
+        foreach ($objectMapping->getDenormalizationFieldMappings($path, $type) as $fieldMapping) {
+            $this->denormalizeField($context, $fieldMapping, $path, $data, $object);
 
-            unset($data[$denormalizationFieldMapping->getName()]);
+            unset($data[$fieldMapping->getName()]);
         }
 
         if (null !== $context->getAllowedAdditionalFields()
@@ -125,26 +125,26 @@ final class Denormalizer implements DenormalizerInterface
 
     /**
      * @param DenormalizerContextInterface         $context
-     * @param DenormalizationFieldMappingInterface $denormalizationFieldMapping
+     * @param DenormalizationFieldMappingInterface $fieldMapping
      * @param string                               $path
      * @param array                                $data
      * @param object                               $object
      */
     private function denormalizeField(
         DenormalizerContextInterface $context,
-        DenormalizationFieldMappingInterface $denormalizationFieldMapping,
+        DenormalizationFieldMappingInterface $fieldMapping,
         string $path,
         array $data,
         $object
     ) {
-        $name = $denormalizationFieldMapping->getName();
+        $name = $fieldMapping->getName();
         if (!array_key_exists($name, $data)) {
             return;
         }
 
-        $fieldDenormalizer = $denormalizationFieldMapping->getFieldDenormalizer();
+        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
 
-        if (!$this->isWithinGroup($context, $denormalizationFieldMapping)) {
+        if (!$this->isWithinGroup($context, $fieldMapping)) {
             return;
         }
 
@@ -152,7 +152,49 @@ final class Denormalizer implements DenormalizerInterface
 
         $this->logger->info('deserialize: path {path}', ['path' => $subPath]);
 
-        $fieldDenormalizer->denormalizeField($subPath, $object, $data[$name], $context, $this);
+        $fieldDenormalizer->denormalizeField(
+            $subPath,
+            $object,
+            $this->forceType($fieldMapping, $data[$name]),
+            $context,
+            $this
+        );
+    }
+
+    /**
+     * @param DenormalizationFieldMappingInterface $fieldMapping
+     * @param mixed                                $value
+     *
+     * @return mixed
+     */
+    private function forceType(DenormalizationFieldMappingInterface $fieldMapping, $value)
+    {
+        if (!method_exists($fieldMapping, 'getForceType')) {
+            return $value;
+        }
+
+        if (null === $forceType = $fieldMapping->getForceType()) {
+            return $value;
+        }
+
+        $type = gettype($value);
+
+        if (!is_scalar($value) || $forceType === $type) {
+            return $value;
+        }
+
+        if (!in_array($forceType, DenormalizationFieldMappingInterface::FORCETYPES, true)) {
+            return $value;
+        }
+
+        $forcedValue = $value;
+        settype($forcedValue, $forceType);
+
+        if ((string) $value !== (string) $forcedValue) {
+            return $value;
+        }
+
+        return $forcedValue;
     }
 
     /**

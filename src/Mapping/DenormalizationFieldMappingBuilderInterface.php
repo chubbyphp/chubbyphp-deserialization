@@ -29,6 +29,12 @@ interface DenormalizationFieldMappingBuilderInterface
      */
     public function setFieldDenormalizer(FieldDenormalizerInterface $fieldDenormalizer): self;
 
+//    /**
+//     * @param string|null $forceType
+//     * @return self
+//     */
+//    public function setForceType(string $forceType = null): self;
+
     /**
      * @return DenormalizationFieldMappingInterface
      */

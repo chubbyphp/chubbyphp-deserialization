@@ -49,13 +49,13 @@ class DeserializerIntegrationTest extends TestCase
             'name' => 'Name',
             'one' => [
                 'name' => 'Name',
-                'value' => 'Value',
+                'value' => '5',
             ],
             'manies' => [
                 [
                     '_type' => 'many-model',
                     'name' => 'Name',
-                    'value' => 'Value',
+                    'value' => '5',
                 ],
             ],
         ]);
@@ -65,11 +65,11 @@ class DeserializerIntegrationTest extends TestCase
         self::assertSame('Name', $model->getName());
         self::assertInstanceOf(OneModel::class, $model->getOne());
         self::assertSame('Name', $model->getOne()->getName());
-        self::assertSame('Value', $model->getOne()->getValue());
+        self::assertSame(5, $model->getOne()->getValue());
         self::assertCount(1, $model->getManies());
         self::assertInstanceOf(ManyModel::class, $model->getManies()[0]);
         self::assertSame('Name', $model->getManies()[0]->getName());
-        self::assertSame('Value', $model->getManies()[0]->getValue());
+        self::assertSame(5, $model->getManies()[0]->getValue());
 
         self::assertEquals(
             [
@@ -150,7 +150,7 @@ class DeserializerIntegrationTest extends TestCase
             'manies' => [
                 [
                     'name' => 'Name',
-                    'value' => 'Value',
+                    'value' => '5',
                 ],
             ],
         ]);
@@ -182,7 +182,7 @@ class DeserializerIntegrationTest extends TestCase
                 [
                     '_type' => 'unknown',
                     'name' => 'Name',
-                    'value' => 'Value',
+                    'value' => '5',
                 ],
             ],
         ]);
@@ -213,13 +213,13 @@ class DeserializerIntegrationTest extends TestCase
             'name' => 'Name',
             'one' => [
                 'name' => 'Name',
-                'value' => 'Value',
+                'value' => '5',
             ],
             'manies' => [
                 [
                     '_type' => 'many-model',
                     'name' => 'Name',
-                    'value' => 'Value',
+                    'value' => '5',
                 ],
             ],
         ]);
@@ -242,11 +242,11 @@ class DeserializerIntegrationTest extends TestCase
         self::assertSame('Name', $model->getName());
         self::assertSame($oneModel, $model->getOne());
         self::assertSame('Name', $model->getOne()->getName());
-        self::assertSame('Value', $model->getOne()->getValue());
+        self::assertSame(5, $model->getOne()->getValue());
         self::assertCount(1, $model->getManies());
         self::assertSame($manyModel1, $model->getManies()[0]);
         self::assertSame('Name', $model->getManies()[0]->getName());
-        self::assertSame('Value', $model->getManies()[0]->getValue());
+        self::assertSame(5, $model->getManies()[0]->getValue());
 
         self::assertEquals(
             [

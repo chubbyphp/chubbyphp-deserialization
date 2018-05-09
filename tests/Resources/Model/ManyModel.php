@@ -7,24 +7,24 @@ namespace Chubbyphp\Tests\Deserialization\Resources\Model;
 final class ManyModel extends AbstractManyModel
 {
     /**
-     * @var string
+     * @var int
      */
     private $value;
 
     /**
-     * @return string
+     * @return int
      */
-    public function getValue(): string
+    public function getValue(): int
     {
         return $this->value;
     }
 
     /**
-     * @param string $value
+     * @param int $value
      *
      * @return self
      */
-    public function setValue(string $value): self
+    public function setValue(int $value): self
     {
         $this->value = $value;
 

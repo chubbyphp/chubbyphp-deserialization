@@ -47,7 +47,9 @@ final class OneModelMapping implements DenormalizationObjectMappingInterface
     {
         return [
             DenormalizationFieldMappingBuilder::create('name')->getMapping(),
-            DenormalizationFieldMappingBuilder::create('value')->getMapping(),
+            DenormalizationFieldMappingBuilder::create('value')
+                ->setForceType(DenormalizationFieldMappingInterface::FORCETYPE_INT)
+                ->getMapping(),
         ];
     }
 }

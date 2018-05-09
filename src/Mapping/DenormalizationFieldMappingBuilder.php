@@ -18,12 +18,17 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     /**
      * @var array
      */
-    private $groups;
+    private $groups = [];
 
     /**
      * @var FieldDenormalizerInterface
      */
     private $fieldDenormalizer;
+
+    /**
+     * @var string
+     */
+    private $forceType;
 
     private function __construct()
     {
@@ -38,7 +43,6 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     {
         $self = new self();
         $self->name = $name;
-        $self->groups = [];
         $self->fieldDenormalizer = new FieldDenormalizer(new PropertyAccessor($name));
 
         return $self;
@@ -70,10 +74,22 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     }
 
     /**
+     * @param string $forceType
+     *
+     * @return DenormalizationFieldMappingBuilderInterface
+     */
+    public function setForceType(string $forceType): DenormalizationFieldMappingBuilderInterface
+    {
+        $this->forceType = $forceType;
+
+        return $this;
+    }
+
+    /**
      * @return DenormalizationFieldMappingInterface
      */
     public function getMapping(): DenormalizationFieldMappingInterface
     {
-        return new DenormalizationFieldMapping($this->name, $this->groups, $this->fieldDenormalizer);
+        return new DenormalizationFieldMapping($this->name, $this->groups, $this->fieldDenormalizer, $this->forceType);
     }
 }
