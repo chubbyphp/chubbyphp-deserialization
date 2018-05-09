@@ -26,7 +26,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     private $fieldDenormalizer;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $forceType;
 
@@ -74,11 +74,11 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     }
 
     /**
-     * @param string $forceType
+     * @param string|null $forceType
      *
      * @return DenormalizationFieldMappingBuilderInterface
      */
-    public function setForceType(string $forceType): DenormalizationFieldMappingBuilderInterface
+    public function setForceType(string $forceType = null): DenormalizationFieldMappingBuilderInterface
     {
         $this->forceType = $forceType;
 
