@@ -26,9 +26,51 @@ class DenormalizerTest extends TestCase
             $this->getDenormalizationObjectMapping(),
         ]));
 
-        $object = $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name']);
+        $object = $denormalizer->denormalize(get_class($this->getObject()), [
+            'typeString' => 'typeString',
+            'typeInteger' => 5,
+            'typeFloat' => 5.5,
+            'typeBool' => true,
+        ]);
 
-        self::assertSame('name', $object->getName());
+        self::assertSame('typeString', $object->getTypeString());
+        self::assertSame(5, $object->getTypeInteger());
+        self::assertSame(5.5, $object->getTypeFloat());
+    }
+
+    public function testDenormalizeWithNewForcedTypes()
+    {
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
+            $this->getDenormalizationObjectMapping(),
+        ]));
+
+        $object = $denormalizer->denormalize(get_class($this->getObject()), [
+            'typeString' => 'typeString',
+            'typeInteger' => '5',
+            'typeFloat' => 5.5,
+            'typeBool' => true,
+        ]);
+
+        self::assertSame('typeString', $object->getTypeString());
+        self::assertSame(5, $object->getTypeInteger());
+        self::assertSame(5.5, $object->getTypeFloat());
+    }
+
+    public function testDenormalizeWithNewForcedTypesAndNotForceableValues()
+    {
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
+            $this->getDenormalizationObjectMapping(),
+        ]));
+
+        $object = $denormalizer->denormalize(get_class($this->getObject()), [
+            'typeString' => 'typeString',
+            'typeInteger' => 5.5,
+            'typeFloat' => '5cars',
+        ]);
+
+        self::assertSame('typeString', $object->getTypeString());
+        self::assertSame(5.5, $object->getTypeInteger());
+        self::assertSame('5cars', $object->getTypeFloat());
     }
 
     public function testDenormalizeWithNewAndType()
@@ -37,9 +79,9 @@ class DenormalizerTest extends TestCase
             $this->getDenormalizationObjectMapping(),
         ]));
 
-        $object = $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name', '_type' => 'object']);
+        $object = $denormalizer->denormalize(get_class($this->getObject()), ['typeString' => 'typeString', '_type' => 'object']);
 
-        self::assertSame('name', $object->getName());
+        self::assertSame('typeString', $object->getTypeString());
     }
 
     public function testDenormalizeWithExisting()
@@ -48,9 +90,9 @@ class DenormalizerTest extends TestCase
             $this->getDenormalizationObjectMapping(),
         ]));
 
-        $object = $denormalizer->denormalize($this->getObject(), ['name' => 'name']);
+        $object = $denormalizer->denormalize($this->getObject(), ['typeString' => 'typeString']);
 
-        self::assertSame('name', $object->getName());
+        self::assertSame('typeString', $object->getTypeString());
     }
 
     public function testDenormalizeWithDataContainsNumericKeys()
@@ -79,7 +121,7 @@ class DenormalizerTest extends TestCase
             ),
         ]));
 
-        $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name', '_type' => 'object']);
+        $denormalizer->denormalize(get_class($this->getObject()), ['typeString' => 'typeString', '_type' => 'object']);
     }
 
     public function testDenormalizeWithAdditionalData()
@@ -93,7 +135,7 @@ class DenormalizerTest extends TestCase
 
         $denormalizer->denormalize(
             get_class($this->getObject()),
-            ['name' => 'name', 'value' => 'value'],
+            ['typeString' => 'typeString', 'value' => 'value'],
             $this->getDenormalizerContext([])
         );
     }
@@ -106,10 +148,10 @@ class DenormalizerTest extends TestCase
 
         $object = $denormalizer->denormalize(
             get_class($this->getObject()),
-            ['name' => 'name', 'value' => 'value']
+            ['typeString' => 'typeString', 'value' => 'value']
         );
 
-        self::assertSame('name', $object->getName());
+        self::assertSame('typeString', $object->getTypeString());
     }
 
     public function testDenormalizeWithMissingObjectMapping()
@@ -118,7 +160,7 @@ class DenormalizerTest extends TestCase
 
         $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([]));
 
-        $denormalizer->denormalize(get_class($this->getObject()), ['name' => 'name']);
+        $denormalizer->denormalize(get_class($this->getObject()), ['typeString' => 'typeString']);
     }
 
     public function testDenormalizeWithNoData()
@@ -129,7 +171,7 @@ class DenormalizerTest extends TestCase
 
         $object = $denormalizer->denormalize(get_class($this->getObject()), []);
 
-        self::assertNull($object->getName());
+        self::assertNull($object->getTypeString());
     }
 
     public function testDenormalizeWithGroups()
@@ -140,11 +182,11 @@ class DenormalizerTest extends TestCase
 
         $object = $denormalizer->denormalize(
             get_class($this->getObject()),
-            ['name' => 'name'],
+            ['typeString' => 'typeString'],
             $this->getDenormalizerContext(null, ['read'])
         );
 
-        self::assertSame('name', $object->getName());
+        self::assertSame('typeString', $object->getTypeString());
     }
 
     public function testDenormalizeWithGroupsButNoGroupOnField()
@@ -155,11 +197,11 @@ class DenormalizerTest extends TestCase
 
         $object = $denormalizer->denormalize(
             get_class($this->getObject()),
-            ['name' => 'name'],
+            ['typeString' => 'typeString'],
             $this->getDenormalizerContext(null, ['read'])
         );
 
-        self::assertNull($object->getName());
+        self::assertNull($object->getTypeString());
     }
 
     /**
@@ -227,35 +269,76 @@ class DenormalizerTest extends TestCase
         });
 
         $objectMapping->expects(self::any())->method('getDenormalizationFieldMappings')->willReturn([
-            $this->getDenormalizationFieldMapping($groups),
+            $this->getDenormalizationFieldMapping('typeString', $groups),
+            $this->getDenormalizationFieldMappingWithForceType(
+                'typeInteger',
+                $groups,
+                DenormalizationFieldMappingInterface::FORCETYPE_INT
+            ),
+            $this->getDenormalizationFieldMappingWithForceType(
+                'typeFloat',
+                $groups,
+                'unknownType'
+            ),
+            $this->getDenormalizationFieldMappingWithForceType('typeBool', $groups),
         ]);
 
         return $objectMapping;
     }
 
     /**
-     * @param array $groups
+     * @param string      $name
+     * @param array       $groups
+     * @param string|null $forceType
      *
      * @return DenormalizationFieldMappingInterface
      */
-    private function getDenormalizationFieldMapping(array $groups = []): DenormalizationFieldMappingInterface
-    {
+    private function getDenormalizationFieldMapping(
+        string $name,
+        array $groups = []
+    ): DenormalizationFieldMappingInterface {
         /** @var DenormalizationFieldMappingInterface|\PHPUnit_Framework_MockObject_MockObject $fieldMapping */
         $fieldMapping = $this->getMockBuilder(DenormalizationFieldMappingInterface::class)
-            ->setMethods([])
             ->getMockForAbstractClass();
 
-        $fieldMapping->expects(self::any())->method('getName')->willReturn('name');
+        $fieldMapping->expects(self::any())->method('getName')->willReturn($name);
         $fieldMapping->expects(self::any())->method('getGroups')->willReturn($groups);
-        $fieldMapping->expects(self::any())->method('getFieldDenormalizer')->willReturn($this->getFieldDenormalizer());
+        $fieldMapping->expects(self::any())->method('getFieldDenormalizer')->willReturn($this->getFieldDenormalizer($name));
 
         return $fieldMapping;
     }
 
     /**
+     * @param string      $name
+     * @param array       $groups
+     * @param string|null $forceType
+     *
+     * @return DenormalizationFieldMappingInterface
+     */
+    private function getDenormalizationFieldMappingWithForceType(
+        string $name,
+        array $groups = [],
+        string $forceType = null
+    ): DenormalizationFieldMappingInterface {
+        /** @var DenormalizationFieldMappingInterface|\PHPUnit_Framework_MockObject_MockObject $fieldMapping */
+        $fieldMapping = $this->getMockBuilder(DenormalizationFieldMappingInterface::class)
+            ->setMethods(['getTypeString', 'getGroups', 'getFieldDenormalizer', 'getForceType'])
+            ->getMockForAbstractClass();
+
+        $fieldMapping->expects(self::any())->method('getName')->willReturn($name);
+        $fieldMapping->expects(self::any())->method('getGroups')->willReturn($groups);
+        $fieldMapping->expects(self::any())->method('getFieldDenormalizer')->willReturn($this->getFieldDenormalizer($name));
+        $fieldMapping->expects(self::any())->method('getForceType')->willReturn($forceType);
+
+        return $fieldMapping;
+    }
+
+    /**
+     * @param string $name
+     *
      * @return FieldDenormalizerInterface
      */
-    private function getFieldDenormalizer(): FieldDenormalizerInterface
+    private function getFieldDenormalizer(string $name): FieldDenormalizerInterface
     {
         /** @var FieldDenormalizerInterface|\PHPUnit_Framework_MockObject_MockObject $fieldDenormalizer */
         $fieldDenormalizer = $this->getMockBuilder(FieldDenormalizerInterface::class)
@@ -268,8 +351,9 @@ class DenormalizerTest extends TestCase
             $value,
             DenormalizerContextInterface $context,
             DenormalizerInterface $denormalizer = null
-        ) {
-            $object->setName($value);
+        ) use ($name) {
+            $method = 'set'.ucfirst($name);
+            $object->$method($value);
         });
 
         return $fieldDenormalizer;
@@ -305,24 +389,99 @@ class DenormalizerTest extends TestCase
             /**
              * @var string
              */
-            private $name;
+            private $typeString;
+
+            /**
+             * @var int
+             */
+            private $typeInteger;
+
+            /**
+             * @var float
+             */
+            private $typeFloat;
+
+            /**
+             * @var bool
+             */
+            private $typeBool;
 
             /**
              * @return string|null
              */
-            public function getName()
+            public function getTypeString()
             {
-                return $this->name;
+                return $this->typeString;
             }
 
             /**
-             * @param string $name
+             * @param string $typeString
              *
              * @return self
              */
-            public function setName(string $name): self
+            public function setTypeString($typeString): self
             {
-                $this->name = $name;
+                $this->typeString = $typeString;
+
+                return $this;
+            }
+
+            /**
+             * @return int
+             */
+            public function getTypeInteger()
+            {
+                return $this->typeInteger;
+            }
+
+            /**
+             * @param int $typeInteger
+             *
+             * @return self
+             */
+            public function setTypeInteger($typeInteger): self
+            {
+                $this->typeInteger = $typeInteger;
+
+                return $this;
+            }
+
+            /**
+             * @return float
+             */
+            public function getTypeFloat()
+            {
+                return $this->typeFloat;
+            }
+
+            /**
+             * @param float $typeFloat
+             *
+             * @return self
+             */
+            public function setTypeFloat($typeFloat): self
+            {
+                $this->typeFloat = $typeFloat;
+
+                return $this;
+            }
+
+            /**
+             * @return bool
+             */
+            public function isTypeBool()
+            {
+                return $this->typeBool;
+            }
+
+            /**
+             * @param bool $typeBool
+             *
+             * @return self
+             */
+            public function setTypeBool($typeBool): self
+            {
+                $this->typeBool = $typeBool;
 
                 return $this;
             }

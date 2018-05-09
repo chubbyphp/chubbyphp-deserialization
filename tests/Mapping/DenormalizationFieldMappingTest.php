@@ -6,6 +6,7 @@ namespace Chubbyphp\Tests\Deserialization\Mapping;
 
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMapping;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -34,6 +35,18 @@ class DenormalizationFieldMappingTest extends TestCase
         $fieldMapping = new DenormalizationFieldMapping('name', ['group1'], $fieldDenormalizer);
 
         self::assertSame($fieldDenormalizer, $fieldMapping->getFieldDenormalizer());
+    }
+
+    public function testGetForceType()
+    {
+        $fieldMapping = new DenormalizationFieldMapping(
+            'name',
+            ['group1'],
+            $this->getFieldDenormalizer(),
+            DenormalizationFieldMappingInterface::FORCETYPE_INT
+        );
+
+        self::assertSame(DenormalizationFieldMappingInterface::FORCETYPE_INT, $fieldMapping->getForceType());
     }
 
     /**
