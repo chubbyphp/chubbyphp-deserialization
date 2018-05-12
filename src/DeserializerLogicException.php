@@ -70,4 +70,14 @@ final class DeserializerLogicException extends \LogicException
     {
         return new self(sprintf('Factory does not return object, "%s" given at path: "%s"', $dataType, $path));
     }
+
+    /**
+     * @param string $type
+     *
+     * @return self
+     */
+    public static function createMissingType(string $type): self
+    {
+        return new self(sprintf('There is no type definition for type: "%s"', $type));
+    }
 }
