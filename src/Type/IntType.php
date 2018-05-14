@@ -33,10 +33,6 @@ final class IntType implements TypeInterface
             return $this->convertFloat($value);
         }
 
-        if (is_bool($value)) {
-            return $this->convertBool($value);
-        }
-
         return $value;
     }
 
@@ -66,15 +62,5 @@ final class IntType implements TypeInterface
         }
 
         return $value;
-    }
-
-    /**
-     * @param bool $value
-     *
-     * @return int
-     */
-    private function convertBool(bool $value): int
-    {
-        return $value ? 1 : 0;
     }
 }

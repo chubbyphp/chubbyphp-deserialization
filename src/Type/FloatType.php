@@ -33,10 +33,6 @@ final class FloatType implements TypeInterface
             return $this->convertInt($value);
         }
 
-        if (is_bool($value)) {
-            return $this->convertBool($value);
-        }
-
         return $value;
     }
 
@@ -62,15 +58,5 @@ final class FloatType implements TypeInterface
     private function convertInt(int $value): float
     {
         return (float) $value;
-    }
-
-    /**
-     * @param bool $value
-     *
-     * @return float
-     */
-    private function convertBool(bool $value): float
-    {
-        return $value ? 1.0 : 0.0;
     }
 }
