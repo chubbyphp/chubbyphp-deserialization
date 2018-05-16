@@ -25,7 +25,7 @@ class DateFieldDenormalizerTest extends TestCase
         self::assertSame('2017-01-01', $object->getDate()->format('Y-m-d'));
     }
 
-    public function testDenormalizeInvalidField()
+    public function testDenormalizeInvalidMonthField()
     {
         $object = $this->getObject();
         $object->setDate(new \DateTime('2016-01-01'));
@@ -36,6 +36,28 @@ class DateFieldDenormalizerTest extends TestCase
         self::assertSame('2017-13-01', $object->getDate());
 
         self::assertNull(error_get_last());
+    }
+
+    public function testDenormalizeInvalidDayField()
+    {
+        $object = $this->getObject();
+        $object->setDate(new \DateTime('2016-01-01'));
+
+        $fieldDenormalizer = new DateFieldDenormalizer($this->getFieldDenormalizer());
+        $fieldDenormalizer->denormalizeField('date', $object, '2017-02-31', $this->getDenormalizerContext());
+
+        self::assertSame('2017-02-31', $object->getDate());
+    }
+
+    public function testDenormalizeInvalidWithAllZeroField()
+    {
+        $object = $this->getObject();
+        $object->setDate(new \DateTime('2016-01-01'));
+
+        $fieldDenormalizer = new DateFieldDenormalizer($this->getFieldDenormalizer());
+        $fieldDenormalizer->denormalizeField('date', $object, '0000-00-00', $this->getDenormalizerContext());
+
+        self::assertSame('0000-00-00', $object->getDate());
     }
 
     public function testDenormalizeEmptyField()

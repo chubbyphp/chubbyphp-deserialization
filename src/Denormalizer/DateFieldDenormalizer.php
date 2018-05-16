@@ -44,7 +44,12 @@ final class DateFieldDenormalizer implements FieldDenormalizerInterface
         }
 
         try {
-            $value = new \DateTime($trimmedValue);
+            $dateTime = new \DateTime($trimmedValue);
+            $errors = \DateTime::getLastErrors();
+
+            if (0 === $errors['warning_count'] && 0 === $errors['error_count']) {
+                $value = $dateTime;
+            }
         } catch (\Exception $exception) {
             error_clear_last();
         }
