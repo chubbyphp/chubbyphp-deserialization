@@ -1,18 +1,18 @@
-# ForceTypeFieldDenormalizer
+# ConvertTypeFieldDenormalizer
 
 ```php
 <?php
 
 use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
-use Chubbyphp\Deserialization\Denormalizer\ForceTypeFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\ConvertTypeFieldDenormalizer;
 use MyProject\Model\Model;
 
 $model = new Model;
 $context = ...;
 
-$fieldDenormalizer = new ForceTypeFieldDenormalizer(
+$fieldDenormalizer = new ConvertTypeFieldDenormalizer(
     new PropertyAccessor('value'),
-    ForceTypeFieldDenormalizer::TYPE_FLOAT
+    ConvertTypeFieldDenormalizer::TYPE_FLOAT
 );
 
 $fieldDenormalizer->denormalizeField(

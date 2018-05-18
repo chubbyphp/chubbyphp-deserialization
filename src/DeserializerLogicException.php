@@ -70,4 +70,14 @@ final class DeserializerLogicException extends \LogicException
     {
         return new self(sprintf('Factory does not return object, "%s" given at path: "%s"', $dataType, $path));
     }
+
+    /**
+     * @param string $convertType
+     *
+     * @return self
+     */
+    public static function createConvertTypeDoesNotExists(string $convertType): self
+    {
+        return new self(sprintf('Convert type "%s" is not supported', $convertType));
+    }
 }

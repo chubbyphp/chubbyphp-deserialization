@@ -5,9 +5,10 @@ declare(strict_types=1);
 namespace Chubbyphp\Deserialization\Denormalizer;
 
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
+use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
-final class ForceTypeFieldDenormalizer implements FieldDenormalizerInterface
+final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
 {
     /**
      * @var AccessorInterface
@@ -19,13 +20,11 @@ final class ForceTypeFieldDenormalizer implements FieldDenormalizerInterface
      */
     private $type;
 
-    const TYPE_BOOL = 'boolean';
-    const TYPE_INT = 'integer';
+    const TYPE_INT = 'int';
     const TYPE_FLOAT = 'float';
     const TYPE_STRING = 'string';
 
     const TYPES = [
-        self::TYPE_BOOL,
         self::TYPE_INT,
         self::TYPE_FLOAT,
         self::TYPE_STRING,
@@ -34,9 +33,15 @@ final class ForceTypeFieldDenormalizer implements FieldDenormalizerInterface
     /**
      * @param AccessorInterface $accessor
      * @param string            $type
+     *
+     * @throws DeserializerLogicException
      */
     public function __construct(AccessorInterface $accessor, string $type)
     {
+        if (!in_array($type, self::TYPES, true)) {
+            throw DeserializerLogicException::createConvertTypeDoesNotExists($type);
+        }
+
         $this->accessor = $accessor;
         $this->type = $type;
     }
@@ -57,15 +62,15 @@ final class ForceTypeFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
     ) {
-        $this->accessor->setValue($object, $this->forceType($value));
+        $this->accessor->setValue($object, $this->convertType($value));
     }
 
     /**
-     * @param mixed$value
+     * @param mixed $value
      *
      * @return mixed
      */
-    private function forceType($value)
+    private function convertType($value)
     {
         $type = gettype($value);
 
@@ -73,18 +78,14 @@ final class ForceTypeFieldDenormalizer implements FieldDenormalizerInterface
             return $value;
         }
 
-        if (!in_array($this->type, self::TYPES, true)) {
+        $convertedValue = $value;
+
+        settype($convertedValue, $this->type);
+
+        if ((string) $value !== (string) $convertedValue) {
             return $value;
         }
 
-        $forcedValue = $value;
-
-        settype($forcedValue, $this->type);
-
-        if ((string) $value !== (string) $forcedValue) {
-            return $value;
-        }
-
-        return $forcedValue;
+        return $convertedValue;
     }
 }

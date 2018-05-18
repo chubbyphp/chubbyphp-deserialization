@@ -6,19 +6,28 @@ namespace Chubbyphp\Tests\Deserialization\Denormalizer;
 
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
-use Chubbyphp\Deserialization\Denormalizer\ForceTypeFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\ConvertTypeFieldDenormalizer;
+use Chubbyphp\Deserialization\DeserializerLogicException;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\Deserialization\Denormalizer\ForceTypeFieldDenormalizer
+ * @covers \Chubbyphp\Deserialization\Denormalizer\ConvertTypeFieldDenormalizer
  */
-class ForceTypeFieldDenormalizerTest extends TestCase
+class ConvertTypeFieldDenormalizerTest extends TestCase
 {
+    public function testDenormalizeFieldWithInvalidType()
+    {
+        self::expectException(DeserializerLogicException::class);
+        self::expectExceptionMessage('Convert type "type" is not supported');
+
+        new ConvertTypeFieldDenormalizer($this->getAccessor(), 'type');
+    }
+
     public function testDenormalizeFieldWithNull()
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ForceTypeFieldDenormalizer($this->getAccessor(), ForceTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
         $fieldDenormalizer->denormalizeField('value', $object, null, $this->getDenormalizerContext());
 
         self::assertNull($object->getValue());
@@ -28,27 +37,17 @@ class ForceTypeFieldDenormalizerTest extends TestCase
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ForceTypeFieldDenormalizer($this->getAccessor(), ForceTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
         $fieldDenormalizer->denormalizeField('value', $object, [], $this->getDenormalizerContext());
 
         self::assertSame([], $object->getValue());
-    }
-
-    public function testDenormalizeFieldWithInvalidType()
-    {
-        $object = $this->getObject();
-
-        $fieldDenormalizer = new ForceTypeFieldDenormalizer($this->getAccessor(), 'type');
-        $fieldDenormalizer->denormalizeField('value', $object, '5', $this->getDenormalizerContext());
-
-        self::assertSame('5', $object->getValue());
     }
 
     public function testDenormalizeFieldWithStringWhichCantBeConvertedToInteger()
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ForceTypeFieldDenormalizer($this->getAccessor(), ForceTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
         $fieldDenormalizer->denormalizeField('value', $object, '5.5', $this->getDenormalizerContext());
 
         self::assertSame('5.5', $object->getValue());
@@ -58,7 +57,7 @@ class ForceTypeFieldDenormalizerTest extends TestCase
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ForceTypeFieldDenormalizer($this->getAccessor(), ForceTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
         $fieldDenormalizer->denormalizeField('value', $object, '5', $this->getDenormalizerContext());
 
         self::assertSame(5, $object->getValue());
@@ -68,7 +67,7 @@ class ForceTypeFieldDenormalizerTest extends TestCase
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ForceTypeFieldDenormalizer($this->getAccessor(), ForceTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
         $fieldDenormalizer->denormalizeField('value', $object, 5.0, $this->getDenormalizerContext());
 
         self::assertSame(5, $object->getValue());
@@ -78,7 +77,7 @@ class ForceTypeFieldDenormalizerTest extends TestCase
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ForceTypeFieldDenormalizer($this->getAccessor(), ForceTypeFieldDenormalizer::TYPE_FLOAT);
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
         $fieldDenormalizer->denormalizeField('value', $object, '5.5.5', $this->getDenormalizerContext());
 
         self::assertSame('5.5.5', $object->getValue());
@@ -88,7 +87,7 @@ class ForceTypeFieldDenormalizerTest extends TestCase
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ForceTypeFieldDenormalizer($this->getAccessor(), ForceTypeFieldDenormalizer::TYPE_FLOAT);
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
         $fieldDenormalizer->denormalizeField('value', $object, '5.5', $this->getDenormalizerContext());
 
         self::assertSame(5.5, $object->getValue());
@@ -98,7 +97,7 @@ class ForceTypeFieldDenormalizerTest extends TestCase
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ForceTypeFieldDenormalizer($this->getAccessor(), ForceTypeFieldDenormalizer::TYPE_FLOAT);
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
         $fieldDenormalizer->denormalizeField('value', $object, 5, $this->getDenormalizerContext());
 
         self::assertSame(5.0, $object->getValue());
@@ -108,7 +107,7 @@ class ForceTypeFieldDenormalizerTest extends TestCase
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ForceTypeFieldDenormalizer($this->getAccessor(), ForceTypeFieldDenormalizer::TYPE_STRING);
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_STRING);
         $fieldDenormalizer->denormalizeField('value', $object, 5, $this->getDenormalizerContext());
 
         self::assertSame('5', $object->getValue());
@@ -118,7 +117,7 @@ class ForceTypeFieldDenormalizerTest extends TestCase
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ForceTypeFieldDenormalizer($this->getAccessor(), ForceTypeFieldDenormalizer::TYPE_STRING);
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_STRING);
         $fieldDenormalizer->denormalizeField('value', $object, 5.5, $this->getDenormalizerContext());
 
         self::assertSame('5.5', $object->getValue());

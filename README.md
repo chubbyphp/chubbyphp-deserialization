@@ -57,7 +57,7 @@ composer require chubbyphp/chubbyphp-deserialization "~2.1"
  * [CallbackFieldDenormalizer][10]
  * [DateFieldDenormalizer][11]
  * [FieldDenormalizer][12]
- * [ForceTypeFieldDenormalizer][13]
+ * [ConvertTypeFieldDenormalizer][13]
  
 ##### Relation Field Denormalizer
 
@@ -182,7 +182,7 @@ Dominik Zogg 2017
 [10]: doc/Denormalizer/CallbackFieldDenormalizer.md
 [11]: doc/Denormalizer/DateFieldDenormalizer.md
 [12]: doc/Denormalizer/FieldDenormalizer.md
-[13]: doc/Denormalizer/ForceTypeFieldDenormalizer.md
+[13]: doc/Denormalizer/ConvertTypeFieldDenormalizer.md
 
 [14]: doc/Denormalizer/Relation/EmbedManyFieldDenormalizer.md
 [15]: doc/Denormalizer/Relation/EmbedOneFieldDenormalizer.md

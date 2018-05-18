@@ -56,4 +56,11 @@ class DeserializerLogicExceptionTest extends TestCase
 
         self::assertSame('Factory does not return object, "string" given at path: "path"', $exception->getMessage());
     }
+
+    public function testCreateConvertTypeDoesNotExists()
+    {
+        $exception = DeserializerLogicException::createConvertTypeDoesNotExists('type');
+
+        self::assertSame('Convert type "type" is not supported', $exception->getMessage());
+    }
 }
