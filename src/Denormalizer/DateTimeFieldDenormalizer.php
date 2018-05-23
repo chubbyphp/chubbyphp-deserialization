@@ -6,7 +6,7 @@ namespace Chubbyphp\Deserialization\Denormalizer;
 
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
-final class DateFieldDenormalizer implements FieldDenormalizerInterface
+final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
 {
     /**
      * @var FieldDenormalizerInterface
@@ -18,7 +18,7 @@ final class DateFieldDenormalizer implements FieldDenormalizerInterface
      */
     public function __construct(FieldDenormalizerInterface $fieldDenormalizer)
     {
-        $this->fieldDenormalizer = new DateTimeFieldDenormalizer($fieldDenormalizer);
+        $this->fieldDenormalizer = $fieldDenormalizer;
     }
 
     /**
@@ -37,6 +37,23 @@ final class DateFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
     ) {
+        if (!is_string($value) || '' === $trimmedValue = trim($value)) {
+            $this->fieldDenormalizer->denormalizeField($path, $object, $value, $context, $denormalizer);
+
+            return;
+        }
+
+        try {
+            $dateTime = new \DateTime($trimmedValue);
+            $errors = \DateTime::getLastErrors();
+
+            if (0 === $errors['warning_count'] && 0 === $errors['error_count']) {
+                $value = $dateTime;
+            }
+        } catch (\Exception $exception) {
+            error_clear_last();
+        }
+
         $this->fieldDenormalizer->denormalizeField($path, $object, $value, $context, $denormalizer);
     }
 }

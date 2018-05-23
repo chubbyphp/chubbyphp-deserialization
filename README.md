@@ -29,7 +29,7 @@ A simple deserialization.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "~2.1"
+composer require chubbyphp/chubbyphp-deserialization "~2.2"
 ```
 
 ## Usage
@@ -57,7 +57,7 @@ composer require chubbyphp/chubbyphp-deserialization "~2.1"
 #### Field Denormalizer
 
  * [CallbackFieldDenormalizer][10]
- * [DateFieldDenormalizer][11]
+ * [DateTimeFieldDenormalizer][11]
  * [FieldDenormalizer][12]
  * [ConvertTypeFieldDenormalizer][13]
  
@@ -182,7 +182,7 @@ Dominik Zogg 2017
 [9]: doc/Denormalizer/Denormalizer.md
 
 [10]: doc/Denormalizer/CallbackFieldDenormalizer.md
-[11]: doc/Denormalizer/DateFieldDenormalizer.md
+[11]: doc/Denormalizer/DateTimeFieldDenormalizer.md
 [12]: doc/Denormalizer/FieldDenormalizer.md
 [13]: doc/Denormalizer/ConvertTypeFieldDenormalizer.md
 
