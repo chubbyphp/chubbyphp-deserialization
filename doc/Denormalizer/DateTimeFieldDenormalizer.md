@@ -20,7 +20,7 @@ $fieldDenormalizer = new DateTimeFieldDenormalizer(
 $fieldDenormalizer->denormalizeField(
     'at',
     $model,
-    new \DateTime('2017-01-01 22:00:00'),
+    '2017-01-01 22:00:00',
     $context
 );
 
