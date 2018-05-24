@@ -6,6 +6,9 @@ namespace Chubbyphp\Deserialization\Denormalizer;
 
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
+/**
+ * @deprecated use Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer
+ */
 final class DateFieldDenormalizer implements FieldDenormalizerInterface
 {
     /**
