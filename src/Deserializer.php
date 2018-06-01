@@ -31,11 +31,11 @@ final class Deserializer implements DeserializerInterface
     }
 
     /**
-     * @param object|string                $object
-     * @param string                       $data
-     * @param string                       $contentType
-     * @param DenormalizerContextInterface $context
-     * @param string                       $path
+     * @param object|string                     $object
+     * @param string                            $data
+     * @param string                            $contentType
+     * @param DenormalizerContextInterface|null $context
+     * @param string                            $path
      *
      * @return object
      */
