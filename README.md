@@ -22,7 +22,7 @@ A simple deserialization.
 
  * container-interop/container-interop: ~1.0
  * pimple/pimple: ~3.0
- * symfony/yaml: ~2.7|~3.0 (application/x-yaml support)
+ * symfony/yaml: ~2.7|~3.0|~4.0 (application/x-yaml support)
 
 ## Installation
 
