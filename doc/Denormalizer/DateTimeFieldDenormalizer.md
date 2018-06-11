@@ -5,16 +5,13 @@
 
 use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
 use Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer;
-use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
 use MyProject\Model\Model;
 
 $model = new Model;
 $context = ...;
 
 $fieldDenormalizer = new DateTimeFieldDenormalizer(
-    new FieldDenormalizer(
-        new PropertyAccessor('at')
-    )
+    new PropertyAccessor('at')
 );
 
 $fieldDenormalizer->denormalizeField(
