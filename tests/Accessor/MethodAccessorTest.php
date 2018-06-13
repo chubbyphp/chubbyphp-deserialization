@@ -46,7 +46,7 @@ class MethodAccessorTest extends TestCase
 
     public function testMissingSet()
     {
-        self::expectException(DeserializerLogicException::class);
+        $this->expectException(DeserializerLogicException::class);
 
         $object = new class() {
         };
@@ -153,7 +153,7 @@ class MethodAccessorTest extends TestCase
 
     public function testMissingGet()
     {
-        self::expectException(DeserializerLogicException::class);
+        $this->expectException(DeserializerLogicException::class);
 
         $object = new class() {
         };

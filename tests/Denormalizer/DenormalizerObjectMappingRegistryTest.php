@@ -31,8 +31,8 @@ class DenormalizerObjectMappingRegistryTest extends TestCase
 
     public function testGetMissingObjectMapping()
     {
-        self::expectException(DeserializerLogicException::class);
-        self::expectExceptionMessage('There is no mapping for class: "stdClass"');
+        $this->expectException(DeserializerLogicException::class);
+        $this->expectExceptionMessage('There is no mapping for class: "stdClass"');
 
         $registry = new DenormalizerObjectMappingRegistry([]);
 

@@ -19,8 +19,8 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
 {
     public function testDenormalizeFieldWithoutArrayDenormalizer()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid data type "double", needed "array" at path: "children"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('There is an invalid data type "double", needed "array" at path: "children"');
 
         $parent = $this->getParent();
 
@@ -36,8 +36,8 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
 
     public function testDenormalizeFieldWithArrayButNullChildDenormalizer()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid data type "double", needed "string" at path: "children[0]"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('There is an invalid data type "double", needed "string" at path: "children[0]"');
 
         $parent = $this->getParent();
 

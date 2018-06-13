@@ -64,8 +64,8 @@ class ReferenceOneFieldDenormalizerTest extends TestCase
 
     public function testDenormalizeFieldWithWrongType()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid data type "integer", needed "string" at path: "reference"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('There is an invalid data type "integer", needed "string" at path: "reference"');
 
         $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
             function (string $id) {},

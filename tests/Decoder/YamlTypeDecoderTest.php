@@ -157,16 +157,16 @@ EOD;
 
     public function testInvalidDecode()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Data is not parsable with content-type: "application/x-yaml"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('Data is not parsable with content-type: "application/x-yaml"');
         $decoderType = new YamlTypeDecoder();
         $decoderType->decode("\ttest");
     }
 
     public function testNotArrayDecode()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Data is not parsable with content-type: "application/x-yaml"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('Data is not parsable with content-type: "application/x-yaml"');
         $decoderType = new YamlTypeDecoder();
         $decoderType->decode('null');
     }

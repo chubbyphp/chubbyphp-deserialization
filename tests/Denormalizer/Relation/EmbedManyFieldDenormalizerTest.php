@@ -20,8 +20,8 @@ class EmbedManyFieldDenormalizerTest extends TestCase
 {
     public function testDenormalizeFieldWithMissingDenormalizer()
     {
-        self::expectException(DeserializerLogicException::class);
-        self::expectExceptionMessage('There is no denormalizer at path: "children"');
+        $this->expectException(DeserializerLogicException::class);
+        $this->expectExceptionMessage('There is no denormalizer at path: "children"');
 
         $parent = $this->getParent();
 
@@ -31,8 +31,8 @@ class EmbedManyFieldDenormalizerTest extends TestCase
 
     public function testDenormalizeFieldWithoutArrayDenormalizer()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid data type "string", needed "array" at path: "children"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('There is an invalid data type "string", needed "array" at path: "children"');
 
         $parent = $this->getParent();
 
@@ -48,8 +48,8 @@ class EmbedManyFieldDenormalizerTest extends TestCase
 
     public function testDenormalizeFieldWithArrayButStringChildDenormalizer()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid data type "string", needed "array" at path: "children[0]"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('There is an invalid data type "string", needed "array" at path: "children[0]"');
 
         $parent = $this->getParent();
 

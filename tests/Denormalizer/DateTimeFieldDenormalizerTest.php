@@ -17,8 +17,8 @@ class DateTimeFieldDenormalizerTest extends TestCase
 {
     public function testDenormalizeFieldWithInvalidConstructArgument()
     {
-        self::expectException(\TypeError::class);
-        self::expectExceptionMessage('Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer::__construct() expects parameter 1 to be Chubbyphp\Deserialization\Accessor\AccessorInterface|Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface, DateTime given');
+        $this->expectException(\TypeError::class);
+        $this->expectExceptionMessage('Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer::__construct() expects parameter 1 to be Chubbyphp\Deserialization\Accessor\AccessorInterface|Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface, DateTime given');
 
         new DateTimeFieldDenormalizer(new \DateTime());
     }

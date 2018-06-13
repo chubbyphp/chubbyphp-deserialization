@@ -129,8 +129,8 @@ class DeserializerIntegrationTest extends TestCase
 
     public function testDenormalizeByClassAndMissingChildType()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Missing object type, supported are "many-model" at path: "manies[0]"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('Missing object type, supported are "many-model" at path: "manies[0]"');
 
         $childModelMapping = new ManyModelMapping();
 
@@ -160,8 +160,8 @@ class DeserializerIntegrationTest extends TestCase
 
     public function testDenormalizeByClassAndInvalidChildType()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Unsupported object type "unknown", supported are "many-model" at path: "manies[0]"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('Unsupported object type "unknown", supported are "many-model" at path: "manies[0]"');
 
         $childModelMapping = new ManyModelMapping();
 
@@ -306,8 +306,8 @@ class DeserializerIntegrationTest extends TestCase
 
     public function testDenormalizeWithAdditionalFieldsExpectsException()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There are additional field(s) at paths: "unknownField"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('There are additional field(s) at paths: "unknownField"');
 
         $childModelMapping = new ManyModelMapping();
 

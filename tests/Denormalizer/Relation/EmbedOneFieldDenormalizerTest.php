@@ -19,8 +19,8 @@ class EmbedOneFieldDenormalizerTest extends TestCase
 {
     public function testDenormalizeFieldWithMissingDenormalizer()
     {
-        self::expectException(DeserializerLogicException::class);
-        self::expectExceptionMessage('There is no denormalizer at path: "reference"');
+        $this->expectException(DeserializerLogicException::class);
+        $this->expectExceptionMessage('There is no denormalizer at path: "reference"');
 
         $object = $this->getObject();
 
@@ -105,8 +105,8 @@ class EmbedOneFieldDenormalizerTest extends TestCase
 
     public function testDenormalizeFieldWithWrongType()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There is an invalid data type "string", needed "array" at path: "reference"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('There is an invalid data type "string", needed "array" at path: "reference"');
 
         $fieldDenormalizer = new EmbedOneFieldDenormalizer(
             get_class($this->getReference()),

@@ -52,8 +52,8 @@ class UrlEncodedTypeDecoderTest extends AbstractTypeDecoderTest
 
     public function testInvalidDecode()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Data is not parsable with content-type: "application/x-www-form-urlencoded"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('Data is not parsable with content-type: "application/x-www-form-urlencoded"');
         $decoderType = new UrlEncodedTypeDecoder();
         $decoderType->decode('====');
     }

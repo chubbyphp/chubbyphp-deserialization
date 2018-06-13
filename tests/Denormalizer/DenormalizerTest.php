@@ -55,8 +55,8 @@ class DenormalizerTest extends TestCase
 
     public function testDenormalizeWithDataContainsNumericKeys()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There are additional field(s) at paths: "0"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('There are additional field(s) at paths: "0"');
 
         $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
             $this->getDenormalizationObjectMapping(),
@@ -67,8 +67,8 @@ class DenormalizerTest extends TestCase
 
     public function testDenormalizeWithNotWorkingFactory()
     {
-        self::expectException(DeserializerLogicException::class);
-        self::expectExceptionMessage('Factory does not return object, "string" given at path: ""');
+        $this->expectException(DeserializerLogicException::class);
+        $this->expectExceptionMessage('Factory does not return object, "string" given at path: ""');
 
         $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
             $this->getDenormalizationObjectMapping(
@@ -84,8 +84,8 @@ class DenormalizerTest extends TestCase
 
     public function testDenormalizeWithAdditionalData()
     {
-        self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('There are additional field(s) at paths: "value"');
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('There are additional field(s) at paths: "value"');
 
         $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
             $this->getDenormalizationObjectMapping(),
@@ -114,7 +114,7 @@ class DenormalizerTest extends TestCase
 
     public function testDenormalizeWithMissingObjectMapping()
     {
-        self::expectException(DeserializerLogicException::class);
+        $this->expectException(DeserializerLogicException::class);
 
         $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([]));
 

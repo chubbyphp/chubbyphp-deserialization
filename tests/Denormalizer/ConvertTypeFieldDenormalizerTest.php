@@ -17,8 +17,8 @@ class ConvertTypeFieldDenormalizerTest extends TestCase
 {
     public function testDenormalizeFieldWithInvalidType()
     {
-        self::expectException(DeserializerLogicException::class);
-        self::expectExceptionMessage('Convert type "type" is not supported');
+        $this->expectException(DeserializerLogicException::class);
+        $this->expectExceptionMessage('Convert type "type" is not supported');
 
         new ConvertTypeFieldDenormalizer($this->getAccessor(), 'type');
     }
