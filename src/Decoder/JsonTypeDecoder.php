@@ -4,10 +4,28 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Decoder;
 
+use Chubbyphp\Deserialization\Decoder\Parsing\JsonParserException;
+use Chubbyphp\Deserialization\Decoder\Parsing\JsonParserInterface;
+use Chubbyphp\Deserialization\Decoder\Parsing\NativeJsonParser;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 final class JsonTypeDecoder implements TypeDecoderInterface
 {
+
+    /**
+     * @var JsonParserInterface
+     */
+    private $jsonParser;
+
+    /**
+     * JsonTypeDecoder constructor.
+     * @param JsonParserInterface $jsonParser
+     */
+    public function __construct(JsonParserInterface $jsonParser = null)
+    {
+        $this->jsonParser = $jsonParser ?? new NativeJsonParser();
+    }
+
     /**
      * @return string
      */
@@ -25,10 +43,10 @@ final class JsonTypeDecoder implements TypeDecoderInterface
      */
     public function decode(string $data): array
     {
-        $decoded = $json = json_decode($data, true);
-
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw DeserializerRuntimeException::createNotParsable($this->getContentType(), json_last_error_msg());
+        try {
+            $decoded = $this->jsonParser->parse($data);
+        } catch (JsonParserException $exception) {
+            throw DeserializerRuntimeException::createNotParsable($this->getContentType(), $exception->getMessage());
         }
 
         if (!is_array($decoded)) {
