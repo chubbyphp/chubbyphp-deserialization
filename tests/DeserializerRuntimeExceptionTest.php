@@ -19,11 +19,21 @@ class DeserializerRuntimeExceptionTest extends TestCase
         self::assertSame('There is an invalid data type "null", needed "array" at path: "path1"', $exception->getMessage());
     }
 
-    public function testCreateNotParsable()
+    public function testCreateNotParsableWithoutError()
     {
         $exception = DeserializerRuntimeException::createNotParsable('application/json');
 
         self::assertSame('Data is not parsable with content-type: "application/json"', $exception->getMessage());
+    }
+
+    public function testCreateNotParsableWithError()
+    {
+        $exception = DeserializerRuntimeException::createNotParsable('application/json', 'unknown');
+
+        self::assertSame(
+            'Data is not parsable with content-type: "application/json", error: "unknown"',
+            $exception->getMessage()
+        );
     }
 
     public function testCreateNotAllowedAddtionalFields()

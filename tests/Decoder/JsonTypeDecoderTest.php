@@ -197,7 +197,7 @@ EOD;
     public function testInvalidDecode()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Data is not parsable with content-type: "application/json"');
+        self::expectExceptionMessage('Data is not parsable with content-type: "application/json", error: "Syntax error"');
         $decoderType = new JsonTypeDecoder();
         $decoderType->decode('====');
     }
@@ -205,7 +205,7 @@ EOD;
     public function testNotArrayDecode()
     {
         self::expectException(DeserializerRuntimeException::class);
-        self::expectExceptionMessage('Data is not parsable with content-type: "application/json"');
+        self::expectExceptionMessage('Data is not parsable with content-type: "application/json", error: "Not an object"');
         $decoderType = new JsonTypeDecoder();
         $decoderType->decode('null');
     }

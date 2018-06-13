@@ -21,13 +21,19 @@ final class DeserializerRuntimeException extends \RuntimeException
     }
 
     /**
-     * @param string $contentType
+     * @param string      $contentType
+     * @param string|null $error
      *
      * @return self
      */
-    public static function createNotParsable(string $contentType): self
+    public static function createNotParsable(string $contentType, string $error = null): self
     {
-        return new self(sprintf('Data is not parsable with content-type: "%s"', $contentType));
+        $message = sprintf('Data is not parsable with content-type: "%s"', $contentType);
+        if (null !== $error) {
+            $message .= sprintf(', error: "%s"', $error);
+        }
+
+        return new self($message);
     }
 
     /**

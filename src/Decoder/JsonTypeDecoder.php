@@ -28,11 +28,11 @@ final class JsonTypeDecoder implements TypeDecoderInterface
         $decoded = $json = json_decode($data, true);
 
         if (JSON_ERROR_NONE !== json_last_error()) {
-            throw DeserializerRuntimeException::createNotParsable($this->getContentType());
+            throw DeserializerRuntimeException::createNotParsable($this->getContentType(), json_last_error_msg());
         }
 
         if (!is_array($decoded)) {
-            throw DeserializerRuntimeException::createNotParsable($this->getContentType());
+            throw DeserializerRuntimeException::createNotParsable($this->getContentType(), 'Not an object');
         }
 
         return $decoded;
