@@ -4,7 +4,13 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Mapping;
 
+use Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
+use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedOneFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceManyFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use PHPUnit\Framework\TestCase;
 
@@ -19,7 +25,52 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame([], $fieldMapping->getGroups());
-        self::assertInstanceOf(FieldDenormalizerInterface::class, $fieldMapping->getFieldDenormalizer());
+        self::assertInstanceOf(FieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+    }
+
+    public function testGetDefaultMappingForDateTime()
+    {
+        $fieldMapping = DenormalizationFieldMappingBuilder::createDateTime('name')->getMapping();
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertSame([], $fieldMapping->getGroups());
+        self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+    }
+
+    public function testGetDefaultMappingForEmbedMany()
+    {
+        $fieldMapping = DenormalizationFieldMappingBuilder::createEmbedMany('name', \stdClass::class)->getMapping();
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertSame([], $fieldMapping->getGroups());
+        self::assertInstanceOf(EmbedManyFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+    }
+
+    public function testGetDefaultMappingForEmbedOne()
+    {
+        $fieldMapping = DenormalizationFieldMappingBuilder::createEmbedOne('name', \stdClass::class)->getMapping();
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertSame([], $fieldMapping->getGroups());
+        self::assertInstanceOf(EmbedOneFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+    }
+
+    public function testGetDefaultMappingForReferenceMany()
+    {
+        $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceMany('name', function () {})->getMapping();
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertSame([], $fieldMapping->getGroups());
+        self::assertInstanceOf(ReferenceManyFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+    }
+
+    public function testGetDefaultMappingForReferenceOne()
+    {
+        $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceOne('name', function () {})->getMapping();
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertSame([], $fieldMapping->getGroups());
+        self::assertInstanceOf(ReferenceOneFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
     }
 
     public function testGetMapping()

@@ -16,7 +16,7 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     /**
      * @var string[]
      */
-    private $groups;
+    private $groups = [];
 
     /**
      * @var ServerRequestInterface|null
@@ -32,11 +32,7 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
      */
     public static function create(): DenormalizerContextBuilderInterface
     {
-        $self = new self();
-        $self->allowedAdditionalFields = null;
-        $self->groups = [];
-
-        return $self;
+        return new self();
     }
 
     /**
