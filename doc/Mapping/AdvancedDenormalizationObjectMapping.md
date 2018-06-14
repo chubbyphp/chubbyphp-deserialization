@@ -56,12 +56,8 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
     {
         return [
             DenormalizationFieldMappingBuilder::create('name')->getMapping(),
-            DenormalizationFieldMappingBuilder::create('one')->setFieldDenormalizer(
-                new EmbedOneFieldDenormalizer(OneModel::class, new PropertyAccessor('one'))
-            )->getMapping(),
-            DenormalizationFieldMappingBuilder::create('manies')->setFieldDenormalizer(
-                new EmbedManyFieldDenormalizer(AbstractManyModel::class, new PropertyAccessor('manies'))
-            )->getMapping(),
+            DenormalizationFieldMappingBuilder::createEmbedOne('one', OneModel::class)->getMapping(),
+            DenormalizationFieldMappingBuilder::createEmbedMany('manies', AbstractManyModel::class)->getMapping(),
         ];
     }
 }

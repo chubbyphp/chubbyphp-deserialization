@@ -4,9 +4,6 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Resources\Mapping;
 
-use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
-use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
-use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedOneFieldDenormalizer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
@@ -52,12 +49,8 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
     {
         return [
             DenormalizationFieldMappingBuilder::create('name')->getMapping(),
-            DenormalizationFieldMappingBuilder::create('one')->setFieldDenormalizer(
-                new EmbedOneFieldDenormalizer(OneModel::class, new PropertyAccessor('one'))
-            )->getMapping(),
-            DenormalizationFieldMappingBuilder::create('manies')->setFieldDenormalizer(
-                new EmbedManyFieldDenormalizer(AbstractManyModel::class, new PropertyAccessor('manies'))
-            )->getMapping(),
+            DenormalizationFieldMappingBuilder::createEmbedOne('one', OneModel::class)->getMapping(),
+            DenormalizationFieldMappingBuilder::createEmbedMany('manies', AbstractManyModel::class)->getMapping(),
         ];
     }
 }

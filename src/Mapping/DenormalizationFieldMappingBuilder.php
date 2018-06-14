@@ -5,8 +5,13 @@ declare(strict_types=1);
 namespace Chubbyphp\Deserialization\Mapping;
 
 use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
+use Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
+use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedOneFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceManyFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer;
 
 final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMappingBuilderInterface
 {
@@ -18,15 +23,16 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     /**
      * @var array
      */
-    private $groups;
+    private $groups = [];
 
     /**
-     * @var FieldDenormalizerInterface
+     * @var FieldDenormalizerInterface|null
      */
     private $fieldDenormalizer;
 
-    private function __construct()
+    private function __construct(string $name)
     {
+        $this->name = $name;
     }
 
     /**
@@ -36,10 +42,78 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
      */
     public static function create(string $name): DenormalizationFieldMappingBuilderInterface
     {
-        $self = new self();
-        $self->name = $name;
-        $self->groups = [];
-        $self->fieldDenormalizer = new FieldDenormalizer(new PropertyAccessor($name));
+        return new self($name);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @return DenormalizationFieldMappingBuilderInterface
+     */
+    public static function createDateTime(string $name): DenormalizationFieldMappingBuilderInterface
+    {
+        $self = new self($name);
+        $self->fieldDenormalizer = new DateTimeFieldDenormalizer(new PropertyAccessor($name));
+
+        return $self;
+    }
+
+    /**
+     * @param string $name
+     * @param string $class
+     *
+     * @return DenormalizationFieldMappingBuilderInterface
+     */
+    public static function createEmbedMany(string $name, string $class): DenormalizationFieldMappingBuilderInterface
+    {
+        $self = new self($name);
+        $self->fieldDenormalizer = new EmbedManyFieldDenormalizer($class, new PropertyAccessor($name));
+
+        return $self;
+    }
+
+    /**
+     * @param string $name
+     * @param string $class
+     *
+     * @return DenormalizationFieldMappingBuilderInterface
+     */
+    public static function createEmbedOne(string $name, string $class): DenormalizationFieldMappingBuilderInterface
+    {
+        $self = new self($name);
+        $self->fieldDenormalizer = new EmbedOneFieldDenormalizer($class, new PropertyAccessor($name));
+
+        return $self;
+    }
+
+    /**
+     * @param string   $name
+     * @param callable $repository
+     *
+     * @return DenormalizationFieldMappingBuilderInterface
+     */
+    public static function createReferenceMany(
+        string $name,
+        callable $repository
+    ): DenormalizationFieldMappingBuilderInterface {
+        $self = new self($name);
+        $self->fieldDenormalizer = new ReferenceManyFieldDenormalizer($repository, new PropertyAccessor($name));
+
+        return $self;
+    }
+
+    /**
+     * @param string   $name
+     * @param callable $repository
+     *
+     * @return DenormalizationFieldMappingBuilderInterface
+     */
+    public static function createReferenceOne(
+        string $name,
+        callable $repository
+    ): DenormalizationFieldMappingBuilderInterface {
+        $self = new self($name);
+        $self->fieldDenormalizer = new ReferenceOneFieldDenormalizer($repository, new PropertyAccessor($name));
 
         return $self;
     }
@@ -74,6 +148,10 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
      */
     public function getMapping(): DenormalizationFieldMappingInterface
     {
-        return new DenormalizationFieldMapping($this->name, $this->groups, $this->fieldDenormalizer);
+        return new DenormalizationFieldMapping(
+            $this->name,
+            $this->groups,
+            $this->fieldDenormalizer ?? new FieldDenormalizer(new PropertyAccessor($this->name))
+        );
     }
 }
