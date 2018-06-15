@@ -51,7 +51,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerInterface $denormalizer = null
     ) {
         if (null === $value) {
-            $this->accessor->setValue($object, $value);
+            $this->accessor->setValue($object, null);
 
             return;
         }
@@ -94,7 +94,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'string');
             }
 
-            $relatedObjects[$i] = $repository($subValue);
+            $relatedObjects[$i] = $repository($subValue) ?? $subValue;
         }
     }
 }

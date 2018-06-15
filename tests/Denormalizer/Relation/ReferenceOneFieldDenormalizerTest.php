@@ -62,6 +62,30 @@ class ReferenceOneFieldDenormalizerTest extends TestCase
         self::assertSame('php', $reference->getName());
     }
 
+    public function testDenormalizeFieldWithNotFoundValue()
+    {
+        $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
+            function (string $id) {
+                self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
+
+                return null;
+            },
+            $this->getAccessor()
+        );
+
+        $object = $this->getObject();
+
+        $fieldDenormalizer->denormalizeField(
+            'reference',
+            $object,
+            '60a9ee14-64d6-4992-8042-8d1528ac02d6',
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
+
+        self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $object->getReference());
+    }
+
     public function testDenormalizeFieldWithWrongType()
     {
         $this->expectException(DeserializerRuntimeException::class);

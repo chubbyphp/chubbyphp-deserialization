@@ -95,6 +95,31 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
         self::assertSame('php', $parent->getChildren()[0]->getName());
     }
 
+    public function testDenormalizeFieldWithNewChildAndNotFoundValue()
+    {
+        $parent = $this->getParent();
+        $parent->setChildren([]);
+
+        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
+            function (string $id) {
+                self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
+
+                return null;
+            },
+            $this->getAccessor()
+        );
+
+        $fieldDenormalizer->denormalizeField(
+            'children',
+            $parent,
+            ['60a9ee14-64d6-4992-8042-8d1528ac02d6'],
+            $this->getDenormalizerContext(),
+            $this->getDenormalizer()
+        );
+
+        self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $parent->getChildren()[0]);
+    }
+
     public function testDenormalizeFieldWithExistingChild()
     {
         $parent = $this->getParent();

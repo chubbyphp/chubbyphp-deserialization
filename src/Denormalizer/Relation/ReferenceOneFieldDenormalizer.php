@@ -49,7 +49,7 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerInterface $denormalizer = null
     ) {
         if (null === $value) {
-            $this->accessor->setValue($object, $value);
+            $this->accessor->setValue($object, null);
 
             return;
         }
@@ -60,6 +60,6 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
 
         $repository = $this->repository;
 
-        $this->accessor->setValue($object, $repository($value));
+        $this->accessor->setValue($object, $repository($value) ?? $value);
     }
 }
