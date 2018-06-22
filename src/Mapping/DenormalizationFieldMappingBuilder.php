@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Chubbyphp\Deserialization\Mapping;
 
 use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
+use Chubbyphp\Deserialization\Denormalizer\CallbackFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\ConvertTypeFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
@@ -43,6 +45,34 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     public static function create(string $name): DenormalizationFieldMappingBuilderInterface
     {
         return new self($name);
+    }
+
+    /**
+     * @param string   $name
+     * @param callable $callback
+     *
+     * @return DenormalizationFieldMappingBuilderInterface
+     */
+    public static function createCallback(string $name, callable $callback): DenormalizationFieldMappingBuilderInterface
+    {
+        $self = new self($name);
+        $self->fieldDenormalizer = new CallbackFieldDenormalizer($callback);
+
+        return $self;
+    }
+
+    /**
+     * @param string $name
+     * @param string $type
+     *
+     * @return DenormalizationFieldMappingBuilderInterface
+     */
+    public static function createConvertType(string $name, string $type): DenormalizationFieldMappingBuilderInterface
+    {
+        $self = new self($name);
+        $self->fieldDenormalizer = new ConvertTypeFieldDenormalizer(new PropertyAccessor($name), $type);
+
+        return $self;
     }
 
     /**
