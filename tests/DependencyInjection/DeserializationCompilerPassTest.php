@@ -67,7 +67,7 @@ class DeserializationCompilerPassTest extends TestCase
 
         self::assertSame(['key' => 'value'], $decoder->decode('{"key":"value"}', 'application/json'));
 
-        $object = $denormalizer->denormalize(\stdClass::class, ['key' => 'value']);
+        self::assertInstanceOf(\stdClass::class, $denormalizer->denormalize(\stdClass::class, ['key' => 'value']));
     }
 
     private function getStdClassMapping()
