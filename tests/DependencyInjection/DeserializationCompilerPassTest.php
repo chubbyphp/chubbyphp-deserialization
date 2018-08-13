@@ -29,7 +29,7 @@ class DeserializationCompilerPassTest extends TestCase
 
         $container
             ->register('stdclass', $stdClassMappingClass)
-            ->addTag('deserializer.denormalizer.objectmapping');
+            ->addTag('chubbyphp.deserializer.denormalizer.objectmapping');
 
         $container->compile();
 

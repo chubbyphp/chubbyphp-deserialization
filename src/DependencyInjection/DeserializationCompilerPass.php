@@ -67,7 +67,7 @@ final class DeserializationCompilerPass implements CompilerPassInterface
             ]);
 
         $denormalizerObjectMappingReferences = [];
-        foreach ($container->findTaggedServiceIds('deserializer.denormalizer.objectmapping') as $id => $tags) {
+        foreach ($container->findTaggedServiceIds('chubbyphp.deserializer.denormalizer.objectmapping') as $id => $tags) {
             $denormalizerObjectMappingReferences[] = new Reference($id);
         }
 
