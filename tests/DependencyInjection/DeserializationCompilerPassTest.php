@@ -4,17 +4,15 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\DependencyInjection;
 
-use Chubbyphp\Deserialization\DependencyInjection\DeserializationCompilerPass;
-use Chubbyphp\Deserialization\Deserializer;
-use PHPUnit\Framework\TestCase;
-use Symfony\Component\DependencyInjection\ContainerBuilder;
-use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
-use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
-use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
+use Chubbyphp\Deserialization\DependencyInjection\DeserializationCompilerPass;
+use Chubbyphp\Deserialization\Deserializer;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
+use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @covers \Chubbyphp\Deserialization\DependencyInjection\DeserializationCompilerPass
@@ -28,14 +26,6 @@ class DeserializationCompilerPassTest extends TestCase
 
         $container = new ContainerBuilder();
         $container->addCompilerPass(new DeserializationCompilerPass());
-
-        $container
-            ->register('json', JsonTypeDecoder::class)
-            ->addTag('chubbyphp.deserializer.decoder.type');
-
-        $container
-            ->register('xml', XmlTypeDecoder::class)
-            ->addTag('chubbyphp.deserializer.decoder.type');
 
         $container
             ->register('stdclass', $stdClassMappingClass)
@@ -66,6 +56,15 @@ class DeserializationCompilerPassTest extends TestCase
         self::assertInstanceOf(DenormalizerObjectMappingRegistry::class, $objectMappingRegistry);
 
         self::assertSame(['key' => 'value'], $decoder->decode('{"key":"value"}', 'application/json'));
+        self::assertSame(['key' => 'value'], $decoder->decode('key=value', 'application/x-www-form-urlencoded'));
+        self::assertSame(
+            ['key' => 'value'],
+            $decoder->decode(
+                '<?xml version="1.0" encoding="UTF-8"?>'."\n"
+                .'<object><key type="string">value</key></object>', 'application/xml'
+            )
+        );
+        self::assertSame(['key' => 'value'], $decoder->decode('key: value', 'application/x-yaml'));
 
         self::assertInstanceOf(\stdClass::class, $denormalizer->denormalize(\stdClass::class, ['key' => 'value']));
     }
