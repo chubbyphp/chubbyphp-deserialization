@@ -19,20 +19,65 @@ final class Denormalizer implements DenormalizerInterface
     private $denormalizerObjectMappingRegistry;
 
     /**
+     * @var DenormalizationObjectMappingInterface[]
+     */
+    private $objectMappings = [];
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
 
     /**
-     * @param DenormalizerObjectMappingRegistryInterface $denormalizerObjectMappingRegistry
-     * @param LoggerInterface|null                       $logger
+     * @param DenormalizationObjectMappingInterface[]|DenormalizerObjectMappingRegistryInterface $objectMappings
+     * @param LoggerInterface|null                                                               $logger
      */
     public function __construct(
-        DenormalizerObjectMappingRegistryInterface $denormalizerObjectMappingRegistry,
+        $objectMappings,
         LoggerInterface $logger = null
     ) {
-        $this->denormalizerObjectMappingRegistry = $denormalizerObjectMappingRegistry;
         $this->logger = $logger ?? new NullLogger();
+
+        if (is_array($objectMappings)) {
+            foreach ($objectMappings as $objectMapping) {
+                $this->addObjectMapping($objectMapping);
+            }
+
+            return;
+        }
+
+        if ($objectMappings instanceof DenormalizerObjectMappingRegistryInterface) {
+            @trigger_error(
+                sprintf(
+                    'Use "%s" instead of "%s" as __construct argument',
+                    DenormalizationObjectMappingInterface::class.'[]',
+                    DenormalizerObjectMappingRegistryInterface::class
+                ),
+                E_USER_DEPRECATED
+            );
+
+            $this->denormalizerObjectMappingRegistry = $objectMappings;
+
+            return;
+        }
+
+        throw new \TypeError(
+            sprintf(
+                '%s::__construct() expects parameter 1 to be %s|%s, %s given',
+                self::class,
+                DenormalizationObjectMappingInterface::class.'[]',
+                DenormalizerObjectMappingRegistryInterface::class,
+                is_object($objectMappings) ? get_class($objectMappings) : gettype($objectMappings)
+            )
+        );
+    }
+
+    /**
+     * @param DenormalizationObjectMappingInterface $objectMapping
+     */
+    private function addObjectMapping(DenormalizationObjectMappingInterface $objectMapping)
+    {
+        $this->objectMappings[$objectMapping->getClass()] = $objectMapping;
     }
 
     /**
@@ -88,13 +133,31 @@ final class Denormalizer implements DenormalizerInterface
      */
     private function getObjectMapping(string $class): DenormalizationObjectMappingInterface
     {
-        try {
-            return $this->denormalizerObjectMappingRegistry->getObjectMapping($class);
-        } catch (DeserializerLogicException $exception) {
-            $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+        if (null !== $this->denormalizerObjectMappingRegistry) {
+            try {
+                return $this->denormalizerObjectMappingRegistry->getObjectMapping($class);
+            } catch (DeserializerLogicException $exception) {
+                $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
 
-            throw $exception;
+                throw $exception;
+            }
         }
+
+        $reflectionClass = new \ReflectionClass($class);
+
+        if (in_array('Doctrine\Common\Persistence\Proxy', $reflectionClass->getInterfaceNames(), true)) {
+            $class = $reflectionClass->getParentClass()->name;
+        }
+
+        if (isset($this->objectMappings[$class])) {
+            return $this->objectMappings[$class];
+        }
+
+        $exception = DeserializerLogicException::createMissingMapping($class);
+
+        $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+
+        throw $exception;
     }
 
     /**

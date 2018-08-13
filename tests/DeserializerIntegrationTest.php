@@ -35,6 +35,107 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
             new Denormalizer(
+                [
+                    new BaseManyModelMapping($childModelMapping, ['many-model']),
+                    $childModelMapping,
+                    new ModelMapping(),
+                    new OneModelMapping(),
+                ],
+                $logger
+            )
+        );
+
+        $data = json_encode([
+            'name' => 'Name',
+            'one' => [
+                'name' => 'Name',
+                'value' => 'Value',
+            ],
+            'manies' => [
+                [
+                    '_type' => 'many-model',
+                    'name' => 'Name',
+                    'value' => 'Value',
+                ],
+            ],
+        ]);
+
+        $model = $deserializer->deserialize(Model::class, $data, 'application/json');
+
+        self::assertSame('Name', $model->getName());
+        self::assertInstanceOf(OneModel::class, $model->getOne());
+        self::assertSame('Name', $model->getOne()->getName());
+        self::assertSame('Value', $model->getOne()->getValue());
+        self::assertCount(1, $model->getManies());
+        self::assertInstanceOf(ManyModel::class, $model->getManies()[0]);
+        self::assertSame('Name', $model->getManies()[0]->getName());
+        self::assertSame('Value', $model->getManies()[0]->getValue());
+
+        self::assertEquals(
+            [
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'name',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'one',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'one.name',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'one.value',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'manies',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'manies[0].name',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'manies[0].value',
+                    ],
+                ],
+            ],
+            $logger->getEntries()
+        );
+    }
+
+    public function testDenormalizeByClassAndDenormalizerObjectMappingRegistry()
+    {
+        $childModelMapping = new ManyModelMapping();
+
+        $logger = $this->getLogger();
+
+        $deserializer = new Deserializer(
+            new Decoder([new JsonTypeDecoder()]),
+            new Denormalizer(
                 new DenormalizerObjectMappingRegistry([
                     new BaseManyModelMapping($childModelMapping, ['many-model']),
                     $childModelMapping,
@@ -137,11 +238,11 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
             new Denormalizer(
-                new DenormalizerObjectMappingRegistry([
+                [
                     new BaseManyModelMapping($childModelMapping, ['many-model']),
                     $childModelMapping,
                     new ModelMapping(),
-                ])
+                ]
             )
         );
 
@@ -168,11 +269,11 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
             new Denormalizer(
-                new DenormalizerObjectMappingRegistry([
+                [
                     new BaseManyModelMapping($childModelMapping, ['many-model']),
                     $childModelMapping,
                     new ModelMapping(),
-                ])
+                ]
             )
         );
 
@@ -199,12 +300,12 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
             new Denormalizer(
-                new DenormalizerObjectMappingRegistry([
+                [
                     new BaseManyModelMapping($childModelMapping, ['many-model']),
                     $childModelMapping,
                     new ModelMapping(),
                     new OneModelMapping(),
-                ]),
+                ],
                 $logger
             )
         );
@@ -314,11 +415,11 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
             new Denormalizer(
-                new DenormalizerObjectMappingRegistry([
+                [
                     new BaseManyModelMapping($childModelMapping, ['many-model']),
                     $childModelMapping,
                     new ModelMapping(),
-                ])
+                ]
             )
         );
 
@@ -339,11 +440,11 @@ class DeserializerIntegrationTest extends TestCase
         $deserializer = new Deserializer(
             new Decoder([new JsonTypeDecoder()]),
             new Denormalizer(
-                new DenormalizerObjectMappingRegistry([
+                [
                     new BaseManyModelMapping($childModelMapping, ['many-model']),
                     $childModelMapping,
                     new ModelMapping(),
-                ])
+                ]
             )
         );
 
