@@ -22,14 +22,15 @@ A simple deserialization.
 
  * container-interop/container-interop: ~1.0
  * pimple/pimple: ~3.0
- * symfony/yaml: ~2.7|~3.0|~4.0 (application/x-yaml support)
+ * symfony/dependency-injection: ~2.8|~3.0|~4.0 (symfony integration)
+ * symfony/yaml: ~2.8|~3.0|~4.0 (application/x-yaml support)
 
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "~2.4"
+composer require chubbyphp/chubbyphp-deserialization "~2.5"
 ```
 
 ## Usage
@@ -60,7 +61,7 @@ composer require chubbyphp/chubbyphp-deserialization "~2.4"
  * [DateTimeFieldDenormalizer][11]
  * [FieldDenormalizer][12]
  * [ConvertTypeFieldDenormalizer][13]
- 
+
 ##### Relation Field Denormalizer
 
  * [EmbedManyFieldDenormalizer][14]
