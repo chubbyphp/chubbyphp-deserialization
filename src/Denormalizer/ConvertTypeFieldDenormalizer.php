@@ -20,13 +20,15 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
      */
     private $type;
 
-    const TYPE_INT = 'int';
+    const TYPE_BOOL = 'boolean';
     const TYPE_FLOAT = 'float';
+    const TYPE_INT = 'int';
     const TYPE_STRING = 'string';
 
     const TYPES = [
-        self::TYPE_INT,
+        self::TYPE_BOOL,
         self::TYPE_FLOAT,
+        self::TYPE_INT,
         self::TYPE_STRING,
     ];
 
@@ -74,18 +76,87 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
     {
         $type = gettype($value);
 
-        if (!is_scalar($value) || $this->type === $type) {
+        if ($this->type === $type || is_bool($value) || !is_scalar($value)) {
             return $value;
         }
 
-        $convertedValue = $value;
+        switch ($this->type) {
+            case self::TYPE_BOOL:
+                return $this->convertBool($value);
+            case self::TYPE_INT:
+                return $this->convertInt($value);
+            case self::TYPE_FLOAT:
+                return $this->convertFloat($value);
+            default:
+                return $this->convertString($value);
+        }
+    }
 
-        settype($convertedValue, $this->type);
-
-        if ((string) $value !== (string) $convertedValue) {
+    /**
+     * @param bool|float|int|string $value
+     *
+     * @return bool|float|int|string
+     */
+    private function convertBool($value)
+    {
+        if (is_float($value) || is_int($value)) {
             return $value;
         }
 
-        return $convertedValue;
+        if ('true' === $value) {
+            return true;
+        }
+
+        if ('false' === $value) {
+            return false;
+        }
+
+        return $value;
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return bool|float|int|string
+     */
+    private function convertFloat($value)
+    {
+        if (!is_numeric($value)) {
+            return $value;
+        }
+
+        return (float) $value;
+    }
+
+    /**
+     * @param mixed $value
+     *
+     * @return bool|float|int|string
+     */
+    private function convertInt($value)
+    {
+        if (!is_numeric($value)) {
+            return $value;
+        }
+
+        if ((string) (int) $value !== (string) $value) {
+            return $value;
+        }
+
+        return (int) $value;
+    }
+
+    /**
+     * @param bool|float|int|string $value
+     *
+     * @return bool|float|int|string
+     */
+    private function convertString($value)
+    {
+        if (is_bool($value)) {
+            return $value;
+        }
+
+        return (string) $value;
     }
 }

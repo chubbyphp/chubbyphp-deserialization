@@ -43,34 +43,74 @@ class ConvertTypeFieldDenormalizerTest extends TestCase
         self::assertSame([], $object->getValue());
     }
 
-    public function testDenormalizeFieldWithStringWhichCantBeConvertedToInteger()
+    public function testDenormalizeFieldWithFloatWhichCantBeConvertedToBool()
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
-        $fieldDenormalizer->denormalizeField('value', $object, '5.5', $this->getDenormalizerContext());
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_BOOL);
+        $fieldDenormalizer->denormalizeField('value', $object, 1.0, $this->getDenormalizerContext());
 
-        self::assertSame('5.5', $object->getValue());
+        self::assertSame(1.0, $object->getValue());
     }
 
-    public function testDenormalizeFieldWithStringConvertedToInteger()
+    public function testDenormalizeFieldWithIntWhichCantBeConvertedToBool()
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
-        $fieldDenormalizer->denormalizeField('value', $object, '5', $this->getDenormalizerContext());
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_BOOL);
+        $fieldDenormalizer->denormalizeField('value', $object, 1, $this->getDenormalizerContext());
 
-        self::assertSame(5, $object->getValue());
+        self::assertSame(1, $object->getValue());
     }
 
-    public function testDenormalizeFieldWithFloatConvertedToInteger()
+    public function testDenormalizeFieldWithStringConvertedToTrue()
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
-        $fieldDenormalizer->denormalizeField('value', $object, 5.0, $this->getDenormalizerContext());
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_BOOL);
+        $fieldDenormalizer->denormalizeField('value', $object, 'true', $this->getDenormalizerContext());
 
-        self::assertSame(5, $object->getValue());
+        self::assertTrue($object->getValue());
+    }
+
+    public function testDenormalizeFieldWithStringConvertedToFalse()
+    {
+        $object = $this->getObject();
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_BOOL);
+        $fieldDenormalizer->denormalizeField('value', $object, 'false', $this->getDenormalizerContext());
+
+        self::assertFalse($object->getValue());
+    }
+
+    public function testDenormalizeFieldWithStringWhichCantBeConvertedToBool()
+    {
+        $object = $this->getObject();
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_BOOL);
+        $fieldDenormalizer->denormalizeField('value', $object, 'test', $this->getDenormalizerContext());
+
+        self::assertSame('test', $object->getValue());
+    }
+
+    public function testDenormalizeFieldWithBoolWhichCantBeConvertedToFloat()
+    {
+        $object = $this->getObject();
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
+        $fieldDenormalizer->denormalizeField('value', $object, true, $this->getDenormalizerContext());
+
+        self::assertTrue($object->getValue());
+    }
+
+    public function testDenormalizeFieldWithIntegerConvertedToFloat()
+    {
+        $object = $this->getObject();
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
+        $fieldDenormalizer->denormalizeField('value', $object, 1, $this->getDenormalizerContext());
+
+        self::assertSame(1.0, $object->getValue());
     }
 
     public function testDenormalizeFieldWithStringWhichCantBeConvertedToFloat()
@@ -88,29 +128,69 @@ class ConvertTypeFieldDenormalizerTest extends TestCase
         $object = $this->getObject();
 
         $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
-        $fieldDenormalizer->denormalizeField('value', $object, '5.5', $this->getDenormalizerContext());
+        $fieldDenormalizer->denormalizeField('value', $object, '5.500', $this->getDenormalizerContext());
 
         self::assertSame(5.5, $object->getValue());
     }
 
-    public function testDenormalizeFieldWithIntegerConvertedToFloat()
+    public function testDenormalizeFieldWithBoolWhichCantBeConvertedToInteger()
     {
         $object = $this->getObject();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
-        $fieldDenormalizer->denormalizeField('value', $object, 5, $this->getDenormalizerContext());
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer->denormalizeField('value', $object, true, $this->getDenormalizerContext());
 
-        self::assertSame(5.0, $object->getValue());
+        self::assertTrue($object->getValue());
     }
 
-    public function testDenormalizeFieldWithIntegerConvertedToString()
+    public function testDenormalizeFieldWithFloatConvertedToInteger()
+    {
+        $object = $this->getObject();
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer->denormalizeField('value', $object, 5.0, $this->getDenormalizerContext());
+
+        self::assertSame(5, $object->getValue());
+    }
+
+    public function testDenormalizeFieldWithFloatWhichCantBeConvertedToInteger()
+    {
+        $object = $this->getObject();
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer->denormalizeField('value', $object, 5.1, $this->getDenormalizerContext());
+
+        self::assertSame(5.1, $object->getValue());
+    }
+
+    public function testDenormalizeFieldWithStringWhichCantBeConvertedToInteger()
+    {
+        $object = $this->getObject();
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer->denormalizeField('value', $object, 'test', $this->getDenormalizerContext());
+
+        self::assertSame('test', $object->getValue());
+    }
+
+    public function testDenormalizeFieldWithStringConvertedToInteger()
+    {
+        $object = $this->getObject();
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer->denormalizeField('value', $object, '5', $this->getDenormalizerContext());
+
+        self::assertSame(5, $object->getValue());
+    }
+
+    public function testDenormalizeFieldWithBoolWhichCantBeConvertedToString()
     {
         $object = $this->getObject();
 
         $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_STRING);
-        $fieldDenormalizer->denormalizeField('value', $object, 5, $this->getDenormalizerContext());
+        $fieldDenormalizer->denormalizeField('value', $object, true, $this->getDenormalizerContext());
 
-        self::assertSame('5', $object->getValue());
+        self::assertTrue($object->getValue());
     }
 
     public function testDenormalizeFieldWithFloatConvertedToString()
@@ -121,6 +201,16 @@ class ConvertTypeFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField('value', $object, 5.5, $this->getDenormalizerContext());
 
         self::assertSame('5.5', $object->getValue());
+    }
+
+    public function testDenormalizeFieldWithIntegerConvertedToString()
+    {
+        $object = $this->getObject();
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_STRING);
+        $fieldDenormalizer->denormalizeField('value', $object, 5, $this->getDenormalizerContext());
+
+        self::assertSame('5', $object->getValue());
     }
 
     private function getObject()
