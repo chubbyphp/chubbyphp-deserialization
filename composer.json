@@ -1,7 +1,7 @@
 {
     "name": "chubbyphp/chubbyphp-deserialization",
     "description": "Chubbyphp Deserialize",
-    "keywords": ["chubbyphp", "slim", "deserialization"],
+    "keywords": ["chubbyphp", "slim", "symfony", "deserialization"],
     "license": "MIT",
     "authors": [
         {
