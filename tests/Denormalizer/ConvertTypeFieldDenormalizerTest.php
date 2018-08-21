@@ -113,6 +113,29 @@ class ConvertTypeFieldDenormalizerTest extends TestCase
         self::assertSame(1.0, $object->getValue());
     }
 
+    public function testDenormalizeFieldWithSpecialIntegerConvertedToFloat()
+    {
+        $object = $this->getObject();
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
+
+        $fieldDenormalizer->denormalizeField('value', $object, 0x539, $this->getDenormalizerContext());
+
+        self::assertSame(1337.0, $object->getValue());
+
+        $fieldDenormalizer->denormalizeField('value', $object, 0b10100111001, $this->getDenormalizerContext());
+
+        self::assertSame(1337.0, $object->getValue());
+
+        $fieldDenormalizer->denormalizeField('value', $object, 02471, $this->getDenormalizerContext());
+
+        self::assertSame(1337.0, $object->getValue());
+
+        $fieldDenormalizer->denormalizeField('value', $object, 1337e0, $this->getDenormalizerContext());
+
+        self::assertSame(1337.0, $object->getValue());
+    }
+
     public function testDenormalizeFieldWithStringWhichCantBeConvertedToFloat()
     {
         $object = $this->getObject();
@@ -211,6 +234,29 @@ class ConvertTypeFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField('value', $object, 5, $this->getDenormalizerContext());
 
         self::assertSame('5', $object->getValue());
+    }
+
+    public function testDenormalizeFieldWithSpecialIntegerConvertedToString()
+    {
+        $object = $this->getObject();
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_STRING);
+
+        $fieldDenormalizer->denormalizeField('value', $object, 0x539, $this->getDenormalizerContext());
+
+        self::assertSame('1337', $object->getValue());
+
+        $fieldDenormalizer->denormalizeField('value', $object, 0b10100111001, $this->getDenormalizerContext());
+
+        self::assertSame('1337', $object->getValue());
+
+        $fieldDenormalizer->denormalizeField('value', $object, 02471, $this->getDenormalizerContext());
+
+        self::assertSame('1337', $object->getValue());
+
+        $fieldDenormalizer->denormalizeField('value', $object, 1337e0, $this->getDenormalizerContext());
+
+        self::assertSame('1337', $object->getValue());
     }
 
     private function getObject()
