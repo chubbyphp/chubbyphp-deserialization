@@ -30,7 +30,7 @@ A simple deserialization.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "~2.5"
+composer require chubbyphp/chubbyphp-deserialization "~2.6"
 ```
 
 ## Usage
@@ -157,11 +157,12 @@ echo $model->getName();
 
 #### LazyDenormalizationObjectMapping
 
- * [LazyDenormalizationObjectMapping][25]
+ * [CallableDenormalizationObjectMapping][25]
+ * [LazyDenormalizationObjectMapping][26]
 
 ### Provider
 
-* [DeserializationProvider][26]
+* [DeserializationProvider][27]
 
 ## Copyright
 
@@ -203,6 +204,7 @@ Dominik Zogg 2017
 [23]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
 [24]: doc/Mapping/SimpleDenormalizationObjectMapping.md
 
-[25]: doc/Mapping/LazyDenormalizationObjectMapping.md
+[25]: doc/Mapping/CallableDenormalizationObjectMapping.md
+[26]: doc/Mapping/LazyDenormalizationObjectMapping.md
 
-[26]: doc/Provider/DeserializationProvider.md
+[27]: doc/Provider/DeserializationProvider.md
