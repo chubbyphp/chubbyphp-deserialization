@@ -12,7 +12,7 @@ final class OneModel
     private $name;
 
     /**
-     * @var string
+     * @var string|null
      */
     private $value;
 
@@ -37,19 +37,19 @@ final class OneModel
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getValue(): string
+    public function getValue()
     {
         return $this->value;
     }
 
     /**
-     * @param string $value
+     * @param string|null $value
      *
      * @return self
      */
-    public function setValue(string $value): self
+    public function setValue(string $value = null): self
     {
         $this->value = $value;
 

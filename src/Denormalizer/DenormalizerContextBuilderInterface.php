@@ -34,6 +34,13 @@ interface DenormalizerContextBuilderInterface
      */
     public function setRequest(ServerRequestInterface $request = null): self;
 
+    // /**
+    //  * @param bool $resetMissingFields
+    //  *
+    //  * @return self
+    //  */
+    // public function setResetMissingFields(bool $resetMissingFields): self;
+
     /**
      * @return DenormalizerContextInterface
      */

@@ -22,4 +22,9 @@ interface DenormalizerContextInterface
      * @return ServerRequestInterface|null
      */
     public function getRequest();
+
+    // /**
+    //  * @return bool
+    //  */
+    // public function isResetMissingFields(): bool;
 }

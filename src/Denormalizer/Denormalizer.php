@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Denormalizer;
 
+use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
@@ -64,10 +65,19 @@ final class Denormalizer implements DenormalizerInterface
             $object = $this->createNewObject($objectMapping, $path, $type);
         }
 
+        $missingFields = [];
         foreach ($objectMapping->getDenormalizationFieldMappings($path, $type) as $denormalizationFieldMapping) {
+            $name = $denormalizationFieldMapping->getName();
+
+            if (!array_key_exists($name, $data)) {
+                $missingFields[] = $name;
+
+                continue;
+            }
+
             $this->denormalizeField($context, $denormalizationFieldMapping, $path, $data, $object);
 
-            unset($data[$denormalizationFieldMapping->getName()]);
+            unset($data[$name]);
         }
 
         if (null !== $context->getAllowedAdditionalFields()
@@ -75,6 +85,8 @@ final class Denormalizer implements DenormalizerInterface
         ) {
             $this->handleNotAllowedAdditionalFields($path, $fields);
         }
+
+        $this->resetMissingFields($context, $object, $missingFields);
 
         return $object;
     }
@@ -137,16 +149,13 @@ final class Denormalizer implements DenormalizerInterface
         array $data,
         $object
     ) {
-        $name = $denormalizationFieldMapping->getName();
-        if (!array_key_exists($name, $data)) {
-            return;
-        }
-
         $fieldDenormalizer = $denormalizationFieldMapping->getFieldDenormalizer();
 
         if (!$this->isWithinGroup($context, $denormalizationFieldMapping)) {
             return;
         }
+
+        $name = $denormalizationFieldMapping->getName();
 
         $subPath = $this->getSubPathByName($path, $name);
 
@@ -218,5 +227,32 @@ final class Denormalizer implements DenormalizerInterface
         }
 
         return $subPaths;
+    }
+
+    /**
+     * @param DenormalizerContextInterface $context
+     * @param object                       $object
+     * @param array                        $missingFields
+     */
+    private function resetMissingFields(DenormalizerContextInterface $context, $object, array $missingFields)
+    {
+        if (!method_exists($context, 'isResetMissingFields') || !$context->isResetMissingFields()) {
+            return;
+        }
+
+        foreach ($missingFields as $missingField) {
+            $accessor = new PropertyAccessor($missingField);
+            $value = $accessor->getValue($object);
+
+            if (is_array($value) || $value instanceof \Traversable) {
+                foreach (array_keys($value) as $key) {
+                    unset($value[$key]);
+                }
+            } else {
+                $value = null;
+            }
+
+            $accessor->setValue($object, $value);
+        }
     }
 }

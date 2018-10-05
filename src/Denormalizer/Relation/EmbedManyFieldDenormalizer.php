@@ -80,9 +80,9 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     private function cleanRelatedObjects(&$relatedObjects)
     {
         $existEmbObjects = [];
-        foreach ($relatedObjects as $i => $existEmbObject) {
-            $existEmbObjects[$i] = $existEmbObject;
-            unset($relatedObjects[$i]);
+        foreach ($relatedObjects as $key => $existEmbObject) {
+            $existEmbObjects[$key] = $existEmbObject;
+            unset($relatedObjects[$key]);
         }
 
         return $existEmbObjects;
@@ -104,16 +104,16 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer
     ) {
-        foreach ($value as $i => $subValue) {
-            $subPath = $path.'['.$i.']';
+        foreach ($value as $key => $subValue) {
+            $subPath = $path.'['.$key.']';
 
             if (!is_array($subValue)) {
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'array');
             }
 
-            $relatedObject = $existEmbObjects[$i] ?? $this->class;
+            $relatedObject = $existEmbObjects[$key] ?? $this->class;
 
-            $relatedObjects[$i] = $denormalizer->denormalize($relatedObject, $subValue, $context, $subPath);
+            $relatedObjects[$key] = $denormalizer->denormalize($relatedObject, $subValue, $context, $subPath);
         }
     }
 }

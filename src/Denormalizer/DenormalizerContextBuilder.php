@@ -23,6 +23,11 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
      */
     private $request;
 
+    /**
+     * @var bool
+     */
+    private $resetMissingFields = false;
+
     private function __construct()
     {
     }
@@ -73,10 +78,27 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     }
 
     /**
+     * @param bool $resetMissingFields
+     *
+     * @return DenormalizerContextBuilderInterface
+     */
+    public function setResetMissingFields(bool $resetMissingFields): DenormalizerContextBuilderInterface
+    {
+        $this->resetMissingFields = $resetMissingFields;
+
+        return $this;
+    }
+
+    /**
      * @return DenormalizerContextInterface
      */
     public function getContext(): DenormalizerContextInterface
     {
-        return new DenormalizerContext($this->allowedAdditionalFields, $this->groups, $this->request);
+        return new DenormalizerContext(
+            $this->allowedAdditionalFields,
+            $this->groups,
+            $this->request,
+            $this->resetMissingFields
+        );
     }
 }

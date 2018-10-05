@@ -24,18 +24,26 @@ final class DenormalizerContext implements DenormalizerContextInterface
     private $request;
 
     /**
+     * @var bool
+     */
+    private $resetMissingFields;
+
+    /**
      * @param array|null                  $allowedAdditionalFields
      * @param string[]                    $groups
      * @param ServerRequestInterface|null $request
+     * @param bool                        $resetMissingFields
      */
     public function __construct(
         array $allowedAdditionalFields = null,
         array $groups = [],
-        ServerRequestInterface $request = null
+        ServerRequestInterface $request = null,
+        bool $resetMissingFields = false
     ) {
         $this->allowedAdditionalFields = $allowedAdditionalFields;
         $this->groups = $groups;
         $this->request = $request;
+        $this->resetMissingFields = $resetMissingFields;
     }
 
     /**
@@ -60,5 +68,13 @@ final class DenormalizerContext implements DenormalizerContextInterface
     public function getRequest()
     {
         return $this->request;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isResetMissingFields(): bool
+    {
+        return $this->resetMissingFields;
     }
 }
