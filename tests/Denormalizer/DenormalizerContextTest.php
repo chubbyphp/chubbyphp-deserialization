@@ -20,17 +20,19 @@ class DenormalizerContextTest extends TestCase
         self::assertSame(null, $context->getAllowedAdditionalFields());
         self::assertSame([], $context->getGroups());
         self::assertNull($context->getRequest());
+        self::assertFalse($context->isResetMissingFields());
     }
 
     public function testCreateWithOverridenSettings()
     {
         $request = $this->getRequest();
 
-        $context = new DenormalizerContext(['allowed_field'], ['group1'], $request);
+        $context = new DenormalizerContext(['allowed_field'], ['group1'], $request, true);
 
         self::assertSame(['allowed_field'], $context->getAllowedAdditionalFields());
         self::assertSame(['group1'], $context->getGroups());
         self::assertSame($request, $context->getRequest());
+        self::assertTrue($context->isResetMissingFields());
     }
 
     /**

@@ -213,7 +213,6 @@ class DeserializerIntegrationTest extends TestCase
             'name' => 'Name',
             'one' => [
                 'name' => 'Name',
-                'value' => 'Value',
             ],
             'manies' => [
                 [
@@ -225,6 +224,7 @@ class DeserializerIntegrationTest extends TestCase
         ]);
 
         $oneModel = new OneModel();
+        $oneModel->setValue('Value');
 
         $manyModel1 = new ManyModel();
         $manyModel1->setName('oldName1');
@@ -275,7 +275,109 @@ class DeserializerIntegrationTest extends TestCase
                     'level' => 'info',
                     'message' => 'deserialize: path {path}',
                     'context' => [
-                        'path' => 'one.value',
+                        'path' => 'manies',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'manies[0].name',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'manies[0].value',
+                    ],
+                ],
+            ],
+            $logger->getEntries()
+        );
+    }
+
+    public function testDenormalizeByObjectResetMissingFields()
+    {
+        $childModelMapping = new ManyModelMapping();
+
+        $logger = $this->getLogger();
+
+        $deserializer = new Deserializer(
+            new Decoder([new JsonTypeDecoder()]),
+            new Denormalizer(
+                new DenormalizerObjectMappingRegistry([
+                    new BaseManyModelMapping($childModelMapping, ['many-model']),
+                    $childModelMapping,
+                    new ModelMapping(),
+                    new OneModelMapping(),
+                ]),
+                $logger
+            )
+        );
+
+        $data = json_encode([
+            'name' => 'Name',
+            'one' => [
+                'name' => 'Name',
+            ],
+            'manies' => [
+                [
+                    '_type' => 'many-model',
+                    'name' => 'Name',
+                    'value' => 'Value',
+                ],
+            ],
+        ]);
+
+        $oneModel = new OneModel();
+        $oneModel->setValue('Value');
+
+        $manyModel1 = new ManyModel();
+        $manyModel1->setName('oldName1');
+
+        $manyModel2 = new ManyModel();
+        $manyModel2->setName('oldNam2');
+
+        $model = new Model();
+        $model->setName('oldName');
+        $model->setOne($oneModel);
+        $model->setManies([$manyModel1, $manyModel2]);
+
+        $context = DenormalizerContextBuilder::create()->setResetMissingFields(true)->getContext();
+
+        $model = $deserializer->deserialize($model, $data, 'application/json', $context);
+
+        self::assertSame('Name', $model->getName());
+        self::assertSame($oneModel, $model->getOne());
+        self::assertSame('Name', $model->getOne()->getName());
+        self::assertNull($model->getOne()->getValue());
+        self::assertCount(1, $model->getManies());
+        self::assertSame($manyModel1, $model->getManies()[0]);
+        self::assertSame('Name', $model->getManies()[0]->getName());
+        self::assertSame('Value', $model->getManies()[0]->getValue());
+
+        self::assertEquals(
+            [
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'name',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'one',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'one.name',
                     ],
                 ],
                 [

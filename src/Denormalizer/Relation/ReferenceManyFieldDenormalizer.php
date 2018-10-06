@@ -73,8 +73,8 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
      */
     private function cleanRelatedObjects(&$relatedObjects)
     {
-        foreach ($relatedObjects as $i => $existEmbObject) {
-            unset($relatedObjects[$i]);
+        foreach ($relatedObjects as $key => $existEmbObject) {
+            unset($relatedObjects[$key]);
         }
     }
 
@@ -87,14 +87,14 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     {
         $repository = $this->repository;
 
-        foreach ($value as $i => $subValue) {
-            $subPath = $path.'['.$i.']';
+        foreach ($value as $key => $subValue) {
+            $subPath = $path.'['.$key.']';
 
             if (!is_string($subValue)) {
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'string');
             }
 
-            $relatedObjects[$i] = $repository($subValue) ?? $subValue;
+            $relatedObjects[$key] = $repository($subValue) ?? $subValue;
         }
     }
 }

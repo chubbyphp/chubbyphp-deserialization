@@ -53,6 +53,24 @@ class DenormalizerTest extends TestCase
         self::assertSame('name', $object->getName());
     }
 
+    public function testDenormalizeWithExistingAndResetMissingFields()
+    {
+        $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
+            $this->getDenormalizationObjectMapping(),
+        ]));
+
+        $object = $this->getObject();
+        $object->setName('name');
+        $object->setValue(['value1']);
+
+        $context = $this->getDenormalizerContext(null, [], true);
+
+        $object = $denormalizer->denormalize($this->getObject(), [], $context);
+
+        self::assertNull($object->getName());
+        self::assertSame([], $object->getValue());
+    }
+
     public function testDenormalizeWithDataContainsNumericKeys()
     {
         $this->expectException(DeserializerRuntimeException::class);
@@ -85,7 +103,7 @@ class DenormalizerTest extends TestCase
     public function testDenormalizeWithAdditionalData()
     {
         $this->expectException(DeserializerRuntimeException::class);
-        $this->expectExceptionMessage('There are additional field(s) at paths: "value"');
+        $this->expectExceptionMessage('There are additional field(s) at paths: "additionalData"');
 
         $denormalizer = new Denormalizer($this->getDenormalizerObjectMappingRegistry([
             $this->getDenormalizationObjectMapping(),
@@ -93,7 +111,7 @@ class DenormalizerTest extends TestCase
 
         $denormalizer->denormalize(
             get_class($this->getObject()),
-            ['name' => 'name', 'value' => 'value'],
+            ['name' => 'name', 'additionalData' => 'additionalData'],
             $this->getDenormalizerContext([])
         );
     }
@@ -106,7 +124,7 @@ class DenormalizerTest extends TestCase
 
         $object = $denormalizer->denormalize(
             get_class($this->getObject()),
-            ['name' => 'name', 'value' => 'value']
+            ['name' => 'name', 'additionalData' => 'additionalData']
         );
 
         self::assertSame('name', $object->getName());
@@ -227,7 +245,8 @@ class DenormalizerTest extends TestCase
         });
 
         $objectMapping->expects(self::any())->method('getDenormalizationFieldMappings')->willReturn([
-            $this->getDenormalizationFieldMapping($groups),
+            $this->getDenormalizationFieldMapping('name', $groups),
+            $this->getDenormalizationFieldMapping('value', $groups),
         ]);
 
         return $objectMapping;
@@ -238,14 +257,14 @@ class DenormalizerTest extends TestCase
      *
      * @return DenormalizationFieldMappingInterface
      */
-    private function getDenormalizationFieldMapping(array $groups = []): DenormalizationFieldMappingInterface
+    private function getDenormalizationFieldMapping(string $name, array $groups = []): DenormalizationFieldMappingInterface
     {
         /** @var DenormalizationFieldMappingInterface|\PHPUnit_Framework_MockObject_MockObject $fieldMapping */
         $fieldMapping = $this->getMockBuilder(DenormalizationFieldMappingInterface::class)
             ->setMethods([])
             ->getMockForAbstractClass();
 
-        $fieldMapping->expects(self::any())->method('getName')->willReturn('name');
+        $fieldMapping->expects(self::any())->method('getName')->willReturn($name);
         $fieldMapping->expects(self::any())->method('getGroups')->willReturn($groups);
         $fieldMapping->expects(self::any())->method('getFieldDenormalizer')->willReturn($this->getFieldDenormalizer());
 
@@ -283,15 +302,17 @@ class DenormalizerTest extends TestCase
      */
     private function getDenormalizerContext(
         array $allowedAdditionalFields = null,
-        array $groups = []
+        array $groups = [],
+        bool $resetMissingFields = false
     ): DenormalizerContextInterface {
         /** @var DenormalizerContextInterface|\PHPUnit_Framework_MockObject_MockObject $context */
         $context = $this->getMockBuilder(DenormalizerContextInterface::class)
-            ->setMethods([])
+            ->setMethods(['getAllowedAdditionalFields', 'getGroups', 'isResetMissingFields'])
             ->getMockForAbstractClass();
 
         $context->expects(self::any())->method('getAllowedAdditionalFields')->willReturn($allowedAdditionalFields);
         $context->expects(self::any())->method('getGroups')->willReturn($groups);
+        $context->expects(self::any())->method('isResetMissingFields')->willReturn($resetMissingFields);
 
         return $context;
     }
@@ -303,9 +324,14 @@ class DenormalizerTest extends TestCase
     {
         return new class() {
             /**
-             * @var string
+             * @var string|null
              */
             private $name;
+
+            /**
+             * @var array
+             */
+            private $value = [];
 
             /**
              * @return string|null
@@ -316,13 +342,33 @@ class DenormalizerTest extends TestCase
             }
 
             /**
-             * @param string $name
+             * @param string|null $name
              *
              * @return self
              */
-            public function setName(string $name): self
+            public function setName(string $name = null): self
             {
                 $this->name = $name;
+
+                return $this;
+            }
+
+            /**
+             * @return array
+             */
+            public function getValue(): array
+            {
+                return $this->value;
+            }
+
+            /**
+             * @param array $value
+             *
+             * @return self
+             */
+            public function setValue(array $value): self
+            {
+                $this->value = $value;
 
                 return $this;
             }
