@@ -61,7 +61,9 @@ final class Denormalizer implements DenormalizerInterface
             unset($data['_type']);
         }
 
+        $isNew = false;
         if (!is_object($object)) {
+            $isNew = true;
             $object = $this->createNewObject($objectMapping, $path, $type);
         }
 
@@ -86,7 +88,9 @@ final class Denormalizer implements DenormalizerInterface
             $this->handleNotAllowedAdditionalFields($path, $fields);
         }
 
-        $this->resetMissingFields($context, $object, $missingFields);
+        if (!$isNew) {
+            $this->resetMissingFields($context, $objectMapping, $object, $missingFields, $path, $type);
+        }
 
         return $object;
     }
@@ -230,29 +234,32 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param DenormalizerContextInterface $context
-     * @param object                       $object
-     * @param array                        $missingFields
+     * @param DenormalizerContextInterface          $context
+     * @param DenormalizationObjectMappingInterface $objectMapping
+     * @param object                                $object
+     * @param array                                 $missingFields
+     * @param string                                $path
+     * @param string|null                           $type
      */
-    private function resetMissingFields(DenormalizerContextInterface $context, $object, array $missingFields)
-    {
+    private function resetMissingFields(
+        DenormalizerContextInterface $context,
+        DenormalizationObjectMappingInterface $objectMapping,
+        $object,
+        array $missingFields,
+        string $path,
+        string $type = null
+    ) {
         if (!method_exists($context, 'isResetMissingFields') || !$context->isResetMissingFields()) {
             return;
         }
 
+        $factory = $objectMapping->getDenormalizationFactory($path, $type);
+
+        $newObject = $factory();
+
         foreach ($missingFields as $missingField) {
             $accessor = new PropertyAccessor($missingField);
-            $value = $accessor->getValue($object);
-
-            if (is_array($value) || $value instanceof \Traversable) {
-                foreach (array_keys($value) as $key) {
-                    unset($value[$key]);
-                }
-            } else {
-                $value = null;
-            }
-
-            $accessor->setValue($object, $value);
+            $accessor->setValue($object, $accessor->getValue($newObject));
         }
     }
 }
