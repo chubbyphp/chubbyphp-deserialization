@@ -7,9 +7,11 @@ namespace Chubbyphp\Tests\Deserialization\Denormalizer\Relation;
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceManyFieldDenormalizer;
-use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Doctrine\Common\Collections\ArrayCollection;
+use Chubbyphp\Mock\Call;
+use Chubbyphp\Mock\MockByCallsTrait;
+use Doctrine\Common\Collections\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,21 +19,23 @@ use PHPUnit\Framework\TestCase;
  */
 class ReferenceManyFieldDenormalizerTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testDenormalizeFieldWithoutArrayDenormalizer()
     {
         $this->expectException(DeserializerRuntimeException::class);
         $this->expectExceptionMessage('There is an invalid data type "double", needed "array" at path: "children"');
 
-        $parent = $this->getParent();
+        $parent = new \stdClass();
 
-        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(function (string $id) {}, $this->getAccessor());
-        $fieldDenormalizer->denormalizeField(
-            'children',
-            $parent,
-            18.9,
-            $this->getDenormalizerContext(),
-            $this->getDenormalizer()
-        );
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(function (string $id) {}, $accessor);
+        $fieldDenormalizer->denormalizeField('children', $parent, 18.9, $context);
     }
 
     public function testDenormalizeFieldWithArrayButNullChildDenormalizer()
@@ -39,66 +43,75 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
         $this->expectException(DeserializerRuntimeException::class);
         $this->expectExceptionMessage('There is an invalid data type "double", needed "string" at path: "children[0]"');
 
-        $parent = $this->getParent();
+        $parent = new \stdClass();
 
-        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(function (string $id) {}, $this->getAccessor());
-        $fieldDenormalizer->denormalizeField(
-            'children',
-            $parent,
-            [18.9],
-            $this->getDenormalizerContext(),
-            $this->getDenormalizer()
-        );
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('getValue')->with($parent)->willReturn([]),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(function (string $id) {}, $accessor);
+        $fieldDenormalizer->denormalizeField('children', $parent, [18.9], $context);
     }
 
     public function testDenormalizeFieldWithNull()
     {
-        $parent = $this->getParent();
+        $parent = new \stdClass();
 
-        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
-            function (string $id) {},
-            $this->getAccessor()
-        );
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($parent, null),
+        ]);
 
-        $fieldDenormalizer->denormalizeField(
-            'children',
-            $parent,
-            null,
-            $this->getDenormalizerContext()
-        );
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        self::assertNull($parent->getChildren());
+        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(function (string $id) {}, $accessor);
+        $fieldDenormalizer->denormalizeField('children', $parent, null, $context);
     }
 
     public function testDenormalizeFieldWithNewChild()
     {
-        $parent = $this->getParent();
-        $parent->setChildren([]);
+        $parent = new \stdClass();
+
+        $child = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('getValue')->with($parent)->willReturn([]),
+            Call::create('setValue')->with($parent, [$child]),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
-            function (string $id) {
+            function (string $id) use ($child) {
                 self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
 
-                return $this->getChild()->setName('php');
+                return $child;
             },
-            $this->getAccessor()
+            $accessor
         );
 
-        $fieldDenormalizer->denormalizeField(
-            'children',
-            $parent,
-            ['60a9ee14-64d6-4992-8042-8d1528ac02d6'],
-            $this->getDenormalizerContext(),
-            $this->getDenormalizer()
-        );
-
-        self::assertSame('php', $parent->getChildren()[0]->getName());
+        $fieldDenormalizer->denormalizeField('children', $parent, ['60a9ee14-64d6-4992-8042-8d1528ac02d6'], $context);
     }
 
     public function testDenormalizeFieldWithNewChildAndNotFoundValue()
     {
-        $parent = $this->getParent();
-        $parent->setChildren([]);
+        $parent = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('getValue')->with($parent)->willReturn([]),
+            Call::create('setValue')->with($parent, ['60a9ee14-64d6-4992-8042-8d1528ac02d6']),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
             function (string $id) {
@@ -106,219 +119,119 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
 
                 return null;
             },
-            $this->getAccessor()
+            $accessor
         );
 
-        $fieldDenormalizer->denormalizeField(
-            'children',
-            $parent,
-            ['60a9ee14-64d6-4992-8042-8d1528ac02d6'],
-            $this->getDenormalizerContext(),
-            $this->getDenormalizer()
-        );
-
-        self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $parent->getChildren()[0]);
+        $fieldDenormalizer->denormalizeField('children', $parent, ['60a9ee14-64d6-4992-8042-8d1528ac02d6'], $context);
     }
 
     public function testDenormalizeFieldWithExistingChild()
     {
-        $parent = $this->getParent();
-        $parent->setChildren([$this->getChild()]);
+        $parent = new \stdClass();
+
+        $child = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('getValue')->with($parent)->willReturn([$child]),
+            Call::create('setValue')->with($parent, [$child]),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
-            function (string $id) {
+            function (string $id) use ($child) {
                 self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
 
-                return $this->getChild()->setName('php');
+                return $child;
             },
-            $this->getAccessor()
+            $accessor
         );
 
-        $fieldDenormalizer->denormalizeField(
-            'children',
-            $parent,
-            ['60a9ee14-64d6-4992-8042-8d1528ac02d6'],
-            $this->getDenormalizerContext(),
-            $this->getDenormalizer()
-        );
-
-        self::assertSame('php', $parent->getChildren()[0]->getName());
+        $fieldDenormalizer->denormalizeField('children', $parent, ['60a9ee14-64d6-4992-8042-8d1528ac02d6'], $context);
     }
 
     public function testDenormalizeFieldWithNewChildAndCollection()
     {
-        $children = new ArrayCollection([]);
+        $parent = new \stdClass();
 
-        $parent = $this->getParent();
-        $parent->setChildren($children);
+        $child = new \stdClass();
+
+        /** @var \Iterator|MockObject $iterator */
+        $iterator = $this->getMockByCalls(\Iterator::class, [
+            Call::create('rewind')->with(),
+            Call::create('valid')->with()->willReturn(false),
+        ]);
+
+        /** @var Collection|MockObject $collection */
+        $collection = $this->getMockByCalls(Collection::class, [
+            Call::create('getIterator')->with()->willReturn($iterator),
+            Call::create('offsetSet')->with(0, $child),
+        ]);
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('getValue')->with($parent)->willReturn($collection),
+            Call::create('setValue')->with($parent, $collection),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
-            function (string $id) {
+            function (string $id) use ($child) {
                 self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
 
-                return $this->getChild()->setName('php');
+                return $child;
             },
-            $this->getAccessor()
+            $accessor
         );
 
-        $fieldDenormalizer->denormalizeField(
-            'children',
-            $parent,
-            ['60a9ee14-64d6-4992-8042-8d1528ac02d6'],
-            $this->getDenormalizerContext(),
-            $this->getDenormalizer()
-        );
-
-        self::assertSame($children, $parent->getChildren());
-
-        self::assertSame('php', $parent->getChildren()[0]->getName());
+        $fieldDenormalizer->denormalizeField('children', $parent, ['60a9ee14-64d6-4992-8042-8d1528ac02d6'], $context);
     }
 
     public function testDenormalizeFieldWithExistingChildAndCollection()
     {
-        $children = new ArrayCollection([$this->getChild()]);
+        $parent = new \stdClass();
 
-        $parent = $this->getParent();
-        $parent->setChildren($children);
+        $child = new \stdClass();
+
+        /** @var \Iterator|MockObject $iterator */
+        $iterator = $this->getMockByCalls(\Iterator::class, [
+            Call::create('rewind')->with(),
+            Call::create('valid')->with()->willReturn(true),
+            Call::create('current')->with()->willReturn($child),
+            Call::create('key')->with()->willReturn(0),
+            Call::create('next')->with(),
+            Call::create('valid')->with()->willReturn(false),
+        ]);
+
+        /** @var Collection|MockObject $collection */
+        $collection = $this->getMockByCalls(Collection::class, [
+            Call::create('getIterator')->with()->willReturn($iterator),
+            Call::create('offsetUnset')->with(0),
+            Call::create('offsetSet')->with(0, $child),
+        ]);
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('getValue')->with($parent)->willReturn($collection),
+            Call::create('setValue')->with($parent, $collection),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
-            function (string $id) {
+            function (string $id) use ($child) {
                 self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
 
-                return $this->getChild()->setName('php');
+                return $child;
             },
-            $this->getAccessor()
+            $accessor
         );
 
-        $fieldDenormalizer->denormalizeField(
-            'children',
-            $parent,
-            ['60a9ee14-64d6-4992-8042-8d1528ac02d6'],
-            $this->getDenormalizerContext(),
-            $this->getDenormalizer()
-        );
-
-        self::assertSame($children, $parent->getChildren());
-
-        self::assertSame('php', $parent->getChildren()[0]->getName());
-    }
-
-    /**
-     * @return object
-     */
-    private function getParent()
-    {
-        return new class() {
-            /**
-             * @var null|array|\Traversable
-             */
-            private $children;
-
-            /**
-             * @return null|array|\Traversable
-             */
-            public function getChildren()
-            {
-                return $this->children;
-            }
-
-            /**
-             * @param null|array|\Traversable $children
-             *
-             * @return self
-             */
-            public function setChildren($children): self
-            {
-                $this->children = $children;
-
-                return $this;
-            }
-        };
-    }
-
-    /**
-     * @return object
-     */
-    private function getChild()
-    {
-        return new class() {
-            /**
-             * @var string
-             */
-            private $name;
-
-            /**
-             * @return string
-             */
-            public function getName(): string
-            {
-                return $this->name;
-            }
-
-            /**
-             * @param string $name
-             *
-             * @return self
-             */
-            public function setName(string $name): self
-            {
-                $this->name = $name;
-
-                return $this;
-            }
-        };
-    }
-
-    /**
-     * @return AccessorInterface
-     */
-    private function getAccessor(): AccessorInterface
-    {
-        /** @var AccessorInterface|\PHPUnit_Framework_MockObject_MockObject $accessor */
-        $accessor = $this->getMockBuilder(AccessorInterface::class)->getMockForAbstractClass();
-
-        $accessor->expects(self::any())->method('setValue')->willReturnCallback(function ($object, $value) {
-            $object->setChildren($value);
-        });
-
-        $accessor->expects(self::any())->method('getValue')->willReturnCallback(function ($object) {
-            return $object->getChildren();
-        });
-
-        return $accessor;
-    }
-
-    /**
-     * @return DenormalizerContextInterface
-     */
-    private function getDenormalizerContext(): DenormalizerContextInterface
-    {
-        /** @var DenormalizerContextInterface|\PHPUnit_Framework_MockObject_MockObject $context */
-        $context = $this->getMockBuilder(DenormalizerContextInterface::class)->getMockForAbstractClass();
-
-        return $context;
-    }
-
-    /**
-     * @return DenormalizerInterface
-     */
-    private function getDenormalizer(): DenormalizerInterface
-    {
-        /** @var DenormalizerInterface|\PHPUnit_Framework_MockObject_MockObject $denormalizer */
-        $denormalizer = $this->getMockBuilder(DenormalizerInterface::class)->getMockForAbstractClass();
-
-        $denormalizer->expects(self::any())->method('denormalize')->willReturnCallback(
-            function ($object, array $data, DenormalizerContextInterface $context = null, string $path = '') {
-                if (is_string($object)) {
-                    $object = $this->getChild();
-                }
-
-                $object->setName($data['name']);
-
-                return $object;
-            }
-        );
-
-        return $denormalizer;
+        $fieldDenormalizer->denormalizeField('children', $parent, ['60a9ee14-64d6-4992-8042-8d1528ac02d6'], $context);
     }
 }

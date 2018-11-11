@@ -8,6 +8,9 @@ use Chubbyphp\Deserialization\Decoder\DecoderInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Deserializer;
+use Chubbyphp\Mock\Call;
+use Chubbyphp\Mock\MockByCallsTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,111 +18,77 @@ use PHPUnit\Framework\TestCase;
  */
 class DeserializerTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testDeserialize()
     {
-        $deserializer = new Deserializer($this->getDecoder(), $this->getDenormalizer());
-
         $object = new \stdClass();
 
-        $deserializer->deserialize(
-            $object,
-            '{"name": "php"}',
-            'application/json',
-            $this->getDenormalizerContext()
-        );
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        self::assertSame('php', $object->name);
+        /** @var DecoderInterface|MockObject $decoder */
+        $decoder = $this->getMockByCalls(DecoderInterface::class, [
+            Call::create('decode')->with('{"name": "php"}', 'application/json')->willReturn(['name' => 'php']),
+        ]);
+
+        /** @var DenormalizerInterface|MockObject $denormalizer */
+        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
+            Call::create('denormalize')->with($object, ['name' => 'php'], $context, '')->willReturn($object),
+        ]);
+
+        $deserializer = new Deserializer($decoder, $denormalizer);
+
+        self::assertSame($object, $deserializer->deserialize($object, '{"name": "php"}', 'application/json', $context));
     }
 
     public function testDecode()
     {
-        $deserializer = new Deserializer($this->getDecoder(), $this->getDenormalizer());
+        /** @var DecoderInterface|MockObject $decoder */
+        $decoder = $this->getMockByCalls(DecoderInterface::class, [
+            Call::create('decode')->with('{"name": "php"}', 'application/json')->willReturn(['name' => 'php']),
+        ]);
 
-        $data = $deserializer->decode(
-            '{"name": "php"}',
-            'application/json'
-        );
+        /** @var DenormalizerInterface|MockObject $denormalizer */
+        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class);
 
-        self::assertEquals(['name' => 'php'], $data);
+        $deserializer = new Deserializer($decoder, $denormalizer);
+
+        self::assertEquals(['name' => 'php'], $deserializer->decode('{"name": "php"}', 'application/json'));
     }
 
     public function testGetContentTypes()
     {
-        $deserializer = new Deserializer($this->getDecoder(), $this->getDenormalizer());
+        /** @var DecoderInterface|MockObject $decoder */
+        $decoder = $this->getMockByCalls(DecoderInterface::class, [
+            Call::create('getContentTypes')->with()->willReturn(['application/json']),
+        ]);
 
-        $contentTypes = $deserializer->getContentTypes();
+        /** @var DenormalizerInterface|MockObject $denormalizer */
+        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class);
 
-        self::assertEquals(['application/json'], $contentTypes);
+        $deserializer = new Deserializer($decoder, $denormalizer);
+
+        self::assertEquals(['application/json'], $deserializer->getContentTypes());
     }
 
     public function testDenormalize()
     {
-        $deserializer = new Deserializer($this->getDecoder(), $this->getDenormalizer());
-
         $object = new \stdClass();
 
-        $deserializer->denormalize(
-            $object,
-            ['name' => 'php'],
-            $this->getDenormalizerContext()
-        );
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        self::assertSame('php', $object->name);
-    }
+        /** @var DecoderInterface|MockObject $decoder */
+        $decoder = $this->getMockByCalls(DecoderInterface::class);
 
-    /**
-     * @return DecoderInterface
-     */
-    private function getDecoder(): DecoderInterface
-    {
-        /** @var DecoderInterface|\PHPUnit_Framework_MockObject_MockObject $decoder */
-        $decoder = $this->getMockBuilder(DecoderInterface::class)->getMockForAbstractClass();
+        /** @var DenormalizerInterface|MockObject $denormalizer */
+        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
+            Call::create('denormalize')->with($object, ['name' => 'php'], $context, '')->willReturn($object),
+        ]);
 
-        $decoder->expects(self::any())->method('getContentTypes')->willReturn(['application/json']);
+        $deserializer = new Deserializer($decoder, $denormalizer);
 
-        $decoder->expects(self::any())->method('decode')->willReturnCallback(
-            function (string $data, string $contentType) {
-                self::assertSame('{"name": "php"}', $data);
-                self::assertSame('application/json', $contentType);
-
-                return json_decode($data, true);
-            }
-        );
-
-        return $decoder;
-    }
-
-    /**
-     * @return DenormalizerInterface
-     */
-    private function getDenormalizer(): DenormalizerInterface
-    {
-        /** @var DenormalizerInterface|\PHPUnit_Framework_MockObject_MockObject $decoder */
-        $decoder = $this->getMockBuilder(DenormalizerInterface::class)->getMockForAbstractClass();
-
-        $decoder->expects(self::any())->method('denormalize')->willReturnCallback(
-            function ($object, array $data, DenormalizerContextInterface $context = null, string $path = '') {
-                self::assertSame(['name' => 'php'], $data);
-                self::assertNotNull($context);
-                self::assertSame('', $path);
-
-                $object->name = $data['name'];
-
-                return $object;
-            }
-        );
-
-        return $decoder;
-    }
-
-    /**
-     * @return DenormalizerContextInterface
-     */
-    private function getDenormalizerContext(): DenormalizerContextInterface
-    {
-        /** @var DenormalizerContextInterface|\PHPUnit_Framework_MockObject_MockObject $context */
-        $context = $this->getMockBuilder(DenormalizerContextInterface::class)->getMockForAbstractClass();
-
-        return $context;
+        self::assertSame($object, $deserializer->denormalize($object, ['name' => 'php'], $context));
     }
 }

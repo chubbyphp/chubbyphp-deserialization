@@ -4,12 +4,15 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Relation\Denormalizer;
 
+use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedOneFieldDenormalizer;
-use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Chubbyphp\Mock\Call;
+use Chubbyphp\Mock\MockByCallsTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,90 +20,23 @@ use PHPUnit\Framework\TestCase;
  */
 class EmbedOneFieldDenormalizerTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testDenormalizeFieldWithMissingDenormalizer()
     {
         $this->expectException(DeserializerLogicException::class);
         $this->expectExceptionMessage('There is no denormalizer at path: "reference"');
 
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
-            get_class($this->getReference()),
-            $this->getAccessor()
-        );
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class);
 
-        $fieldDenormalizer->denormalizeField(
-            'reference',
-            $object,
-            ['name' => 'name'],
-            $this->getDenormalizerContext()
-        );
-    }
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-    public function testDenormalizeFieldWithNull()
-    {
-        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
-            get_class($this->getReference()),
-            $this->getAccessor()
-        );
-
-        $object = $this->getObject();
-
-        $fieldDenormalizer->denormalizeField(
-            'reference',
-            $object,
-            null,
-            $this->getDenormalizerContext()
-        );
-
-        self::assertNull($object->getReference());
-    }
-
-    public function testDenormalizeField()
-    {
-        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
-            get_class($this->getReference()),
-            $this->getAccessor()
-        );
-
-        $object = $this->getObject();
-
-        $fieldDenormalizer->denormalizeField(
-            'reference',
-            $object,
-            ['name' => 'php'],
-            $this->getDenormalizerContext(),
-            $this->getDenormalizer()
-        );
-
-        $reference = $object->getReference();
-
-        self::assertInstanceOf(get_class($this->getReference()), $reference);
-        self::assertSame('php', $reference->getName());
-    }
-
-    public function testDenormalizeFieldWithExistingValue()
-    {
-        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
-            get_class($this->getReference()),
-            $this->getAccessor()
-        );
-
-        $reference = $this->getReference();
-
-        $object = $this->getObject();
-        $object->setReference($reference);
-
-        $fieldDenormalizer->denormalizeField(
-            'reference',
-            $object,
-            ['name' => 'php'],
-            $this->getDenormalizerContext(),
-            $this->getDenormalizer()
-        );
-
-        self::assertInstanceOf(get_class($this->getReference()), $reference);
-        self::assertSame('php', $reference->getName());
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(\stdClass::class, $accessor);
+        $fieldDenormalizer->denormalizeField('reference', $object, ['name' => 'name'], $context);
     }
 
     public function testDenormalizeFieldWithWrongType()
@@ -108,138 +44,89 @@ class EmbedOneFieldDenormalizerTest extends TestCase
         $this->expectException(DeserializerRuntimeException::class);
         $this->expectExceptionMessage('There is an invalid data type "string", needed "array" at path: "reference"');
 
-        $fieldDenormalizer = new EmbedOneFieldDenormalizer(
-            get_class($this->getReference()),
-            $this->getAccessor()
-        );
+        $object = new \stdClass();
 
-        $object = $this->getObject();
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class);
 
-        $fieldDenormalizer->denormalizeField(
-            'reference',
-            $object,
-            'test',
-            $this->getDenormalizerContext(),
-            $this->getDenormalizer()
-        );
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        /** @var DenormalizerInterface|MockObject $denormalizer */
+        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class);
+
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(\stdClass::class, $accessor);
+        $fieldDenormalizer->denormalizeField('reference', $object, 'test', $context, $denormalizer);
     }
 
-    /**
-     * @return AccessorInterface
-     */
-    private function getAccessor(): AccessorInterface
+    public function testDenormalizeFieldWithNull()
     {
-        /** @var AccessorInterface|\PHPUnit_Framework_MockObject_MockObject $accessor */
-        $accessor = $this->getMockBuilder(AccessorInterface::class)->getMockForAbstractClass();
+        $object = new \stdClass();
 
-        $accessor->expects(self::any())->method('setValue')->willReturnCallback(function ($object, $value) {
-            $object->setReference($value);
-        });
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, null),
+        ]);
 
-        $accessor->expects(self::any())->method('getValue')->willReturnCallback(function ($object) {
-            return $object->getReference();
-        });
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        return $accessor;
+        /** @var DenormalizerInterface|MockObject $denormalizer */
+        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class);
+
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(\stdClass::class, $accessor);
+        $fieldDenormalizer->denormalizeField('reference', $object, null, $context, $denormalizer);
     }
 
-    /**
-     * @return DenormalizerInterface
-     */
-    private function getDenormalizer(): DenormalizerInterface
+    public function testDenormalizeField()
     {
-        /** @var DenormalizerInterface|\PHPUnit_Framework_MockObject_MockObject $denormalizer */
-        $denormalizer = $this->getMockBuilder(DenormalizerInterface::class)->getMockForAbstractClass();
+        $object = new \stdClass();
 
-        $denormalizer->expects(self::any())->method('denormalize')->willReturnCallback(
-            function ($object, array $data, DenormalizerContextInterface $context = null, string $path = '') {
-                if (is_string($object)) {
-                    $object = $this->getReference();
-                }
+        $reference = new \stdClass();
 
-                $object->setName($data['name']);
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('getValue')->with($object)->willReturn(null),
+            Call::create('setValue')->with($object, $reference),
+        ]);
 
-                return $object;
-            }
-        );
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        return $denormalizer;
+        /** @var DenormalizerInterface|MockObject $denormalizer */
+        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
+            Call::create('denormalize')
+                ->with(\stdClass::class, ['name' => 'name'], $context, 'reference')
+                ->willReturn($reference),
+        ]);
+
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(\stdClass::class, $accessor);
+        $fieldDenormalizer->denormalizeField('reference', $object, ['name' => 'name'], $context, $denormalizer);
     }
 
-    /**
-     * @return DenormalizerContextInterface
-     */
-    private function getDenormalizerContext(): DenormalizerContextInterface
+    public function testDenormalizeFieldWithExistingValue()
     {
-        /** @var DenormalizerContextInterface|\PHPUnit_Framework_MockObject_MockObject $context */
-        $context = $this->getMockBuilder(DenormalizerContextInterface::class)->getMockForAbstractClass();
+        $object = new \stdClass();
 
-        return $context;
-    }
+        $reference = new \stdClass();
 
-    /**
-     * @return object
-     */
-    private function getObject()
-    {
-        return new class() {
-            /**
-             * @var object
-             */
-            private $reference;
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('getValue')->with($object)->willReturn($reference),
+            Call::create('setValue')->with($object, $reference),
+        ]);
 
-            /**
-             * @return object
-             */
-            public function getReference()
-            {
-                return $this->reference;
-            }
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-            /**
-             * @param object $reference
-             *
-             * @return self
-             */
-            public function setReference($reference): self
-            {
-                $this->reference = $reference;
+        /** @var DenormalizerInterface|MockObject $denormalizer */
+        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
+            Call::create('denormalize')
+                ->with($reference, ['name' => 'name'], $context, 'reference')
+                ->willReturn($reference),
+        ]);
 
-                return $this;
-            }
-        };
-    }
-
-    /**
-     * @return object
-     */
-    private function getReference()
-    {
-        return new class() {
-            /**
-             * @var string
-             */
-            private $name;
-
-            /**
-             * @return string
-             */
-            public function getName(): string
-            {
-                return $this->name;
-            }
-
-            /**
-             * @param string $name
-             *
-             * @return self
-             */
-            public function setName(string $name): self
-            {
-                $this->name = $name;
-
-                return $this;
-            }
-        };
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(\stdClass::class, $accessor);
+        $fieldDenormalizer->denormalizeField('reference', $object, ['name' => 'name'], $context, $denormalizer);
     }
 }

@@ -7,8 +7,11 @@ namespace Chubbyphp\Tests\Deserialization\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
+use Chubbyphp\Mock\Call;
+use Chubbyphp\Mock\MockByCallsTrait;
 use Chubbyphp\Tests\Deserialization\Resources\Model\AbstractManyModel;
 use Doctrine\Common\Persistence\Proxy;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -16,15 +19,20 @@ use PHPUnit\Framework\TestCase;
  */
 class DenormalizerObjectMappingRegistryTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testGetObjectMapping()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $registry = new DenormalizerObjectMappingRegistry([
-            $this->getDenormalizationObjectMapping(),
+        /** @var DenormalizationObjectMappingInterface|MockObject $denormalizationObjectMapping */
+        $denormalizationObjectMapping = $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
+            Call::create('getClass')->with()->willReturn(\stdClass::class),
         ]);
 
-        $mapping = $registry->getObjectMapping(get_class($object));
+        $registry = new DenormalizerObjectMappingRegistry([$denormalizationObjectMapping]);
+
+        $mapping = $registry->getObjectMapping(\stdClass::class);
 
         self::assertInstanceOf(DenormalizationObjectMappingInterface::class, $mapping);
     }
@@ -43,88 +51,16 @@ class DenormalizerObjectMappingRegistryTest extends TestCase
     {
         $object = $this->getProxyObject();
 
-        $registry = new DenormalizerObjectMappingRegistry([
-            $this->getDenormalizationProxyObjectMapping(),
+        /** @var DenormalizationObjectMappingInterface|MockObject $denormalizationObjectMapping */
+        $denormalizationObjectMapping = $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
+            Call::create('getClass')->with()->willReturn(AbstractManyModel::class),
         ]);
+
+        $registry = new DenormalizerObjectMappingRegistry([$denormalizationObjectMapping]);
 
         $mapping = $registry->getObjectMapping(get_class($object));
 
         self::assertInstanceOf(DenormalizationObjectMappingInterface::class, $mapping);
-    }
-
-    /**
-     * @return DenormalizationObjectMappingInterface
-     */
-    private function getDenormalizationObjectMapping(): DenormalizationObjectMappingInterface
-    {
-        /** @var DenormalizationObjectMappingInterface|\PHPUnit_Framework_MockObject_MockObject $objectMapping */
-        $objectMapping = $this->getMockBuilder(DenormalizationObjectMappingInterface::class)
-            ->setMethods([])
-            ->getMockForAbstractClass();
-
-        $object = $this->getObject();
-
-        $objectMapping->expects(self::any())->method('getClass')->willReturnCallback(
-            function () use ($object) {
-                return get_class($object);
-            }
-        );
-
-        return $objectMapping;
-    }
-
-    /**
-     * @return DenormalizationObjectMappingInterface
-     */
-    private function getDenormalizationProxyObjectMapping(): DenormalizationObjectMappingInterface
-    {
-        /** @var DenormalizationObjectMappingInterface|\PHPUnit_Framework_MockObject_MockObject $objectMapping */
-        $objectMapping = $this->getMockBuilder(DenormalizationObjectMappingInterface::class)
-            ->setMethods([])
-            ->getMockForAbstractClass();
-
-        $object = $this->getProxyObject();
-
-        $objectMapping->expects(self::any())->method('getClass')->willReturnCallback(
-            function () use ($object) {
-                return AbstractManyModel::class;
-            }
-        );
-
-        return $objectMapping;
-    }
-
-    /**
-     * @return object
-     */
-    private function getObject()
-    {
-        return new class() {
-            /**
-             * @var string
-             */
-            private $name;
-
-            /**
-             * @return string|null
-             */
-            public function getName()
-            {
-                return $this->name;
-            }
-
-            /**
-             * @param string $name
-             *
-             * @return self
-             */
-            public function setName(string $name): self
-            {
-                $this->name = $name;
-
-                return $this;
-            }
-        };
     }
 
     /**
