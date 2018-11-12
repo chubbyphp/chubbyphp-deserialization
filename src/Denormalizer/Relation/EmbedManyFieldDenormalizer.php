@@ -73,7 +73,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param array|\Traversable|\ArrayAccess $relatedObjects
+     * @param iterable $relatedObjects
      *
      * @return array
      */
@@ -91,7 +91,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     /**
      * @param string                          $path
      * @param array                           $value
-     * @param array|\Traversable|\ArrayAccess $relatedObjects
+     * @param iterable $relatedObjects
      * @param array                           $existEmbObjects
      * @param DenormalizerContextInterface    $context
      * @param DenormalizerInterface           $denormalizer

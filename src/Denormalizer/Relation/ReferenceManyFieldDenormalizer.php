@@ -69,7 +69,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param array|\Traversable|\ArrayAccess $relatedObjects
+     * @param iterable $relatedObjects
      */
     private function cleanRelatedObjects(&$relatedObjects)
     {
@@ -81,7 +81,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     /**
      * @param string                          $path
      * @param array                           $value
-     * @param array|\Traversable|\ArrayAccess $relatedObjects
+     * @param iterable $relatedObjects
      */
     private function assignRelatedObjects(string $path, array $value, &$relatedObjects)
     {
