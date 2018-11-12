@@ -14,6 +14,8 @@ use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedOneFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceManyFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
+use Chubbyphp\Mock\MockByCallsTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -21,6 +23,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DenormalizationFieldMappingBuilderTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testGetDefaultMapping()
     {
         $fieldMapping = DenormalizationFieldMappingBuilder::create('name')->getMapping();
@@ -98,26 +102,16 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetMapping()
     {
-        $denormalizer = $this->getFieldDenormalizer();
+        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
+        $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
 
         $fieldMapping = DenormalizationFieldMappingBuilder::create('name')
             ->setGroups(['group1'])
-            ->setFieldDenormalizer($denormalizer)
+            ->setFieldDenormalizer($fieldDenormalizer)
             ->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame(['group1'], $fieldMapping->getGroups());
-        self::assertSame($denormalizer, $fieldMapping->getFieldDenormalizer());
-    }
-
-    /**
-     * @return FieldDenormalizerInterface
-     */
-    private function getFieldDenormalizer(): FieldDenormalizerInterface
-    {
-        /** @var FieldDenormalizerInterface|\PHPUnit_Framework_MockObject_MockObject $fieldDenormalizer */
-        $fieldDenormalizer = $this->getMockBuilder(FieldDenormalizerInterface::class)->getMockForAbstractClass();
-
-        return $fieldDenormalizer;
+        self::assertSame($fieldDenormalizer, $fieldMapping->getFieldDenormalizer());
     }
 }

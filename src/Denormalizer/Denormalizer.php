@@ -77,13 +77,15 @@ final class Denormalizer implements DenormalizerInterface
                 continue;
             }
 
-            $this->denormalizeField($context, $denormalizationFieldMapping, $path, $data, $object);
+            $this->denormalizeField($context, $denormalizationFieldMapping, $path, $name, $data, $object);
 
             unset($data[$name]);
         }
 
-        if (null !== $context->getAllowedAdditionalFields()
-            && [] !== $fields = array_diff(array_keys($data), $context->getAllowedAdditionalFields())
+        $allowedAdditionalFields = $context->getAllowedAdditionalFields();
+
+        if (null !== $allowedAdditionalFields
+            && [] !== $fields = array_diff(array_keys($data), $allowedAdditionalFields)
         ) {
             $this->handleNotAllowedAdditionalFields($path, $fields);
         }
@@ -150,21 +152,19 @@ final class Denormalizer implements DenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizationFieldMappingInterface $denormalizationFieldMapping,
         string $path,
+        string $name,
         array $data,
         $object
     ) {
-        $fieldDenormalizer = $denormalizationFieldMapping->getFieldDenormalizer();
-
         if (!$this->isWithinGroup($context, $denormalizationFieldMapping)) {
             return;
         }
-
-        $name = $denormalizationFieldMapping->getName();
 
         $subPath = $this->getSubPathByName($path, $name);
 
         $this->logger->info('deserialize: path {path}', ['path' => $subPath]);
 
+        $fieldDenormalizer = $denormalizationFieldMapping->getFieldDenormalizer();
         $fieldDenormalizer->denormalizeField($subPath, $object, $data[$name], $context, $this);
     }
 

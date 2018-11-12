@@ -7,6 +7,9 @@ namespace Chubbyphp\Tests\Deserialization\Denormalizer;
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
+use Chubbyphp\Mock\Call;
+use Chubbyphp\Mock\MockByCallsTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,68 +17,21 @@ use PHPUnit\Framework\TestCase;
  */
 class FieldDenormalizerTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testDenormalizeField()
     {
-        $object = new class() {
-            /**
-             * @var string
-             */
-            private $name;
+        $object = new \stdClass();
 
-            /**
-             * @return string
-             */
-            public function getName(): string
-            {
-                return $this->name;
-            }
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 'name'),
+        ]);
 
-            /**
-             * @param string $name
-             *
-             * @return self
-             */
-            public function setName(string $name): self
-            {
-                $this->name = $name;
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-                return $this;
-            }
-        };
-
-        $fieldDenormalizer = new FieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('name', $object, 'name', $this->getDenormalizerContext());
-
-        self::assertSame('name', $object->getName());
-    }
-
-    /**
-     * @return AccessorInterface
-     */
-    private function getAccessor(): AccessorInterface
-    {
-        /** @var AccessorInterface|\PHPUnit_Framework_MockObject_MockObject $accessor */
-        $accessor = $this->getMockBuilder(AccessorInterface::class)->getMockForAbstractClass();
-
-        $accessor->expects(self::any())->method('setValue')->willReturnCallback(function ($object, $value) {
-            $object->setName($value);
-        });
-
-        $accessor->expects(self::any())->method('getValue')->willReturnCallback(function ($object) {
-            return $object->getName();
-        });
-
-        return $accessor;
-    }
-
-    /**
-     * @return DenormalizerContextInterface
-     */
-    private function getDenormalizerContext(): DenormalizerContextInterface
-    {
-        /** @var DenormalizerContextInterface|\PHPUnit_Framework_MockObject_MockObject $context */
-        $context = $this->getMockBuilder(DenormalizerContextInterface::class)->getMockForAbstractClass();
-
-        return $context;
+        $fieldDenormalizer = new FieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('name', $object, 'name', $context);
     }
 }

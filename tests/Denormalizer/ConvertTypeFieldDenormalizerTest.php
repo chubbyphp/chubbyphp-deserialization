@@ -5,9 +5,12 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Denormalizer;
 
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
-use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\ConvertTypeFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\DeserializerLogicException;
+use Chubbyphp\Mock\Call;
+use Chubbyphp\Mock\MockByCallsTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,307 +18,366 @@ use PHPUnit\Framework\TestCase;
  */
 class ConvertTypeFieldDenormalizerTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testDenormalizeFieldWithInvalidType()
     {
         $this->expectException(DeserializerLogicException::class);
         $this->expectExceptionMessage('Convert type "type" is not supported');
 
-        new ConvertTypeFieldDenormalizer($this->getAccessor(), 'type');
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class);
+
+        new ConvertTypeFieldDenormalizer($accessor, 'type');
     }
 
     public function testDenormalizeFieldWithNull()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
-        $fieldDenormalizer->denormalizeField('value', $object, null, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, null),
+        ]);
 
-        self::assertNull($object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer->denormalizeField('value', $object, null, $context);
     }
 
     public function testDenormalizeFieldWithArray()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
-        $fieldDenormalizer->denormalizeField('value', $object, [], $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, []),
+        ]);
 
-        self::assertSame([], $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer->denormalizeField('value', $object, [], $context);
     }
 
     public function testDenormalizeFieldWithFloatWhichCantBeConvertedToBool()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_BOOL);
-        $fieldDenormalizer->denormalizeField('value', $object, 1.0, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 1.0),
+        ]);
 
-        self::assertSame(1.0, $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_BOOL);
+        $fieldDenormalizer->denormalizeField('value', $object, 1.0, $context);
     }
 
     public function testDenormalizeFieldWithIntWhichCantBeConvertedToBool()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_BOOL);
-        $fieldDenormalizer->denormalizeField('value', $object, 1, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 1),
+        ]);
 
-        self::assertSame(1, $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_BOOL);
+        $fieldDenormalizer->denormalizeField('value', $object, 1, $context);
     }
 
     public function testDenormalizeFieldWithStringConvertedToTrue()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_BOOL);
-        $fieldDenormalizer->denormalizeField('value', $object, 'true', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, true),
+        ]);
 
-        self::assertTrue($object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_BOOL);
+        $fieldDenormalizer->denormalizeField('value', $object, 'true', $context);
     }
 
     public function testDenormalizeFieldWithStringConvertedToFalse()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_BOOL);
-        $fieldDenormalizer->denormalizeField('value', $object, 'false', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, false),
+        ]);
 
-        self::assertFalse($object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_BOOL);
+        $fieldDenormalizer->denormalizeField('value', $object, 'false', $context);
     }
 
     public function testDenormalizeFieldWithStringWhichCantBeConvertedToBool()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_BOOL);
-        $fieldDenormalizer->denormalizeField('value', $object, 'test', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 'test'),
+        ]);
 
-        self::assertSame('test', $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_BOOL);
+        $fieldDenormalizer->denormalizeField('value', $object, 'test', $context);
     }
 
     public function testDenormalizeFieldWithBoolWhichCantBeConvertedToFloat()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
-        $fieldDenormalizer->denormalizeField('value', $object, true, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, true),
+        ]);
 
-        self::assertTrue($object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_FLOAT);
+        $fieldDenormalizer->denormalizeField('value', $object, true, $context);
     }
 
     public function testDenormalizeFieldWithIntegerConvertedToFloat()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
-        $fieldDenormalizer->denormalizeField('value', $object, 1, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 1.0),
+        ]);
 
-        self::assertSame(1.0, $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_FLOAT);
+        $fieldDenormalizer->denormalizeField('value', $object, 1, $context);
     }
 
     public function testDenormalizeFieldWithSpecialIntegerConvertedToFloat()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 1337.0),
+            Call::create('setValue')->with($object, 1337.0),
+            Call::create('setValue')->with($object, 1337.0),
+            Call::create('setValue')->with($object, 1337.0),
+        ]);
 
-        $fieldDenormalizer->denormalizeField('value', $object, 0x539, $this->getDenormalizerContext());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        self::assertSame(1337.0, $object->getValue());
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_FLOAT);
 
-        $fieldDenormalizer->denormalizeField('value', $object, 0b10100111001, $this->getDenormalizerContext());
-
-        self::assertSame(1337.0, $object->getValue());
-
-        $fieldDenormalizer->denormalizeField('value', $object, 02471, $this->getDenormalizerContext());
-
-        self::assertSame(1337.0, $object->getValue());
-
-        $fieldDenormalizer->denormalizeField('value', $object, 1337e0, $this->getDenormalizerContext());
-
-        self::assertSame(1337.0, $object->getValue());
+        $fieldDenormalizer->denormalizeField('value', $object, 0x539, $context);
+        $fieldDenormalizer->denormalizeField('value', $object, 0b10100111001, $context);
+        $fieldDenormalizer->denormalizeField('value', $object, 02471, $context);
+        $fieldDenormalizer->denormalizeField('value', $object, 1337e0, $context);
     }
 
     public function testDenormalizeFieldWithStringWhichCantBeConvertedToFloat()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
-        $fieldDenormalizer->denormalizeField('value', $object, '5.5.5', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, '5.5.5'),
+        ]);
 
-        self::assertSame('5.5.5', $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_FLOAT);
+        $fieldDenormalizer->denormalizeField('value', $object, '5.5.5', $context);
     }
 
     public function testDenormalizeFieldWithStringConvertedToFloat()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_FLOAT);
-        $fieldDenormalizer->denormalizeField('value', $object, '5.500', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 5.5),
+        ]);
 
-        self::assertSame(5.5, $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_FLOAT);
+        $fieldDenormalizer->denormalizeField('value', $object, '5.500', $context);
     }
 
     public function testDenormalizeFieldWithBoolWhichCantBeConvertedToInteger()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
-        $fieldDenormalizer->denormalizeField('value', $object, true, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, true),
+        ]);
 
-        self::assertTrue($object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer->denormalizeField('value', $object, true, $context);
     }
 
     public function testDenormalizeFieldWithFloatConvertedToInteger()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
-        $fieldDenormalizer->denormalizeField('value', $object, 5.0, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 5),
+        ]);
 
-        self::assertSame(5, $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer->denormalizeField('value', $object, 5.0, $context);
     }
 
     public function testDenormalizeFieldWithFloatWhichCantBeConvertedToInteger()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
-        $fieldDenormalizer->denormalizeField('value', $object, 5.1, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 5.1),
+        ]);
 
-        self::assertSame(5.1, $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer->denormalizeField('value', $object, 5.1, $context);
     }
 
     public function testDenormalizeFieldWithStringWhichCantBeConvertedToInteger()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
-        $fieldDenormalizer->denormalizeField('value', $object, 'test', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 'test'),
+        ]);
 
-        self::assertSame('test', $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer->denormalizeField('value', $object, 'test', $context);
     }
 
     public function testDenormalizeFieldWithStringConvertedToInteger()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_INT);
-        $fieldDenormalizer->denormalizeField('value', $object, '5', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 5),
+        ]);
 
-        self::assertSame(5, $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_INT);
+        $fieldDenormalizer->denormalizeField('value', $object, '5', $context);
     }
 
     public function testDenormalizeFieldWithBoolWhichCantBeConvertedToString()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_STRING);
-        $fieldDenormalizer->denormalizeField('value', $object, true, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, true),
+        ]);
 
-        self::assertTrue($object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_STRING);
+        $fieldDenormalizer->denormalizeField('value', $object, true, $context);
     }
 
     public function testDenormalizeFieldWithFloatConvertedToString()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_STRING);
-        $fieldDenormalizer->denormalizeField('value', $object, 5.5, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, '5.5'),
+        ]);
 
-        self::assertSame('5.5', $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_STRING);
+        $fieldDenormalizer->denormalizeField('value', $object, 5.5, $context);
     }
 
     public function testDenormalizeFieldWithIntegerConvertedToString()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_STRING);
-        $fieldDenormalizer->denormalizeField('value', $object, 5, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, '5'),
+        ]);
 
-        self::assertSame('5', $object->getValue());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_STRING);
+        $fieldDenormalizer->denormalizeField('value', $object, 5, $context);
     }
 
     public function testDenormalizeFieldWithSpecialIntegerConvertedToString()
     {
-        $object = $this->getObject();
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($this->getAccessor(), ConvertTypeFieldDenormalizer::TYPE_STRING);
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, '1337'),
+            Call::create('setValue')->with($object, '1337'),
+            Call::create('setValue')->with($object, '1337'),
+            Call::create('setValue')->with($object, '1337'),
+        ]);
 
-        $fieldDenormalizer->denormalizeField('value', $object, 0x539, $this->getDenormalizerContext());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        self::assertSame('1337', $object->getValue());
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_STRING);
 
-        $fieldDenormalizer->denormalizeField('value', $object, 0b10100111001, $this->getDenormalizerContext());
-
-        self::assertSame('1337', $object->getValue());
-
-        $fieldDenormalizer->denormalizeField('value', $object, 02471, $this->getDenormalizerContext());
-
-        self::assertSame('1337', $object->getValue());
-
-        $fieldDenormalizer->denormalizeField('value', $object, 1337e0, $this->getDenormalizerContext());
-
-        self::assertSame('1337', $object->getValue());
-    }
-
-    private function getObject()
-    {
-        return new class() {
-            /**
-             * @var int
-             */
-            private $value;
-
-            /**
-             * @param int $value
-             *
-             * @return self
-             */
-            public function setValue($value): self
-            {
-                $this->value = $value;
-
-                return $this;
-            }
-
-            /**
-             * @return int
-             */
-            public function getValue()
-            {
-                return $this->value;
-            }
-        };
-    }
-
-    /**
-     * @return AccessorInterface
-     */
-    private function getAccessor(): AccessorInterface
-    {
-        /** @var AccessorInterface|\PHPUnit_Framework_MockObject_MockObject $accessor */
-        $accessor = $this->getMockBuilder(AccessorInterface::class)->getMockForAbstractClass();
-
-        $accessor->expects(self::any())->method('setValue')->willReturnCallback(function ($object, $value) {
-            $object->setValue($value);
-        });
-
-        $accessor->expects(self::any())->method('getValue')->willReturnCallback(function ($object) {
-            return $object->getValue();
-        });
-
-        return $accessor;
-    }
-
-    /**
-     * @return DenormalizerContextInterface
-     */
-    private function getDenormalizerContext(): DenormalizerContextInterface
-    {
-        /** @var DenormalizerContextInterface|\PHPUnit_Framework_MockObject_MockObject $context */
-        $context = $this->getMockBuilder(DenormalizerContextInterface::class)->getMockForAbstractClass();
-
-        return $context;
+        $fieldDenormalizer->denormalizeField('value', $object, 0x539, $context);
+        $fieldDenormalizer->denormalizeField('value', $object, 0b10100111001, $context);
+        $fieldDenormalizer->denormalizeField('value', $object, 02471, $context);
+        $fieldDenormalizer->denormalizeField('value', $object, 1337e0, $context);
     }
 }

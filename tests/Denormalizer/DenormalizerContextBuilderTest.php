@@ -6,6 +6,8 @@ namespace Chubbyphp\Tests\Deserialization\Denormalizer;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextBuilder;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
+use Chubbyphp\Mock\MockByCallsTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -14,6 +16,8 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 class DenormalizerContextBuilderTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testCreate()
     {
         $context = DenormalizerContextBuilder::create()->getContext();
@@ -28,7 +32,8 @@ class DenormalizerContextBuilderTest extends TestCase
 
     public function testCreateWithOverridenSettings()
     {
-        $request = $this->getRequest();
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class);
 
         $context = DenormalizerContextBuilder::create()
             ->setAllowedAdditionalFields(['allowed_field'])
@@ -54,16 +59,5 @@ class DenormalizerContextBuilderTest extends TestCase
         self::assertInstanceOf(DenormalizerContextInterface::class, $context);
 
         self::assertNull($context->getRequest());
-    }
-
-    /**
-     * @return ServerRequestInterface
-     */
-    private function getRequest(): ServerRequestInterface
-    {
-        /** @var ServerRequestInterface|\PHPUnit_Framework_MockObject_MockObject $request */
-        $request = $this->getMockBuilder(ServerRequestInterface::class)->getMockForAbstractClass();
-
-        return $request;
     }
 }

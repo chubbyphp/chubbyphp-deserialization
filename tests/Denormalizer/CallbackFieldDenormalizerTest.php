@@ -4,9 +4,11 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Denormalizer;
 
-use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\CallbackFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
+use Chubbyphp\Mock\MockByCallsTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -14,6 +16,8 @@ use PHPUnit\Framework\TestCase;
  */
 class CallbackFieldDenormalizerTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testDenormalizeField()
     {
         $object = new class() {
@@ -43,6 +47,9 @@ class CallbackFieldDenormalizerTest extends TestCase
             }
         };
 
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
         $fieldDenormalizer = new CallbackFieldDenormalizer(
             function (
                 string $path,
@@ -54,19 +61,9 @@ class CallbackFieldDenormalizerTest extends TestCase
                 $object->setName($value);
             }
         );
-        $fieldDenormalizer->denormalizeField('name', $object, 'name', $this->getDenormalizerContext());
+
+        $fieldDenormalizer->denormalizeField('name', $object, 'name', $context);
 
         self::assertSame('name', $object->getName());
-    }
-
-    /**
-     * @return DenormalizerContextInterface
-     */
-    private function getDenormalizerContext(): DenormalizerContextInterface
-    {
-        /** @var DenormalizerContextInterface|\PHPUnit_Framework_MockObject_MockObject $context */
-        $context = $this->getMockBuilder(DenormalizerContextInterface::class)->getMockForAbstractClass();
-
-        return $context;
     }
 }

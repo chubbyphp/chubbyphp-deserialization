@@ -7,6 +7,9 @@ namespace Chubbyphp\Tests\Deserialization\Mapping;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use Chubbyphp\Deserialization\Mapping\LazyDenormalizationObjectMapping;
+use Chubbyphp\Mock\Call;
+use Chubbyphp\Mock\MockByCallsTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -15,15 +18,27 @@ use Psr\Container\ContainerInterface;
  */
 class LazyDenormalizationObjectMappingTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testInvoke()
     {
-        $denormalizationFieldMappings = [$this->getDenormalizationFieldMapping()];
+        $denormalizationFieldMappings = [$this->getMockByCalls(DenormalizationFieldMappingInterface::class)];
 
         $factory = function () {
         };
 
-        $container = $this->getContainer([
-            'service' => $this->getDenormalizationObjectMapping($factory, $denormalizationFieldMappings),
+        /** @var DenormalizationObjectMappingInterface|MockObject $denormalizationObjectMapping */
+        $denormalizationObjectMapping = $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
+            Call::create('getDenormalizationFactory')->with('path', 'type')->willReturn($factory),
+            Call::create('getDenormalizationFieldMappings')
+                ->with('path', 'type')
+                ->willReturn($denormalizationFieldMappings),
+        ]);
+
+        /** @var ContainerInterface|MockObject $container */
+        $container = $this->getMockByCalls(ContainerInterface::class, [
+            Call::create('get')->with('service')->willReturn($denormalizationObjectMapping),
+            Call::create('get')->with('service')->willReturn($denormalizationObjectMapping),
         ]);
 
         $objectMapping = new LazyDenormalizationObjectMapping($container, 'service', \stdClass::class);
@@ -31,64 +46,5 @@ class LazyDenormalizationObjectMappingTest extends TestCase
         self::assertEquals(\stdClass::class, $objectMapping->getClass());
         self::assertSame($factory, $objectMapping->getDenormalizationFactory('path', 'type'));
         self::assertSame($denormalizationFieldMappings, $objectMapping->getDenormalizationFieldMappings('path', 'type'));
-    }
-
-    /**
-     * @param array $services
-     *
-     * @return ContainerInterface
-     */
-    private function getContainer(array $services): ContainerInterface
-    {
-        /** @var ContainerInterface|\PHPUnit_Framework_MockObject_MockObject $container */
-        $container = $this->getMockBuilder(ContainerInterface::class)->setMethods(['get'])->getMockForAbstractClass();
-
-        $container
-            ->expects(self::any())
-            ->method('get')
-            ->willReturnCallback(function (string $id) use ($services) {
-                return $services[$id];
-            })
-        ;
-
-        return $container;
-    }
-
-    /**
-     * @param callable $denormalizationFactory
-     * @param array    $denormalizationFieldMappings
-     *
-     * @return DenormalizationObjectMappingInterface
-     */
-    private function getDenormalizationObjectMapping(
-        callable $denormalizationFactory,
-        array $denormalizationFieldMappings
-    ): DenormalizationObjectMappingInterface {
-        /** @var DenormalizationObjectMappingInterface|\PHPUnit_Framework_MockObject_MockObject $mapping */
-        $mapping = $this
-            ->getMockBuilder(DenormalizationObjectMappingInterface::class)
-            ->setMethods(['getDenormalizationFactory', 'getDenormalizationFieldMappings'])
-            ->getMockForAbstractClass()
-        ;
-
-        $mapping->expects(self::any())
-            ->method('getDenormalizationFactory')
-            ->with(self::equalTo('path'), self::equalTo('type'))
-            ->willReturn($denormalizationFactory);
-
-        $mapping->expects(self::any())
-            ->method('getDenormalizationFieldMappings')
-            ->with(self::equalTo('path'), self::equalTo('type'))
-            ->willReturn($denormalizationFieldMappings);
-
-        return $mapping;
-    }
-
-    /**
-     * @return DenormalizationFieldMappingInterface|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private function getDenormalizationFieldMapping(): DenormalizationFieldMappingInterface
-    {
-        return $this->getMockBuilder(DenormalizationFieldMappingInterface::class)->getMockForAbstractClass();
     }
 }

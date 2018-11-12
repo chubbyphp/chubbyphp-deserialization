@@ -8,6 +8,10 @@ use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
+use Chubbyphp\Mock\Argument\ArgumentCallback;
+use Chubbyphp\Mock\Call;
+use Chubbyphp\Mock\MockByCallsTrait;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -15,6 +19,8 @@ use PHPUnit\Framework\TestCase;
  */
 class DateTimeFieldDenormalizerTest extends TestCase
 {
+    use MockByCallsTrait;
+
     public function testDenormalizeFieldWithInvalidConstructArgument()
     {
         $this->expectException(\TypeError::class);
@@ -25,13 +31,30 @@ class DateTimeFieldDenormalizerTest extends TestCase
 
     public function testDenormalizeFieldWithFieldDenormalizer()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getFieldDenormalizer());
-        $fieldDenormalizer->denormalizeField('date', $object, '2017-01-01', $this->getDenormalizerContext());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        self::assertSame('2017-01-01', $object->getDate()->format('Y-m-d'));
+        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
+        $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class, [
+            Call::create('denormalizeField')
+                ->with(
+                    'date',
+                    $object,
+                    new ArgumentCallback(
+                        function ($date) {
+                            self::assertInstanceOf(\DateTime::class, $date);
+                            self::assertSame('2017-01-01', $date->format('Y-m-d'));
+                        }
+                    ),
+                    $context,
+                    null
+                ),
+        ]);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($fieldDenormalizer);
+        $fieldDenormalizer->denormalizeField('date', $object, '2017-01-01', $context);
 
         $error = error_get_last();
 
@@ -45,234 +68,224 @@ class DateTimeFieldDenormalizerTest extends TestCase
 
     public function testDenormalizeField()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('date', $object, '2017-01-01', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, new ArgumentCallback(
+                function ($value) {
+                    self::assertInstanceOf(\DateTime::class, $value);
+                    self::assertSame('2017-01-01', $value->format('Y-m-d'));
+                }
+            )),
+        ]);
 
-        self::assertSame('2017-01-01', $object->getDate()->format('Y-m-d'));
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, '2017-01-01', $context);
 
         self::assertNull(error_get_last());
     }
 
     public function testDenormalizeInvalidMonthField()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('date', $object, '2017-13-01', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, '2017-13-01'),
+        ]);
 
-        self::assertSame('2017-13-01', $object->getDate());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, '2017-13-01', $context);
 
         self::assertNull(error_get_last());
     }
 
     public function testDenormalizeInvalidDayField()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('date', $object, '2017-02-31', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, '2017-02-31'),
+        ]);
 
-        self::assertSame('2017-02-31', $object->getDate());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, '2017-02-31', $context);
 
         self::assertNull(error_get_last());
     }
 
     public function testDenormalizeInvalidWithAllZeroField()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('date', $object, '0000-00-00', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, '0000-00-00'),
+        ]);
 
-        self::assertSame('0000-00-00', $object->getDate());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, '0000-00-00', $context);
 
         self::assertNull(error_get_last());
     }
 
     public function testDenormalizeEmptyField()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('date', $object, '', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, ''),
+        ]);
 
-        self::assertSame('', $object->getDate());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, '', $context);
 
         self::assertNull(error_get_last());
     }
 
     public function testDenormalizeWhitespaceOnlyField()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('date', $object, '   ', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, '    '),
+        ]);
 
-        self::assertSame('   ', $object->getDate());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, '    ', $context);
 
         self::assertNull(error_get_last());
     }
 
     public function testDenormalizeNullField()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('date', $object, null, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, null),
+        ]);
 
-        self::assertSame(null, $object->getDate());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, null, $context);
 
         self::assertNull(error_get_last());
     }
 
     public function testDenormalizeNullStringField()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('date', $object, 'null', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 'null'),
+        ]);
 
-        self::assertSame('null', $object->getDate());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, 'null', $context);
 
         self::assertNull(error_get_last());
     }
 
     public function testDenormalizeZeroField()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('date', $object, 0, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, 0),
+        ]);
 
-        self::assertSame(0, $object->getDate());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, 0, $context);
 
         self::assertNull(error_get_last());
     }
 
     public function testDenormalizeZeroStringField()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('date', $object, '0', $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, '0'),
+        ]);
 
-        self::assertSame('0', $object->getDate());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, '0', $context);
 
         self::assertNull(error_get_last());
     }
 
     public function testDenormalizeArrayField()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('date', $object, [], $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, []),
+        ]);
 
-        self::assertSame([], $object->getDate());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, [], $context);
 
         self::assertNull(error_get_last());
     }
 
     public function testDenormalizeObjectField()
     {
-        $object = $this->getObject();
-        $object->setDate(new \DateTime('2016-01-01'));
+        $object = new \stdClass();
 
         $date = new \stdClass();
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($this->getAccessor());
-        $fieldDenormalizer->denormalizeField('date', $object, $date, $this->getDenormalizerContext());
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, $date),
+        ]);
 
-        self::assertSame($date, $object->getDate());
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, $date, $context);
 
         self::assertNull(error_get_last());
-    }
-
-    private function getObject()
-    {
-        return new class() {
-            /**
-             * @var \DateTime|string|null
-             */
-            private $date;
-
-            /**
-             * @return \DateTime|string|null
-             */
-            public function getDate()
-            {
-                return $this->date;
-            }
-
-            /**
-             * @param \DateTime|string|null $date
-             *
-             * @return self
-             */
-            public function setDate($date): self
-            {
-                $this->date = $date;
-
-                return $this;
-            }
-        };
-    }
-
-    /**
-     * @return AccessorInterface
-     */
-    private function getAccessor(): AccessorInterface
-    {
-        /** @var AccessorInterface|\PHPUnit_Framework_MockObject_MockObject $accessor */
-        $accessor = $this->getMockBuilder(AccessorInterface::class)->getMockForAbstractClass();
-
-        $accessor->expects(self::any())->method('setValue')->willReturnCallback(
-            function ($object, $value) {
-                $object->setDate($value);
-            }
-        );
-
-        return $accessor;
-    }
-
-    /**
-     * @return FieldDenormalizerInterface
-     */
-    private function getFieldDenormalizer(): FieldDenormalizerInterface
-    {
-        /** @var FieldDenormalizerInterface|\PHPUnit_Framework_MockObject_MockObject $fieldDenormalizer */
-        $fieldDenormalizer = $this->getMockBuilder(FieldDenormalizerInterface::class)->getMockForAbstractClass();
-
-        $fieldDenormalizer->expects(self::any())->method('denormalizeField')->willReturnCallback(
-            function (string $path, $object, $value) {
-                $object->setDate($value);
-            }
-        );
-
-        return $fieldDenormalizer;
-    }
-
-    /**
-     * @return DenormalizerContextInterface
-     */
-    private function getDenormalizerContext(): DenormalizerContextInterface
-    {
-        /** @var DenormalizerContextInterface|\PHPUnit_Framework_MockObject_MockObject $context */
-        $context = $this->getMockBuilder(DenormalizerContextInterface::class)->getMockForAbstractClass();
-
-        return $context;
     }
 }
