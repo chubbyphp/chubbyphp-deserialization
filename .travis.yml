@@ -24,3 +24,6 @@ before_script:
   - if [ "$dependencies" = "highest" ]; then composer update -n; fi;
 
 script: vendor/bin/phpunit --coverage-text --verbose
+
+after_success:
+  - vendor/bin/phpstan analyse -l 7 --no-progress src
