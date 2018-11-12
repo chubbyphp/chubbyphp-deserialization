@@ -26,4 +26,4 @@ before_script:
 script: vendor/bin/phpunit --coverage-text --verbose
 
 after_success:
-  - vendor/bin/phpstan analyse -l 7 --no-progress src
+  - vendor/bin/phpstan analyse --level 7 --no-progress src
