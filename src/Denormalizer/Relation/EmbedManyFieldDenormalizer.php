@@ -87,12 +87,12 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string                          $path
-     * @param array                           $value
-     * @param iterable $relatedObjects
-     * @param array                           $existEmbObjects
-     * @param DenormalizerContextInterface    $context
-     * @param DenormalizerInterface           $denormalizer
+     * @param string                       $path
+     * @param array                        $value
+     * @param iterable                     $relatedObjects
+     * @param array                        $existEmbObjects
+     * @param DenormalizerContextInterface $context
+     * @param DenormalizerInterface        $denormalizer
      */
     private function assignRelatedObjects(
         string $path,

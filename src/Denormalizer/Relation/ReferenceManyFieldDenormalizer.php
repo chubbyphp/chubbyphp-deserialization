@@ -77,8 +77,8 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string                          $path
-     * @param array                           $value
+     * @param string   $path
+     * @param array    $value
      * @param iterable $relatedObjects
      */
     private function assignRelatedObjects(string $path, array $value, &$relatedObjects)
