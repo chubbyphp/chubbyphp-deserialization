@@ -88,7 +88,8 @@ class EmbedManyFieldDenormalizerTest extends TestCase
 
         /** @var AccessorInterface|MockObject $accessor */
         $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('setValue')->with($parent, null),
+            Call::create('getValue')->with($parent)->willReturn([]),
+            Call::create('setValue')->with($parent, []),
         ]);
 
         /** @var DenormalizerContextInterface|MockObject $context */

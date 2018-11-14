@@ -51,9 +51,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerInterface $denormalizer = null
     ) {
         if (null === $value) {
-            $this->accessor->setValue($object, null);
-
-            return;
+            $value = [];
         }
 
         if (!is_array($value)) {

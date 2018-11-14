@@ -51,9 +51,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerInterface $denormalizer = null
     ) {
         if (null === $value) {
-            $this->accessor->setValue($object, $value);
-
-            return;
+            $value = [];
         }
 
         if (null === $denormalizer) {

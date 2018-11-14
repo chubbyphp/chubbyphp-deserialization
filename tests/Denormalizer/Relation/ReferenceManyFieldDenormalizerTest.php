@@ -63,13 +63,20 @@ class ReferenceManyFieldDenormalizerTest extends TestCase
 
         /** @var AccessorInterface|MockObject $accessor */
         $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('setValue')->with($parent, null),
+            Call::create('getValue')->with($parent)->willReturn([]),
+            Call::create('setValue')->with($parent, []),
         ]);
 
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(function (string $id) {}, $accessor);
+        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
+            function () {
+                self::fail('There should be no id to resolve');
+            },
+            $accessor
+        );
+
         $fieldDenormalizer->denormalizeField('children', $parent, null, $context);
     }
 
