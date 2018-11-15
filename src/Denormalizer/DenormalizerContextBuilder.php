@@ -78,6 +78,8 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     }
 
     /**
+     * @deprecated
+     *
      * @param bool $resetMissingFields
      *
      * @return DenormalizerContextBuilderInterface

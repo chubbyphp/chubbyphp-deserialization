@@ -48,6 +48,15 @@ class DenormalizerContextBuilderTest extends TestCase
         self::assertSame(['group1'], $context->getGroups());
         self::assertSame($request, $context->getRequest());
         self::assertTrue($context->isResetMissingFields());
+
+        $error = error_get_last();
+
+        error_clear_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame('resetMissingFields is broken by design, better solution is in progress', $error['message']);
     }
 
     public function testCreateSetNullRequest()

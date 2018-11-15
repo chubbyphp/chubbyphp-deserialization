@@ -43,6 +43,11 @@ final class DenormalizerContext implements DenormalizerContextInterface
         $this->allowedAdditionalFields = $allowedAdditionalFields;
         $this->groups = $groups;
         $this->request = $request;
+
+        if ($resetMissingFields) {
+            @trigger_error('resetMissingFields is broken by design, better solution is in progress', E_USER_DEPRECATED);
+        }
+
         $this->resetMissingFields = $resetMissingFields;
     }
 
@@ -71,6 +76,8 @@ final class DenormalizerContext implements DenormalizerContextInterface
     }
 
     /**
+     * @deprecated
+     *
      * @return bool
      */
     public function isResetMissingFields(): bool

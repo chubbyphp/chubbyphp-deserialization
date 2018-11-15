@@ -25,6 +25,12 @@ class DenormalizerContextTest extends TestCase
         self::assertSame([], $context->getGroups());
         self::assertNull($context->getRequest());
         self::assertFalse($context->isResetMissingFields());
+
+        $error = error_get_last();
+
+        error_clear_last();
+
+        self::assertNull($error);
     }
 
     public function testCreateWithOverridenSettings()
@@ -32,11 +38,33 @@ class DenormalizerContextTest extends TestCase
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        $context = new DenormalizerContext(['allowed_field'], ['group1'], $request, true);
+        $context = new DenormalizerContext(['allowed_field'], ['group1'], $request, false);
 
         self::assertSame(['allowed_field'], $context->getAllowedAdditionalFields());
         self::assertSame(['group1'], $context->getGroups());
         self::assertSame($request, $context->getRequest());
+        self::assertFalse($context->isResetMissingFields());
+
+        $error = error_get_last();
+
+        error_clear_last();
+
+        self::assertNull($error);
+    }
+
+    public function testWithResetMissingFieldsExpectDeprecation()
+    {
+        $context = new DenormalizerContext(null, [], null, true);
+
         self::assertTrue($context->isResetMissingFields());
+
+        $error = error_get_last();
+
+        error_clear_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame('resetMissingFields is broken by design, better solution is in progress', $error['message']);
     }
 }
