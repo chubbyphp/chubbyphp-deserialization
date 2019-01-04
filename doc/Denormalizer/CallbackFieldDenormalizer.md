@@ -21,7 +21,7 @@ $fieldDenormalizer = new CallbackFieldDenormalizer(
     }
 );
 
-$fieldDenormalizer->denormalizedenormalizeField(
+$fieldDenormalizer->denormalizeField(
     'name',
     $model,
     'php',
