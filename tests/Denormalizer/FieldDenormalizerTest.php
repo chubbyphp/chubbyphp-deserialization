@@ -34,4 +34,36 @@ class FieldDenormalizerTest extends TestCase
         $fieldDenormalizer = new FieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('name', $object, 'name', $context);
     }
+
+    public function testDenormalizeFieldWithEmptyToNullDisabled()
+    {
+        $object = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, ''),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new FieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('name', $object, '', $context);
+    }
+
+    public function testDenormalizeFieldWithEmptyToNullEnabled()
+    {
+        $object = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, null),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new FieldDenormalizer($accessor, true);
+        $fieldDenormalizer->denormalizeField('name', $object, '', $context);
+    }
 }

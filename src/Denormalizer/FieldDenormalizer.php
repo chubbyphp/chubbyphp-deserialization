@@ -15,11 +15,18 @@ final class FieldDenormalizer implements FieldDenormalizerInterface
     private $accessor;
 
     /**
-     * @param AccessorInterface $accessor
+     * @var bool
      */
-    public function __construct(AccessorInterface $accessor)
+    private $emptyToNull;
+
+    /**
+     * @param AccessorInterface $accessor
+     * @param bool              $emptyToNull
+     */
+    public function __construct(AccessorInterface $accessor, bool $emptyToNull = false)
     {
         $this->accessor = $accessor;
+        $this->emptyToNull = $emptyToNull;
     }
 
     /**
@@ -38,6 +45,12 @@ final class FieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
     ) {
+        if ($this->emptyToNull && '' === $value) {
+            $this->accessor->setValue($object, null);
+
+            return;
+        }
+
         $this->accessor->setValue($object, $value);
     }
 }

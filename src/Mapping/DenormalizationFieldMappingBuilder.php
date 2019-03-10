@@ -42,9 +42,12 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
      *
      * @return DenormalizationFieldMappingBuilderInterface
      */
-    public static function create(string $name): DenormalizationFieldMappingBuilderInterface
+    public static function create(string $name, bool $emptyToNull = false): DenormalizationFieldMappingBuilderInterface
     {
-        return new self($name);
+        $self = new self($name);
+        $self->fieldDenormalizer = new FieldDenormalizer(new PropertyAccessor($name), $emptyToNull);
+
+        return $self;
     }
 
     /**
@@ -64,13 +67,14 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     /**
      * @param string $name
      * @param string $type
+     * @param bool   $emptyToNull
      *
      * @return DenormalizationFieldMappingBuilderInterface
      */
-    public static function createConvertType(string $name, string $type): DenormalizationFieldMappingBuilderInterface
+    public static function createConvertType(string $name, string $type, bool $emptyToNull = false): DenormalizationFieldMappingBuilderInterface
     {
         $self = new self($name);
-        $self->fieldDenormalizer = new ConvertTypeFieldDenormalizer(new PropertyAccessor($name), $type);
+        $self->fieldDenormalizer = new ConvertTypeFieldDenormalizer(new PropertyAccessor($name), $type, $emptyToNull);
 
         return $self;
     }
@@ -80,10 +84,10 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
      *
      * @return DenormalizationFieldMappingBuilderInterface
      */
-    public static function createDateTime(string $name): DenormalizationFieldMappingBuilderInterface
+    public static function createDateTime(string $name, bool $emptyToNull = false): DenormalizationFieldMappingBuilderInterface
     {
         $self = new self($name);
-        $self->fieldDenormalizer = new DateTimeFieldDenormalizer(new PropertyAccessor($name));
+        $self->fieldDenormalizer = new DateTimeFieldDenormalizer(new PropertyAccessor($name), $emptyToNull);
 
         return $self;
     }
@@ -181,7 +185,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return new DenormalizationFieldMapping(
             $this->name,
             $this->groups,
-            $this->fieldDenormalizer ?? new FieldDenormalizer(new PropertyAccessor($this->name))
+            $this->fieldDenormalizer
         );
     }
 }

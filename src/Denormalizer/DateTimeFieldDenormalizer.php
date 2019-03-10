@@ -22,10 +22,17 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
     private $accessor;
 
     /**
+     * @var bool
+     */
+    private $emptyToNull;
+
+    /**
      * @param AccessorInterface|FieldDenormalizerInterface $accessor
      */
-    public function __construct($accessor)
+    public function __construct($accessor, bool $emptyToNull = false)
     {
+        $this->emptyToNull = $emptyToNull;
+
         if ($accessor instanceof AccessorInterface) {
             $this->accessor = $accessor;
 
@@ -74,6 +81,12 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
     ) {
+        if ($this->emptyToNull && '' === $value) {
+            $this->setValue($path, $object, null, $context, $denormalizer);
+
+            return;
+        }
+
         if (!is_string($value) || '' === $trimmedValue = trim($value)) {
             $this->setValue($path, $object, $value, $context, $denormalizer);
 

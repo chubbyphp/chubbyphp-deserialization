@@ -288,4 +288,40 @@ class DateTimeFieldDenormalizerTest extends TestCase
 
         self::assertNull(error_get_last());
     }
+
+    public function testDenormalizeFieldWithEmptyToNullDisabled()
+    {
+        $object = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, ''),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer->denormalizeField('date', $object, '', $context);
+
+        self::assertNull(error_get_last());
+    }
+
+    public function testDenormalizeFieldWithEmptyToNullEnabled()
+    {
+        $object = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, null),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor, true);
+        $fieldDenormalizer->denormalizeField('date', $object, '', $context);
+
+        self::assertNull(error_get_last());
+    }
 }

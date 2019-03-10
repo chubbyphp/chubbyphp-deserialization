@@ -380,4 +380,36 @@ class ConvertTypeFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField('value', $object, 02471, $context);
         $fieldDenormalizer->denormalizeField('value', $object, 1337e0, $context);
     }
+
+    public function testDenormalizeFieldWithEmptyToNullDisabled()
+    {
+        $object = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, ''),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_FLOAT);
+        $fieldDenormalizer->denormalizeField('value', $object, '', $context);
+    }
+
+    public function testDenormalizeFieldWithEmptyToNullEnabled()
+    {
+        $object = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, null),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_FLOAT, true);
+        $fieldDenormalizer->denormalizeField('value', $object, '', $context);
+    }
 }

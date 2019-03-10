@@ -33,12 +33,18 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
     ];
 
     /**
+     * @var bool
+     */
+    private $emptyToNull;
+
+    /**
      * @param AccessorInterface $accessor
      * @param string            $type
+     * @param bool              $emptyToNull
      *
      * @throws DeserializerLogicException
      */
-    public function __construct(AccessorInterface $accessor, string $type)
+    public function __construct(AccessorInterface $accessor, string $type, bool $emptyToNull = false)
     {
         if (!in_array($type, self::TYPES, true)) {
             throw DeserializerLogicException::createConvertTypeDoesNotExists($type);
@@ -46,6 +52,7 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
 
         $this->accessor = $accessor;
         $this->type = $type;
+        $this->emptyToNull = $emptyToNull;
     }
 
     /**
@@ -64,6 +71,12 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
     ) {
+        if ($this->emptyToNull && '' === $value) {
+            $this->accessor->setValue($object, null);
+
+            return;
+        }
+
         $this->accessor->setValue($object, $this->convertType($value));
     }
 
