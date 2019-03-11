@@ -139,15 +139,21 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     /**
      * @param string   $name
      * @param callable $repository
+     * @param bool     $emptyToNull
      *
      * @return DenormalizationFieldMappingBuilderInterface
      */
     public static function createReferenceOne(
         string $name,
-        callable $repository
+        callable $repository,
+        bool $emptyToNull = false
     ): DenormalizationFieldMappingBuilderInterface {
         $self = new self($name);
-        $self->fieldDenormalizer = new ReferenceOneFieldDenormalizer($repository, new PropertyAccessor($name));
+        $self->fieldDenormalizer = new ReferenceOneFieldDenormalizer(
+            $repository,
+            new PropertyAccessor($name),
+            $emptyToNull
+        );
 
         return $self;
     }
