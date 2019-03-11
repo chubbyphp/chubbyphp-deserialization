@@ -31,4 +31,24 @@ echo $model
     ->getReference()
     ->getName();
 // 'php'
+
+// empty to null
+$fieldDenormalizer = new ReferenceOneFieldDenormalizer(
+    function (string $id) {
+        return;
+    },
+    new PropertyAccessor('children'),
+    true
+);
+
+$fieldDenormalizer->denormalizeField(
+    'reference',
+    $model,
+    '',
+    $context,
+    $denormalizer
+);
+
+echo $model->getReference();
+// null
 ```

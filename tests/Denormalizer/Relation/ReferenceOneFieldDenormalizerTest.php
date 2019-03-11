@@ -112,4 +112,63 @@ class ReferenceOneFieldDenormalizerTest extends TestCase
             $context
         );
     }
+
+    public function testDenormalizeFieldWithEmptyToNullDisabled()
+    {
+        $object = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, ''),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
+            function (string $id) {
+                self::assertSame('', $id);
+
+                return null;
+            },
+            $accessor
+        );
+
+        $fieldDenormalizer->denormalizeField(
+            'reference',
+            $object,
+            '',
+            $context
+        );
+    }
+
+    public function testDenormalizeFieldWithEmptyToNullEnabled()
+    {
+        $object = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, null),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
+            function ($id) {
+                self::assertSame(null, $id);
+
+                return null;
+            },
+            $accessor,
+            true
+        );
+
+        $fieldDenormalizer->denormalizeField(
+            'reference',
+            $object,
+            '',
+            $context
+        );
+    }
 }

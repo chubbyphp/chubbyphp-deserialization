@@ -71,7 +71,7 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
     ) {
-        if ($this->emptyToNull && '' === $value) {
+        if ('' === $value && $this->emptyToNull) {
             $this->accessor->setValue($object, null);
 
             return;

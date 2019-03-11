@@ -23,13 +23,20 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
     private $accessor;
 
     /**
+     * @var bool
+     */
+    private $emptyToNull;
+
+    /**
      * @param callable          $repository
      * @param AccessorInterface $accessor
+     * @param bool $emptyToNull
      */
-    public function __construct(callable $repository, AccessorInterface $accessor)
+    public function __construct(callable $repository, AccessorInterface $accessor, bool $emptyToNull = false)
     {
         $this->repository = $repository;
         $this->accessor = $accessor;
+        $this->emptyToNull = $emptyToNull;
     }
 
     /**
@@ -48,6 +55,12 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
     ) {
+        if ('' === $value && $this->emptyToNull) {
+            $this->accessor->setValue($object, null);
+
+            return;
+        }
+
         if (null === $value) {
             $this->accessor->setValue($object, null);
 

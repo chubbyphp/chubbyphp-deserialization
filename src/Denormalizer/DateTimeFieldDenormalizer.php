@@ -81,7 +81,7 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
     ) {
-        if ($this->emptyToNull && '' === $value) {
+        if ('' === $value && $this->emptyToNull) {
             $this->setValue($path, $object, null, $context, $denormalizer);
 
             return;
