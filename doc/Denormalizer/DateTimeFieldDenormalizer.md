@@ -24,4 +24,20 @@ $fieldDenormalizer->denormalizeField(
 echo $model->getAt()
     ->format('Y-m-d H:i:s');
 // '2017-01-01 22:00:00'
+
+// empty to null
+$fieldDenormalizer = new DateTimeFieldDenormalizer(
+    new PropertyAccessor('at'),
+    null
+);
+
+$fieldDenormalizer->denormalizeField(
+    'at',
+    $model,
+    '',
+    $context
+);
+
+echo $model->getAt();
+// null
 ```

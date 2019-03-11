@@ -23,4 +23,20 @@ $fieldDenormalizer->denormalizeField(
 
 echo $model->getName();
 // 'php'
+
+// empty to null
+$fieldDenormalizer = new FieldDenormalizer(
+    new PropertyAccessor('name'),
+    true
+);
+
+$fieldDenormalizer->denormalizeField(
+    'name',
+    $model,
+    '',
+    $context
+);
+
+echo $model->getName();
+// null
 ```

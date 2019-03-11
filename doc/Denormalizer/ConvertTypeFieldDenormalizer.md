@@ -22,6 +22,23 @@ $fieldDenormalizer->denormalizeField(
     $context
 );
 
-echo $model->getName();
+echo $model->getAmount();
 // 5.5
+
+// empty to null
+$fieldDenormalizer = new ConvertTypeFieldDenormalizer(
+    new PropertyAccessor('amount'),
+    ConvertTypeFieldDenormalizer::TYPE_FLOAT,
+    true
+);
+
+$fieldDenormalizer->denormalizeField(
+    'amount',
+    $model,
+    '',
+    $context
+);
+
+echo $model->getAmount();
+// null
 ```
