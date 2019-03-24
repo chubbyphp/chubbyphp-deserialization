@@ -6,6 +6,7 @@ namespace Chubbyphp\Deserialization\Provider;
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\JsonxTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
@@ -35,6 +36,7 @@ final class DeserializationProvider implements ServiceProviderInterface
             $decoderTypes = [];
 
             $decoderTypes[] = new JsonTypeDecoder();
+            $decoderTypes[] = new JsonxTypeDecoder();
             $decoderTypes[] = new UrlEncodedTypeDecoder();
             $decoderTypes[] = new XmlTypeDecoder();
 
