@@ -6,6 +6,7 @@ namespace Chubbyphp\Deserialization\DependencyInjection;
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\JsonxTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
@@ -32,6 +33,10 @@ final class DeserializationCompilerPass implements CompilerPassInterface
 
         $container
             ->register('chubbyphp.deserializer.decoder.type.json', JsonTypeDecoder::class)
+            ->addTag('chubbyphp.deserializer.decoder.type');
+
+        $container
+            ->register('chubbyphp.deserializer.decoder.type.jsonx', JsonxTypeDecoder::class)
             ->addTag('chubbyphp.deserializer.decoder.type');
 
         $container

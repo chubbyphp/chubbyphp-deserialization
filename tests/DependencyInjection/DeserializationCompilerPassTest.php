@@ -56,6 +56,13 @@ class DeserializationCompilerPassTest extends TestCase
         self::assertInstanceOf(DenormalizerObjectMappingRegistry::class, $objectMappingRegistry);
 
         self::assertSame(['key' => 'value'], $decoder->decode('{"key":"value"}', 'application/json'));
+        self::assertSame(
+            ['key' => 'value'],
+            $decoder->decode(
+                '<?xml version="1.0" encoding="UTF-8"?>'."\n"
+                .'<json:object><json:string name="key">value</json:string></json:object>', 'application/x-jsonx'
+            )
+        );
         self::assertSame(['key' => 'value'], $decoder->decode('key=value', 'application/x-www-form-urlencoded'));
         self::assertSame(
             ['key' => 'value'],
