@@ -47,7 +47,7 @@ composer require chubbyphp/chubbyphp-deserialization "~2.9"
 #### Type Decoder
 
  * [JsonTypeDecoder][5]
- * [JsonxTypeDecoderTest][6]
+ * [JsonxTypeDecoder][6]
  * [UrlEncodedTypeDecoder][7]
  * [XmlTypeDecoder][8]
  * [YamlTypeDecoder][9]
