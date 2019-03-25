@@ -30,7 +30,7 @@ A simple deserialization.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "~2.8"
+composer require chubbyphp/chubbyphp-deserialization "~2.9"
 ```
 
 ## Usage
@@ -47,36 +47,37 @@ composer require chubbyphp/chubbyphp-deserialization "~2.8"
 #### Type Decoder
 
  * [JsonTypeDecoder][5]
- * [UrlEncodedTypeDecoder][6]
- * [XmlTypeDecoder][7]
- * [YamlTypeDecoder][8]
+ * [JsonxTypeDecoderTest][6]
+ * [UrlEncodedTypeDecoder][7]
+ * [XmlTypeDecoder][8]
+ * [YamlTypeDecoder][9]
 
 ### Denormalizer
 
- * [Denormalizer][9]
+ * [Denormalizer][10]
 
 #### Field Denormalizer
 
- * [CallbackFieldDenormalizer][10]
- * [DateTimeFieldDenormalizer][11]
- * [FieldDenormalizer][12]
- * [ConvertTypeFieldDenormalizer][13]
+ * [CallbackFieldDenormalizer][11]
+ * [DateTimeFieldDenormalizer][12]
+ * [FieldDenormalizer][13]
+ * [ConvertTypeFieldDenormalizer][14]
 
 ##### Relation Field Denormalizer
 
- * [EmbedManyFieldDenormalizer][14]
- * [EmbedOneFieldDenormalizer][15]
- * [ReferenceManyFieldDenormalizer][16]
- * [ReferenceOneFieldDenormalizer][17]
+ * [EmbedManyFieldDenormalizer][15]
+ * [EmbedOneFieldDenormalizer][16]
+ * [ReferenceManyFieldDenormalizer][17]
+ * [ReferenceOneFieldDenormalizer][18]
 
 #### Denormalizer Context
 
- * [DenormalizerContext][18]
- * [DenormalizerContextBuilder][19]
+ * [DenormalizerContext][19]
+ * [DenormalizerContextBuilder][20]
 
 ### DenormalizerObjectMappingRegistry
 
-* [DenormalizerObjectMappingRegistry][20]
+* [DenormalizerObjectMappingRegistry][21]
 
 ### Deserializer
 
@@ -85,6 +86,7 @@ composer require chubbyphp/chubbyphp-deserialization "~2.8"
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\JsonxTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
@@ -99,6 +101,7 @@ $logger = ...;
 $deserializer = new Deserializer(
     new Decoder([
         new JsonTypeDecoder(),
+        new JsonxTypeDecoder(),
         new UrlEncodedTypeDecoder(),
         new XmlTypeDecoder(),
         new YamlTypeDecoder()
@@ -123,6 +126,7 @@ echo $model->getName();
 print_r($deserializer->getContentTypes());
 //[
 //    'application/json',
+//    'application/x-jsonx',
 //    'application/x-www-form-urlencoded',
 //    'application/xml',
 //    'application/x-yaml'
@@ -177,26 +181,27 @@ Dominik Zogg 2017
 [4]: doc/Decoder/Decoder.md
 
 [5]: doc/Decoder/JsonTypeDecoder.md
-[6]: doc/Decoder/UrlEncodedTypeDecoder.md
-[7]: doc/Decoder/XmlTypeDecoder.md
-[8]: doc/Decoder/YamlTypeDecoder.md
+[6]: doc/Decoder/JsonxTypeDecoder.md
+[7]: doc/Decoder/UrlEncodedTypeDecoder.md
+[8]: doc/Decoder/XmlTypeDecoder.md
+[9]: doc/Decoder/YamlTypeDecoder.md
 
-[9]: doc/Denormalizer/Denormalizer.md
+[10]: doc/Denormalizer/Denormalizer.md
 
-[10]: doc/Denormalizer/CallbackFieldDenormalizer.md
-[11]: doc/Denormalizer/DateTimeFieldDenormalizer.md
-[12]: doc/Denormalizer/FieldDenormalizer.md
-[13]: doc/Denormalizer/ConvertTypeFieldDenormalizer.md
+[11]: doc/Denormalizer/CallbackFieldDenormalizer.md
+[12]: doc/Denormalizer/DateTimeFieldDenormalizer.md
+[13]: doc/Denormalizer/FieldDenormalizer.md
+[14]: doc/Denormalizer/ConvertTypeFieldDenormalizer.md
 
-[14]: doc/Denormalizer/Relation/EmbedManyFieldDenormalizer.md
-[15]: doc/Denormalizer/Relation/EmbedOneFieldDenormalizer.md
-[16]: doc/Denormalizer/Relation/ReferenceManyFieldDenormalizer.md
-[17]: doc/Denormalizer/Relation/ReferenceOneFieldDenormalizer.md
+[15]: doc/Denormalizer/Relation/EmbedManyFieldDenormalizer.md
+[16]: doc/Denormalizer/Relation/EmbedOneFieldDenormalizer.md
+[17]: doc/Denormalizer/Relation/ReferenceManyFieldDenormalizer.md
+[18]: doc/Denormalizer/Relation/ReferenceOneFieldDenormalizer.md
 
-[18]: doc/Denormalizer/DenormalizerContext.md
-[19]: doc/Denormalizer/DenormalizerContextBuilder.md
+[19]: doc/Denormalizer/DenormalizerContext.md
+[20]: doc/Denormalizer/DenormalizerContextBuilder.md
 
-[20]: doc/Denormalizer/DenormalizerObjectMappingRegistry.md
+[21]: doc/Denormalizer/DenormalizerObjectMappingRegistry.md
 
 [21]: doc/Mapping/DenormalizationFieldMapping.md
 [22]: doc/Mapping/DenormalizationFieldMappingBuilder.md
