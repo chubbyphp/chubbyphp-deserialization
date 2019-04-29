@@ -324,4 +324,27 @@ class DateTimeFieldDenormalizerTest extends TestCase
 
         self::assertNull(error_get_last());
     }
+
+    public function testDenormalizeFieldWithTimezone()
+    {
+        $object = new \stdClass();
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
+        $fieldDenormalizer = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, new ArgumentCallback(
+                function ($value) {
+                    self::assertInstanceOf(\DateTime::class, $value);
+                    self::assertSame('2016-12-31 22:00:00', $value->format('Y-m-d H:i:s'));
+                }
+            )),
+        ]);
+
+        $fieldDenormalizer = new DateTimeFieldDenormalizer($fieldDenormalizer, false, new \DateTimeZone('UTC'));
+        $fieldDenormalizer->denormalizeField('date', $object, '2017-01-01T00:00:00+02:00', $context);
+
+        self::assertNull(error_get_last());
+    }
 }

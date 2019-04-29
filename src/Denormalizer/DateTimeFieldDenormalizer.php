@@ -27,11 +27,19 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
     private $emptyToNull;
 
     /**
-     * @param AccessorInterface|FieldDenormalizerInterface $accessor
+     * @var \DateTimeZone|null
      */
-    public function __construct($accessor, bool $emptyToNull = false)
+    private $dateTimeZone;
+
+    /**
+     * @param AccessorInterface|FieldDenormalizerInterface $accessor
+     * @param bool $emptyToNull
+     * @param \DateTimeZone|null $dateTimeZone
+     */
+    public function __construct($accessor, bool $emptyToNull = false, \DateTimeZone $dateTimeZone = null)
     {
         $this->emptyToNull = $emptyToNull;
+        $this->dateTimeZone = $dateTimeZone;
 
         if ($accessor instanceof AccessorInterface) {
             $this->accessor = $accessor;
@@ -95,6 +103,11 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
 
         try {
             $dateTime = new \DateTime($trimmedValue);
+
+            if(null !== $this->dateTimeZone) {
+                $dateTime->setTimezone($this->dateTimeZone);
+            }
+
             $errors = \DateTime::getLastErrors();
 
             if (0 === $errors['warning_count'] && 0 === $errors['error_count']) {

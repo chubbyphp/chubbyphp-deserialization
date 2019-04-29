@@ -64,6 +64,15 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
     }
 
+    public function testGetDefaultMappingForDateTimeWithTimezone()
+    {
+        $fieldMapping = DenormalizationFieldMappingBuilder::createDateTime('name', false, new \DateTimeZone('UTC'))->getMapping();
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertSame([], $fieldMapping->getGroups());
+        self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+    }
+
     public function testGetDefaultMappingForEmbedMany()
     {
         $fieldMapping = DenormalizationFieldMappingBuilder::createEmbedMany('name', \stdClass::class)->getMapping();
