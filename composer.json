@@ -28,6 +28,9 @@
     "autoload": {
         "psr-4": { "Chubbyphp\\Deserialization\\": "src/" }
     },
+    "autoload-dev": {
+        "psr-4": { "Chubbyphp\\Tests\\Deserialization\\": "tests/" }
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "2.9-dev"
