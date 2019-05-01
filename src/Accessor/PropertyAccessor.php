@@ -42,7 +42,7 @@ final class PropertyAccessor implements AccessorInterface
             $class
         );
 
-        return $setter($this->property, $value);
+        $setter($this->property, $value);
     }
 
     /**
@@ -81,7 +81,10 @@ final class PropertyAccessor implements AccessorInterface
                 $object->__load();
             }
 
-            return (new \ReflectionClass($object))->getParentClass()->name;
+            $reflectionParentClass = (new \ReflectionObject($object))->getParentClass();
+            if ($reflectionParentClass instanceof \ReflectionClass) {
+                return $reflectionParentClass->getName();
+            }
         }
 
         return get_class($object);

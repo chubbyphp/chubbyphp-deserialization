@@ -31,7 +31,32 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame([], $fieldMapping->getGroups());
-        self::assertInstanceOf(FieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+
+        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
+
+        self::assertInstanceOf(FieldDenormalizer::class, $fieldDenormalizer);
+
+        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
+        $reflectionObject->setAccessible(true);
+
+        self::assertFalse($reflectionObject->getValue($fieldDenormalizer));
+    }
+
+    public function testGetDefaultMappingWithEmptyToNull()
+    {
+        $fieldMapping = DenormalizationFieldMappingBuilder::create('name', true)->getMapping();
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertSame([], $fieldMapping->getGroups());
+
+        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
+
+        self::assertInstanceOf(FieldDenormalizer::class, $fieldDenormalizer);
+
+        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
+        $reflectionObject->setAccessible(true);
+
+        self::assertTrue($reflectionObject->getValue($fieldDenormalizer));
     }
 
     public function testGetDefaultMappingForCallback()
@@ -52,7 +77,36 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame([], $fieldMapping->getGroups());
-        self::assertInstanceOf(ConvertTypeFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+
+        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
+
+        self::assertInstanceOf(ConvertTypeFieldDenormalizer::class, $fieldDenormalizer);
+
+        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
+        $reflectionObject->setAccessible(true);
+
+        self::assertFalse($reflectionObject->getValue($fieldDenormalizer));
+    }
+
+    public function testGetDefaultMappingForConvertTypeWithEmptyToNull()
+    {
+        $fieldMapping = DenormalizationFieldMappingBuilder::createConvertType(
+            'name',
+            ConvertTypeFieldDenormalizer::TYPE_FLOAT,
+            true
+        )->getMapping();
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertSame([], $fieldMapping->getGroups());
+
+        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
+
+        self::assertInstanceOf(ConvertTypeFieldDenormalizer::class, $fieldDenormalizer);
+
+        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
+        $reflectionObject->setAccessible(true);
+
+        self::assertTrue($reflectionObject->getValue($fieldDenormalizer));
     }
 
     public function testGetDefaultMappingForDateTime()
@@ -61,7 +115,32 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame([], $fieldMapping->getGroups());
-        self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+
+        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
+
+        self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldDenormalizer);
+
+        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
+        $reflectionObject->setAccessible(true);
+
+        self::assertFalse($reflectionObject->getValue($fieldDenormalizer));
+    }
+
+    public function testGetDefaultMappingForDateTimeWithEmptyToNull()
+    {
+        $fieldMapping = DenormalizationFieldMappingBuilder::createDateTime('name', true)->getMapping();
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertSame([], $fieldMapping->getGroups());
+
+        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
+
+        self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldDenormalizer);
+
+        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
+        $reflectionObject->setAccessible(true);
+
+        self::assertTrue($reflectionObject->getValue($fieldDenormalizer));
     }
 
     public function testGetDefaultMappingForEmbedMany()
@@ -97,7 +176,36 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame([], $fieldMapping->getGroups());
-        self::assertInstanceOf(ReferenceOneFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+
+        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
+
+        self::assertInstanceOf(ReferenceOneFieldDenormalizer::class, $fieldDenormalizer);
+
+        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
+        $reflectionObject->setAccessible(true);
+
+        self::assertFalse($reflectionObject->getValue($fieldDenormalizer));
+    }
+
+    public function testGetDefaultMappingForReferenceOneWithEmptyToNull()
+    {
+        $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceOne(
+            'name',
+            function () {},
+            true
+        )->getMapping();
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertSame([], $fieldMapping->getGroups());
+
+        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
+
+        self::assertInstanceOf(ReferenceOneFieldDenormalizer::class, $fieldDenormalizer);
+
+        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
+        $reflectionObject->setAccessible(true);
+
+        self::assertTrue($reflectionObject->getValue($fieldDenormalizer));
     }
 
     public function testGetMapping()

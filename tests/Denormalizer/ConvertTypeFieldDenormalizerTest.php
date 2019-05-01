@@ -397,6 +397,23 @@ class ConvertTypeFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField('value', $object, '', $context);
     }
 
+    public function testDenormalizeFieldWithObjectToString()
+    {
+        $object = new \stdClass();
+        $valueObject = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($object, $valueObject),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $fieldDenormalizer = new ConvertTypeFieldDenormalizer($accessor, ConvertTypeFieldDenormalizer::TYPE_STRING);
+        $fieldDenormalizer->denormalizeField('value', $object, $valueObject, $context);
+    }
+
     public function testDenormalizeFieldWithEmptyToNullEnabled()
     {
         $object = new \stdClass();

@@ -112,10 +112,6 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
      */
     private function convertBool($value)
     {
-        if (is_float($value) || is_int($value)) {
-            return $value;
-        }
-
         if ('true' === $value) {
             return true;
         }

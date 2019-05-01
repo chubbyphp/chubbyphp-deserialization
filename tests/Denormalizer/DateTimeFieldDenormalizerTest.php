@@ -53,7 +53,6 @@ class DateTimeFieldDenormalizerTest extends TestCase
                 ),
         ]);
 
-
         error_clear_last();
 
         $fieldDenormalizer = new DateTimeFieldDenormalizer($fieldDenormalizer);
@@ -63,7 +62,14 @@ class DateTimeFieldDenormalizerTest extends TestCase
         self::assertNotNull($error);
 
         self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame('Use "Chubbyphp\\Deserialization\\Accessor\\AccessorInterface" instead of "Chubbyphp\\Deserialization\\Denormalizer\\FieldDenormalizerInterface" as __construct argument', $error['message']);
+        self::assertSame(
+            sprintf(
+                'Use "%s" instead of "%s" as __construct argument',
+                AccessorInterface::class,
+                FieldDenormalizerInterface::class
+            ),
+            $error['message']
+        );
 
         $fieldDenormalizer->denormalizeField('date', $object, '2017-01-01', $context);
     }
@@ -230,7 +236,14 @@ class DateTimeFieldDenormalizerTest extends TestCase
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+
+        error_clear_last();
+
         $fieldDenormalizer->denormalizeField('date', $object, '0', $context);
+
+        $error = error_get_last();
+
+        self::assertNull($error);
     }
 
     public function testDenormalizeArrayField()

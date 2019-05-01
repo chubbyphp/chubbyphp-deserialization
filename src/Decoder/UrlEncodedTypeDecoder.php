@@ -43,9 +43,7 @@ final class UrlEncodedTypeDecoder implements TypeDecoderInterface
     private function fixValues(array $rawData): array
     {
         $data = [];
-        foreach ($rawData as $rawKey => $value) {
-            $key = (string) (int) $rawKey === $rawKey ? (int) $rawKey : $rawKey;
-
+        foreach ($rawData as $key => $value) {
             if (is_array($value)) {
                 $data[$key] = $this->fixValues($value);
             } else {

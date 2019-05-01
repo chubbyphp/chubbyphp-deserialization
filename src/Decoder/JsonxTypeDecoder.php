@@ -53,10 +53,6 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
     {
         $nodeName = $node->nodeName;
 
-        if (0 !== strpos($nodeName, 'json:')) {
-            throw DeserializerRuntimeException::createNotParsable($this->getContentType());
-        }
-
         $nodeType = substr($nodeName, 5);
 
         if (self::DATATYPE_OBJECT === $nodeType) {
