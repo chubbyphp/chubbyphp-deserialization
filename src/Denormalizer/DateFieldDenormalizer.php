@@ -12,7 +12,7 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 final class DateFieldDenormalizer implements FieldDenormalizerInterface
 {
     /**
-     * @var FieldDenormalizerInterface
+     * @var DateTimeFieldDenormalizer
      */
     private $fieldDenormalizer;
 

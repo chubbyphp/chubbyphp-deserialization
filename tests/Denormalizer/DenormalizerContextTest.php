@@ -25,12 +25,6 @@ class DenormalizerContextTest extends TestCase
         self::assertSame([], $context->getGroups());
         self::assertNull($context->getRequest());
         self::assertFalse($context->isResetMissingFields());
-
-        $error = error_get_last();
-
-        error_clear_last();
-
-        self::assertNull($error);
     }
 
     public function testCreateWithOverridenSettings()
@@ -44,27 +38,21 @@ class DenormalizerContextTest extends TestCase
         self::assertSame(['group1'], $context->getGroups());
         self::assertSame($request, $context->getRequest());
         self::assertFalse($context->isResetMissingFields());
-
-        $error = error_get_last();
-
-        error_clear_last();
-
-        self::assertNull($error);
     }
 
     public function testWithResetMissingFieldsExpectDeprecation()
     {
+        error_clear_last();
+
         $context = new DenormalizerContext(null, [], null, true);
 
         self::assertTrue($context->isResetMissingFields());
 
         $error = error_get_last();
 
-        error_clear_last();
-
         self::assertNotNull($error);
 
         self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame('resetMissingFields is broken by design, better solution is in progress', $error['message']);
+        self::assertSame('resetMissingFields is broken by design, please do this your self by model or repository', $error['message']);
     }
 }
