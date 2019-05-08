@@ -331,7 +331,5 @@ class DateTimeFieldDenormalizerTest extends TestCase
 
         $fieldDenormalizer = new DateTimeFieldDenormalizer($fieldDenormalizer, false, new \DateTimeZone('UTC'));
         $fieldDenormalizer->denormalizeField('date', $object, '2017-01-01T00:00:00+02:00', $context);
-
-        self::assertNull(error_get_last());
     }
 }
