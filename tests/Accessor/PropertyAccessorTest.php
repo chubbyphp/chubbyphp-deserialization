@@ -41,8 +41,14 @@ class PropertyAccessorTest extends TestCase
     public function testSetValueCanAccessPrivatePropertyThroughDoctrineProxyClass()
     {
         $object = new class() extends AbstractManyModel implements Proxy {
+            /**
+             * @var bool
+             */
+            private $initialized = false;
+
             public function __load()
             {
+                $this->initialized = true;
             }
 
             /**
@@ -50,15 +56,19 @@ class PropertyAccessorTest extends TestCase
              */
             public function __isInitialized()
             {
-                return false;
+                return $this->initialized;
             }
         };
 
         $accessor = new PropertyAccessor('address');
 
+        self::assertFalse($object->__isInitialized());
+
         $accessor->setValue($object, 'Address');
 
-        self::assertSame('Address', $accessor->getValue($object));
+        self::assertTrue($object->__isInitialized());
+
+        self::assertSame('Address', $object->getAddress());
     }
 
     public function testMissingSet()
@@ -99,8 +109,14 @@ class PropertyAccessorTest extends TestCase
     public function testGetValueCanAccessPrivatePropertyThroughDoctrineProxyClass()
     {
         $object = new class() extends AbstractManyModel implements Proxy {
+            /**
+             * @var bool
+             */
+            private $initialized = false;
+
             public function __load()
             {
+                $this->initialized = true;
             }
 
             /**
@@ -108,7 +124,7 @@ class PropertyAccessorTest extends TestCase
              */
             public function __isInitialized()
             {
-                return false;
+                return $this->initialized;
             }
         };
 
@@ -116,7 +132,11 @@ class PropertyAccessorTest extends TestCase
 
         $accessor = new PropertyAccessor('address');
 
+        self::assertFalse($object->__isInitialized());
+
         self::assertSame('Address', $accessor->getValue($object));
+
+        self::assertTrue($object->__isInitialized());
     }
 
     public function testMissingGet()

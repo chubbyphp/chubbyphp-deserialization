@@ -20,7 +20,7 @@ A simple deserialization.
 
 ## Suggest
 
- * container-interop/container-interop: ~1.0
+ * psr/container: ~1.0
  * pimple/pimple: ~3.0
  * symfony/dependency-injection: ~2.8|~3.0|~4.0 (symfony integration)
  * symfony/yaml: ~2.8|~3.0|~4.0 (application/x-yaml support)

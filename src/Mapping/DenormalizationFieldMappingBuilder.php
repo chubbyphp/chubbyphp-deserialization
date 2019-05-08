@@ -28,7 +28,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     private $groups = [];
 
     /**
-     * @var FieldDenormalizerInterface|null
+     * @var FieldDenormalizerInterface
      */
     private $fieldDenormalizer;
 
@@ -71,8 +71,11 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
      *
      * @return DenormalizationFieldMappingBuilderInterface
      */
-    public static function createConvertType(string $name, string $type, bool $emptyToNull = false): DenormalizationFieldMappingBuilderInterface
-    {
+    public static function createConvertType(
+        string $name,
+        string $type,
+        bool $emptyToNull = false
+    ): DenormalizationFieldMappingBuilderInterface {
         $self = new self($name);
         $self->fieldDenormalizer = new ConvertTypeFieldDenormalizer(new PropertyAccessor($name), $type, $emptyToNull);
 
@@ -85,8 +88,11 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
      * @param \DateTimeZone $dateTimeZone
      * @return DenormalizationFieldMappingBuilderInterface
      */
-    public static function createDateTime(string $name, bool $emptyToNull = false, \DateTimeZone $dateTimeZone = null): DenormalizationFieldMappingBuilderInterface
-    {
+    public static function createDateTime(
+        string $name,
+        bool $emptyToNull = false,
+        \DateTimeZone $dateTimeZone = null
+    ): DenormalizationFieldMappingBuilderInterface {
         $self = new self($name);
         $self->fieldDenormalizer = new DateTimeFieldDenormalizer(new PropertyAccessor($name), $emptyToNull, $dateTimeZone);
 

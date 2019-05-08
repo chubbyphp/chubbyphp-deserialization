@@ -45,7 +45,17 @@ class DateFieldDenormalizerTest extends TestCase
         ]);
 
         $dateFieldDenormalizer = new DateFieldDenormalizer($fieldDenormalizer);
+
+        error_clear_last();
+
         $dateFieldDenormalizer->denormalizeField('date', $object, '2017-01-01', $context);
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame('Use Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer instead', $error['message']);
     }
 
     public function testDenormalizeInvalidMonthField()

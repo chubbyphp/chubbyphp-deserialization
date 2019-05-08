@@ -207,14 +207,14 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param string     $path
-     * @param string|int $name
+     * @param string $path
+     * @param string $name
      *
      * @return string
      */
-    private function getSubPathByName(string $path, $name): string
+    private function getSubPathByName(string $path, string $name): string
     {
-        return '' === $path ? (string) $name : $path.'.'.$name;
+        return '' === $path ? $name : $path.'.'.$name;
     }
 
     /**
