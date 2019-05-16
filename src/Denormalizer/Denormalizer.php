@@ -71,7 +71,7 @@ final class Denormalizer implements DenormalizerInterface
         //@TODO: discuss with Dominik if only keys of the array should be copied
         $dataCopy = $data;
         foreach ($objectMapping->getDenormalizationFieldMappings($path, $type) as $denormalizationFieldMapping) {
-            $name = $denormalizationFieldMapping->getName();//mainAddress //ArrayFiledDenormalizer
+            $name = $denormalizationFieldMapping->getName();
 
             if (!array_key_exists($name, $data)) {
                 $missingFields[] = $name;
@@ -167,7 +167,7 @@ final class Denormalizer implements DenormalizerInterface
 
         $this->logger->info('deserialize: path {path}', ['path' => $subPath]);
 
-        $fieldDenormalizer = $denormalizationFieldMapping->getFieldDenormalizer();//ArrayFiledDenormalizer
+        $fieldDenormalizer = $denormalizationFieldMapping->getFieldDenormalizer();
         $fieldDenormalizer->denormalizeField($subPath, $object, $data[$name], $context, $this);
     }
 
