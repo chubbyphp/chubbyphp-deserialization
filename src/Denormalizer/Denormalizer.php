@@ -81,7 +81,7 @@ final class Denormalizer implements DenormalizerInterface
 
             $this->denormalizeField($context, $denormalizationFieldMapping, $path, $name, $data, $object);
 
-            if (isset($dataCopy[$name])) unset($dataCopy[$name]);
+            unset($dataCopy[$name]);
         }
 
         $allowedAdditionalFields = $context->getAllowedAdditionalFields();
