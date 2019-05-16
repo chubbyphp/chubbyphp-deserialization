@@ -68,8 +68,10 @@ final class Denormalizer implements DenormalizerInterface
         }
 
         $missingFields = [];
+        //@TODO: discuss with Dominik if only keys of the array should be copied
+        $dataCopy = $data;
         foreach ($objectMapping->getDenormalizationFieldMappings($path, $type) as $denormalizationFieldMapping) {
-            $name = $denormalizationFieldMapping->getName();
+            $name = $denormalizationFieldMapping->getName();//mainAddress //ArrayFiledDenormalizer
 
             if (!array_key_exists($name, $data)) {
                 $missingFields[] = $name;
@@ -77,15 +79,16 @@ final class Denormalizer implements DenormalizerInterface
                 continue;
             }
 
+            /****/
             $this->denormalizeField($context, $denormalizationFieldMapping, $path, $name, $data, $object);
 
-            unset($data[$name]);
+            if (isset($dataCopy[$name])) unset($dataCopy[$name]);
         }
 
         $allowedAdditionalFields = $context->getAllowedAdditionalFields();
 
         if (null !== $allowedAdditionalFields
-            && [] !== $fields = array_diff(array_keys($data), $allowedAdditionalFields)
+            && [] !== $fields = array_diff(array_keys($dataCopy), $allowedAdditionalFields)
         ) {
             $this->handleNotAllowedAdditionalFields($path, $fields);
         }
@@ -164,7 +167,7 @@ final class Denormalizer implements DenormalizerInterface
 
         $this->logger->info('deserialize: path {path}', ['path' => $subPath]);
 
-        $fieldDenormalizer = $denormalizationFieldMapping->getFieldDenormalizer();
+        $fieldDenormalizer = $denormalizationFieldMapping->getFieldDenormalizer();//ArrayFiledDenormalizer
         $fieldDenormalizer->denormalizeField($subPath, $object, $data[$name], $context, $this);
     }
 
