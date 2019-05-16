@@ -79,7 +79,6 @@ final class Denormalizer implements DenormalizerInterface
                 continue;
             }
 
-            /****/
             $this->denormalizeField($context, $denormalizationFieldMapping, $path, $name, $data, $object);
 
             if (isset($dataCopy[$name])) unset($dataCopy[$name]);
