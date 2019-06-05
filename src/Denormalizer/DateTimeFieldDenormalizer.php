@@ -33,8 +33,8 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
 
     /**
      * @param AccessorInterface|FieldDenormalizerInterface $accessor
-     * @param bool $emptyToNull
-     * @param \DateTimeZone|null $dateTimeZone
+     * @param bool                                         $emptyToNull
+     * @param \DateTimeZone|null                           $dateTimeZone
      */
     public function __construct($accessor, bool $emptyToNull = false, \DateTimeZone $dateTimeZone = null)
     {
@@ -104,7 +104,7 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
         try {
             $dateTime = new \DateTime($trimmedValue);
 
-            if(null !== $this->dateTimeZone) {
+            if (null !== $this->dateTimeZone) {
                 $dateTime->setTimezone($this->dateTimeZone);
             }
 

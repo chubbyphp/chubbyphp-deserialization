@@ -14,6 +14,8 @@ final class DenormalizerContext implements DenormalizerContextInterface
     private $allowedAdditionalFields;
 
     /**
+     * @deprecated
+     *
      * @var string[]
      */
     private $groups = [];
@@ -29,16 +31,23 @@ final class DenormalizerContext implements DenormalizerContextInterface
     private $resetMissingFields;
 
     /**
+     * @var array
+     */
+    private $attributes;
+
+    /**
      * @param array|null                  $allowedAdditionalFields
      * @param string[]                    $groups
      * @param ServerRequestInterface|null $request
      * @param bool                        $resetMissingFields
+     * @param array                       $attributes
      */
     public function __construct(
         array $allowedAdditionalFields = null,
         array $groups = [],
         ServerRequestInterface $request = null,
-        bool $resetMissingFields = false
+        bool $resetMissingFields = false,
+        array $attributes = []
     ) {
         $this->allowedAdditionalFields = $allowedAdditionalFields;
         $this->groups = $groups;
@@ -52,6 +61,7 @@ final class DenormalizerContext implements DenormalizerContextInterface
         }
 
         $this->resetMissingFields = $resetMissingFields;
+        $this->attributes = $attributes;
     }
 
     /**
@@ -63,6 +73,8 @@ final class DenormalizerContext implements DenormalizerContextInterface
     }
 
     /**
+     * @deprecated
+     *
      * @return string[]
      */
     public function getGroups(): array
@@ -86,5 +98,42 @@ final class DenormalizerContext implements DenormalizerContextInterface
     public function isResetMissingFields(): bool
     {
         return $this->resetMissingFields;
+    }
+
+    /**
+     * @return array
+     */
+    public function getAttributes(): array
+    {
+        return $this->attributes;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed  $default
+     *
+     * @return mixed
+     */
+    public function getAttribute(string $name, $default = null)
+    {
+        if (isset($this->attributes[$name])) {
+            return $this->attributes[$name];
+        }
+
+        return $default;
+    }
+
+    /**
+     * @param string $name
+     * @param mixed  $value
+     *
+     * @return DenormalizerContextInterface
+     */
+    public function withAttribute(string $name, $value): DenormalizerContextInterface
+    {
+        $context = clone $this;
+        $context->attributes[$name] = $value;
+
+        return $context;
     }
 }

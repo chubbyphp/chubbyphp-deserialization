@@ -14,6 +14,8 @@ use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedOneFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceManyFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer;
+use Chubbyphp\Deserialization\Policy\NullPolicy;
+use Chubbyphp\Deserialization\Policy\PolicyInterface;
 
 final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMappingBuilderInterface
 {
@@ -23,6 +25,8 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     private $name;
 
     /**
+     * @deprecated
+     *
      * @var array
      */
     private $groups = [];
@@ -31,6 +35,11 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
      * @var FieldDenormalizerInterface
      */
     private $fieldDenormalizer;
+
+    /**
+     * @var PolicyInterface|null
+     */
+    private $policy;
 
     private function __construct(string $name)
     {
@@ -83,9 +92,10 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     }
 
     /**
-     * @param string $name
-     * @param bool $emptyToNull
+     * @param string        $name
+     * @param bool          $emptyToNull
      * @param \DateTimeZone $dateTimeZone
+     *
      * @return DenormalizationFieldMappingBuilderInterface
      */
     public static function createDateTime(
@@ -166,6 +176,8 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     }
 
     /**
+     * @deprecated
+     *
      * @param array $groups
      *
      * @return DenormalizationFieldMappingBuilderInterface
@@ -191,6 +203,18 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     }
 
     /**
+     * @param PolicyInterface $policy
+     *
+     * @return DenormalizationFieldMappingBuilderInterface
+     */
+    public function setPolicy(PolicyInterface $policy): DenormalizationFieldMappingBuilderInterface
+    {
+        $this->policy = $policy;
+
+        return $this;
+    }
+
+    /**
      * @return DenormalizationFieldMappingInterface
      */
     public function getMapping(): DenormalizationFieldMappingInterface
@@ -198,7 +222,8 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return new DenormalizationFieldMapping(
             $this->name,
             $this->groups,
-            $this->fieldDenormalizer
+            $this->fieldDenormalizer,
+            $this->policy ?? new NullPolicy()
         );
     }
 }

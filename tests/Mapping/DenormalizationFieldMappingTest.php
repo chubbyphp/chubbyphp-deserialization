@@ -6,6 +6,7 @@ namespace Chubbyphp\Tests\Deserialization\Mapping;
 
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMapping;
+use Chubbyphp\Deserialization\Policy\PolicyInterface;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -45,5 +46,18 @@ class DenormalizationFieldMappingTest extends TestCase
         $fieldMapping = new DenormalizationFieldMapping('name', ['group1'], $fieldDenormalizer);
 
         self::assertSame($fieldDenormalizer, $fieldMapping->getFieldDenormalizer());
+    }
+
+    public function testGetPolicy()
+    {
+        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
+        $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
+
+        /** @var PolicyInterface|MockObject $policy */
+        $policy = $this->getMockByCalls(PolicyInterface::class);
+
+        $fieldMapping = new DenormalizationFieldMapping('name', ['group1'], $fieldDenormalizer, $policy);
+
+        self::assertSame($policy, $fieldMapping->getPolicy());
     }
 }

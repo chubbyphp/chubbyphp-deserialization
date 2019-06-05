@@ -156,6 +156,10 @@ final class Denormalizer implements DenormalizerInterface
         array $data,
         $object
     ) {
+        if (!$this->isCompliant($context, $denormalizationFieldMapping, $object)) {
+            return;
+        }
+
         if (!$this->isWithinGroup($context, $denormalizationFieldMapping)) {
             return;
         }
@@ -181,6 +185,25 @@ final class Denormalizer implements DenormalizerInterface
         $this->logger->notice('deserialize: {exception}', ['exception' => $exception->getMessage()]);
 
         throw $exception;
+    }
+
+    /**
+     * @param DenormalizerContextInterface         $context
+     * @param DenormalizationFieldMappingInterface $mapping
+     * @param object                               $object
+     *
+     * @return bool
+     */
+    private function isCompliant(
+        DenormalizerContextInterface $context,
+        DenormalizationFieldMappingInterface $mapping,
+        $object
+    ): bool {
+        if (!is_callable([$mapping, 'getPolicy'])) {
+            return true;
+        }
+
+        return $mapping->getPolicy()->isCompliant($context, $object);
     }
 
     /**

@@ -25,6 +25,9 @@ class DenormalizerContextTest extends TestCase
         self::assertSame([], $context->getGroups());
         self::assertNull($context->getRequest());
         self::assertFalse($context->isResetMissingFields());
+        self::assertSame([], $context->getAttributes());
+        self::assertNull($context->getAttribute('nonExistingAttribute'));
+        self::assertSame('default', $context->getAttribute('nonExistingAttribute', 'default'));
     }
 
     public function testCreateWithOverridenSettings()
@@ -32,12 +35,14 @@ class DenormalizerContextTest extends TestCase
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        $context = new DenormalizerContext(['allowed_field'], ['group1'], $request, false);
+        $context = new DenormalizerContext(['allowed_field'], ['group1'], $request, false, ['attribute' => 'value']);
 
         self::assertSame(['allowed_field'], $context->getAllowedAdditionalFields());
         self::assertSame(['group1'], $context->getGroups());
         self::assertSame($request, $context->getRequest());
         self::assertFalse($context->isResetMissingFields());
+        self::assertSame(['attribute' => 'value'], $context->getAttributes());
+        self::assertSame('value', $context->getAttribute('attribute'));
     }
 
     public function testWithResetMissingFieldsExpectDeprecation()
@@ -54,5 +59,20 @@ class DenormalizerContextTest extends TestCase
 
         self::assertSame(E_USER_DEPRECATED, $error['type']);
         self::assertSame('resetMissingFields is broken by design, please do this your self by model or repository', $error['message']);
+    }
+
+    public function testWithAttribute()
+    {
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class);
+
+        $context = new DenormalizerContext(['allowed_field'], ['group1'], $request, false, ['attribute' => 'value']);
+
+        $newContext = $context->withAttribute('otherAttribute', 'value2');
+
+        self::assertNotSame($context, $newContext);
+
+        self::assertSame(['attribute' => 'value', 'otherAttribute' => 'value2'], $newContext->getAttributes());
+        self::assertSame(['attribute' => 'value'], $context->getAttributes());
     }
 }
