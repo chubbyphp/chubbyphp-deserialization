@@ -68,6 +68,7 @@ final class Denormalizer implements DenormalizerInterface
         }
 
         $missingFields = [];
+        $additionalFields = array_flip(array_keys($data));
         foreach ($objectMapping->getDenormalizationFieldMappings($path, $type) as $denormalizationFieldMapping) {
             $name = $denormalizationFieldMapping->getName();
 
@@ -79,13 +80,13 @@ final class Denormalizer implements DenormalizerInterface
 
             $this->denormalizeField($context, $denormalizationFieldMapping, $path, $name, $data, $object);
 
-            unset($data[$name]);
+            unset($additionalFields[$name]);
         }
 
         $allowedAdditionalFields = $context->getAllowedAdditionalFields();
 
         if (null !== $allowedAdditionalFields
-            && [] !== $fields = array_diff(array_keys($data), $allowedAdditionalFields)
+            && [] !== $fields = array_diff(array_keys($additionalFields), $allowedAdditionalFields)
         ) {
             $this->handleNotAllowedAdditionalFields($path, $fields);
         }
