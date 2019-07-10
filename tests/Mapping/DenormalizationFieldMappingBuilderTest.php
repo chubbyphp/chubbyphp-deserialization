@@ -27,6 +27,21 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
 {
     use MockByCallsTrait;
 
+    public function testGetMappingWithDenormalizer()
+    {
+        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
+        $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
+
+        $fieldMapping = DenormalizationFieldMappingBuilder::create('name', false, $fieldDenormalizer)->getMapping();
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertSame([], $fieldMapping->getGroups());
+
+        self::assertSame($fieldDenormalizer, $fieldMapping->getFieldDenormalizer());
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
+    }
+
     public function testGetDefaultMapping()
     {
         $fieldMapping = DenormalizationFieldMappingBuilder::create('name')->getMapping();
@@ -253,11 +268,18 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         /** @var PolicyInterface|MockObject $policy */
         $policy = $this->getMockByCalls(PolicyInterface::class);
 
+        error_clear_last();
+
         $fieldMapping = DenormalizationFieldMappingBuilder::create('name')
             ->setGroups(['group1'])
             ->setFieldDenormalizer($fieldDenormalizer)
             ->setPolicy($policy)
             ->getMapping();
+
+        $error = error_get_last();
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame('Utilize third parameter of create method instead', $error['message']);
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame(['group1'], $fieldMapping->getGroups());

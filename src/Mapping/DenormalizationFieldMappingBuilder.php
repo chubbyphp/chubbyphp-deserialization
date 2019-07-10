@@ -41,6 +41,9 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
      */
     private $policy;
 
+    /**
+     * @param string $name
+     */
     private function __construct(string $name)
     {
         $this->name = $name;
@@ -48,13 +51,22 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
 
     /**
      * @param string $name
+     * @param bool   $emptyToNull
+     * @param FieldDenormalizerInterface|null
      *
      * @return DenormalizationFieldMappingBuilderInterface
      */
-    public static function create(string $name, bool $emptyToNull = false): DenormalizationFieldMappingBuilderInterface
-    {
+    public static function create(
+        string $name,
+        bool $emptyToNull = false,
+        FieldDenormalizerInterface $fieldDenormalizer = null
+    ): DenormalizationFieldMappingBuilderInterface {
+        if (null === $fieldDenormalizer) {
+            $fieldDenormalizer = new FieldDenormalizer(new PropertyAccessor($name), $emptyToNull);
+        }
+
         $self = new self($name);
-        $self->fieldDenormalizer = new FieldDenormalizer(new PropertyAccessor($name), $emptyToNull);
+        $self->fieldDenormalizer = $fieldDenormalizer;
 
         return $self;
     }
@@ -197,6 +209,11 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     public function setFieldDenormalizer(
         FieldDenormalizerInterface $fieldDenormalizer
     ): DenormalizationFieldMappingBuilderInterface {
+        @trigger_error(
+            'Utilize third parameter of create method instead',
+            E_USER_DEPRECATED
+        );
+
         $this->fieldDenormalizer = $fieldDenormalizer;
 
         return $this;

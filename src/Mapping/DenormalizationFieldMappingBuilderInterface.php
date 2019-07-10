@@ -20,6 +20,14 @@ interface DenormalizationFieldMappingBuilderInterface
     public static function create(string $name): self;
 
     /**
+     * @param string                        $name
+     * @param FieldNormalizerInterface|null $fieldNormalizer
+     *
+     * @return NormalizationFieldMappingBuilderInterface
+     */
+    //public static function create(string $name, FieldNormalizerInterface $fieldNormalizer = null): self;
+
+    /**
      * @deprecated
      *
      * @param array $groups

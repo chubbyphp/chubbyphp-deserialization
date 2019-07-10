@@ -9,6 +9,7 @@ use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
+use Chubbyphp\Deserialization\Policy\GroupPolicy;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -220,6 +221,15 @@ final class Denormalizer implements DenormalizerInterface
         if ([] === $groups = $context->getGroups()) {
             return true;
         }
+
+        @trigger_error(
+            sprintf(
+                'Use "%s" instead of "%s::setGroups"',
+                GroupPolicy::class,
+                DenormalizerContextInterface::class
+            ),
+            E_USER_DEPRECATED
+        );
 
         foreach ($fieldMapping->getGroups() as $group) {
             if (in_array($group, $groups, true)) {
