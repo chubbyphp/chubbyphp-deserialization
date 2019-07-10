@@ -83,9 +83,10 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     }
 
     /**
-     * @param string $name
-     * @param bool $emptyToNull
+     * @param string        $name
+     * @param bool          $emptyToNull
      * @param \DateTimeZone $dateTimeZone
+     *
      * @return DenormalizationFieldMappingBuilderInterface
      */
     public static function createDateTime(
