@@ -19,9 +19,9 @@ interface AccessorInterface
     /**
      * @param object $object
      *
-     * @return mixed
-     *
      * @throws DeserializerLogicException
+     *
+     * @return mixed
      */
     public function getValue($object);
 }

@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer
+ *
+ * @internal
  */
 class FieldDenormalizerTest extends TestCase
 {

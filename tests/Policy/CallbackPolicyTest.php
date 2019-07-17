@@ -4,14 +4,16 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Policy;
 
-use Chubbyphp\Mock\MockByCallsTrait;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Policy\CallbackPolicy;
+use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Policy\CallbackPolicy
+ *
+ * @internal
  */
 class CallbackPolicyTest extends TestCase
 {

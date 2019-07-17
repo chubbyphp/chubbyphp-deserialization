@@ -18,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer
+ *
+ * @internal
  */
 class EmbedManyFieldDenormalizerTest extends TestCase
 {

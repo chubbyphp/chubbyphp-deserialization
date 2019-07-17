@@ -9,6 +9,8 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 /**
  * @covers \Chubbyphp\Deserialization\Decoder\JsonTypeDecoder
+ *
+ * @internal
  */
 class JsonTypeDecoderTest extends AbstractTypeDecoderTest
 {
@@ -26,7 +28,7 @@ class JsonTypeDecoderTest extends AbstractTypeDecoderTest
      */
     public function testDecode(array $expectedData)
     {
-        $json = <<<EOD
+        $json = <<<'EOD'
 {
     "page": 1,
     "perPage": 10,
@@ -165,7 +167,7 @@ EOD;
 
     public function testTypes()
     {
-        $json = <<<EOD
+        $json = <<<'EOD'
 {
     "id": "id1",
     "name": "A fancy Name",

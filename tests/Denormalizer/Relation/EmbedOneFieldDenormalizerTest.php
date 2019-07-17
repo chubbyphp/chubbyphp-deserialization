@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Denormalizer\Relation\EmbedOneFieldDenormalizer
+ *
+ * @internal
  */
 class EmbedOneFieldDenormalizerTest extends TestCase
 {

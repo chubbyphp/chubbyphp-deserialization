@@ -4,16 +4,18 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Policy;
 
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Policy\AndPolicy;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
+use Chubbyphp\Mock\Call;
+use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Policy\AndPolicy
+ *
+ * @internal
  */
 class AndPolicyTest extends TestCase
 {

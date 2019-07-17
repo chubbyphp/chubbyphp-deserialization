@@ -33,24 +33,29 @@ final class DeserializationCompilerPass implements CompilerPassInterface
 
         $container
             ->register('chubbyphp.deserializer.decoder.type.json', JsonTypeDecoder::class)
-            ->addTag('chubbyphp.deserializer.decoder.type');
+            ->addTag('chubbyphp.deserializer.decoder.type')
+        ;
 
         $container
             ->register('chubbyphp.deserializer.decoder.type.jsonx', JsonxTypeDecoder::class)
-            ->addTag('chubbyphp.deserializer.decoder.type');
+            ->addTag('chubbyphp.deserializer.decoder.type')
+        ;
 
         $container
             ->register('chubbyphp.deserializer.decoder.type.urlencoded', UrlEncodedTypeDecoder::class)
-            ->addTag('chubbyphp.deserializer.decoder.type');
+            ->addTag('chubbyphp.deserializer.decoder.type')
+        ;
 
         $container
             ->register('chubbyphp.deserializer.decoder.type.xml', XmlTypeDecoder::class)
-            ->addTag('chubbyphp.deserializer.decoder.type');
+            ->addTag('chubbyphp.deserializer.decoder.type')
+        ;
 
         if (class_exists(Yaml::class)) {
             $container
                 ->register('chubbyphp.deserializer.decoder.type.yml', YamlTypeDecoder::class)
-                ->addTag('chubbyphp.deserializer.decoder.type');
+                ->addTag('chubbyphp.deserializer.decoder.type')
+            ;
         }
 
         $decoderTypeReferences = [];
@@ -61,7 +66,8 @@ final class DeserializationCompilerPass implements CompilerPassInterface
         $container
             ->register('chubbyphp.deserializer.decoder', Decoder::class)
             ->setPublic(true)
-            ->setArguments([$decoderTypeReferences]);
+            ->setArguments([$decoderTypeReferences])
+        ;
 
         $container
             ->register('chubbyphp.deserializer.denormalizer', Denormalizer::class)
@@ -69,7 +75,8 @@ final class DeserializationCompilerPass implements CompilerPassInterface
             ->setArguments([
                 new Reference('chubbyphp.deserializer.denormalizer.objectmappingregistry'),
                 new Reference('logger', ContainerInterface::IGNORE_ON_INVALID_REFERENCE),
-            ]);
+            ])
+        ;
 
         $denormalizerObjectMappingReferences = [];
         foreach ($container->findTaggedServiceIds('chubbyphp.deserializer.denormalizer.objectmapping') as $id => $tags) {
@@ -82,6 +89,7 @@ final class DeserializationCompilerPass implements CompilerPassInterface
                 DenormalizerObjectMappingRegistry::class
             )
             ->setPublic(true)
-            ->setArguments([$denormalizerObjectMappingReferences]);
+            ->setArguments([$denormalizerObjectMappingReferences])
+        ;
     }
 }

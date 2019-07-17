@@ -9,6 +9,8 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 /**
  * @covers \Chubbyphp\Deserialization\Decoder\JsonxTypeDecoder
+ *
+ * @internal
  */
 class JsonxTypeDecoderTest extends AbstractTypeDecoderTest
 {
@@ -26,7 +28,7 @@ class JsonxTypeDecoderTest extends AbstractTypeDecoderTest
      */
     public function testDecode(array $expectedData)
     {
-        $jsonx = <<<EOD
+        $jsonx = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8"?>
 <json:object xsi:schemaLocation="http://www.datapower.com/schemas/json jsonx.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:json="http://www.ibm.com/xmlns/prod/2009/jsonx">
   <json:number name="page">1</json:number>
@@ -166,7 +168,7 @@ EOD;
 
     public function testTypes()
     {
-        $jsonx = <<<EOD
+        $jsonx = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8"?>
 <json:object xsi:schemaLocation="http://www.datapower.com/schemas/json jsonx.xsd" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:json="http://www.ibm.com/xmlns/prod/2009/jsonx">
   <json:string name="id">id1</json:string>

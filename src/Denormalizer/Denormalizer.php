@@ -43,10 +43,10 @@ final class Denormalizer implements DenormalizerInterface
      * @param DenormalizerContextInterface|null $context
      * @param string                            $path
      *
-     * @return object
-     *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
+     *
+     * @return object
      */
     public function denormalize($object, array $data, DenormalizerContextInterface $context = null, string $path = '')
     {
@@ -102,9 +102,9 @@ final class Denormalizer implements DenormalizerInterface
     /**
      * @param string $class
      *
-     * @return DenormalizationObjectMappingInterface
-     *
      * @throws DeserializerLogicException
+     *
+     * @return DenormalizationObjectMappingInterface
      */
     private function getObjectMapping(string $class): DenormalizationObjectMappingInterface
     {

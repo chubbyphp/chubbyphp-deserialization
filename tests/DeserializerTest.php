@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Deserializer
+ *
+ * @internal
  */
 class DeserializerTest extends TestCase
 {

@@ -9,6 +9,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\DeserializerRuntimeException
+ *
+ * @internal
  */
 class DeserializerRuntimeExceptionTest extends TestCase
 {

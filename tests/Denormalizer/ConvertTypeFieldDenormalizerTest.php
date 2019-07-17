@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Denormalizer\ConvertTypeFieldDenormalizer
+ *
+ * @internal
  */
 class ConvertTypeFieldDenormalizerTest extends TestCase
 {

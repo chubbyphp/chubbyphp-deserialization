@@ -24,6 +24,8 @@ use Psr\Log\LoggerInterface;
 
 /**
  * @covers \Chubbyphp\Deserialization\Denormalizer\Denormalizer
+ *
+ * @internal
  */
 class DenormalizerTest extends TestCase
 {

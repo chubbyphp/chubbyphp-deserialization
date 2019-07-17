@@ -16,6 +16,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry
+ *
+ * @internal
  */
 class DenormalizerObjectMappingRegistryTest extends TestCase
 {

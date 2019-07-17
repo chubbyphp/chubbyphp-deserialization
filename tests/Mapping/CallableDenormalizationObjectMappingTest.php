@@ -13,6 +13,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Mapping\CallableDenormalizationObjectMapping
+ *
+ * @internal
  */
 class CallableDenormalizationObjectMappingTest extends TestCase
 {

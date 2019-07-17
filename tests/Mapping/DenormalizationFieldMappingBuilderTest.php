@@ -14,14 +14,16 @@ use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedOneFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceManyFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
-use Chubbyphp\Mock\MockByCallsTrait;
 use Chubbyphp\Deserialization\Policy\NullPolicy;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
+use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder
+ *
+ * @internal
  */
 class DenormalizationFieldMappingBuilderTest extends TestCase
 {
@@ -274,7 +276,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
             ->setGroups(['group1'])
             ->setFieldDenormalizer($fieldDenormalizer)
             ->setPolicy($policy)
-            ->getMapping();
+            ->getMapping()
+        ;
 
         $error = error_get_last();
 

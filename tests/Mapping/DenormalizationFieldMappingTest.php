@@ -13,6 +13,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Mapping\DenormalizationFieldMapping
+ *
+ * @internal
  */
 class DenormalizationFieldMappingTest extends TestCase
 {

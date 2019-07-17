@@ -18,10 +18,10 @@ interface DecoderInterface
      * @param string $data
      * @param string $contentType
      *
-     * @return array
-     *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
+     *
+     * @return array
      */
     public function decode(string $data, string $contentType): array;
 }

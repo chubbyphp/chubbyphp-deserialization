@@ -9,6 +9,8 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 /**
  * @covers \Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder
+ *
+ * @internal
  */
 class UrlEncodedTypeDecoderTest extends AbstractTypeDecoderTest
 {
