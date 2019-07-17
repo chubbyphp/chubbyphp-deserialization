@@ -1,5 +1,4 @@
 parameters:
-    level: 7
-    paths:
-        - src
-    ignoreErrors: []
+	ignoreErrors:
+		- '#Call to an undefined method Chubbyphp\\Deserialization\\Denormalizer\\DenormalizerContextInterface::isResetMissingFields().#'
+		- '#Method Chubbyphp\\Deserialization\\Decoder\\JsonxTypeDecoder::decode() should return array but returns array|bool|float|int|string|null.#'

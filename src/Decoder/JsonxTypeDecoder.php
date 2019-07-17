@@ -141,7 +141,7 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
     }
 
     /**
-     * @param \DOMNoDOMNodedeList $node
+     * @param \DOMNode $node
      *
      * @return int|float
      */
