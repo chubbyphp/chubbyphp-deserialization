@@ -23,6 +23,8 @@ use Psr\Log\AbstractLogger;
 
 /**
  * @coversNothing
+ *
+ * @internal
  */
 class DeserializerIntegrationTest extends TestCase
 {

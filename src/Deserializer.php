@@ -61,10 +61,10 @@ final class Deserializer implements DeserializerInterface
      * @param string $data
      * @param string $contentType
      *
-     * @return array
-     *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
+     *
+     * @return array
      */
     public function decode(string $data, string $contentType): array
     {
@@ -77,10 +77,10 @@ final class Deserializer implements DeserializerInterface
      * @param DenormalizerContextInterface|null $context
      * @param string                            $path
      *
-     * @return object
-     *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
+     *
+     * @return object
      */
     public function denormalize($object, array $data, DenormalizerContextInterface $context = null, string $path = '')
     {

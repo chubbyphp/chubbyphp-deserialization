@@ -15,10 +15,10 @@ interface DenormalizerInterface
      * @param DenormalizerContextInterface|null $context
      * @param string                            $path
      *
-     * @return object
-     *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
+     *
+     * @return object
      */
     public function denormalize($object, array $data, DenormalizerContextInterface $context = null, string $path = '');
 }

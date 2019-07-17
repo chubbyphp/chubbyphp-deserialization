@@ -13,6 +13,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @covers \Chubbyphp\Deserialization\Denormalizer\DenormalizerContextBuilder
+ *
+ * @internal
  */
 class DenormalizerContextBuilderTest extends TestCase
 {
@@ -56,7 +58,8 @@ class DenormalizerContextBuilderTest extends TestCase
             ->setAllowedAdditionalFields(['allowed_field'])
             ->setGroups(['group1'])
             ->setRequest($request)
-            ->getContext();
+            ->getContext()
+        ;
 
         self::assertInstanceOf(DenormalizerContextInterface::class, $context);
 
@@ -70,7 +73,8 @@ class DenormalizerContextBuilderTest extends TestCase
     {
         $context = DenormalizerContextBuilder::create()
             ->setRequest()
-            ->getContext();
+            ->getContext()
+        ;
 
         self::assertInstanceOf(DenormalizerContextInterface::class, $context);
 

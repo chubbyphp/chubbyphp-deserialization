@@ -12,6 +12,8 @@ use Psr\Http\Message\ServerRequestInterface;
 
 /**
  * @covers \Chubbyphp\Deserialization\Denormalizer\DenormalizerContext
+ *
+ * @internal
  */
 class DenormalizerContextTest extends TestCase
 {

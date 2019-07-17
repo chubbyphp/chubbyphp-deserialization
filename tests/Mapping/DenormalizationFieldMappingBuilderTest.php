@@ -20,6 +20,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder
+ *
+ * @internal
  */
 class DenormalizationFieldMappingBuilderTest extends TestCase
 {
@@ -225,7 +227,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         $fieldMapping = DenormalizationFieldMappingBuilder::create('name')
             ->setGroups(['group1'])
             ->setFieldDenormalizer($fieldDenormalizer)
-            ->getMapping();
+            ->getMapping()
+        ;
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame(['group1'], $fieldMapping->getGroups());

@@ -14,6 +14,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Decoder\Decoder
+ *
+ * @internal
  */
 class DecoderTest extends TestCase
 {

@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Denormalizer\DateFieldDenormalizer
+ *
+ * @internal
  */
 class DateFieldDenormalizerTest extends TestCase
 {

@@ -26,14 +26,6 @@ final class Decoder implements DecoderInterface
     }
 
     /**
-     * @param TypeDecoderInterface $decoderType
-     */
-    private function addTypeDecoder(TypeDecoderInterface $decoderType)
-    {
-        $this->decoderTypes[$decoderType->getContentType()] = $decoderType;
-    }
-
-    /**
      * @return array
      */
     public function getContentTypes(): array
@@ -45,10 +37,10 @@ final class Decoder implements DecoderInterface
      * @param string $data
      * @param string $contentType
      *
-     * @return array
-     *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
+     *
+     * @return array
      */
     public function decode(string $data, string $contentType): array
     {
@@ -57,5 +49,13 @@ final class Decoder implements DecoderInterface
         }
 
         throw DeserializerLogicException::createMissingContentType($contentType);
+    }
+
+    /**
+     * @param TypeDecoderInterface $decoderType
+     */
+    private function addTypeDecoder(TypeDecoderInterface $decoderType)
+    {
+        $this->decoderTypes[$decoderType->getContentType()] = $decoderType;
     }
 }

@@ -15,6 +15,8 @@ use Psr\Container\ContainerInterface;
 
 /**
  * @covers \Chubbyphp\Deserialization\Mapping\LazyDenormalizationObjectMapping
+ *
+ * @internal
  */
 class LazyDenormalizationObjectMappingTest extends TestCase
 {

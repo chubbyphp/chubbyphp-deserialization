@@ -26,9 +26,9 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
      * @param string      $path
      * @param string|null $type
      *
-     * @return callable
-     *
      * @throws DeserializerRuntimeException
+     *
+     * @return callable
      */
     public function getDenormalizationFactory(string $path, string $type = null): callable
     {
@@ -41,9 +41,9 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
      * @param string      $path
      * @param string|null $type
      *
-     * @return DenormalizationFieldMappingInterface[]
-     *
      * @throws DeserializerRuntimeException
+     *
+     * @return DenormalizationFieldMappingInterface[]
      */
     public function getDenormalizationFieldMappings(string $path, string $type = null): array
     {

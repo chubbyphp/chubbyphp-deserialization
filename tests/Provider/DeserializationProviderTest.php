@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chubbyphp\Tests\Deserialization\Provider;
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
@@ -21,6 +23,8 @@ use Psr\Log\NullLogger;
 
 /**
  * @covers \Chubbyphp\Deserialization\Provider\DeserializationProvider
+ *
+ * @internal
  */
 final class DeserializationProviderTest extends TestCase
 {

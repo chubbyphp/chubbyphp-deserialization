@@ -9,6 +9,8 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 /**
  * @covers \Chubbyphp\Deserialization\Decoder\YamlTypeDecoder
+ *
+ * @internal
  */
 class YamlTypeDecoderTest extends AbstractTypeDecoderTest
 {
@@ -26,7 +28,7 @@ class YamlTypeDecoderTest extends AbstractTypeDecoderTest
      */
     public function testDecode(array $expectedData)
     {
-        $yaml = <<<EOD
+        $yaml = <<<'EOD'
 page: 1
 perPage: 10
 search: null
@@ -130,7 +132,7 @@ EOD;
 
     public function testTypes()
     {
-        $yaml = <<<EOD
+        $yaml = <<<'EOD'
 id: id1
 name: 'A fancy Name'
 treeValues:

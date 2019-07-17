@@ -13,6 +13,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Denormalizer\CallbackFieldDenormalizer
+ *
+ * @internal
  */
 class CallbackFieldDenormalizerTest extends TestCase
 {

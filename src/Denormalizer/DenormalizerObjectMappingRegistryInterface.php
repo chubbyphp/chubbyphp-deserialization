@@ -12,9 +12,9 @@ interface DenormalizerObjectMappingRegistryInterface
     /**
      * @param string $class
      *
-     * @return DenormalizationObjectMappingInterface
-     *
      * @throws DeserializerLogicException
+     *
+     * @return DenormalizationObjectMappingInterface
      */
     public function getObjectMapping(string $class): DenormalizationObjectMappingInterface;
 }

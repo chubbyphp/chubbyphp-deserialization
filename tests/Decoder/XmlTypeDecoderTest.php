@@ -9,6 +9,8 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 /**
  * @covers \Chubbyphp\Deserialization\Decoder\XmlTypeDecoder
+ *
+ * @internal
  */
 class XmlTypeDecoderTest extends AbstractTypeDecoderTest
 {
@@ -26,7 +28,7 @@ class XmlTypeDecoderTest extends AbstractTypeDecoderTest
      */
     public function testDecode(array $expectedData)
     {
-        $xml = <<<EOD
+        $xml = <<<'EOD'
 <?xml version="1.0" encoding="UTF-8"?>
 <object type="search">
   <page type="integer">1</page>
@@ -163,7 +165,7 @@ EOD;
 
     public function testTypes()
     {
-        $xml = <<<EOD
+        $xml = <<<'EOD'
 <object type="item">
   <id type="string">id1</id>
   <name type="string">A fancy Name</name>

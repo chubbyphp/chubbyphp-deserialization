@@ -21,9 +21,9 @@ final class YamlTypeDecoder implements TypeDecoderInterface
     /**
      * @param string $data
      *
-     * @return array
-     *
      * @throws DeserializerRuntimeException
+     *
+     * @return array
      */
     public function decode(string $data): array
     {

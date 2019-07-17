@@ -15,6 +15,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer
+ *
+ * @internal
  */
 class ReferenceOneFieldDenormalizerTest extends TestCase
 {

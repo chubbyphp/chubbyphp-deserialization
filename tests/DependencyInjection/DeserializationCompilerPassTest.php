@@ -16,6 +16,8 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 
 /**
  * @covers \Chubbyphp\Deserialization\DependencyInjection\DeserializationCompilerPass
+ *
+ * @internal
  */
 class DeserializationCompilerPassTest extends TestCase
 {
@@ -29,7 +31,8 @@ class DeserializationCompilerPassTest extends TestCase
 
         $container
             ->register('stdclass', $stdClassMappingClass)
-            ->addTag('chubbyphp.deserializer.denormalizer.objectmapping');
+            ->addTag('chubbyphp.deserializer.denormalizer.objectmapping')
+        ;
 
         $container->compile();
 

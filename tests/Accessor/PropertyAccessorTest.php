@@ -12,6 +12,8 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Chubbyphp\Deserialization\Accessor\PropertyAccessor
+ *
+ * @internal
  */
 class PropertyAccessorTest extends TestCase
 {
