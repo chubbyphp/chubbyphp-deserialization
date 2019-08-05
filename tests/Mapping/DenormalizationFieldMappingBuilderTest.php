@@ -14,6 +14,8 @@ use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedOneFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceManyFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
+use Chubbyphp\Deserialization\Policy\NullPolicy;
+use Chubbyphp\Deserialization\Policy\PolicyInterface;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -26,6 +28,21 @@ use PHPUnit\Framework\TestCase;
 class DenormalizationFieldMappingBuilderTest extends TestCase
 {
     use MockByCallsTrait;
+
+    public function testGetMappingWithDenormalizer()
+    {
+        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
+        $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
+
+        $fieldMapping = DenormalizationFieldMappingBuilder::create('name', false, $fieldDenormalizer)->getMapping();
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertSame([], $fieldMapping->getGroups());
+
+        self::assertSame($fieldDenormalizer, $fieldMapping->getFieldDenormalizer());
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
+    }
 
     public function testGetDefaultMapping()
     {
@@ -42,6 +59,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         $reflectionObject->setAccessible(true);
 
         self::assertFalse($reflectionObject->getValue($fieldDenormalizer));
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetDefaultMappingWithEmptyToNull()
@@ -59,6 +78,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         $reflectionObject->setAccessible(true);
 
         self::assertTrue($reflectionObject->getValue($fieldDenormalizer));
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetDefaultMappingForCallback()
@@ -68,6 +89,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame([], $fieldMapping->getGroups());
         self::assertInstanceOf(CallbackFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetDefaultMappingForConvertType()
@@ -88,6 +111,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         $reflectionObject->setAccessible(true);
 
         self::assertFalse($reflectionObject->getValue($fieldDenormalizer));
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetDefaultMappingForConvertTypeWithEmptyToNull()
@@ -109,6 +134,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         $reflectionObject->setAccessible(true);
 
         self::assertTrue($reflectionObject->getValue($fieldDenormalizer));
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetDefaultMappingForDateTime()
@@ -126,6 +153,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         $reflectionObject->setAccessible(true);
 
         self::assertFalse($reflectionObject->getValue($fieldDenormalizer));
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetDefaultMappingForDateTimeWithEmptyToNull()
@@ -143,6 +172,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         $reflectionObject->setAccessible(true);
 
         self::assertTrue($reflectionObject->getValue($fieldDenormalizer));
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetDefaultMappingForDateTimeWithTimezone()
@@ -152,6 +183,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame([], $fieldMapping->getGroups());
         self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetDefaultMappingForEmbedMany()
@@ -161,6 +194,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame([], $fieldMapping->getGroups());
         self::assertInstanceOf(EmbedManyFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetDefaultMappingForEmbedOne()
@@ -170,6 +205,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame([], $fieldMapping->getGroups());
         self::assertInstanceOf(EmbedOneFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetDefaultMappingForReferenceMany()
@@ -179,6 +216,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame([], $fieldMapping->getGroups());
         self::assertInstanceOf(ReferenceManyFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetDefaultMappingForReferenceOne()
@@ -196,6 +235,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         $reflectionObject->setAccessible(true);
 
         self::assertFalse($reflectionObject->getValue($fieldDenormalizer));
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetDefaultMappingForReferenceOneWithEmptyToNull()
@@ -217,6 +258,8 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         $reflectionObject->setAccessible(true);
 
         self::assertTrue($reflectionObject->getValue($fieldDenormalizer));
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }
 
     public function testGetMapping()
@@ -224,14 +267,27 @@ class DenormalizationFieldMappingBuilderTest extends TestCase
         /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
         $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
 
+        /** @var PolicyInterface|MockObject $policy */
+        $policy = $this->getMockByCalls(PolicyInterface::class);
+
+        error_clear_last();
+
         $fieldMapping = DenormalizationFieldMappingBuilder::create('name')
             ->setGroups(['group1'])
             ->setFieldDenormalizer($fieldDenormalizer)
+            ->setPolicy($policy)
             ->getMapping()
         ;
+
+        $error = error_get_last();
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame('Utilize third parameter of create method instead', $error['message']);
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame(['group1'], $fieldMapping->getGroups());
         self::assertSame($fieldDenormalizer, $fieldMapping->getFieldDenormalizer());
+
+        self::assertSame($policy, $fieldMapping->getPolicy());
     }
 }

@@ -9,6 +9,7 @@ use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
+use Chubbyphp\Deserialization\Policy\GroupPolicy;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
 
@@ -157,6 +158,10 @@ final class Denormalizer implements DenormalizerInterface
         array $data,
         $object
     ) {
+        if (!$this->isCompliant($context, $denormalizationFieldMapping, $object)) {
+            return;
+        }
+
         if (!$this->isWithinGroup($context, $denormalizationFieldMapping)) {
             return;
         }
@@ -186,6 +191,25 @@ final class Denormalizer implements DenormalizerInterface
 
     /**
      * @param DenormalizerContextInterface         $context
+     * @param DenormalizationFieldMappingInterface $mapping
+     * @param object                               $object
+     *
+     * @return bool
+     */
+    private function isCompliant(
+        DenormalizerContextInterface $context,
+        DenormalizationFieldMappingInterface $mapping,
+        $object
+    ): bool {
+        if (!is_callable([$mapping, 'getPolicy'])) {
+            return true;
+        }
+
+        return $mapping->getPolicy()->isCompliant($context, $object);
+    }
+
+    /**
+     * @param DenormalizerContextInterface         $context
      * @param DenormalizationFieldMappingInterface $fieldMapping
      *
      * @return bool
@@ -197,6 +221,15 @@ final class Denormalizer implements DenormalizerInterface
         if ([] === $groups = $context->getGroups()) {
             return true;
         }
+
+        @trigger_error(
+            sprintf(
+                'Use "%s" instead of "%s::setGroups"',
+                GroupPolicy::class,
+                DenormalizerContextInterface::class
+            ),
+            E_USER_DEPRECATED
+        );
 
         foreach ($fieldMapping->getGroups() as $group) {
             if (in_array($group, $groups, true)) {

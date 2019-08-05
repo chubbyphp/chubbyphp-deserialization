@@ -14,6 +14,8 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     private $allowedAdditionalFields;
 
     /**
+     * @deprecated
+     *
      * @var string[]
      */
     private $groups = [];
@@ -27,6 +29,11 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
      * @var bool
      */
     private $resetMissingFields = false;
+
+    /**
+     * @var array
+     */
+    private $attributes = [];
 
     private function __construct()
     {
@@ -54,6 +61,8 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     }
 
     /**
+     * @deprecated
+     *
      * @param string[] $groups
      *
      * @return DenormalizerContextBuilderInterface
@@ -97,6 +106,18 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     }
 
     /**
+     * @param array $attributes
+     *
+     * @return DenormalizerContextBuilderInterface
+     */
+    public function setAttributes(array $attributes): DenormalizerContextBuilderInterface
+    {
+        $this->attributes = $attributes;
+
+        return $this;
+    }
+
+    /**
      * @return DenormalizerContextInterface
      */
     public function getContext(): DenormalizerContextInterface
@@ -105,7 +126,8 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
             $this->allowedAdditionalFields,
             $this->groups,
             $this->request,
-            $this->resetMissingFields
+            $this->resetMissingFields,
+            $this->attributes
         );
     }
 }
