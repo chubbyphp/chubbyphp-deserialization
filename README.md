@@ -30,7 +30,7 @@ A simple deserialization.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "~2.11"
+composer require chubbyphp/chubbyphp-deserialization "~2.12"
 ```
 
 ## Usage
