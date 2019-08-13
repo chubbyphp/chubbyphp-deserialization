@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Policy;
 
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Policy\NotPolicy;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
+use Chubbyphp\Mock\Call;
+use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
