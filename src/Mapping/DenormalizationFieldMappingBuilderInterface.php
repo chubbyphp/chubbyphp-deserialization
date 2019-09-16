@@ -8,7 +8,7 @@ use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
 
 /**
- * @method setPolicy(PolicyInterface $policy): self
+ * @method DenormalizationFieldMappingBuilderInterface setPolicy(PolicyInterface $policy)
  */
 interface DenormalizationFieldMappingBuilderInterface
 {
@@ -20,10 +20,10 @@ interface DenormalizationFieldMappingBuilderInterface
     public static function create(string $name): self;
 
     /**
-     * @param string                        $name
-     * @param FieldNormalizerInterface|null $fieldNormalizer
+     * @param string                          $name
+     * @param FieldDenormalizerInterface|null $fieldNormalizer
      *
-     * @return NormalizationFieldMappingBuilderInterface
+     * @return DenormalizationFieldMappingBuilderInterface
      */
     //public static function create(string $name, FieldNormalizerInterface $fieldNormalizer = null): self;
 

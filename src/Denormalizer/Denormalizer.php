@@ -147,6 +147,7 @@ final class Denormalizer implements DenormalizerInterface
      * @param DenormalizerContextInterface         $context
      * @param DenormalizationFieldMappingInterface $denormalizationFieldMapping
      * @param string                               $path
+     * @param string                               $name
      * @param array                                $data
      * @param object                               $object
      */
