@@ -8,7 +8,7 @@ use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
 
 /**
- * @method getPolicy(): PolicyInterface
+ * @method PolicyInterface getPolicy()
  */
 interface DenormalizationFieldMappingInterface
 {

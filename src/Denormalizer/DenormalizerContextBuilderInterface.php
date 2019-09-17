@@ -7,7 +7,7 @@ namespace Chubbyphp\Deserialization\Denormalizer;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
- * @method setAttributes(array $attributes): self
+ * @method DenormalizerContextBuilderInterface setAttributes(array $attributes)
  */
 interface DenormalizerContextBuilderInterface
 {

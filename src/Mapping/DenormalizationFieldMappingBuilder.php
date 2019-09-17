@@ -50,9 +50,9 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     }
 
     /**
-     * @param string $name
-     * @param bool   $emptyToNull
-     * @param FieldDenormalizerInterface|null
+     * @param string                          $name
+     * @param bool                            $emptyToNull
+     * @param FieldDenormalizerInterface|null $fieldDenormalizer
      *
      * @return DenormalizationFieldMappingBuilderInterface
      */
