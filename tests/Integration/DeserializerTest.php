@@ -26,7 +26,7 @@ use Psr\Log\AbstractLogger;
  *
  * @internal
  */
-final class DeserializerIntegrationTest extends TestCase
+final class DeserializerTest extends TestCase
 {
     public function testDenormalizeByClass(): void
     {

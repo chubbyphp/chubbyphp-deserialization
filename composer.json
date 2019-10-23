@@ -38,6 +38,9 @@
     "autoload-dev": {
         "psr-4": { "Chubbyphp\\Tests\\Deserialization\\": "tests/" }
     },
+    "config": {
+        "sort-packages": true
+    },
     "extra": {
         "branch-alias": {
             "dev-master": "2.14-dev"
