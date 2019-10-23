@@ -26,7 +26,7 @@ final class PropertyAccessor implements AccessorInterface
      * @param object $object
      * @param mixed  $value
      */
-    public function setValue($object, $value)
+    public function setValue($object, $value): void
     {
         $class = $this->getClass($object);
 
@@ -35,7 +35,7 @@ final class PropertyAccessor implements AccessorInterface
         }
 
         $setter = \Closure::bind(
-            function ($property, $value) {
+            function ($property, $value): void {
                 $this->{$property} = $value;
             },
             $object,

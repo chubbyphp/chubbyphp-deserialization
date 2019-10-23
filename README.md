@@ -1,8 +1,7 @@
 # chubbyphp-deserialization
 
 [![Build Status](https://api.travis-ci.org/chubbyphp/chubbyphp-deserialization.png?branch=master)](https://travis-ci.org/chubbyphp/chubbyphp-deserialization)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-deserialization/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-deserialization/?branch=master)
-[![Code Coverage](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-deserialization/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/chubbyphp/chubbyphp-deserialization/?branch=master)
+[![Coverage Status](https://coveralls.io/repos/github/chubbyphp/chubbyphp-deserialization/badge.svg?branch=master)](https://coveralls.io/github/chubbyphp/chubbyphp-deserialization?branch=master)
 [![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-deserialization/downloads.png)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialization)
 [![Monthly Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-deserialization/d/monthly)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialization)
 [![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-deserialization/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialization)
@@ -14,23 +13,23 @@ A simple deserialization.
 
 ## Requirements
 
- * php: ~7.0
- * psr/http-message: ~1.0
- * psr/log: ~1.0
+ * php: ^7.2
+ * psr/http-message: ^1.0.1
+ * psr/log: ^1.1
 
 ## Suggest
 
- * psr/container: ~1.0
- * pimple/pimple: ~3.0
- * symfony/dependency-injection: ~2.8|~3.0|~4.0 (symfony integration)
- * symfony/yaml: ~2.8|~3.0|~4.0 (application/x-yaml support)
+ * psr/container: ^1.0
+ * pimple/pimple: ^3.2.1
+ * symfony/dependency-injection: ^2.8|^3.4|^4.2 (symfony integration)
+ * symfony/yaml: ^2.8|^3.4|^4.2 (application/x-yaml support)
 
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "~2.13"
+composer require chubbyphp/chubbyphp-deserialization "^2.14"
 ```
 
 ## Usage

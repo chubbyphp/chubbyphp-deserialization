@@ -54,7 +54,7 @@ final class Decoder implements DecoderInterface
     /**
      * @param TypeDecoderInterface $decoderType
      */
-    private function addTypeDecoder(TypeDecoderInterface $decoderType)
+    private function addTypeDecoder(TypeDecoderInterface $decoderType): void
     {
         $this->decoderTypes[$decoderType->getContentType()] = $decoderType;
     }

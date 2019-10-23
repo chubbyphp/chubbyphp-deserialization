@@ -49,7 +49,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
         $value,
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
-    ) {
+    ): void {
         if (null === $value) {
             $value = [];
         }
@@ -69,7 +69,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     /**
      * @param iterable $relatedObjects
      */
-    private function cleanRelatedObjects(&$relatedObjects)
+    private function cleanRelatedObjects(&$relatedObjects): void
     {
         foreach ($relatedObjects as $key => $existEmbObject) {
             unset($relatedObjects[$key]);
@@ -81,7 +81,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
      * @param array    $value
      * @param iterable $relatedObjects
      */
-    private function assignRelatedObjects(string $path, array $value, &$relatedObjects)
+    private function assignRelatedObjects(string $path, array $value, &$relatedObjects): void
     {
         $repository = $this->repository;
 
