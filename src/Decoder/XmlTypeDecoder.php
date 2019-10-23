@@ -6,6 +6,9 @@ namespace Chubbyphp\Deserialization\Decoder;
 
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
+/**
+ * @deprecated use JsonxTypeDecoder instead
+ */
 final class XmlTypeDecoder implements TypeDecoderInterface
 {
     /**
