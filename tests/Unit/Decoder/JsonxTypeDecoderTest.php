@@ -16,9 +16,28 @@ final class JsonxTypeDecoderTest extends AbstractTypeDecoderTest
 {
     public function testGetContentType(): void
     {
+        error_clear_last();
+
         $decoder = new JsonxTypeDecoder();
 
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(
+            'Use "application/jsonx+xml" instead of "application/x-jsonx", cause jsonx is a xml variant.',
+            $error['message']
+        );
+
         self::assertSame('application/x-jsonx', $decoder->getContentType());
+    }
+
+    public function testGetContentTypeWithFixedContentType(): void
+    {
+        $decoder = new JsonxTypeDecoder('application/jsonx+xml');
+
+        self::assertSame('application/jsonx+xml', $decoder->getContentType());
     }
 
     /**

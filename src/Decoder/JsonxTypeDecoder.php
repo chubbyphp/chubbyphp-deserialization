@@ -19,11 +19,31 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
     const DATATYPE_NULL = 'null';
 
     /**
+     * @var string
+     */
+    private $contentType;
+
+    /**
+     * @param string $contentType
+     */
+    public function __construct(string $contentType = 'application/x-jsonx')
+    {
+        if ('application/x-jsonx' === $contentType) {
+            @trigger_error(
+                'Use "application/jsonx+xml" instead of "application/x-jsonx", cause jsonx is a xml variant.',
+                E_USER_DEPRECATED
+            );
+        }
+
+        $this->contentType = $contentType;
+    }
+
+    /**
      * @return string
      */
     public function getContentType(): string
     {
-        return 'application/x-jsonx';
+        return $this->contentType;
     }
 
     /**

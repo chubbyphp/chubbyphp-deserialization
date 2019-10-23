@@ -7,6 +7,7 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Provider;
 use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\JsonxTypeDecoder;
+use Chubbyphp\Deserialization\Decoder\TypeDecoderInterface;
 use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
@@ -48,11 +49,25 @@ final class DeserializationProviderTest extends TestCase
 
         self::assertInstanceOf(Decoder::class, $container['deserializer.decoder']);
         self::assertIsArray($container['deserializer.decodertypes']);
-        self::assertInstanceOf(JsonTypeDecoder::class, $container['deserializer.decodertypes'][0]);
-        self::assertInstanceOf(JsonxTypeDecoder::class, $container['deserializer.decodertypes'][1]);
-        self::assertInstanceOf(UrlEncodedTypeDecoder::class, $container['deserializer.decodertypes'][2]);
-        self::assertInstanceOf(XmlTypeDecoder::class, $container['deserializer.decodertypes'][3]);
-        self::assertInstanceOf(YamlTypeDecoder::class, $container['deserializer.decodertypes'][4]);
+
+        /** @var array<int, TypeDecoderInterface> $decoderTypes */
+        $decoderTypes = $container['deserializer.decodertypes'];
+
+        self::assertInstanceOf(JsonTypeDecoder::class, array_shift($decoderTypes));
+
+        $jsonxTypeDecoder1 = array_shift($decoderTypes);
+        self::assertInstanceOf(JsonxTypeDecoder::class, $jsonxTypeDecoder1);
+
+        self::assertSame('application/x-jsonx', $jsonxTypeDecoder1->getContentType());
+
+        $jsonxTypeDecoder2 = array_shift($decoderTypes);
+        self::assertInstanceOf(JsonxTypeDecoder::class, $jsonxTypeDecoder2);
+
+        self::assertSame('application/jsonx+xml', $jsonxTypeDecoder2->getContentType());
+
+        self::assertInstanceOf(UrlEncodedTypeDecoder::class, array_shift($decoderTypes));
+        self::assertInstanceOf(XmlTypeDecoder::class, array_shift($decoderTypes));
+        self::assertInstanceOf(YamlTypeDecoder::class, array_shift($decoderTypes));
 
         self::assertInstanceOf(
             DenormalizerObjectMappingRegistry::class,

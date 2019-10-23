@@ -37,6 +37,7 @@ final class DeserializationProvider implements ServiceProviderInterface
 
             $decoderTypes[] = new JsonTypeDecoder();
             $decoderTypes[] = new JsonxTypeDecoder();
+            $decoderTypes[] = new JsonxTypeDecoder('application/jsonx+xml');
             $decoderTypes[] = new UrlEncodedTypeDecoder();
             $decoderTypes[] = new XmlTypeDecoder();
 
