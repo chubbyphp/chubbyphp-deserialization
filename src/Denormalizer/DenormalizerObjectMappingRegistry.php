@@ -53,7 +53,7 @@ final class DenormalizerObjectMappingRegistry implements DenormalizerObjectMappi
     /**
      * @param DenormalizationObjectMappingInterface $objectMapping
      */
-    private function addObjectMapping(DenormalizationObjectMappingInterface $objectMapping)
+    private function addObjectMapping(DenormalizationObjectMappingInterface $objectMapping): void
     {
         $this->objectMappings[$objectMapping->getClass()] = $objectMapping;
     }

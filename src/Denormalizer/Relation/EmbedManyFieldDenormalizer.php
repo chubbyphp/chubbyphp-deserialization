@@ -49,7 +49,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
         $value,
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
-    ) {
+    ): void {
         if (null === $value) {
             $value = [];
         }
@@ -101,7 +101,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
         array $existEmbObjects,
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer
-    ) {
+    ): void {
         foreach ($value as $key => $subValue) {
             $subPath = $path.'['.$key.']';
 

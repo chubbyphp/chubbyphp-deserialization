@@ -39,7 +39,7 @@ final class DateFieldDenormalizer implements FieldDenormalizerInterface
         $value,
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null
-    ) {
+    ): void {
         @trigger_error(sprintf('Use %s instead', DateTimeFieldDenormalizer::class), E_USER_DEPRECATED);
 
         $this->fieldDenormalizer->denormalizeField($path, $object, $value, $context, $denormalizer);

@@ -158,7 +158,7 @@ final class Denormalizer implements DenormalizerInterface
         string $name,
         array $data,
         $object
-    ) {
+    ): void {
         if (!$this->isCompliant($context, $denormalizationFieldMapping, $object)) {
             return;
         }
@@ -179,7 +179,7 @@ final class Denormalizer implements DenormalizerInterface
      * @param string $path
      * @param array  $names
      */
-    private function handleNotAllowedAdditionalFields(string $path, array $names)
+    private function handleNotAllowedAdditionalFields(string $path, array $names): void
     {
         $exception = DeserializerRuntimeException::createNotAllowedAdditionalFields(
             $this->getSubPathsByNames($path, $names)
@@ -283,7 +283,7 @@ final class Denormalizer implements DenormalizerInterface
         array $missingFields,
         string $path,
         string $type = null
-    ) {
+    ): void {
         if (!method_exists($context, 'isResetMissingFields') || !$context->isResetMissingFields()) {
             return;
         }

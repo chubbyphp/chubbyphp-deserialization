@@ -22,7 +22,7 @@ final class DeserializationProvider implements ServiceProviderInterface
     /**
      * @param Container $container
      */
-    public function register(Container $container)
+    public function register(Container $container): void
     {
         $container['deserializer'] = function () use ($container) {
             return new Deserializer($container['deserializer.decoder'], $container['deserializer.denormalizer']);

@@ -1,4 +1,11 @@
 parameters:
-	ignoreErrors:
-		- '#Call to an undefined method Chubbyphp\\Deserialization\\Denormalizer\\DenormalizerContextInterface::isResetMissingFields().#'
-		- '#Method Chubbyphp\\Deserialization\\Decoder\\JsonxTypeDecoder::decode() should return array but returns array|bool|float|int|string|null.#'
+    ignoreErrors:
+        -
+            message: '##'
+            path: %currentWorkingDirectory%/src/Decoder/JsonxTypeDecoder.php
+        -
+            message: '##'
+            path: %currentWorkingDirectory%/src/Decoder/XmlTypeDecoder.php
+        -
+            message: '#Else branch is unreachable because ternary operator condition is always true.#'
+            path: %currentWorkingDirectory%/src/Denormalizer/DateTimeFieldDenormalizer.php
