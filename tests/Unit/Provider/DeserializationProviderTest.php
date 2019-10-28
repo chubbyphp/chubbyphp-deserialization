@@ -35,6 +35,8 @@ final class DeserializationProviderTest extends TestCase
         $container = new Container();
         $container->register(new DeserializationProvider());
 
+        error_clear_last();
+
         self::assertTrue(isset($container['deserializer']));
 
         self::assertTrue(isset($container['deserializer.decoder']));
@@ -70,6 +72,17 @@ final class DeserializationProviderTest extends TestCase
         $reflectionProperty->setAccessible(true);
 
         self::assertInstanceOf(NullLogger::class, $reflectionProperty->getValue($denormalizer));
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(
+            'Register the decoder types by yourself:'
+                .' $container[\'deserializer.decodertypes\'] = function () { return [new JsonTypeDecoder()]; };',
+            $error['message']
+        );
     }
 
     public function testRegisterWithDefinedLogger(): void

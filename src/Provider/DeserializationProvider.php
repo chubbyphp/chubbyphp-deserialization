@@ -44,6 +44,12 @@ final class DeserializationProvider implements ServiceProviderInterface
                 $decoderTypes[] = new YamlTypeDecoder();
             }
 
+            @trigger_error(
+                'Register the decoder types by yourself:'
+                    .' $container[\'deserializer.decodertypes\'] = function () { return [new JsonTypeDecoder()]; };',
+                E_USER_DEPRECATED
+            );
+
             return $decoderTypes;
         };
 
