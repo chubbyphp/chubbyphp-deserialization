@@ -9,10 +9,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 final class NullPolicy implements PolicyInterface
 {
     /**
-     * @param DenormalizerContextInterface $context
-     * @param object|mixed                 $object
-     *
-     * @return bool
+     * @param object|mixed $object
      */
     public function isCompliant(DenormalizerContextInterface $context, $object): bool
     {

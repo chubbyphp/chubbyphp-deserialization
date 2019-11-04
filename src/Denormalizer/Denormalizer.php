@@ -25,10 +25,6 @@ final class Denormalizer implements DenormalizerInterface
      */
     private $logger;
 
-    /**
-     * @param DenormalizerObjectMappingRegistryInterface $denormalizerObjectMappingRegistry
-     * @param LoggerInterface|null                       $logger
-     */
     public function __construct(
         DenormalizerObjectMappingRegistryInterface $denormalizerObjectMappingRegistry,
         LoggerInterface $logger = null
@@ -38,10 +34,7 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param object|string                     $object
-     * @param array                             $data
-     * @param DenormalizerContextInterface|null $context
-     * @param string                            $path
+     * @param object|string $object
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
@@ -100,11 +93,7 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param string $class
-     *
      * @throws DeserializerLogicException
-     *
-     * @return DenormalizationObjectMappingInterface
      */
     private function getObjectMapping(string $class): DenormalizationObjectMappingInterface
     {
@@ -118,10 +107,6 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param DenormalizationObjectMappingInterface $objectMapping
-     * @param string                                $path
-     * @param string|null                           $type
-     *
      * @return object
      */
     private function createNewObject(
@@ -144,12 +129,7 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param DenormalizerContextInterface         $context
-     * @param DenormalizationFieldMappingInterface $denormalizationFieldMapping
-     * @param string                               $path
-     * @param string                               $name
-     * @param array                                $data
-     * @param object                               $object
+     * @param object $object
      */
     private function denormalizeField(
         DenormalizerContextInterface $context,
@@ -175,10 +155,6 @@ final class Denormalizer implements DenormalizerInterface
         $fieldDenormalizer->denormalizeField($subPath, $object, $data[$name], $context, $this);
     }
 
-    /**
-     * @param string $path
-     * @param array  $names
-     */
     private function handleNotAllowedAdditionalFields(string $path, array $names): void
     {
         $exception = DeserializerRuntimeException::createNotAllowedAdditionalFields(
@@ -191,11 +167,7 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param DenormalizerContextInterface         $context
-     * @param DenormalizationFieldMappingInterface $mapping
-     * @param object                               $object
-     *
-     * @return bool
+     * @param object $object
      */
     private function isCompliant(
         DenormalizerContextInterface $context,
@@ -209,12 +181,6 @@ final class Denormalizer implements DenormalizerInterface
         return $mapping->getPolicy()->isCompliant($context, $object);
     }
 
-    /**
-     * @param DenormalizerContextInterface         $context
-     * @param DenormalizationFieldMappingInterface $fieldMapping
-     *
-     * @return bool
-     */
     private function isWithinGroup(
         DenormalizerContextInterface $context,
         DenormalizationFieldMappingInterface $fieldMapping
@@ -241,23 +207,11 @@ final class Denormalizer implements DenormalizerInterface
         return false;
     }
 
-    /**
-     * @param string $path
-     * @param string $name
-     *
-     * @return string
-     */
     private function getSubPathByName(string $path, string $name): string
     {
         return '' === $path ? $name : $path.'.'.$name;
     }
 
-    /**
-     * @param string $path
-     * @param array  $names
-     *
-     * @return array
-     */
     private function getSubPathsByNames(string $path, array $names): array
     {
         $subPaths = [];
@@ -269,12 +223,7 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param DenormalizerContextInterface          $context
-     * @param DenormalizationObjectMappingInterface $objectMapping
-     * @param object                                $object
-     * @param array                                 $missingFields
-     * @param string                                $path
-     * @param string|null                           $type
+     * @param object $object
      */
     private function resetMissingFields(
         DenormalizerContextInterface $context,

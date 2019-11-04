@@ -10,11 +10,7 @@ use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 interface DenormalizerObjectMappingRegistryInterface
 {
     /**
-     * @param string $class
-     *
      * @throws DeserializerLogicException
-     *
-     * @return DenormalizationObjectMappingInterface
      */
     public function getObjectMapping(string $class): DenormalizationObjectMappingInterface;
 }

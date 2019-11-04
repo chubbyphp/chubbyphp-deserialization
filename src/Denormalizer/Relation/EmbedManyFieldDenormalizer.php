@@ -23,10 +23,6 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
      */
     private $accessor;
 
-    /**
-     * @param string            $class
-     * @param AccessorInterface $accessor
-     */
     public function __construct(string $class, AccessorInterface $accessor)
     {
         $this->class = $class;
@@ -34,11 +30,8 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string                       $path
-     * @param object                       $object
-     * @param mixed                        $value
-     * @param DenormalizerContextInterface $context
-     * @param DenormalizerInterface|null   $denormalizer
+     * @param object $object
+     * @param mixed  $value
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
@@ -87,12 +80,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string                       $path
-     * @param array                        $value
-     * @param iterable                     $relatedObjects
-     * @param array                        $existEmbObjects
-     * @param DenormalizerContextInterface $context
-     * @param DenormalizerInterface        $denormalizer
+     * @param iterable $relatedObjects
      */
     private function assignRelatedObjects(
         string $path,

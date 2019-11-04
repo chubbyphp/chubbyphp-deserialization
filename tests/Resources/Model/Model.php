@@ -21,19 +21,11 @@ final class Model
      */
     private $manies;
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return self
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -50,8 +42,6 @@ final class Model
     }
 
     /**
-     * @param OneModel|null $one
-     *
      * @return self
      */
     public function setOne(OneModel $one = null)
@@ -71,8 +61,6 @@ final class Model
 
     /**
      * @param AbstractManyModel[] $manies
-     *
-     * @return self
      */
     public function setManies(array $manies): self
     {

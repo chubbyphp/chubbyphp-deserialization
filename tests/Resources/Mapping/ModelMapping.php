@@ -14,21 +14,13 @@ use Chubbyphp\Tests\Deserialization\Resources\Model\OneModel;
 
 final class ModelMapping implements DenormalizationObjectMappingInterface
 {
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return Model::class;
     }
 
     /**
-     * @param string      $path
-     * @param string|null $type
-     *
      * @throws DeserializerRuntimeException
-     *
-     * @return callable
      */
     public function getDenormalizationFactory(string $path, string $type = null): callable
     {
@@ -38,9 +30,6 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
     }
 
     /**
-     * @param string      $path
-     * @param string|null $type
-     *
      * @throws DeserializerRuntimeException
      *
      * @return DenormalizationFieldMappingInterface[]

@@ -10,11 +10,8 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 interface FieldDenormalizerInterface
 {
     /**
-     * @param string                       $path
-     * @param object                       $object
-     * @param mixed                        $value
-     * @param DenormalizerContextInterface $context
-     * @param DenormalizerInterface|null   $denormalizer
+     * @param object $object
+     * @param mixed  $value
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException

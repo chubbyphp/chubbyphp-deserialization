@@ -739,13 +739,6 @@ final class DenormalizerTest extends TestCase
     }
 
     /**
-     * @param string                     $name
-     * @param FieldDenormalizerInterface $fieldDenormalizer
-     * @param PolicyInterface            $policy
-     * @param array                      $groups
-     *
-     * @return DenormalizationFieldMappingInterface
-     *
      * @todo remove as soon getPolicy() is part of the mapping interface
      */
     private function getDenormalizationFieldMappingWithPolicy(
@@ -783,9 +776,6 @@ final class DenormalizerTest extends TestCase
                 return $this->groups;
             }
 
-            /**
-             * @return FieldDenormalizerInterface
-             */
             public function getFieldDenormalizer(): FieldDenormalizerInterface
             {
                 return $this->fieldDenormalizer;

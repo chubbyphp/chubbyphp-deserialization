@@ -19,10 +19,6 @@ final class FieldDenormalizer implements FieldDenormalizerInterface
      */
     private $emptyToNull;
 
-    /**
-     * @param AccessorInterface $accessor
-     * @param bool              $emptyToNull
-     */
     public function __construct(AccessorInterface $accessor, bool $emptyToNull = false)
     {
         $this->accessor = $accessor;
@@ -30,11 +26,8 @@ final class FieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string                       $path
-     * @param object                       $object
-     * @param mixed                        $value
-     * @param DenormalizerContextInterface $context
-     * @param DenormalizerInterface|null   $denormalizer
+     * @param object $object
+     * @param mixed  $value
      *
      * @throws DeserializerRuntimeException
      */

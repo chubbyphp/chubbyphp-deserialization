@@ -12,11 +12,6 @@ use Chubbyphp\Deserialization\Policy\PolicyInterface;
  */
 interface DenormalizationFieldMappingBuilderInterface
 {
-    /**
-     * @param string $name
-     *
-     * @return self
-     */
     public static function create(string $name): self;
 
     /**
@@ -29,18 +24,9 @@ interface DenormalizationFieldMappingBuilderInterface
 
     /**
      * @deprecated
-     *
-     * @param array $groups
-     *
-     * @return self
      */
     public function setGroups(array $groups): self;
 
-    /**
-     * @param FieldDenormalizerInterface $fieldDenormalizer
-     *
-     * @return self
-     */
     public function setFieldDenormalizer(FieldDenormalizerInterface $fieldDenormalizer): self;
 
     /**
@@ -50,8 +36,5 @@ interface DenormalizationFieldMappingBuilderInterface
      */
     //public function setPolicy(PolicyInterface $policy): self;
 
-    /**
-     * @return DenormalizationFieldMappingInterface
-     */
     public function getMapping(): DenormalizationFieldMappingInterface;
 }

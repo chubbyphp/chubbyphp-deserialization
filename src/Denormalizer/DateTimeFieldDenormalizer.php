@@ -33,8 +33,6 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
 
     /**
      * @param AccessorInterface|FieldDenormalizerInterface $accessor
-     * @param bool                                         $emptyToNull
-     * @param \DateTimeZone|null                           $dateTimeZone
      */
     public function __construct($accessor, bool $emptyToNull = false, \DateTimeZone $dateTimeZone = null)
     {
@@ -74,11 +72,8 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string                       $path
-     * @param object                       $object
-     * @param mixed                        $value
-     * @param DenormalizerContextInterface $context
-     * @param DenormalizerInterface|null   $denormalizer
+     * @param object $object
+     * @param mixed  $value
      *
      * @throws DeserializerRuntimeException
      */
@@ -121,11 +116,8 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string                       $path
-     * @param object                       $object
-     * @param mixed                        $value
-     * @param DenormalizerContextInterface $context
-     * @param DenormalizerInterface|null   $denormalizer
+     * @param object $object
+     * @param mixed  $value
      */
     private function setValue(
         string $path,

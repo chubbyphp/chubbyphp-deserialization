@@ -16,19 +16,11 @@ final class OneModel
      */
     private $value;
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @param string $name
-     *
-     * @return self
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -44,11 +36,6 @@ final class OneModel
         return $this->value;
     }
 
-    /**
-     * @param string|null $value
-     *
-     * @return self
-     */
     public function setValue(string $value = null): self
     {
         $this->value = $value;

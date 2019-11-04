@@ -8,20 +8,13 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 final class UrlEncodedTypeDecoder implements TypeDecoderInterface
 {
-    /**
-     * @return string
-     */
     public function getContentType(): string
     {
         return 'application/x-www-form-urlencoded';
     }
 
     /**
-     * @param string $data
-     *
      * @throws DeserializerRuntimeException
-     *
-     * @return array
      */
     public function decode(string $data): array
     {
@@ -35,11 +28,6 @@ final class UrlEncodedTypeDecoder implements TypeDecoderInterface
         return $this->fixValues($rawData);
     }
 
-    /**
-     * @param array $rawData
-     *
-     * @return array
-     */
     private function fixValues(array $rawData): array
     {
         $data = [];
@@ -55,8 +43,6 @@ final class UrlEncodedTypeDecoder implements TypeDecoderInterface
     }
 
     /**
-     * @param string $value
-     *
      * @return mixed
      */
     private function fixValue(string $value)

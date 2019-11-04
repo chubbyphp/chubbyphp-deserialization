@@ -23,8 +23,6 @@ final class UrlEncodedTypeDecoderTest extends AbstractTypeDecoderTest
 
     /**
      * @dataProvider getExpectedData
-     *
-     * @param array $expectedData
      */
     public function testDecode(array $expectedData): void
     {

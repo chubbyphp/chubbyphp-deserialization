@@ -14,9 +14,6 @@ final class PropertyAccessor implements AccessorInterface
      */
     private $property;
 
-    /**
-     * @param string $property
-     */
     public function __construct(string $property)
     {
         $this->property = $property;
@@ -71,8 +68,6 @@ final class PropertyAccessor implements AccessorInterface
 
     /**
      * @param object $object
-     *
-     * @return string
      */
     private function getClass($object): string
     {

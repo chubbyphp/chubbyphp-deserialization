@@ -10,20 +10,13 @@ use Symfony\Component\Yaml\Yaml;
 
 final class YamlTypeDecoder implements TypeDecoderInterface
 {
-    /**
-     * @return string
-     */
     public function getContentType(): string
     {
         return 'application/x-yaml';
     }
 
     /**
-     * @param string $data
-     *
      * @throws DeserializerRuntimeException
-     *
-     * @return array
      */
     public function decode(string $data): array
     {

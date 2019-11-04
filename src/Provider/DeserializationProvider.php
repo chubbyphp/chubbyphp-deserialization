@@ -19,9 +19,6 @@ use Symfony\Component\Yaml\Yaml;
 
 final class DeserializationProvider implements ServiceProviderInterface
 {
-    /**
-     * @param Container $container
-     */
     public function register(Container $container): void
     {
         $container['deserializer'] = function () use ($container) {

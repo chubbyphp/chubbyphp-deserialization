@@ -11,11 +11,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 interface DeserializerInterface extends DecoderInterface, DenormalizerInterface
 {
     /**
-     * @param object|string                     $object
-     * @param string                            $data
-     * @param string                            $contentType
-     * @param DenormalizerContextInterface|null $context
-     * @param string                            $path
+     * @param object|string $object
      *
      * @return object
      */

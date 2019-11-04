@@ -79,11 +79,6 @@ final class GroupPolicyTest extends TestCase
         self::assertFalse($policy->isCompliant($context, $object));
     }
 
-    /**
-     * @param array|null $groups
-     *
-     * @return DenormalizerContextInterface
-     */
     private function getDenormalizerContextWithGroupAttribute(array $groups = null): DenormalizerContextInterface
     {
         return new class($groups) implements DenormalizerContextInterface {

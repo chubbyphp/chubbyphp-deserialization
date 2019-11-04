@@ -15,13 +15,8 @@ interface DecoderInterface
     public function getContentTypes(): array;
 
     /**
-     * @param string $data
-     * @param string $contentType
-     *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
-     *
-     * @return array
      */
     public function decode(string $data, string $contentType): array;
 }

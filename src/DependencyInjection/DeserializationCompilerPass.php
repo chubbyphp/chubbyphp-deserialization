@@ -21,9 +21,6 @@ use Symfony\Component\Yaml\Yaml;
 
 final class DeserializationCompilerPass implements CompilerPassInterface
 {
-    /**
-     * @param ContainerBuilder $container
-     */
     public function process(ContainerBuilder $container): void
     {
         $container->register('chubbyphp.deserializer', Deserializer::class)->setPublic(true)->setArguments([

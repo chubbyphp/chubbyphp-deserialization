@@ -23,9 +23,6 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
      */
     private $contentType;
 
-    /**
-     * @param string $contentType
-     */
     public function __construct(string $contentType = 'application/x-jsonx')
     {
         if ('application/x-jsonx' === $contentType) {
@@ -38,20 +35,13 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
         $this->contentType = $contentType;
     }
 
-    /**
-     * @return string
-     */
     public function getContentType(): string
     {
         return $this->contentType;
     }
 
     /**
-     * @param string $data
-     *
      * @throws DeserializerRuntimeException
-     *
-     * @return array
      */
     public function decode(string $data): array
     {
@@ -65,8 +55,6 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
     }
 
     /**
-     * @param \DOMNode $node
-     *
      * @return array|bool|string|int|float|null
      */
     private function decodeNode(\DOMNode $node)
@@ -102,11 +90,6 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
         throw DeserializerRuntimeException::createNotParsable($this->getContentType());
     }
 
-    /**
-     * @param \DOMNode $node
-     *
-     * @return array
-     */
     private function decodeObjectNode(\DOMNode $node): array
     {
         $data = [];
@@ -121,11 +104,6 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
         return $data;
     }
 
-    /**
-     * @param \DOMNode $node
-     *
-     * @return array
-     */
     private function decodeArrayNode(\DOMNode $node): array
     {
         $data = [];
@@ -140,29 +118,17 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
         return $data;
     }
 
-    /**
-     * @param \DOMNode $node
-     *
-     * @return bool
-     */
     private function decodeBooleanNode(\DOMNode $node): bool
     {
         return 'true' === $node->nodeValue;
     }
 
-    /**
-     * @param \DOMNode $node
-     *
-     * @return string
-     */
     private function decodeStringNode(\DOMNode $node): string
     {
         return html_entity_decode($node->nodeValue, ENT_COMPAT | ENT_XML1, 'UTF-8');
     }
 
     /**
-     * @param \DOMNode $node
-     *
      * @return int|float
      */
     private function decodeNumberNode(\DOMNode $node)

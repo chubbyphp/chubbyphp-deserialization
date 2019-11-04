@@ -10,10 +10,7 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 interface DenormalizerInterface
 {
     /**
-     * @param object|string                     $object
-     * @param array                             $data
-     * @param DenormalizerContextInterface|null $context
-     * @param string                            $path
+     * @param object|string $object
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException

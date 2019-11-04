@@ -13,20 +13,14 @@ final class CallbackFieldDenormalizer implements FieldDenormalizerInterface
      */
     private $callback;
 
-    /**
-     * @param callable $callback
-     */
     public function __construct(callable $callback)
     {
         $this->callback = $callback;
     }
 
     /**
-     * @param string                       $path
-     * @param object                       $object
-     * @param mixed                        $value
-     * @param DenormalizerContextInterface $context
-     * @param DenormalizerInterface|null   $denormalizer
+     * @param object $object
+     * @param mixed  $value
      *
      * @throws DeserializerRuntimeException
      */

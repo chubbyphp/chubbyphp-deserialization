@@ -22,10 +22,7 @@ final class OrPolicy implements PolicyInterface
     }
 
     /**
-     * @param DenormalizerContextInterface $context
-     * @param object|mixed                 $object
-     *
-     * @return bool
+     * @param object|mixed $object
      */
     public function isCompliant(DenormalizerContextInterface $context, $object): bool
     {

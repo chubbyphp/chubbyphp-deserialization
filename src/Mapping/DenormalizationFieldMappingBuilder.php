@@ -41,21 +41,11 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
      */
     private $policy;
 
-    /**
-     * @param string $name
-     */
     private function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    /**
-     * @param string                          $name
-     * @param bool                            $emptyToNull
-     * @param FieldDenormalizerInterface|null $fieldDenormalizer
-     *
-     * @return DenormalizationFieldMappingBuilderInterface
-     */
     public static function create(
         string $name,
         bool $emptyToNull = false,
@@ -71,12 +61,6 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $self;
     }
 
-    /**
-     * @param string   $name
-     * @param callable $callback
-     *
-     * @return DenormalizationFieldMappingBuilderInterface
-     */
     public static function createCallback(string $name, callable $callback): DenormalizationFieldMappingBuilderInterface
     {
         $self = new self($name);
@@ -85,13 +69,6 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $self;
     }
 
-    /**
-     * @param string $name
-     * @param string $type
-     * @param bool   $emptyToNull
-     *
-     * @return DenormalizationFieldMappingBuilderInterface
-     */
     public static function createConvertType(
         string $name,
         string $type,
@@ -104,11 +81,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     }
 
     /**
-     * @param string        $name
-     * @param bool          $emptyToNull
      * @param \DateTimeZone $dateTimeZone
-     *
-     * @return DenormalizationFieldMappingBuilderInterface
      */
     public static function createDateTime(
         string $name,
@@ -121,12 +94,6 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $self;
     }
 
-    /**
-     * @param string $name
-     * @param string $class
-     *
-     * @return DenormalizationFieldMappingBuilderInterface
-     */
     public static function createEmbedMany(string $name, string $class): DenormalizationFieldMappingBuilderInterface
     {
         $self = new self($name);
@@ -135,12 +102,6 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $self;
     }
 
-    /**
-     * @param string $name
-     * @param string $class
-     *
-     * @return DenormalizationFieldMappingBuilderInterface
-     */
     public static function createEmbedOne(string $name, string $class): DenormalizationFieldMappingBuilderInterface
     {
         $self = new self($name);
@@ -149,12 +110,6 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $self;
     }
 
-    /**
-     * @param string   $name
-     * @param callable $repository
-     *
-     * @return DenormalizationFieldMappingBuilderInterface
-     */
     public static function createReferenceMany(
         string $name,
         callable $repository
@@ -165,13 +120,6 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $self;
     }
 
-    /**
-     * @param string   $name
-     * @param callable $repository
-     * @param bool     $emptyToNull
-     *
-     * @return DenormalizationFieldMappingBuilderInterface
-     */
     public static function createReferenceOne(
         string $name,
         callable $repository,
@@ -189,10 +137,6 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
 
     /**
      * @deprecated
-     *
-     * @param array $groups
-     *
-     * @return DenormalizationFieldMappingBuilderInterface
      */
     public function setGroups(array $groups): DenormalizationFieldMappingBuilderInterface
     {
@@ -201,11 +145,6 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $this;
     }
 
-    /**
-     * @param FieldDenormalizerInterface $fieldDenormalizer
-     *
-     * @return DenormalizationFieldMappingBuilderInterface
-     */
     public function setFieldDenormalizer(
         FieldDenormalizerInterface $fieldDenormalizer
     ): DenormalizationFieldMappingBuilderInterface {
@@ -219,11 +158,6 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $this;
     }
 
-    /**
-     * @param PolicyInterface $policy
-     *
-     * @return DenormalizationFieldMappingBuilderInterface
-     */
     public function setPolicy(PolicyInterface $policy): DenormalizationFieldMappingBuilderInterface
     {
         $this->policy = $policy;
@@ -231,9 +165,6 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $this;
     }
 
-    /**
-     * @return DenormalizationFieldMappingInterface
-     */
     public function getMapping(): DenormalizationFieldMappingInterface
     {
         return new DenormalizationFieldMapping(

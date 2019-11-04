@@ -12,21 +12,13 @@ use Chubbyphp\Deserialization\Policy\PolicyInterface;
  */
 interface DenormalizationFieldMappingInterface
 {
-    /**
-     * @return string
-     */
     public function getName(): string;
 
     /**
      * @deprecated
-     *
-     * @return array
      */
     public function getGroups(): array;
 
-    /**
-     * @return FieldDenormalizerInterface
-     */
     public function getFieldDenormalizer(): FieldDenormalizerInterface;
 
     /*

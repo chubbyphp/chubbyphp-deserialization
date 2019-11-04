@@ -36,11 +36,7 @@ final class DenormalizerContext implements DenormalizerContextInterface
     private $attributes;
 
     /**
-     * @param array|null                  $allowedAdditionalFields
-     * @param string[]                    $groups
-     * @param ServerRequestInterface|null $request
-     * @param bool                        $resetMissingFields
-     * @param array                       $attributes
+     * @param string[] $groups
      */
     public function __construct(
         array $allowedAdditionalFields = null,
@@ -92,25 +88,19 @@ final class DenormalizerContext implements DenormalizerContextInterface
 
     /**
      * @deprecated
-     *
-     * @return bool
      */
     public function isResetMissingFields(): bool
     {
         return $this->resetMissingFields;
     }
 
-    /**
-     * @return array
-     */
     public function getAttributes(): array
     {
         return $this->attributes;
     }
 
     /**
-     * @param string $name
-     * @param mixed  $default
+     * @param mixed $default
      *
      * @return mixed
      */
@@ -124,10 +114,7 @@ final class DenormalizerContext implements DenormalizerContextInterface
     }
 
     /**
-     * @param string $name
-     * @param mixed  $value
-     *
-     * @return DenormalizerContextInterface
+     * @param mixed $value
      */
     public function withAttribute(string $name, $value): DenormalizerContextInterface
     {

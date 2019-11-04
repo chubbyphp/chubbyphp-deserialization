@@ -11,20 +11,13 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
  */
 final class XmlTypeDecoder implements TypeDecoderInterface
 {
-    /**
-     * @return string
-     */
     public function getContentType(): string
     {
         return 'application/xml';
     }
 
     /**
-     * @param string $data
-     *
      * @throws DeserializerRuntimeException
-     *
-     * @return array
      */
     public function decode(string $data): array
     {
@@ -37,11 +30,6 @@ final class XmlTypeDecoder implements TypeDecoderInterface
         return $this->transformType($document->getElementsByTagName('object')->item(0));
     }
 
-    /**
-     * @param \DOMElement $node
-     *
-     * @return array
-     */
     private function transformType(\DOMElement $node): array
     {
         $data = [];
@@ -84,8 +72,6 @@ final class XmlTypeDecoder implements TypeDecoderInterface
     }
 
     /**
-     * @param \DOMElement $node
-     *
      * @return string|int
      */
     private function getKey(\DOMElement $node)
@@ -103,8 +89,6 @@ final class XmlTypeDecoder implements TypeDecoderInterface
     }
 
     /**
-     * @param \DOMElement $node
-     *
      * @return bool|string
      */
     private function getValue(\DOMElement $node)

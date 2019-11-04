@@ -16,20 +16,14 @@ final class DateFieldDenormalizer implements FieldDenormalizerInterface
      */
     private $fieldDenormalizer;
 
-    /**
-     * @param FieldDenormalizerInterface $fieldDenormalizer
-     */
     public function __construct(FieldDenormalizerInterface $fieldDenormalizer)
     {
         $this->fieldDenormalizer = new DateTimeFieldDenormalizer($fieldDenormalizer);
     }
 
     /**
-     * @param string                       $path
-     * @param object                       $object
-     * @param mixed                        $value
-     * @param DenormalizerContextInterface $context
-     * @param DenormalizerInterface|null   $denormalizer
+     * @param object $object
+     * @param mixed  $value
      *
      * @throws DeserializerRuntimeException
      */

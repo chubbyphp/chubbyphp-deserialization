@@ -27,11 +27,6 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
      */
     private $emptyToNull;
 
-    /**
-     * @param callable          $repository
-     * @param AccessorInterface $accessor
-     * @param bool              $emptyToNull
-     */
     public function __construct(callable $repository, AccessorInterface $accessor, bool $emptyToNull = false)
     {
         $this->repository = $repository;
@@ -40,11 +35,8 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string                       $path
-     * @param object                       $object
-     * @param mixed                        $value
-     * @param DenormalizerContextInterface $context
-     * @param DenormalizerInterface|null   $denormalizer
+     * @param object $object
+     * @param mixed  $value
      *
      * @throws DeserializerRuntimeException
      */

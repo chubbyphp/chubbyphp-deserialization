@@ -33,10 +33,7 @@ final class DenormalizationFieldMapping implements DenormalizationFieldMappingIn
     private $policy;
 
     /**
-     * @param string                     $name
-     * @param array                      $groups
-     * @param FieldDenormalizerInterface $fieldDenormalizer
-     * @param PolicyInterface|null       $policy
+     * @param string $name
      */
     public function __construct(
         $name,
@@ -50,9 +47,6 @@ final class DenormalizationFieldMapping implements DenormalizationFieldMappingIn
         $this->policy = $policy ?? new NullPolicy();
     }
 
-    /**
-     * @return string
-     */
     public function getName(): string
     {
         return $this->name;
@@ -60,25 +54,17 @@ final class DenormalizationFieldMapping implements DenormalizationFieldMappingIn
 
     /**
      * @deprecated
-     *
-     * @return array
      */
     public function getGroups(): array
     {
         return $this->groups;
     }
 
-    /**
-     * @return FieldDenormalizerInterface
-     */
     public function getFieldDenormalizer(): FieldDenormalizerInterface
     {
         return $this->fieldDenormalizer;
     }
 
-    /**
-     * @return PolicyInterface
-     */
     public function getPolicy(): PolicyInterface
     {
         return $this->policy;

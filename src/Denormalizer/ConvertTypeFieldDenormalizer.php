@@ -37,10 +37,6 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
     private $emptyToNull;
 
     /**
-     * @param AccessorInterface $accessor
-     * @param string            $type
-     * @param bool              $emptyToNull
-     *
      * @throws DeserializerLogicException
      */
     public function __construct(AccessorInterface $accessor, string $type, bool $emptyToNull = false)
@@ -55,11 +51,8 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string                       $path
-     * @param object                       $object
-     * @param mixed                        $value
-     * @param DenormalizerContextInterface $context
-     * @param DenormalizerInterface|null   $denormalizer
+     * @param object $object
+     * @param mixed  $value
      *
      * @throws DeserializerRuntimeException
      */

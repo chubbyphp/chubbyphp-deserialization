@@ -8,9 +8,6 @@ use PHPUnit\Framework\TestCase;
 
 abstract class AbstractTypeDecoderTest extends TestCase
 {
-    /**
-     * @return array
-     */
     public function getExpectedData(): array
     {
         return [

@@ -20,10 +20,6 @@ final class Deserializer implements DeserializerInterface
      */
     private $denormalizer;
 
-    /**
-     * @param DecoderInterface      $decoder
-     * @param DenormalizerInterface $denormalizer
-     */
     public function __construct(DecoderInterface $decoder, DenormalizerInterface $denormalizer)
     {
         $this->decoder = $decoder;
@@ -31,11 +27,7 @@ final class Deserializer implements DeserializerInterface
     }
 
     /**
-     * @param object|string                     $object
-     * @param string                            $data
-     * @param string                            $contentType
-     * @param DenormalizerContextInterface|null $context
-     * @param string                            $path
+     * @param object|string $object
      *
      * @return object
      */
@@ -58,13 +50,8 @@ final class Deserializer implements DeserializerInterface
     }
 
     /**
-     * @param string $data
-     * @param string $contentType
-     *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
-     *
-     * @return array
      */
     public function decode(string $data, string $contentType): array
     {
@@ -72,10 +59,7 @@ final class Deserializer implements DeserializerInterface
     }
 
     /**
-     * @param object|string                     $object
-     * @param array                             $data
-     * @param DenormalizerContextInterface|null $context
-     * @param string                            $path
+     * @param object|string $object
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException

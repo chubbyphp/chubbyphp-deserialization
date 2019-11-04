@@ -21,31 +21,19 @@ final class BaseManyModelMapping implements DenormalizationObjectMappingInterfac
      */
     private $supportedTypes;
 
-    /**
-     * @param ManyModelMapping $modelMapping
-     * @param array            $supportedTypes
-     */
     public function __construct(ManyModelMapping $modelMapping, array $supportedTypes)
     {
         $this->modelMapping = $modelMapping;
         $this->supportedTypes = $supportedTypes;
     }
 
-    /**
-     * @return string
-     */
     public function getClass(): string
     {
         return AbstractManyModel::class;
     }
 
     /**
-     * @param string      $path
-     * @param string|null $type
-     *
      * @throws DeserializerRuntimeException
-     *
-     * @return callable
      */
     public function getDenormalizationFactory(string $path, string $type = null): callable
     {
@@ -61,9 +49,6 @@ final class BaseManyModelMapping implements DenormalizationObjectMappingInterfac
     }
 
     /**
-     * @param string      $path
-     * @param string|null $type
-     *
      * @throws DeserializerRuntimeException
      *
      * @return DenormalizationFieldMappingInterface[]

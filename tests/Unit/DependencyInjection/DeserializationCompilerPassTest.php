@@ -82,20 +82,11 @@ final class DeserializationCompilerPassTest extends TestCase
     private function getStdClassMapping()
     {
         return new class() implements DenormalizationObjectMappingInterface {
-            /**
-             * @return string
-             */
             public function getClass(): string
             {
                 return \stdClass::class;
             }
 
-            /**
-             * @param string      $path
-             * @param string|null $type
-             *
-             * @return callable
-             */
             public function getDenormalizationFactory(string $path, string $type = null): callable
             {
                 return function () {
@@ -104,9 +95,6 @@ final class DeserializationCompilerPassTest extends TestCase
             }
 
             /**
-             * @param string      $path
-             * @param string|null $type
-             *
              * @return DenormalizationFieldMappingInterface[]
              */
             public function getDenormalizationFieldMappings(string $path, string $type = null): array

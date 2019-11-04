@@ -23,10 +23,6 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
      */
     private $accessor;
 
-    /**
-     * @param callable          $repository
-     * @param AccessorInterface $accessor
-     */
     public function __construct(callable $repository, AccessorInterface $accessor)
     {
         $this->repository = $repository;
@@ -34,11 +30,8 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string                       $path
-     * @param object                       $object
-     * @param mixed                        $value
-     * @param DenormalizerContextInterface $context
-     * @param DenormalizerInterface|null   $denormalizer
+     * @param object $object
+     * @param mixed  $value
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
@@ -77,8 +70,6 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param string   $path
-     * @param array    $value
      * @param iterable $relatedObjects
      */
     private function assignRelatedObjects(string $path, array $value, &$relatedObjects): void

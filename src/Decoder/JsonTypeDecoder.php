@@ -8,20 +8,13 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 final class JsonTypeDecoder implements TypeDecoderInterface
 {
-    /**
-     * @return string
-     */
     public function getContentType(): string
     {
         return 'application/json';
     }
 
     /**
-     * @param string $data
-     *
      * @throws DeserializerRuntimeException
-     *
-     * @return array
      */
     public function decode(string $data): array
     {

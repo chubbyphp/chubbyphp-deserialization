@@ -14,9 +14,6 @@ final class DenormalizerObjectMappingRegistry implements DenormalizerObjectMappi
      */
     private $objectMappings;
 
-    /**
-     * @param array $objectMappings
-     */
     public function __construct(array $objectMappings)
     {
         $this->objectMappings = [];
@@ -26,11 +23,7 @@ final class DenormalizerObjectMappingRegistry implements DenormalizerObjectMappi
     }
 
     /**
-     * @param string $class
-     *
      * @throws DeserializerLogicException
-     *
-     * @return DenormalizationObjectMappingInterface
      */
     public function getObjectMapping(string $class): DenormalizationObjectMappingInterface
     {
@@ -50,9 +43,6 @@ final class DenormalizerObjectMappingRegistry implements DenormalizerObjectMappi
         throw DeserializerLogicException::createMissingMapping($class);
     }
 
-    /**
-     * @param DenormalizationObjectMappingInterface $objectMapping
-     */
     private function addObjectMapping(DenormalizationObjectMappingInterface $objectMapping): void
     {
         $this->objectMappings[$objectMapping->getClass()] = $objectMapping;

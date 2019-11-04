@@ -39,19 +39,11 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     {
     }
 
-    /**
-     * @return DenormalizerContextBuilderInterface
-     */
     public static function create(): DenormalizerContextBuilderInterface
     {
         return new self();
     }
 
-    /**
-     * @param array|null $allowedAdditionalFields
-     *
-     * @return DenormalizerContextBuilderInterface
-     */
     public function setAllowedAdditionalFields(
         array $allowedAdditionalFields = null
     ): DenormalizerContextBuilderInterface {
@@ -64,8 +56,6 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
      * @deprecated
      *
      * @param string[] $groups
-     *
-     * @return DenormalizerContextBuilderInterface
      */
     public function setGroups(array $groups): DenormalizerContextBuilderInterface
     {
@@ -74,11 +64,6 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
         return $this;
     }
 
-    /**
-     * @param ServerRequestInterface|null $request
-     *
-     * @return DenormalizerContextBuilderInterface
-     */
     public function setRequest(ServerRequestInterface $request = null): DenormalizerContextBuilderInterface
     {
         $this->request = $request;
@@ -88,10 +73,6 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
 
     /**
      * @deprecated
-     *
-     * @param bool $resetMissingFields
-     *
-     * @return DenormalizerContextBuilderInterface
      */
     public function setResetMissingFields(bool $resetMissingFields): DenormalizerContextBuilderInterface
     {
@@ -105,11 +86,6 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
         return $this;
     }
 
-    /**
-     * @param array $attributes
-     *
-     * @return DenormalizerContextBuilderInterface
-     */
     public function setAttributes(array $attributes): DenormalizerContextBuilderInterface
     {
         $this->attributes = $attributes;
@@ -117,9 +93,6 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
         return $this;
     }
 
-    /**
-     * @return DenormalizerContextInterface
-     */
     public function getContext(): DenormalizerContextInterface
     {
         return new DenormalizerContext(

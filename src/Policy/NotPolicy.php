@@ -13,19 +13,13 @@ final class NotPolicy implements PolicyInterface
      */
     private $policy;
 
-    /**
-     * @param PolicyInterface $policy
-     */
     public function __construct(PolicyInterface $policy)
     {
         $this->policy = $policy;
     }
 
     /**
-     * @param DenormalizerContextInterface $context
-     * @param object|mixed                 $object
-     *
-     * @return bool
+     * @param object|mixed $object
      */
     public function isCompliant(DenormalizerContextInterface $context, $object): bool
     {
