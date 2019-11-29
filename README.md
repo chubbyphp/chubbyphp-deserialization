@@ -19,8 +19,9 @@ A simple deserialization.
 
 ## Suggest
 
- * psr/container: ^1.0
+ * chubbyphp/chubbyphp-container: ^1.0
  * pimple/pimple: ^3.2.3
+ * psr/container: ^1.0
  * symfony/dependency-injection: ^2.8|^3.4|^4.2|^5.0 (symfony integration)
  * symfony/yaml: ^2.8|^3.4|^4.2|^5.0 (application/x-yaml support)
 
@@ -163,9 +164,14 @@ echo $model->getName();
  * [CallableDenormalizationObjectMapping][25]
  * [LazyDenormalizationObjectMapping][26]
 
+
+### ServiceFactory
+
+* [DeserializationServiceFactory][27]
+
 ### ServiceProvider
 
-* [DeserializationServiceProvider][27]
+* [DeserializationServiceProvider][28]
 
 ## Copyright
 
@@ -211,4 +217,6 @@ Dominik Zogg 2019
 [25]: doc/Mapping/CallableDenormalizationObjectMapping.md
 [26]: doc/Mapping/LazyDenormalizationObjectMapping.md
 
-[27]: doc/ServiceProvider/DeserializationServiceProvider.md
+[27]: doc/ServiceFactory/DeserializationServiceFactory.md
+
+[28]: doc/ServiceProvider/DeserializationServiceProvider.md
