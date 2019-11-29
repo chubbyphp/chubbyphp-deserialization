@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\ServiceFactory;
 
-use Chubbyphp\Container\ContainerInterface;
 use Chubbyphp\Deserialization\Decoder\Decoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;
+use Psr\Container\ContainerInterface;
 
 final class DeserializationServiceFactory
 {
