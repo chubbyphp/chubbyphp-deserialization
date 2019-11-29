@@ -1,13 +1,13 @@
-# DeserializationProvider
+# DeserializationServiceProvider
 
 ```php
 <?php
 
-use Chubbyphp\Deserialization\Provider\DeserializationProvider;
+use Chubbyphp\Deserialization\ServiceProvider\DeserializationServiceProvider;
 use Pimple\Container;
 
 $container = new Container();
-$container->register(new DeserializationProvider);
+$container->register(new DeserializationServiceProvider);
 
 $container['deserializer']
     ->deserialize(...);
