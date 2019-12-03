@@ -2,6 +2,26 @@
 
 declare(strict_types=1);
 
-use Chubbyphp\Deserialization\ServiceProvider\DeserializationServiceProvider;
+namespace Chubbyphp\Deserialization\Provider;
 
-class_alias(DeserializationServiceProvider::class, 'Chubbyphp\Deserialization\Provider\DeserializationProvider');
+use Chubbyphp\Deserialization\ServiceProvider\DeserializationServiceProvider;
+use Pimple\Container;
+use Pimple\ServiceProviderInterface;
+
+final class DeserializationProvider implements ServiceProviderInterface
+{
+    /**
+     * @var DeserializationServiceProvider
+     */
+    private $serviceProvider;
+
+    public function __construct()
+    {
+        $this->serviceProvider = new DeserializationServiceProvider();
+    }
+
+    public function register(Container $container): void
+    {
+        $this->serviceProvider->register($container);
+    }
+}
