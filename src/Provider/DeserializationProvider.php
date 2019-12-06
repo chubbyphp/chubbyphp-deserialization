@@ -8,6 +8,9 @@ use Chubbyphp\Deserialization\ServiceProvider\DeserializationServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
+/**
+ * @deprecated use \Chubbyphp\Deserialization\ServiceProvider\DeserializationServiceProvider
+ */
 final class DeserializationProvider implements ServiceProviderInterface
 {
     /**
@@ -17,6 +20,11 @@ final class DeserializationProvider implements ServiceProviderInterface
 
     public function __construct()
     {
+        @trigger_error(
+            sprintf('Use "%s" instead.', DeserializationServiceProvider::class),
+            E_USER_DEPRECATED
+        );
+
         $this->serviceProvider = new DeserializationServiceProvider();
     }
 

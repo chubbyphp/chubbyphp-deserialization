@@ -30,6 +30,23 @@ final class DeserializationProviderTest extends TestCase
 {
     use MockByCallsTrait;
 
+    public function testAdapter(): void
+    {
+        error_clear_last();
+
+        new DeserializationProvider();
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(
+            'Use "Chubbyphp\Deserialization\ServiceProvider\DeserializationServiceProvider" instead.',
+            $error['message']
+        );
+    }
+
     public function testRegister(): void
     {
         $container = new Container();
