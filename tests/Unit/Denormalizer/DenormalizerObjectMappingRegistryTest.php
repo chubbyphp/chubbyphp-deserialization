@@ -10,7 +10,7 @@ use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
 use Chubbyphp\Tests\Deserialization\Resources\Model\AbstractManyModel;
-use Doctrine\Common\Persistence\Proxy;
+use Doctrine\Persistence\Proxy;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 

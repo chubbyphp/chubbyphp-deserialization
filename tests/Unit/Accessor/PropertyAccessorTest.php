@@ -7,7 +7,7 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Accessor;
 use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Tests\Deserialization\Resources\Model\AbstractManyModel;
-use Doctrine\Common\Persistence\Proxy;
+use Doctrine\Persistence\Proxy;
 use PHPUnit\Framework\TestCase;
 
 /**
