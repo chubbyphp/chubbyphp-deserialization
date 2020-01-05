@@ -35,6 +35,7 @@ final class Denormalizer implements DenormalizerInterface
 
     /**
      * @param object|string $object
+     * @param array<mixed>  $data
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
@@ -129,7 +130,8 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param object $object
+     * @param array<mixed> $data
+     * @param object       $object
      */
     private function denormalizeField(
         DenormalizerContextInterface $context,
@@ -155,6 +157,9 @@ final class Denormalizer implements DenormalizerInterface
         $fieldDenormalizer->denormalizeField($subPath, $object, $data[$name], $context, $this);
     }
 
+    /**
+     * @param array<int, string> $names
+     */
     private function handleNotAllowedAdditionalFields(string $path, array $names): void
     {
         $exception = DeserializerRuntimeException::createNotAllowedAdditionalFields(
@@ -212,6 +217,11 @@ final class Denormalizer implements DenormalizerInterface
         return '' === $path ? $name : $path.'.'.$name;
     }
 
+    /**
+     * @param array<int, string> $names
+     *
+     * @return array<int, string>
+     */
     private function getSubPathsByNames(string $path, array $names): array
     {
         $subPaths = [];
@@ -223,7 +233,8 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param object $object
+     * @param object             $object
+     * @param array<int, string> $missingFields
      */
     private function resetMissingFields(
         DenormalizerContextInterface $context,

@@ -64,11 +64,11 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param iterable $relatedObjects
+     * @param iterable<int|string, object> $relatedObjects
      *
-     * @return array
+     * @return array<int|string, object>
      */
-    private function cleanRelatedObjects(&$relatedObjects)
+    private function cleanRelatedObjects(&$relatedObjects): array
     {
         $existEmbObjects = [];
         foreach ($relatedObjects as $key => $existEmbObject) {
@@ -80,7 +80,9 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param iterable $relatedObjects
+     * @param array<int|string, array>     $value
+     * @param iterable<int|string, object> $relatedObjects
+     * @param array<int|string, object>    $existEmbObjects
      */
     private function assignRelatedObjects(
         string $path,

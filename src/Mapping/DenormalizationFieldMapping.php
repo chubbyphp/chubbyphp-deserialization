@@ -18,7 +18,7 @@ final class DenormalizationFieldMapping implements DenormalizationFieldMappingIn
     /**
      * @deprecated
      *
-     * @var array
+     * @var array<int, string>
      */
     private $groups;
 
@@ -33,7 +33,8 @@ final class DenormalizationFieldMapping implements DenormalizationFieldMappingIn
     private $policy;
 
     /**
-     * @param string $name
+     * @param string             $name
+     * @param array<int, string> $groups
      */
     public function __construct(
         $name,
@@ -54,6 +55,8 @@ final class DenormalizationFieldMapping implements DenormalizationFieldMappingIn
 
     /**
      * @deprecated
+     *
+     * @return array<int, string>
      */
     public function getGroups(): array
     {

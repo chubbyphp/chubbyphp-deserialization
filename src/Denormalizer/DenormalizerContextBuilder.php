@@ -9,14 +9,14 @@ use Psr\Http\Message\ServerRequestInterface;
 final class DenormalizerContextBuilder implements DenormalizerContextBuilderInterface
 {
     /**
-     * @var array|null
+     * @var array<int, string>|null
      */
     private $allowedAdditionalFields;
 
     /**
      * @deprecated
      *
-     * @var string[]
+     * @var array<int, string>
      */
     private $groups = [];
 
@@ -31,7 +31,7 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     private $resetMissingFields = false;
 
     /**
-     * @var array
+     * @var array<mixed>
      */
     private $attributes = [];
 
@@ -44,6 +44,9 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
         return new self();
     }
 
+    /**
+     * @param array<int, string>|null $allowedAdditionalFields
+     */
     public function setAllowedAdditionalFields(
         array $allowedAdditionalFields = null
     ): DenormalizerContextBuilderInterface {
@@ -55,7 +58,7 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     /**
      * @deprecated
      *
-     * @param string[] $groups
+     * @param array<int, string> $groups
      */
     public function setGroups(array $groups): DenormalizerContextBuilderInterface
     {
@@ -86,6 +89,9 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
         return $this;
     }
 
+    /**
+     * @param array<mixed> $attributes
+     */
     public function setAttributes(array $attributes): DenormalizerContextBuilderInterface
     {
         $this->attributes = $attributes;

@@ -10,13 +10,15 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 interface DecoderInterface
 {
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getContentTypes(): array;
 
     /**
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
+     *
+     * @return array<mixed>
      */
     public function decode(string $data, string $contentType): array;
 }

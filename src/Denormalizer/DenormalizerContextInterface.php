@@ -14,14 +14,14 @@ use Psr\Http\Message\ServerRequestInterface;
 interface DenormalizerContextInterface
 {
     /**
-     * @return array|null
+     * @return array<int, string>|null
      */
     public function getAllowedAdditionalFields();
 
     /**
      * @deprecated
      *
-     * @return string[]
+     * @return array<int, string>
      */
     public function getGroups(): array;
 

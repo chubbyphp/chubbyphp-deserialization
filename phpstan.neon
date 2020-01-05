@@ -1,11 +1,26 @@
 parameters:
     ignoreErrors:
         -
-            message: '##'
+            message: '/Method Chubbyphp\\Deserialization\\Accessor\\AccessorInterface\:\:setValue\(\) has no return typehint specified\./'
+            path: %currentWorkingDirectory%/src/Accessor/AccessorInterface.php
+        -
+            message: '/Method Chubbyphp\\Deserialization\\Accessor\\MethodAccessor\:\:setValue\(\) has no return typehint specified\./'
+            path: %currentWorkingDirectory%/src/Accessor/MethodAccessor.php
+        -
+            message: '//'
             path: %currentWorkingDirectory%/src/Decoder/JsonxTypeDecoder.php
         -
-            message: '##'
+            message: '//'
+            path: %currentWorkingDirectory%/src/Decoder/UrlEncodedTypeDecoder.php
+        -
+            message: '//'
             path: %currentWorkingDirectory%/src/Decoder/XmlTypeDecoder.php
         -
-            message: '#Else branch is unreachable because ternary operator condition is always true.#'
+            message: '/Unreachable statement - code above always terminates\./'
             path: %currentWorkingDirectory%/src/Denormalizer/DateTimeFieldDenormalizer.php
+        -
+            message: '/Parameter \#1 \$argument of class ReflectionClass constructor expects class\-string<T of object>\|T of object, string given\./'
+            path: %currentWorkingDirectory%/src/Denormalizer/DenormalizerObjectMappingRegistry.php
+        -
+            message: '/Method Chubbyphp\\Deserialization\\Denormalizer\\FieldDenormalizerInterface\:\:denormalizeField\(\) has no return typehint specified\./'
+            path: %currentWorkingDirectory%/src/Denormalizer/FieldDenormalizerInterface.php

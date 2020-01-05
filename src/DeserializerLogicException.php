@@ -21,6 +21,9 @@ final class DeserializerLogicException extends \LogicException
         return new self(sprintf('There is no mapping for class: "%s"', $class));
     }
 
+    /**
+     * @param array<int, string> $methods
+     */
     public static function createMissingMethod(string $class, array $methods): self
     {
         return new self(

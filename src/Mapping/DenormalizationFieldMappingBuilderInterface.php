@@ -24,6 +24,8 @@ interface DenormalizationFieldMappingBuilderInterface
 
     /**
      * @deprecated
+     *
+     * @param array<int, string> $groups
      */
     public function setGroups(array $groups): self;
 

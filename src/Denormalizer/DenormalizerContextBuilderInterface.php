@@ -13,12 +13,15 @@ interface DenormalizerContextBuilderInterface
 {
     public static function create(): self;
 
+    /**
+     * @param array<int, string>|null $allowedAdditionalFields
+     */
     public function setAllowedAdditionalFields(array $allowedAdditionalFields = null): self;
 
     /**
      * @deprecated
      *
-     * @param string[] $groups
+     * @param array<int, string> $groups
      */
     public function setGroups(array $groups): self;
 

@@ -11,6 +11,7 @@ interface DenormalizerInterface
 {
     /**
      * @param object|string $object
+     * @param array<mixed>  $data
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException

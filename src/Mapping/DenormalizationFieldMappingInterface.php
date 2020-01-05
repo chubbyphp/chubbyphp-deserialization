@@ -16,6 +16,8 @@ interface DenormalizationFieldMappingInterface
 
     /**
      * @deprecated
+     *
+     * @return array<int, string>
      */
     public function getGroups(): array;
 

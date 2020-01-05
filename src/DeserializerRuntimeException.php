@@ -23,11 +23,17 @@ final class DeserializerRuntimeException extends \RuntimeException
         return new self($message);
     }
 
+    /**
+     * @param array<int, string> $paths
+     */
     public static function createNotAllowedAdditionalFields(array $paths): self
     {
         return new self(sprintf('There are additional field(s) at paths: "%s"', implode('", "', $paths)));
     }
 
+    /**
+     * @param array<int, string> $supportedTypes
+     */
     public static function createMissingObjectType(string $path, array $supportedTypes): self
     {
         return new self(sprintf(
@@ -37,6 +43,9 @@ final class DeserializerRuntimeException extends \RuntimeException
         ));
     }
 
+    /**
+     * @param array<int, string> $supportedTypes
+     */
     public static function createInvalidObjectType(string $path, string $type, array $supportedTypes): self
     {
         return new self(sprintf(

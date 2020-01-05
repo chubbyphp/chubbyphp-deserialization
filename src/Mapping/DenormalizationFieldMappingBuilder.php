@@ -27,7 +27,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     /**
      * @deprecated
      *
-     * @var array
+     * @var array<int, string>
      */
     private $groups = [];
 
@@ -137,6 +137,8 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
 
     /**
      * @deprecated
+     *
+     * @param array<int, string> $groups
      */
     public function setGroups(array $groups): DenormalizationFieldMappingBuilderInterface
     {

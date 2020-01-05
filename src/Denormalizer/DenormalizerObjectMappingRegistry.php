@@ -10,10 +10,13 @@ use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 final class DenormalizerObjectMappingRegistry implements DenormalizerObjectMappingRegistryInterface
 {
     /**
-     * @var DenormalizationObjectMappingInterface[]
+     * @var array<string, DenormalizationObjectMappingInterface>
      */
     private $objectMappings;
 
+    /**
+     * @param array<int, DenormalizationObjectMappingInterface> $objectMappings
+     */
     public function __construct(array $objectMappings)
     {
         $this->objectMappings = [];

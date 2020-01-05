@@ -150,7 +150,7 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
     /**
      * @param bool|float|int|string $value
      *
-     * @return bool|float|int|string
+     * @return bool|string
      */
     private function convertString($value)
     {

@@ -12,6 +12,8 @@ interface TypeDecoderInterface
 
     /**
      * @throws DeserializerRuntimeException
+     *
+     * @return array<mixed>
      */
     public function decode(string $data): array;
 }

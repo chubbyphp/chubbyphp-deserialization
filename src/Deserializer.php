@@ -42,7 +42,7 @@ final class Deserializer implements DeserializerInterface
     }
 
     /**
-     * @return string[]
+     * @return array<int, string>
      */
     public function getContentTypes(): array
     {
@@ -52,6 +52,8 @@ final class Deserializer implements DeserializerInterface
     /**
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
+     *
+     * @return array<mixed>
      */
     public function decode(string $data, string $contentType): array
     {
@@ -60,6 +62,7 @@ final class Deserializer implements DeserializerInterface
 
     /**
      * @param object|string $object
+     * @param array<mixed>  $data
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException

@@ -60,7 +60,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param iterable $relatedObjects
+     * @param iterable<int|string, object> $relatedObjects
      */
     private function cleanRelatedObjects(&$relatedObjects): void
     {
@@ -70,7 +70,8 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param iterable $relatedObjects
+     * @param array<mixed>                 $value
+     * @param iterable<int|string, object> $relatedObjects
      */
     private function assignRelatedObjects(string $path, array $value, &$relatedObjects): void
     {

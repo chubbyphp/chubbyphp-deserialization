@@ -12,6 +12,9 @@ use Psr\Container\ContainerInterface;
 
 final class DeserializationServiceFactory
 {
+    /**
+     * @return array<string, callable>
+     */
     public function __invoke(): array
     {
         return [
