@@ -55,6 +55,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
             throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
         }
 
+        /** @var array<int|string, object> $relatedObjects */
         $relatedObjects = $this->accessor->getValue($object) ?? [];
 
         $existEmbObjects = $this->cleanRelatedObjects($relatedObjects);
@@ -64,7 +65,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param iterable<int|string, object> $relatedObjects
+     * @param array<int|string, object> $relatedObjects
      *
      * @return array<int|string, object>
      */
@@ -80,9 +81,9 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param array<int|string, array>     $value
-     * @param iterable<int|string, object> $relatedObjects
-     * @param array<int|string, object>    $existEmbObjects
+     * @param array<int|string, array>  $value
+     * @param array<int|string, object> $relatedObjects
+     * @param array<int|string, object> $existEmbObjects
      */
     private function assignRelatedObjects(
         string $path,

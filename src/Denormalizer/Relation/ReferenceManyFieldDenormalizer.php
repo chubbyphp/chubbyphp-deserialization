@@ -51,6 +51,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
             throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
         }
 
+        /** @var array<int|string, object> $relatedObjects */
         $relatedObjects = $this->accessor->getValue($object) ?? [];
 
         $this->cleanRelatedObjects($relatedObjects);
@@ -60,7 +61,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param iterable<int|string, object> $relatedObjects
+     * @param array<int|string, object> $relatedObjects
      */
     private function cleanRelatedObjects(&$relatedObjects): void
     {
@@ -70,8 +71,8 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param array<mixed>                 $value
-     * @param iterable<int|string, object> $relatedObjects
+     * @param array<mixed>              $value
+     * @param array<int|string, object> $relatedObjects
      */
     private function assignRelatedObjects(string $path, array $value, &$relatedObjects): void
     {
