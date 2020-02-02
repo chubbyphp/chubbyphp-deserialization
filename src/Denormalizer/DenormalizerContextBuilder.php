@@ -48,7 +48,7 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
      * @param array<int, string>|null $allowedAdditionalFields
      */
     public function setAllowedAdditionalFields(
-        array $allowedAdditionalFields = null
+        ?array $allowedAdditionalFields = null
     ): DenormalizerContextBuilderInterface {
         $this->allowedAdditionalFields = $allowedAdditionalFields;
 
@@ -67,7 +67,7 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
         return $this;
     }
 
-    public function setRequest(ServerRequestInterface $request = null): DenormalizerContextBuilderInterface
+    public function setRequest(?ServerRequestInterface $request = null): DenormalizerContextBuilderInterface
     {
         $this->request = $request;
 

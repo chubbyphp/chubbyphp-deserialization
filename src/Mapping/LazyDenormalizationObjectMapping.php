@@ -23,10 +23,7 @@ final class LazyDenormalizationObjectMapping implements DenormalizationObjectMap
      */
     private $class;
 
-    /**
-     * @param string $serviceId
-     */
-    public function __construct(ContainerInterface $container, $serviceId, string $class)
+    public function __construct(ContainerInterface $container, string $serviceId, string $class)
     {
         $this->container = $container;
         $this->serviceId = $serviceId;
@@ -38,15 +35,15 @@ final class LazyDenormalizationObjectMapping implements DenormalizationObjectMap
         return $this->class;
     }
 
-    public function getDenormalizationFactory(string $path, string $type = null): callable
+    public function getDenormalizationFactory(string $path, ?string $type = null): callable
     {
         return $this->container->get($this->serviceId)->getDenormalizationFactory($path, $type);
     }
 
     /**
-     * @return DenormalizationFieldMappingInterface[]
+     * @return array<int, DenormalizationFieldMappingInterface>
      */
-    public function getDenormalizationFieldMappings(string $path, string $type = null): array
+    public function getDenormalizationFieldMappings(string $path, ?string $type = null): array
     {
         return $this->container->get($this->serviceId)->getDenormalizationFieldMappings($path, $type);
     }

@@ -16,7 +16,7 @@ interface DenormalizerContextBuilderInterface
     /**
      * @param array<int, string>|null $allowedAdditionalFields
      */
-    public function setAllowedAdditionalFields(array $allowedAdditionalFields = null): self;
+    public function setAllowedAdditionalFields(?array $allowedAdditionalFields = null): self;
 
     /**
      * @deprecated
@@ -25,7 +25,7 @@ interface DenormalizerContextBuilderInterface
      */
     public function setGroups(array $groups): self;
 
-    public function setRequest(ServerRequestInterface $request = null): self;
+    public function setRequest(?ServerRequestInterface $request = null): self;
 
     /**
      * @param array $attributes

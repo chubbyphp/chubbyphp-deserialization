@@ -24,5 +24,5 @@ echo get_class($model);
 // 'MyProject\Model\Model'
 
 $objectMapping->getDenormalizationFieldMappings('');
-// DenormalizationFieldMappingInterface[]
+// array<int, DenormalizationFieldMappingInterface>
 ```

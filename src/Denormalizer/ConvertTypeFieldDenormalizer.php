@@ -10,17 +10,18 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
 {
-    const TYPE_BOOL = 'boolean';
-    const TYPE_FLOAT = 'float';
-    const TYPE_INT = 'int';
-    const TYPE_STRING = 'string';
+    public const TYPE_BOOL = 'boolean';
+    public const TYPE_FLOAT = 'float';
+    public const TYPE_INT = 'int';
+    public const TYPE_STRING = 'string';
 
-    const TYPES = [
+    public const TYPES = [
         self::TYPE_BOOL,
         self::TYPE_FLOAT,
         self::TYPE_INT,
         self::TYPE_STRING,
     ];
+
     /**
      * @var AccessorInterface
      */
@@ -61,7 +62,7 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
         $object,
         $value,
         DenormalizerContextInterface $context,
-        DenormalizerInterface $denormalizer = null
+        ?DenormalizerInterface $denormalizer = null
     ): void {
         if ('' === $value && $this->emptyToNull) {
             $this->accessor->setValue($object, null);

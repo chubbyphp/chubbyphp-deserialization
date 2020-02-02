@@ -8,15 +8,9 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 
 final class GroupPolicy implements PolicyInterface
 {
-    /**
-     * @var string
-     */
-    const ATTRIBUTE_GROUPS = 'groups';
+    public const ATTRIBUTE_GROUPS = 'groups';
 
-    /**
-     * @var string
-     */
-    const GROUP_DEFAULT = 'default';
+    public const GROUP_DEFAULT = 'default';
 
     /**
      * @var array<int, string>
@@ -32,7 +26,7 @@ final class GroupPolicy implements PolicyInterface
     }
 
     /**
-     * @param object|mixed $object
+     * @param object $object
      */
     public function isCompliant(DenormalizerContextInterface $context, $object): bool
     {

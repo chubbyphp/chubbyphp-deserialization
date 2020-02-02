@@ -38,9 +38,9 @@ final class DenormalizationFieldMapping implements DenormalizationFieldMappingIn
      */
     public function __construct(
         $name,
-        array $groups = [],
+        array $groups,
         FieldDenormalizerInterface $fieldDenormalizer,
-        PolicyInterface $policy = null
+        ?PolicyInterface $policy = null
     ) {
         $this->name = $name;
         $this->groups = $groups;

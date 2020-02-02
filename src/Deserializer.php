@@ -35,7 +35,7 @@ final class Deserializer implements DeserializerInterface
         $object,
         string $data,
         string $contentType,
-        DenormalizerContextInterface $context = null,
+        ?DenormalizerContextInterface $context = null,
         string $path = ''
     ) {
         return $this->denormalizer->denormalize($object, $this->decoder->decode($data, $contentType), $context, $path);
@@ -69,7 +69,7 @@ final class Deserializer implements DeserializerInterface
      *
      * @return object
      */
-    public function denormalize($object, array $data, DenormalizerContextInterface $context = null, string $path = '')
+    public function denormalize($object, array $data, ?DenormalizerContextInterface $context = null, string $path = '')
     {
         return $this->denormalizer->denormalize($object, $data, $context, $path);
     }

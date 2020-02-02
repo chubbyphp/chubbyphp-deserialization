@@ -27,7 +27,7 @@ final class Denormalizer implements DenormalizerInterface
 
     public function __construct(
         DenormalizerObjectMappingRegistryInterface $denormalizerObjectMappingRegistry,
-        LoggerInterface $logger = null
+        ?LoggerInterface $logger = null
     ) {
         $this->denormalizerObjectMappingRegistry = $denormalizerObjectMappingRegistry;
         $this->logger = $logger ?? new NullLogger();
@@ -42,7 +42,7 @@ final class Denormalizer implements DenormalizerInterface
      *
      * @return object
      */
-    public function denormalize($object, array $data, DenormalizerContextInterface $context = null, string $path = '')
+    public function denormalize($object, array $data, ?DenormalizerContextInterface $context = null, string $path = '')
     {
         $context = $context ?? DenormalizerContextBuilder::create()->getContext();
 
@@ -113,7 +113,7 @@ final class Denormalizer implements DenormalizerInterface
     private function createNewObject(
         DenormalizationObjectMappingInterface $objectMapping,
         string $path,
-        string $type = null
+        ?string $type = null
     ) {
         $factory = $objectMapping->getDenormalizationFactory($path, $type);
         $object = $factory();
@@ -242,7 +242,7 @@ final class Denormalizer implements DenormalizerInterface
         $object,
         array $missingFields,
         string $path,
-        string $type = null
+        ?string $type = null
     ): void {
         if (!method_exists($context, 'isResetMissingFields') || !$context->isResetMissingFields()) {
             return;

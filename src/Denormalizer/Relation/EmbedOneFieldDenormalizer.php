@@ -44,7 +44,7 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
         $object,
         $value,
         DenormalizerContextInterface $context,
-        DenormalizerInterface $denormalizer = null
+        ?DenormalizerInterface $denormalizer = null
     ): void {
         if (null === $value) {
             $this->accessor->setValue($object, $value);

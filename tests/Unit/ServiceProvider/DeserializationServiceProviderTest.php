@@ -80,7 +80,7 @@ final class DeserializationProviderTest extends TestCase
         self::assertSame(E_USER_DEPRECATED, $error['type']);
         self::assertSame(
             'Register the decoder types by yourself:'
-                .' $container[\'deserializer.decodertypes\'] = function () { return [new JsonTypeDecoder()]; };',
+                .' $container[\'deserializer.decodertypes\'] = static function () { return [new JsonTypeDecoder()]; };',
             $error['message']
         );
     }

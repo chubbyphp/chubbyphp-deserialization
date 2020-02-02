@@ -48,7 +48,7 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
      * @param string      $path
      * @param string|null $type
      *
-     * @return DenormalizationFieldMappingInterface[]
+     * @return array<int, DenormalizationFieldMappingInterface>
      *
      * @throws DeserializerRuntimeException
      */
@@ -142,7 +142,7 @@ final class BaseManyModelMapping implements DenormalizationObjectMappingInterfac
      * @param string      $path
      * @param string|null $type
      *
-     * @return DenormalizationFieldMappingInterface[]
+     * @return array<int, DenormalizationFieldMappingInterface>
      *
      * @throws DeserializerRuntimeException
      */
@@ -215,7 +215,7 @@ final class ManyModelMapping implements DenormalizationObjectMappingInterface
      * @param string      $path
      * @param string|null $type
      *
-     * @return DenormalizationFieldMappingInterface[]
+     * @return array<int, DenormalizationFieldMappingInterface>
      *
      * @throws DeserializerRuntimeException
      */
@@ -274,7 +274,7 @@ final class OneModelMapping implements DenormalizationObjectMappingInterface
      * @param string      $path
      * @param string|null $type
      *
-     * @return DenormalizationFieldMappingInterface[]
+     * @return array<int, DenormalizationFieldMappingInterface>
      *
      * @throws DeserializerRuntimeException
      */

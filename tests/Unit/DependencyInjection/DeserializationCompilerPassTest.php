@@ -95,7 +95,7 @@ final class DeserializationCompilerPassTest extends TestCase
             }
 
             /**
-             * @return DenormalizationFieldMappingInterface[]
+             * @return array<int, DenormalizationFieldMappingInterface>
              */
             public function getDenormalizationFieldMappings(string $path, string $type = null): array
             {

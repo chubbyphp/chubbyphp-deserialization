@@ -49,7 +49,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     public static function create(
         string $name,
         bool $emptyToNull = false,
-        FieldDenormalizerInterface $fieldDenormalizer = null
+        ?FieldDenormalizerInterface $fieldDenormalizer = null
     ): DenormalizationFieldMappingBuilderInterface {
         if (null === $fieldDenormalizer) {
             $fieldDenormalizer = new FieldDenormalizer(new PropertyAccessor($name), $emptyToNull);
@@ -86,10 +86,14 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     public static function createDateTime(
         string $name,
         bool $emptyToNull = false,
-        \DateTimeZone $dateTimeZone = null
+        ?\DateTimeZone $dateTimeZone = null
     ): DenormalizationFieldMappingBuilderInterface {
         $self = new self($name);
-        $self->fieldDenormalizer = new DateTimeFieldDenormalizer(new PropertyAccessor($name), $emptyToNull, $dateTimeZone);
+        $self->fieldDenormalizer = new DateTimeFieldDenormalizer(
+            new PropertyAccessor($name),
+            $emptyToNull,
+            $dateTimeZone
+        );
 
         return $self;
     }

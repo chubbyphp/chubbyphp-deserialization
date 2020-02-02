@@ -29,7 +29,7 @@ final class CallbackFieldDenormalizer implements FieldDenormalizerInterface
         $object,
         $value,
         DenormalizerContextInterface $context,
-        DenormalizerInterface $denormalizer = null
+        ?DenormalizerInterface $denormalizer = null
     ): void {
         $callback = $this->callback;
 

@@ -41,7 +41,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
         $object,
         $value,
         DenormalizerContextInterface $context,
-        DenormalizerInterface $denormalizer = null
+        ?DenormalizerInterface $denormalizer = null
     ): void {
         if (null === $value) {
             $value = [];

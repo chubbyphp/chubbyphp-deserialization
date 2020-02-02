@@ -24,7 +24,7 @@ final class YamlTypeDecoder implements TypeDecoderInterface
     {
         try {
             $decoded = Yaml::parse($data);
-        } catch (ParseException $e) {
+        } catch (ParseException $exception) {
             throw DeserializerRuntimeException::createNotParsable($this->getContentType());
         }
 

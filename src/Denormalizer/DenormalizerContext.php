@@ -41,9 +41,9 @@ final class DenormalizerContext implements DenormalizerContextInterface
      * @param array<mixed>            $attributes
      */
     public function __construct(
-        array $allowedAdditionalFields = null,
+        ?array $allowedAdditionalFields = null,
         array $groups = [],
-        ServerRequestInterface $request = null,
+        ?ServerRequestInterface $request = null,
         bool $resetMissingFields = false,
         array $attributes = []
     ) {

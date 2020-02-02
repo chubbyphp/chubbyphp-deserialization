@@ -21,6 +21,6 @@ interface FieldDenormalizerInterface
         $object,
         $value,
         DenormalizerContextInterface $context,
-        DenormalizerInterface $denormalizer = null
+        ?DenormalizerInterface $denormalizer = null
     );
 }

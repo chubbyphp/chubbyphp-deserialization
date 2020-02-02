@@ -11,12 +11,12 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
  */
 final class JsonxTypeDecoder implements TypeDecoderInterface
 {
-    const DATATYPE_OBJECT = 'object';
-    const DATATYPE_ARRAY = 'array';
-    const DATATYPE_BOOLEAN = 'boolean';
-    const DATATYPE_STRING = 'string';
-    const DATATYPE_NUMBER = 'number';
-    const DATATYPE_NULL = 'null';
+    public const DATATYPE_OBJECT = 'object';
+    public const DATATYPE_ARRAY = 'array';
+    public const DATATYPE_BOOLEAN = 'boolean';
+    public const DATATYPE_STRING = 'string';
+    public const DATATYPE_NUMBER = 'number';
+    public const DATATYPE_NULL = 'null';
 
     /**
      * @var string

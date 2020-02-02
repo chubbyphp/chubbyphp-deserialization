@@ -30,7 +30,7 @@ final class ManyModelMapping implements DenormalizationObjectMappingInterface
     /**
      * @throws DeserializerRuntimeException
      *
-     * @return DenormalizationFieldMappingInterface[]
+     * @return array<int, DenormalizationFieldMappingInterface>
      */
     public function getDenormalizationFieldMappings(string $path, string $type = null): array
     {

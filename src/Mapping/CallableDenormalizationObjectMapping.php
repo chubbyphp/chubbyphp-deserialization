@@ -32,15 +32,15 @@ final class CallableDenormalizationObjectMapping implements DenormalizationObjec
         return $this->class;
     }
 
-    public function getDenormalizationFactory(string $path, string $type = null): callable
+    public function getDenormalizationFactory(string $path, ?string $type = null): callable
     {
         return $this->getMapping()->getDenormalizationFactory($path, $type);
     }
 
     /**
-     * @return DenormalizationFieldMappingInterface[]
+     * @return array<int, DenormalizationFieldMappingInterface>
      */
-    public function getDenormalizationFieldMappings(string $path, string $type = null): array
+    public function getDenormalizationFieldMappings(string $path, ?string $type = null): array
     {
         return $this->getMapping()->getDenormalizationFieldMappings($path, $type);
     }

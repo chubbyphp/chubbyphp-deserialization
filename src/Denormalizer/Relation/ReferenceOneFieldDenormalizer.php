@@ -45,7 +45,7 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
         $object,
         $value,
         DenormalizerContextInterface $context,
-        DenormalizerInterface $denormalizer = null
+        ?DenormalizerInterface $denormalizer = null
     ): void {
         if ('' === $value && $this->emptyToNull) {
             $this->accessor->setValue($object, null);

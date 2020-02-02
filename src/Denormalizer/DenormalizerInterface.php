@@ -18,5 +18,5 @@ interface DenormalizerInterface
      *
      * @return object
      */
-    public function denormalize($object, array $data, DenormalizerContextInterface $context = null, string $path = '');
+    public function denormalize($object, array $data, ?DenormalizerContextInterface $context = null, string $path = '');
 }

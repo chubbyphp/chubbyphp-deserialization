@@ -43,7 +43,7 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
      * @param string      $path
      * @param string|null $type
      *
-     * @return DenormalizationFieldMappingInterface[]
+     * @return array<int, DenormalizationFieldMappingInterface>
      */
     public function getDenormalizationFieldMappings(
         string $path,

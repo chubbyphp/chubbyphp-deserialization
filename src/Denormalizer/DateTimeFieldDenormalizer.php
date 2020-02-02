@@ -34,7 +34,7 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
     /**
      * @param AccessorInterface|FieldDenormalizerInterface $accessor
      */
-    public function __construct($accessor, bool $emptyToNull = false, \DateTimeZone $dateTimeZone = null)
+    public function __construct($accessor, bool $emptyToNull = false, ?\DateTimeZone $dateTimeZone = null)
     {
         $this->emptyToNull = $emptyToNull;
         $this->dateTimeZone = $dateTimeZone;
@@ -46,16 +46,7 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
         }
 
         if ($accessor instanceof FieldDenormalizerInterface) {
-            @trigger_error(
-                sprintf(
-                    'Use "%s" instead of "%s" as __construct argument',
-                    AccessorInterface::class,
-                    FieldDenormalizerInterface::class
-                ),
-                E_USER_DEPRECATED
-            );
-
-            $this->fieldDenormalizer = $accessor;
+            $this->setFieldDenormalizer($accessor);
 
             return;
         }
@@ -82,7 +73,7 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
         $object,
         $value,
         DenormalizerContextInterface $context,
-        DenormalizerInterface $denormalizer = null
+        ?DenormalizerInterface $denormalizer = null
     ): void {
         if ('' === $value && $this->emptyToNull) {
             $this->setValue($path, $object, null, $context, $denormalizer);
@@ -115,6 +106,20 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
         $this->setValue($path, $object, $value, $context, $denormalizer);
     }
 
+    private function setFieldDenormalizer(FieldDenormalizerInterface $fieldDenormalizer): void
+    {
+        @trigger_error(
+            sprintf(
+                'Use "%s" instead of "%s" as __construct argument',
+                AccessorInterface::class,
+                FieldDenormalizerInterface::class
+            ),
+            E_USER_DEPRECATED
+        );
+
+        $this->fieldDenormalizer = $fieldDenormalizer;
+    }
+
     /**
      * @param object $object
      * @param mixed  $value
@@ -124,7 +129,7 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
         $object,
         $value,
         DenormalizerContextInterface $context,
-        DenormalizerInterface $denormalizer = null
+        ?DenormalizerInterface $denormalizer = null
     ): void {
         if (null !== $this->accessor) {
             $this->accessor->setValue($object, $value);

@@ -21,15 +21,15 @@ final class DeserializationServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $container): void
     {
-        $container['deserializer'] = function () use ($container) {
+        $container['deserializer'] = static function () use ($container) {
             return new Deserializer($container['deserializer.decoder'], $container['deserializer.denormalizer']);
         };
 
-        $container['deserializer.decoder'] = function () use ($container) {
+        $container['deserializer.decoder'] = static function () use ($container) {
             return new Decoder($container['deserializer.decodertypes']);
         };
 
-        $container['deserializer.decodertypes'] = function () {
+        $container['deserializer.decodertypes'] = static function () {
             $decoderTypes = [];
 
             $decoderTypes[] = new JsonTypeDecoder();
@@ -43,25 +43,27 @@ final class DeserializationServiceProvider implements ServiceProviderInterface
 
             @trigger_error(
                 'Register the decoder types by yourself:'
-                    .' $container[\'deserializer.decodertypes\'] = function () { return [new JsonTypeDecoder()]; };',
+                    .' $container[\'deserializer.decodertypes\'] = static function () {'
+                        .' return [new JsonTypeDecoder()]; '.
+                    '};',
                 E_USER_DEPRECATED
             );
 
             return $decoderTypes;
         };
 
-        $container['deserializer.denormalizer'] = function () use ($container) {
+        $container['deserializer.denormalizer'] = static function () use ($container) {
             return new Denormalizer(
                 $container['deserializer.denormalizer.objectmappingregistry'],
                 $container['logger'] ?? null
             );
         };
 
-        $container['deserializer.denormalizer.objectmappingregistry'] = function () use ($container) {
+        $container['deserializer.denormalizer.objectmappingregistry'] = static function () use ($container) {
             return new DenormalizerObjectMappingRegistry($container['deserializer.denormalizer.objectmappings']);
         };
 
-        $container['deserializer.denormalizer.objectmappings'] = function () {
+        $container['deserializer.denormalizer.objectmappings'] = static function () {
             return [];
         };
     }

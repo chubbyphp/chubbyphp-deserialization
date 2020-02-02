@@ -13,12 +13,12 @@ interface DenormalizationObjectMappingInterface
     /**
      * @throws DeserializerRuntimeException
      */
-    public function getDenormalizationFactory(string $path, string $type = null): callable;
+    public function getDenormalizationFactory(string $path, ?string $type = null): callable;
 
     /**
      * @throws DeserializerRuntimeException
      *
-     * @return DenormalizationFieldMappingInterface[]
+     * @return array<int, DenormalizationFieldMappingInterface>
      */
-    public function getDenormalizationFieldMappings(string $path, string $type = null): array;
+    public function getDenormalizationFieldMappings(string $path, ?string $type = null): array;
 }
