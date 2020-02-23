@@ -104,6 +104,32 @@ final class EmbedManyFieldDenormalizerTest extends TestCase
         $fieldDenormalizer->denormalizeField('children', $parent, null, $context, $denormalizer);
     }
 
+    public function testDenormalizeFieldWithSubValueNull(): void
+    {
+        $parent = new \stdClass();
+
+        $child = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('getValue')->with($parent)->willReturn([]),
+            Call::create('setValue')->with($parent, [$child]),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        /** @var DenormalizerInterface|MockObject $denormalizer */
+        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
+            Call::create('denormalize')
+                ->with(\stdClass::class, [], $context, 'children[0]')
+                ->willReturn($child),
+        ]);
+
+        $fieldDenormalizer = new EmbedManyFieldDenormalizer(\stdClass::class, $accessor);
+        $fieldDenormalizer->denormalizeField('children', $parent, [null], $context, $denormalizer);
+    }
+
     public function testDenormalizeFieldWithNewChild(): void
     {
         $parent = new \stdClass();

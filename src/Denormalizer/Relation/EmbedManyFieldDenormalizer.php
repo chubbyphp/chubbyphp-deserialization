@@ -81,9 +81,9 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param array<int|string, array>  $value
-     * @param array<int|string, object> $relatedObjects
-     * @param array<int|string, object> $existEmbObjects
+     * @param array<int|string, array|null> $value
+     * @param array<int|string, object>     $relatedObjects
+     * @param array<int|string, object>     $existEmbObjects
      */
     private function assignRelatedObjects(
         string $path,
@@ -95,6 +95,10 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     ): void {
         foreach ($value as $key => $subValue) {
             $subPath = $path.'['.$key.']';
+
+            if (null === $subValue) {
+                $subValue = [];
+            }
 
             if (!is_array($subValue)) {
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'array');
