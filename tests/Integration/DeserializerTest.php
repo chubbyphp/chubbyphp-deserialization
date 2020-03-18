@@ -436,6 +436,34 @@ final class DeserializerTest extends TestCase
         );
     }
 
+    public function testDenormalizeWithKeyCastToIntegerAdditionalFieldsExpectsException(): void
+    {
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('There are additional field(s) at paths: "1"');
+
+        $childModelMapping = new ManyModelMapping();
+
+        $deserializer = new Deserializer(
+            new Decoder([new JsonTypeDecoder()]),
+            new Denormalizer(
+                new DenormalizerObjectMappingRegistry([
+                    new BaseManyModelMapping($childModelMapping, ['many-model']),
+                    $childModelMapping,
+                    new ModelMapping(),
+                ])
+            )
+        );
+
+        $data = json_encode(['name' => 'Name', '1' => 'value']);
+
+        $deserializer->deserialize(
+            Model::class,
+            $data,
+            'application/json',
+            DenormalizerContextBuilder::create()->setAllowedAdditionalFields([])->getContext()
+        );
+    }
+
     public function testDenormalizeWithAllowedAdditionalFields(): void
     {
         $childModelMapping = new ManyModelMapping();
