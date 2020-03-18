@@ -449,7 +449,7 @@ final class DenormalizerTest extends TestCase
         $denormalizer->denormalize(\stdClass::class, ['additionalData' => 'additionalData'], $context);
     }
 
-    public function testDenormalizeWithKeyCastToIntegerAdditionalData(): void
+    public function testDenormalizeWithKeyCastToIntegerAdditionalDataExpectsException(): void
     {
         $this->expectException(DeserializerRuntimeException::class);
         $this->expectExceptionMessage('There are additional field(s) at paths: "1"');
