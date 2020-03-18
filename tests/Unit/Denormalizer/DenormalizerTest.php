@@ -449,6 +449,57 @@ final class DenormalizerTest extends TestCase
         $denormalizer->denormalize(\stdClass::class, ['additionalData' => 'additionalData'], $context);
     }
 
+    public function testDenormalizeWithKeyCastToIntegerAdditionalData(): void
+    {
+        $this->expectException(DeserializerRuntimeException::class);
+        $this->expectExceptionMessage('There are additional field(s) at paths: "1"');
+
+        $object = new \stdClass();
+
+        $factory = function () use ($object) {
+            return $object;
+        };
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
+            Call::create('getAllowedAdditionalFields')->with()->willReturn([]),
+        ]);
+
+        /** @var DenormalizationFieldMappingInterface|MockObject $denormalizationNameFieldMapping */
+        $denormalizationNameFieldMapping = $this->getMockByCalls(DenormalizationFieldMappingInterface::class, [
+            Call::create('getName')->with()->willReturn('name'),
+        ]);
+
+        /** @var DenormalizationFieldMappingInterface|MockObject $denormalizationValueFieldMapping */
+        $denormalizationValueFieldMapping = $this->getMockByCalls(DenormalizationFieldMappingInterface::class, [
+            Call::create('getName')->with()->willReturn('value'),
+        ]);
+
+        /** @var DenormalizationObjectMappingInterface|MockObject $objectMapping */
+        $objectMapping = $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
+            Call::create('getDenormalizationFactory')->with('', null)->willReturn($factory),
+            Call::create('getDenormalizationFieldMappings')->with('', null)->willReturn([
+                $denormalizationNameFieldMapping,
+                $denormalizationValueFieldMapping,
+            ]),
+        ]);
+
+        /** @var DenormalizerObjectMappingRegistryInterface|MockObject $registry */
+        $registry = $this->getMockByCalls(DenormalizerObjectMappingRegistryInterface::class, [
+            Call::create('getObjectMapping')->with(\stdClass::class)->willReturn($objectMapping),
+        ]);
+
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->getMockByCalls(LoggerInterface::class, [
+            Call::create('notice')->with('deserialize: {exception}', [
+                'exception' => 'There are additional field(s) at paths: "1"',
+            ]),
+        ]);
+
+        $denormalizer = new Denormalizer($registry, $logger);
+        $denormalizer->denormalize(\stdClass::class, ['1' => 'additionalData'], $context);
+    }
+
     public function testDenormalizeWithAdditionalDataAndAllowIt(): void
     {
         $object = new \stdClass();

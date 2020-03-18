@@ -158,7 +158,7 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param array<int, string> $names
+     * @param array<int, string|int> $names
      */
     private function handleNotAllowedAdditionalFields(string $path, array $names): void
     {
@@ -218,7 +218,7 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param array<int, string> $names
+     * @param array<int, string|int> $names
      *
      * @return array<int, string>
      */
@@ -226,7 +226,7 @@ final class Denormalizer implements DenormalizerInterface
     {
         $subPaths = [];
         foreach ($names as $name) {
-            $subPaths[] = $this->getSubPathByName($path, $name);
+            $subPaths[] = $this->getSubPathByName($path, (string) $name);
         }
 
         return $subPaths;
