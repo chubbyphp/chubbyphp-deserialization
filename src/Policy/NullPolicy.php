@@ -8,10 +8,12 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 
 final class NullPolicy implements PolicyInterface
 {
-    /**
-     * @param object $object
-     */
-    public function isCompliant(DenormalizerContextInterface $context, $object): bool
+    public function isCompliant(DenormalizerContextInterface $context, object $object): bool
+    {
+        return true;
+    }
+
+    public function isCompliantIncludingPath(object $object, DenormalizerContextInterface $context, string $path): bool
     {
         return true;
     }

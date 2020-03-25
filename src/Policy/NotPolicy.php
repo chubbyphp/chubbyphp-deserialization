@@ -18,11 +18,13 @@ final class NotPolicy implements PolicyInterface
         $this->policy = $policy;
     }
 
-    /**
-     * @param object $object
-     */
-    public function isCompliant(DenormalizerContextInterface $context, $object): bool
+    public function isCompliant(DenormalizerContextInterface $context, object $object): bool
     {
         return !$this->policy->isCompliant($context, $object);
+    }
+
+    public function isCompliantIncludingPath(object $object, DenormalizerContextInterface $context, string $path): bool
+    {
+        return !$this->policy->isCompliantIncludingPath($object, $context, $path);
     }
 }

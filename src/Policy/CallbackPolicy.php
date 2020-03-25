@@ -18,11 +18,13 @@ final class CallbackPolicy implements PolicyInterface
         $this->callback = $callback;
     }
 
-    /**
-     * @param object $object
-     */
-    public function isCompliant(DenormalizerContextInterface $context, $object): bool
+    public function isCompliant(DenormalizerContextInterface $context, object $object): bool
     {
         return ($this->callback)($context, $object);
+    }
+
+    public function isCompliantIncludingPath(object $object, DenormalizerContextInterface $context, string $path): bool
+    {
+        return ($this->callback)($object, $context, $path);
     }
 }

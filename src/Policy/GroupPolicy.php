@@ -25,10 +25,12 @@ final class GroupPolicy implements PolicyInterface
         $this->groups = $groups;
     }
 
-    /**
-     * @param object $object
-     */
-    public function isCompliant(DenormalizerContextInterface $context, $object): bool
+    public function isCompliant(DenormalizerContextInterface $context, object $object): bool
+    {
+        return $this->isCompliantIncludingPath($object, $context, '');
+    }
+
+    public function isCompliantIncludingPath(object $object, DenormalizerContextInterface $context, string $path): bool
     {
         if ([] === $this->groups) {
             return true;

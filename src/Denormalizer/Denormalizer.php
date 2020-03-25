@@ -39,11 +39,13 @@ final class Denormalizer implements DenormalizerInterface
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
-     *
-     * @return object
      */
-    public function denormalize($object, array $data, ?DenormalizerContextInterface $context = null, string $path = '')
-    {
+    public function denormalize(
+        $object,
+        array $data,
+        ?DenormalizerContextInterface $context = null,
+        string $path = ''
+    ): object {
         $context = $context ?? DenormalizerContextBuilder::create()->getContext();
 
         $class = is_object($object) ? get_class($object) : $object;
@@ -131,7 +133,6 @@ final class Denormalizer implements DenormalizerInterface
 
     /**
      * @param array<mixed> $data
-     * @param object       $object
      */
     private function denormalizeField(
         DenormalizerContextInterface $context,
@@ -139,17 +140,17 @@ final class Denormalizer implements DenormalizerInterface
         string $path,
         string $name,
         array $data,
-        $object
+        object $object
     ): void {
-        if (!$this->isCompliant($context, $denormalizationFieldMapping, $object)) {
+        $subPath = $this->getSubPathByName($path, $name);
+
+        if (!$this->isCompliant($context, $denormalizationFieldMapping, $object, $subPath)) {
             return;
         }
 
         if (!$this->isWithinGroup($context, $denormalizationFieldMapping)) {
             return;
         }
-
-        $subPath = $this->getSubPathByName($path, $name);
 
         $this->logger->info('deserialize: path {path}', ['path' => $subPath]);
 
@@ -171,16 +172,18 @@ final class Denormalizer implements DenormalizerInterface
         throw $exception;
     }
 
-    /**
-     * @param object $object
-     */
     private function isCompliant(
         DenormalizerContextInterface $context,
         DenormalizationFieldMappingInterface $mapping,
-        $object
+        object $object,
+        string $path
     ): bool {
         if (!is_callable([$mapping, 'getPolicy'])) {
             return true;
+        }
+
+        if (method_exists($mapping->getPolicy(), 'isCompliantIncludingPath')) {
+            return $mapping->getPolicy()->isCompliantIncludingPath($object, $context, $path);
         }
 
         return $mapping->getPolicy()->isCompliant($context, $object);
@@ -233,13 +236,12 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param object             $object
      * @param array<int, string> $missingFields
      */
     private function resetMissingFields(
         DenormalizerContextInterface $context,
         DenormalizationObjectMappingInterface $objectMapping,
-        $object,
+        object $object,
         array $missingFields,
         string $path,
         ?string $type = null
