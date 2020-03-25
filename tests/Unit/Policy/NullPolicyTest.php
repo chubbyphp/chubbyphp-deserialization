@@ -30,4 +30,18 @@ final class NullPolicyTest extends TestCase
 
         self::assertTrue($policy->isCompliant($context, $object));
     }
+
+    public function testIsCompliantIncludingReturnsTrue(): void
+    {
+        $object = new \stdClass();
+
+        $path = '';
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        $policy = new NullPolicy();
+
+        self::assertTrue($policy->isCompliantIncludingPath($object, $context, $path));
+    }
 }

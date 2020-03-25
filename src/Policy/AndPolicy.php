@@ -24,7 +24,7 @@ final class AndPolicy implements PolicyInterface
     public function isCompliant(DenormalizerContextInterface $context, object $object): bool
     {
         foreach ($this->policies as $policy) {
-            if (!$policy->isCompliant($context, $object)) {
+            if (false === $policy->isCompliant($context, $object)) {
                 return false;
             }
         }
@@ -35,7 +35,7 @@ final class AndPolicy implements PolicyInterface
     public function isCompliantIncludingPath(object $object, DenormalizerContextInterface $context, string $path): bool
     {
         foreach ($this->policies as $policy) {
-            if (!$policy->isCompliantIncudingPath($object, $context, $path)) {
+            if (false === $policy->isCompliantIncludingPath($object, $context, $path)) {
                 return false;
             }
         }

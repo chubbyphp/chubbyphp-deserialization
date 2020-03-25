@@ -18,6 +18,7 @@ use Chubbyphp\Deserialization\Policy\PolicyInterface;
 use Chubbyphp\Mock\Argument\ArgumentInstanceOf;
 use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Tests\Deserialization\Unit\Policy\PolicyIncludingPathTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -30,6 +31,7 @@ use Psr\Log\LoggerInterface;
 final class DenormalizerTest extends TestCase
 {
     use MockByCallsTrait;
+    use PolicyIncludingPathTrait;
 
     public function testDenormalizeWithNew(): void
     {
@@ -755,6 +757,116 @@ final class DenormalizerTest extends TestCase
         $policy = $this->getMockByCalls(PolicyInterface::class, [
             Call::create('isCompliant')->with($context, $object)->willReturn(false),
         ]);
+
+        $denormalizationNameFieldMapping = $this->getDenormalizationFieldMappingWithPolicy(
+            'name',
+            $nameFieldDenormalizer,
+            $policy
+        );
+
+        /** @var DenormalizationFieldMappingInterface|MockObject $denormalizationValueFieldMapping */
+        $denormalizationValueFieldMapping = $this->getMockByCalls(DenormalizationFieldMappingInterface::class, [
+            Call::create('getName')->with()->willReturn('value'),
+        ]);
+
+        /** @var DenormalizationObjectMappingInterface|MockObject $objectMapping */
+        $objectMapping = $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
+            Call::create('getDenormalizationFactory')->with('', null)->willReturn($factory),
+            Call::create('getDenormalizationFieldMappings')->with('', null)->willReturn([
+                $denormalizationNameFieldMapping,
+                $denormalizationValueFieldMapping,
+            ]),
+        ]);
+
+        /** @var DenormalizerObjectMappingRegistryInterface|MockObject $registry */
+        $registry = $this->getMockByCalls(DenormalizerObjectMappingRegistryInterface::class, [
+            Call::create('getObjectMapping')->with(\stdClass::class)->willReturn($objectMapping),
+        ]);
+
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->getMockByCalls(LoggerInterface::class);
+
+        $denormalizer = new Denormalizer($registry, $logger);
+
+        self::assertSame($object, $denormalizer->denormalize(\stdClass::class, ['name' => 'name'], $context));
+    }
+
+    public function testDenormalizeWithCompliantIncludingPathPolicy(): void
+    {
+        $object = new \stdClass();
+
+        $factory = function () use ($object) {
+            return $object;
+        };
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
+            Call::create('getGroups')->with()->willReturn([]),
+            Call::create('getAllowedAdditionalFields')->with()->willReturn(null),
+        ]);
+
+        /** @var FieldDenormalizerInterface|MockObject $nameFieldDenormalizer */
+        $nameFieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class, [
+            Call::create('denormalizeField')
+                ->with('name', $object, 'name', $context, new ArgumentInstanceOf(DenormalizerInterface::class)),
+        ]);
+
+        /** @var PolicyInterface|MockObject $policy */
+        $policy = $this->getCompliantPolicyIncludingPath(true);
+
+        $denormalizationNameFieldMapping = $this->getDenormalizationFieldMappingWithPolicy(
+            'name',
+            $nameFieldDenormalizer,
+            $policy
+        );
+
+        /** @var DenormalizationFieldMappingInterface|MockObject $denormalizationValueFieldMapping */
+        $denormalizationValueFieldMapping = $this->getMockByCalls(DenormalizationFieldMappingInterface::class, [
+            Call::create('getName')->with()->willReturn('value'),
+        ]);
+
+        /** @var DenormalizationObjectMappingInterface|MockObject $objectMapping */
+        $objectMapping = $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
+            Call::create('getDenormalizationFactory')->with('', null)->willReturn($factory),
+            Call::create('getDenormalizationFieldMappings')->with('', null)->willReturn([
+                $denormalizationNameFieldMapping,
+                $denormalizationValueFieldMapping,
+            ]),
+        ]);
+
+        /** @var DenormalizerObjectMappingRegistryInterface|MockObject $registry */
+        $registry = $this->getMockByCalls(DenormalizerObjectMappingRegistryInterface::class, [
+            Call::create('getObjectMapping')->with(\stdClass::class)->willReturn($objectMapping),
+        ]);
+
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->getMockByCalls(LoggerInterface::class, [
+            Call::create('info')->with('deserialize: path {path}', ['path' => 'name']),
+        ]);
+
+        $denormalizer = new Denormalizer($registry, $logger);
+
+        self::assertSame($object, $denormalizer->denormalize(\stdClass::class, ['name' => 'name'], $context));
+    }
+
+    public function testDenormalizeWithNotCompliantIncludingPathPolicy(): void
+    {
+        $object = new \stdClass();
+
+        $factory = function () use ($object) {
+            return $object;
+        };
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
+            Call::create('getAllowedAdditionalFields')->with()->willReturn(null),
+        ]);
+
+        /** @var FieldDenormalizerInterface|MockObject $nameFieldDenormalizer */
+        $nameFieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
+
+        /** @var PolicyInterface|MockObject $policy */
+        $policy = $this->getCompliantPolicyIncludingPath(false);
 
         $denormalizationNameFieldMapping = $this->getDenormalizationFieldMappingWithPolicy(
             'name',
