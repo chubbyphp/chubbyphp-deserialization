@@ -23,6 +23,8 @@ final class OrPolicy implements PolicyInterface
 
     public function isCompliant(DenormalizerContextInterface $context, object $object): bool
     {
+        @trigger_error('Use "isCompliantIncludingPath()" instead of "isCompliant()"', E_USER_DEPRECATED);
+
         foreach ($this->policies as $policy) {
             if ($policy->isCompliant($context, $object)) {
                 return true;
@@ -42,6 +44,8 @@ final class OrPolicy implements PolicyInterface
 
                 continue;
             }
+
+            @trigger_error('Use "isCompliantIncludingPath()" instead of "isCompliant()"', E_USER_DEPRECATED);
 
             if ($policy->isCompliant($context, $object)) {
                 return true;

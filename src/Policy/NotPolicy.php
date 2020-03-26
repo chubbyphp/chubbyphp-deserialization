@@ -20,11 +20,19 @@ final class NotPolicy implements PolicyInterface
 
     public function isCompliant(DenormalizerContextInterface $context, object $object): bool
     {
+        @trigger_error('Use "isCompliantIncludingPath()" instead of "isCompliant()"', E_USER_DEPRECATED);
+
         return !$this->policy->isCompliant($context, $object);
     }
 
     public function isCompliantIncludingPath(object $object, DenormalizerContextInterface $context, string $path): bool
     {
-        return !$this->policy->isCompliantIncludingPath($object, $context, $path);
+        if (is_callable([$this->policy, 'isCompliantIncludingPath'])) {
+            return !$this->policy->isCompliantIncludingPath($object, $context, $path);
+        }
+
+        @trigger_error('Use "isCompliantIncludingPath()" instead of "isCompliant()"', E_USER_DEPRECATED);
+
+        return !$this->policy->isCompliant($context, $object);
     }
 }
