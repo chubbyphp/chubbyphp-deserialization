@@ -6,7 +6,7 @@ namespace Chubbyphp\Deserialization\Policy;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 
-final class CallbackPolicy implements PolicyInterface
+final class CallbackPolicyIncludingPath implements PolicyInterface
 {
     /**
      * @var callable
@@ -27,6 +27,6 @@ final class CallbackPolicy implements PolicyInterface
 
     public function isCompliantIncludingPath(object $object, DenormalizerContextInterface $context, string $path): bool
     {
-        return ($this->callback)($context, $object, $path);
+        return ($this->callback)($object, $context, $path);
     }
 }

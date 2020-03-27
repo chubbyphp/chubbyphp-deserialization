@@ -5,17 +5,17 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Unit\Policy;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
-use Chubbyphp\Deserialization\Policy\CallbackPolicy;
+use Chubbyphp\Deserialization\Policy\CallbackPolicyIncludingPath;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\Deserialization\Policy\CallbackPolicy
+ * @covers \Chubbyphp\Deserialization\Policy\CallbackPolicyIncludingPath
  *
  * @internal
  */
-final class CallbackPolicyTest extends TestCase
+final class CallbackPolicyIncludingPathTest extends TestCase
 {
     use MockByCallsTrait;
 
@@ -26,7 +26,7 @@ final class CallbackPolicyTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, []);
 
-        $policy = new CallbackPolicy(function ($contextParameter, $objectParameter) use ($context, $object) {
+        $policy = new CallbackPolicyIncludingPath(function ($contextParameter, $objectParameter) use ($context, $object) {
             self::assertSame($context, $contextParameter);
             self::assertSame($object, $objectParameter);
 
@@ -43,7 +43,7 @@ final class CallbackPolicyTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, []);
 
-        $policy = new CallbackPolicy(function ($contextParameter, $objectParameter) use ($context, $object) {
+        $policy = new CallbackPolicyIncludingPath(function ($contextParameter, $objectParameter) use ($context, $object) {
             self::assertSame($context, $contextParameter);
             self::assertSame($object, $objectParameter);
 
@@ -62,7 +62,7 @@ final class CallbackPolicyTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, []);
 
-        $policy = new CallbackPolicy(function ($contextParameter,$objectParameter) use ($object, $context) {
+        $policy = new CallbackPolicyIncludingPath(function ($objectParameter, $contextParameter) use ($object, $context) {
             self::assertSame($context, $contextParameter);
             self::assertSame($object, $objectParameter);
 
@@ -81,7 +81,7 @@ final class CallbackPolicyTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, []);
 
-        $policy = new CallbackPolicy(function ($contextParameter, $objectParameter) use ($object, $context) {
+        $policy = new CallbackPolicyIncludingPath(function ($objectParameter, $contextParameter) use ($object, $context) {
             self::assertSame($context, $contextParameter);
             self::assertSame($object, $objectParameter);
 
