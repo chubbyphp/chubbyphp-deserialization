@@ -18,6 +18,9 @@ final class CallbackPolicyIncludingPath implements PolicyInterface
         $this->callback = $callback;
     }
 
+    /**
+     * @deprecated
+     */
     public function isCompliant(DenormalizerContextInterface $context, object $object): bool
     {
         @trigger_error('Use "isCompliantIncludingPath()" instead of "isCompliant()"', E_USER_DEPRECATED);

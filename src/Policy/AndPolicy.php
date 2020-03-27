@@ -21,6 +21,9 @@ final class AndPolicy implements PolicyInterface
         $this->policies = $policies;
     }
 
+    /**
+     * @deprecated
+     */
     public function isCompliant(DenormalizerContextInterface $context, object $object): bool
     {
         @trigger_error('Use "isCompliantIncludingPath()" instead of "isCompliant()"', E_USER_DEPRECATED);
