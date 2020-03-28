@@ -74,16 +74,8 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
         return $this;
     }
 
-    /**
-     * @deprecated
-     */
     public function setResetMissingFields(bool $resetMissingFields): DenormalizerContextBuilderInterface
     {
-        @trigger_error(
-            'setResetMissingFields is broken by design, please do this your self by model or repository',
-            E_USER_DEPRECATED
-        );
-
         $this->resetMissingFields = $resetMissingFields;
 
         return $this;

@@ -7,6 +7,7 @@ namespace Chubbyphp\Deserialization\Denormalizer;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
+ * @method bool                         isResetMissingFields()
  * @method array                        getAttributes()
  * @method mixed                        getAttribute(string $name, $default = null)
  * @method DenormalizerContextInterface withAttribute(string $name, $value)
@@ -24,6 +25,11 @@ interface DenormalizerContextInterface
      * @return array<int, string>
      */
     public function getGroups(): array;
+
+    /**
+     * @return bool
+     */
+    //public function isResetMissingFields(): bool;
 
     /**
      * @return ServerRequestInterface|null

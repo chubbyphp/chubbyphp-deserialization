@@ -232,7 +232,7 @@ final class DeserializerTest extends TestCase
         $manyModel1->setName('oldName1');
 
         $manyModel2 = new ManyModel();
-        $manyModel2->setName('oldNam2');
+        $manyModel2->setName('oldName2');
 
         $model = new Model();
         $model->setName('oldName');
@@ -339,7 +339,7 @@ final class DeserializerTest extends TestCase
         $manyModel1->setName('oldName1');
 
         $manyModel2 = new ManyModel();
-        $manyModel2->setName('oldNam2');
+        $manyModel2->setName('oldName2');
 
         $model = new Model();
         $model->setName('oldName');
@@ -380,6 +380,13 @@ final class DeserializerTest extends TestCase
                     'message' => 'deserialize: path {path}',
                     'context' => [
                         'path' => 'one.name',
+                    ],
+                ],
+                [
+                    'level' => 'info',
+                    'message' => 'deserialize: path {path}',
+                    'context' => [
+                        'path' => 'one.value',
                     ],
                 ],
                 [
