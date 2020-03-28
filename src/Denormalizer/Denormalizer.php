@@ -67,15 +67,13 @@ final class Denormalizer implements DenormalizerInterface
         foreach ($objectMapping->getDenormalizationFieldMappings($path, $type) as $denormalizationFieldMapping) {
             $name = $denormalizationFieldMapping->getName();
 
+            unset($additionalFields[$name]);
+
             if (!array_key_exists($name, $data)) {
                 $missingFields[] = $name;
-
-                continue;
             }
 
             $this->denormalizeField($context, $denormalizationFieldMapping, $path, $name, $data, $object);
-
-            unset($additionalFields[$name]);
         }
 
         $allowedAdditionalFields = $context->getAllowedAdditionalFields();
@@ -141,6 +139,14 @@ final class Denormalizer implements DenormalizerInterface
         array $data,
         $object
     ): void {
+        if (!array_key_exists($name, $data)) {
+            if (!method_exists($context, 'isClearMissing') || !$context->isClearMissing()) {
+                return;
+            }
+
+            $data[$name] = null;
+        }
+
         if (!$this->isCompliant($context, $denormalizationFieldMapping, $object)) {
             return;
         }

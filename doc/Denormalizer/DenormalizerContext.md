@@ -9,7 +9,7 @@ use Psr\Http\Message\ServerRequestInterface;
 /** @var ServerRequestInterface $request */
 $request = ...;
 
-$context = new DenormalizerContext(['allowed_additional_field'], ['group1'], $request, true);
+$context = new DenormalizerContext(['allowed_additional_field'], ['group1'], $request, true, [], true);
 
 echo $context->getAllowedAdditionalFields();
 // ['allowed_additional_field']
@@ -22,4 +22,10 @@ $context->getRequest();
 
 echo $context->isResetMissingFields();
 // true
+
+echo $context->isClearMissing();
+
+$context->getAttributes();
+$context->getAttribute('name');
+$context = $context->withAttribute('name');
 ```

@@ -26,9 +26,18 @@ final class DenormalizerContext implements DenormalizerContextInterface
     private $request;
 
     /**
+     * @deprecated
+     *
      * @var bool
      */
     private $resetMissingFields;
+
+    /**
+     * @deprecated
+     *
+     * @var bool
+     */
+    private $clearMissing;
 
     /**
      * @var array<mixed>
@@ -45,7 +54,8 @@ final class DenormalizerContext implements DenormalizerContextInterface
         array $groups = [],
         ?ServerRequestInterface $request = null,
         bool $resetMissingFields = false,
-        array $attributes = []
+        array $attributes = [],
+        bool $clearMissing = false
     ) {
         $this->allowedAdditionalFields = $allowedAdditionalFields;
         $this->groups = $groups;
@@ -59,6 +69,7 @@ final class DenormalizerContext implements DenormalizerContextInterface
         }
 
         $this->resetMissingFields = $resetMissingFields;
+        $this->clearMissing = $clearMissing;
         $this->attributes = $attributes;
     }
 
@@ -94,6 +105,11 @@ final class DenormalizerContext implements DenormalizerContextInterface
     public function isResetMissingFields(): bool
     {
         return $this->resetMissingFields;
+    }
+
+    public function isClearMissing(): bool
+    {
+        return $this->clearMissing;
     }
 
     /**

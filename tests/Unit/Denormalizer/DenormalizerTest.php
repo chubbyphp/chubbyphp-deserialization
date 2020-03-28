@@ -364,6 +364,68 @@ final class DenormalizerTest extends TestCase
         self::assertSame('initialValue', $object->value);
     }
 
+    public function testIsCleanMissing(): void
+    {
+        $object = new \stdClass();
+
+        $factory = function () use ($object) {
+            return $object;
+        };
+
+        $context = DenormalizerContextBuilder::create()->setClearMissing(true)->getContext();
+
+        /** @var FieldDenormalizerInterface|MockObject $nameFieldDenormalizer */
+        $nameFieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class, [
+            Call::create('denormalizeField')
+                ->with('name', $object, 'name', $context, new ArgumentInstanceOf(DenormalizerInterface::class)),
+        ]);
+
+        /** @var DenormalizationFieldMappingInterface|MockObject $denormalizationNameFieldMapping */
+        $denormalizationNameFieldMapping = $this->getMockByCalls(DenormalizationFieldMappingInterface::class, [
+            Call::create('getName')->with()->willReturn('name'),
+            Call::create('getFieldDenormalizer')->with()->willReturn($nameFieldDenormalizer),
+        ]);
+
+        /** @var FieldDenormalizerInterface|MockObject $valueFieldDenormalizer */
+        $valueFieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class, [
+            Call::create('denormalizeField')
+                ->with('value', $object, null, $context, new ArgumentInstanceOf(DenormalizerInterface::class)),
+        ]);
+
+        /** @var DenormalizationFieldMappingInterface|MockObject $denormalizationValueFieldMapping */
+        $denormalizationValueFieldMapping = $this->getMockByCalls(DenormalizationFieldMappingInterface::class, [
+            Call::create('getName')->with()->willReturn('value'),
+            Call::create('getFieldDenormalizer')->with()->willReturn($valueFieldDenormalizer),
+        ]);
+
+        /** @var DenormalizationObjectMappingInterface|MockObject $objectMapping */
+        $objectMapping = $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
+            Call::create('getDenormalizationFactory')->with('', 'object')->willReturn($factory),
+            Call::create('getDenormalizationFieldMappings')->with('', 'object')->willReturn([
+                $denormalizationNameFieldMapping,
+                $denormalizationValueFieldMapping,
+            ]),
+        ]);
+
+        /** @var DenormalizerObjectMappingRegistryInterface|MockObject $registry */
+        $registry = $this->getMockByCalls(DenormalizerObjectMappingRegistryInterface::class, [
+            Call::create('getObjectMapping')->with(\stdClass::class)->willReturn($objectMapping),
+        ]);
+
+        /** @var LoggerInterface|MockObject $logger */
+        $logger = $this->getMockByCalls(LoggerInterface::class, [
+            Call::create('info')->with('deserialize: path {path}', ['path' => 'name']),
+            Call::create('info')->with('deserialize: path {path}', ['path' => 'value']),
+        ]);
+
+        $denormalizer = new Denormalizer($registry, $logger);
+
+        self::assertSame(
+            $object,
+            $denormalizer->denormalize(\stdClass::class, ['name' => 'name', '_type' => 'object'], $context)
+        );
+    }
+
     public function testDenormalizeWithNotWorkingFactory(): void
     {
         $this->expectException(DeserializerLogicException::class);
