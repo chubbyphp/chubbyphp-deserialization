@@ -30,6 +30,7 @@ final class DenormalizerContextBuilderTest extends TestCase
         self::assertSame([], $context->getGroups());
         self::assertNull($context->getRequest());
         self::assertFalse($context->isResetMissingFields());
+        self::assertFalse($context->isClearMissing());
         self::assertSame([], $context->getAttributes());
     }
 
@@ -59,6 +60,7 @@ final class DenormalizerContextBuilderTest extends TestCase
             ->setAllowedAdditionalFields(['allowed_field'])
             ->setGroups(['group1'])
             ->setRequest($request)
+            ->setClearMissing(true)
             ->setAttributes(['attribute' => 'value'])
             ->getContext()
         ;
@@ -69,6 +71,7 @@ final class DenormalizerContextBuilderTest extends TestCase
         self::assertSame(['group1'], $context->getGroups());
         self::assertSame($request, $context->getRequest());
         self::assertFalse($context->isResetMissingFields());
+        self::assertTrue($context->isClearMissing());
         self::assertSame(['attribute' => 'value'], $context->getAttributes());
     }
 

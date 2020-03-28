@@ -13,7 +13,8 @@ $context = DenormalizerContextBuilder::create()
     ->setAllowedAdditionalFields(['allowed_additional_field'])
     ->setGroups(['group1'])
     ->setRequest($request)
-    ->setResetMissingFields(true)
+    ->setResetMissingFields(true) // deprecated
+    ->setClearMissing(true)
     ->getContext();
 
 echo $context->getAllowedAdditionalFields();
@@ -27,4 +28,9 @@ $context->getRequest();
 
 echo $context->isResetMissingFields();
 // true
+
+echo $context->isClearMissing();
+// true
+
+$context->setAttributes(['key' => 'value']);
 ```
