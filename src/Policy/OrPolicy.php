@@ -40,7 +40,7 @@ final class OrPolicy implements PolicyInterface
     public function isCompliantIncludingPath(object $object, DenormalizerContextInterface $context, string  $path): bool
     {
         foreach ($this->policies as $policy) {
-            if (method_exists($policy, 'isCompliantIncludingPath')) {
+            if (!is_callable([$policy, 'isCompliantIncludingPath'])) {
                 if ($policy->isCompliantIncludingPath($object, $context, $path)) {
                     return true;
                 }
