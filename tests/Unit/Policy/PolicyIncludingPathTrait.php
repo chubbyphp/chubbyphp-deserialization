@@ -12,7 +12,8 @@ use Chubbyphp\Deserialization\Policy\PolicyInterface;
  */
 trait PolicyIncludingPathTrait
 {
-    private function getCompliantPolicyIncludingPath(bool $isCompliant): PolicyInterface {
+    private function getCompliantPolicyIncludingPath(bool $isCompliant): PolicyInterface
+    {
         return new class($isCompliant) implements PolicyInterface {
             private $isPolicyCompliant;
 
