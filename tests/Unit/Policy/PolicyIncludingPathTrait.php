@@ -27,9 +27,9 @@ trait PolicyIncludingPathTrait
             }
 
             public function isCompliantIncludingPath(
+                string $path,
                 object $object,
-                DenormalizerContextInterface $context,
-                string $path
+                DenormalizerContextInterface $context
             ): bool {
                 return $this->isPolicyCompliant;
             }

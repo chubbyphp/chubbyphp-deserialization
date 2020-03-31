@@ -183,7 +183,7 @@ final class Denormalizer implements DenormalizerInterface
         }
 
         if (is_callable([$mapping->getPolicy(), 'isCompliantIncludingPath'])) {
-            return $mapping->getPolicy()->isCompliantIncludingPath($object, $context, $path);
+            return $mapping->getPolicy()->isCompliantIncludingPath($path, $object, $context);
         }
 
         return $mapping->getPolicy()->isCompliant($context, $object);

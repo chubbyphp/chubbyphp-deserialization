@@ -89,7 +89,7 @@ final class OrPolicyTest extends TestCase
 
         $policy = new OrPolicy([$nonCompliantPolicy, $compliantPolicy, $notToBeCalledPolicy]);
 
-        self::assertTrue($policy->isCompliantIncludingPath($object, $context, $path));
+        self::assertTrue($policy->isCompliantIncludingPath($path, $object, $context));
     }
 
     public function testIsCompliantIncludingPathReturnsTrueIfOnePolicyReturnsTrue(): void
@@ -101,8 +101,8 @@ final class OrPolicyTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, []);
 
-        /** @var PolicyInterface|MockObject $nonCompliantPolicy */
-        $nonCompliantPolicy = $this->getCompliantPolicyIncludingPath(false);
+        /** @var PolicyInterface|MockObject $nonCompliantPolicy1 */
+        $nonCompliantPolicy1 = $this->getCompliantPolicyIncludingPath(false);
 
         /** @var PolicyInterface|MockObject $compliantPolicy */
         $compliantPolicy = $this->getMockByCalls(PolicyInterface::class, [
@@ -112,9 +112,9 @@ final class OrPolicyTest extends TestCase
         /** @var PolicyInterface|MockObject $notToBeCalledPolicy */
         $notToBeCalledPolicy = $this->getMockByCalls(PolicyInterface::class, []);
 
-        $policy = new OrPolicy([$nonCompliantPolicy, $compliantPolicy, $notToBeCalledPolicy]);
+        $policy = new OrPolicy([$nonCompliantPolicy1, $compliantPolicy, $notToBeCalledPolicy]);
 
-        self::assertTrue($policy->isCompliantIncludingPath($object, $context, $path));
+        self::assertTrue($policy->isCompliantIncludingPath($path, $object, $context));
     }
 
     public function testIsCompliantIncludingReturnsFalseIfAllPoliciesReturnFalse(): void
@@ -134,6 +134,6 @@ final class OrPolicyTest extends TestCase
 
         $policy = new OrPolicy([$nonCompliantPolicy1, $nonCompliantPolicy2]);
 
-        self::assertFalse($policy->isCompliantIncludingPath($object, $context, $path));
+        self::assertFalse($policy->isCompliantIncludingPath($path, $object, $context));
     }
 }
