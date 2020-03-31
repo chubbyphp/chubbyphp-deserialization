@@ -19,15 +19,6 @@ parameters:
             message: '/Unreachable statement - code above always terminates\./'
             path: %currentWorkingDirectory%/src/Denormalizer/DateTimeFieldDenormalizer.php
         -
-            message: '/Unreachable statement - code above always terminates\./'
-            path: %currentWorkingDirectory%/src/Policy/AndPolicy.php
-        -
-            message: '/Unreachable statement - code above always terminates\./'
-            path: %currentWorkingDirectory%/src/Policy/NotPolicy.php
-        -
-            message: '/Unreachable statement - code above always terminates\./'
-            path: %currentWorkingDirectory%/src/Policy/OrPolicy.php
-        -
             message: '/Parameter \#1 \$argument of class ReflectionClass constructor expects class\-string<T of object>\|T of object, string given\./'
             path: %currentWorkingDirectory%/src/Denormalizer/DenormalizerObjectMappingRegistry.php
         -
