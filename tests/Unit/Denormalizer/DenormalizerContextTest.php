@@ -27,6 +27,7 @@ final class DenormalizerContextTest extends TestCase
         self::assertSame([], $context->getGroups());
         self::assertNull($context->getRequest());
         self::assertFalse($context->isResetMissingFields());
+        self::assertFalse($context->isClearMissing());
         self::assertSame([], $context->getAttributes());
         self::assertNull($context->getAttribute('nonExistingAttribute'));
         self::assertSame('default', $context->getAttribute('nonExistingAttribute', 'default'));
@@ -37,12 +38,20 @@ final class DenormalizerContextTest extends TestCase
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        $context = new DenormalizerContext(['allowed_field'], ['group1'], $request, false, ['attribute' => 'value']);
+        $context = new DenormalizerContext(
+            ['allowed_field'],
+            ['group1'],
+            $request,
+            false,
+            ['attribute' => 'value'],
+            true
+        );
 
         self::assertSame(['allowed_field'], $context->getAllowedAdditionalFields());
         self::assertSame(['group1'], $context->getGroups());
         self::assertSame($request, $context->getRequest());
         self::assertFalse($context->isResetMissingFields());
+        self::assertTrue($context->isClearMissing());
         self::assertSame(['attribute' => 'value'], $context->getAttributes());
         self::assertSame('value', $context->getAttribute('attribute'));
     }

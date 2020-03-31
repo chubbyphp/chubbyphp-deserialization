@@ -26,9 +26,16 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     private $request;
 
     /**
+     * @deprecated
+     *
      * @var bool
      */
     private $resetMissingFields = false;
+
+    /**
+     * @var bool
+     */
+    private $clearMissing = false;
 
     /**
      * @var array<mixed>
@@ -89,6 +96,13 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
         return $this;
     }
 
+    public function setClearMissing(bool $clearMissing): DenormalizerContextBuilderInterface
+    {
+        $this->clearMissing = $clearMissing;
+
+        return $this;
+    }
+
     /**
      * @param array<mixed> $attributes
      */
@@ -106,7 +120,8 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
             $this->groups,
             $this->request,
             $this->resetMissingFields,
-            $this->attributes
+            $this->attributes,
+            $this->clearMissing
         );
     }
 }

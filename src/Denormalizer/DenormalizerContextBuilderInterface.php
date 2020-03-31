@@ -7,6 +7,8 @@ namespace Chubbyphp\Deserialization\Denormalizer;
 use Psr\Http\Message\ServerRequestInterface;
 
 /**
+ * @method DenormalizerContextBuilderInterface setResetMissingFields(bool $clearMissing)
+ * @method DenormalizerContextBuilderInterface setClearMissing(bool $clearMissing)
  * @method DenormalizerContextBuilderInterface setAttributes(array $attributes)
  */
 interface DenormalizerContextBuilderInterface
@@ -27,10 +29,10 @@ interface DenormalizerContextBuilderInterface
 
     public function setRequest(?ServerRequestInterface $request = null): self;
 
+    //public function setClearMissing(bool $clearMissing): self;
+
     /**
-     * @param array $attributes
-     *
-     * @return self
+     * @param array<mixed> $attributes
      */
     //public function setAttributes(array $attributes): self;
 
