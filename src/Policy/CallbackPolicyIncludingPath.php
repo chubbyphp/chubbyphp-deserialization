@@ -22,9 +22,11 @@ final class CallbackPolicyIncludingPath implements PolicyInterface
     /**
      * @deprecated
      *
+     * @param mixed $object
+     *
      * @throws DeserializerLogicException
      */
-    public function isCompliant(DenormalizerContextInterface $context, object $object): bool
+    public function isCompliant(DenormalizerContextInterface $context, $object): bool
     {
         throw DeserializerLogicException::createDeprecatedMethod(__CLASS__, ['isCompliant']);
     }

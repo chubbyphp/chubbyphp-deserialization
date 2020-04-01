@@ -13,8 +13,10 @@ interface PolicyInterface
 {
     /**
      * @deprecated
+     *
+     * @param object|mixed $object
      */
-    public function isCompliant(DenormalizerContextInterface $context, object $object): bool;
+    public function isCompliant(DenormalizerContextInterface $context, $object): bool;
 
     //public function isCompliantIncludingPath(string $path, object $object, DenormalizerContextInterface $context): bool;
 }

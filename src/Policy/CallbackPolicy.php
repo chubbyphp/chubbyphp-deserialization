@@ -21,7 +21,10 @@ final class CallbackPolicy implements PolicyInterface
         $this->callback = $callback;
     }
 
-    public function isCompliant(DenormalizerContextInterface $context, object $object): bool
+    /**
+     * @param mixed|object $object
+     */
+    public function isCompliant(DenormalizerContextInterface $context, $object): bool
     {
         @trigger_error('Use "CallbackPolicyIncludingPath" instead of "CallbackPolicy"', E_USER_DEPRECATED);
 
