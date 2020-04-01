@@ -150,7 +150,7 @@ final class Denormalizer implements DenormalizerInterface
 
         $subPath = $this->getSubPathByName($path, $name);
 
-        if (!$this->isCompliant($context, $denormalizationFieldMapping, $object, $subPath)) {
+        if (!$this->isCompliant($subPath, $object, $context, $denormalizationFieldMapping)) {
             return;
         }
 
@@ -179,10 +179,10 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     private function isCompliant(
-        DenormalizerContextInterface $context,
-        DenormalizationFieldMappingInterface $mapping,
+        string $path,
         object $object,
-        string $path
+        DenormalizerContextInterface $context,
+        DenormalizationFieldMappingInterface $mapping
     ): bool {
         if (!is_callable([$mapping, 'getPolicy'])) {
             return true;
