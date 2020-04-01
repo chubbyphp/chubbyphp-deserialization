@@ -6,6 +6,9 @@ namespace Chubbyphp\Deserialization\Policy;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 
+/**
+ * @deprecated use CallbackPolicyIncludingPath instead
+ */
 final class CallbackPolicy implements PolicyInterface
 {
     /**
@@ -19,10 +22,12 @@ final class CallbackPolicy implements PolicyInterface
     }
 
     /**
-     * @param object $object
+     * @param mixed|object $object
      */
     public function isCompliant(DenormalizerContextInterface $context, $object): bool
     {
+        @trigger_error('Use "CallbackPolicyIncludingPath" instead of "CallbackPolicy"', E_USER_DEPRECATED);
+
         return ($this->callback)($context, $object);
     }
 }

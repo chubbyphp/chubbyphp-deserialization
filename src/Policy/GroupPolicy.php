@@ -26,9 +26,18 @@ final class GroupPolicy implements PolicyInterface
     }
 
     /**
-     * @param object $object
+     * @deprecated
+     *
+     * @param object|mixed $object
      */
     public function isCompliant(DenormalizerContextInterface $context, $object): bool
+    {
+        @trigger_error('Use "isCompliantIncludingPath()" instead of "isCompliant()"', E_USER_DEPRECATED);
+
+        return $this->isCompliantIncludingPath('', $object, $context);
+    }
+
+    public function isCompliantIncludingPath(string $path, object $object, DenormalizerContextInterface $context): bool
     {
         if ([] === $this->groups) {
             return true;

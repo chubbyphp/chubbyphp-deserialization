@@ -19,10 +19,25 @@ final class NotPolicy implements PolicyInterface
     }
 
     /**
-     * @param object $object
+     * @deprecated
+     *
+     * @param object|mixed $object
      */
     public function isCompliant(DenormalizerContextInterface $context, $object): bool
     {
+        @trigger_error('Use "isCompliantIncludingPath()" instead of "isCompliant()"', E_USER_DEPRECATED);
+
+        return !$this->policy->isCompliant($context, $object);
+    }
+
+    public function isCompliantIncludingPath(string $path, object $object, DenormalizerContextInterface $context): bool
+    {
+        if (method_exists($this->policy, 'isCompliantIncludingPath')) {
+            return !$this->policy->isCompliantIncludingPath($path, $object, $context);
+        }
+
+        @trigger_error('Use "isCompliantIncludingPath()" instead of "isCompliant()"', E_USER_DEPRECATED);
+
         return !$this->policy->isCompliant($context, $object);
     }
 }

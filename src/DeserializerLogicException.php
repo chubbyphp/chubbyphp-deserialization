@@ -45,4 +45,14 @@ final class DeserializerLogicException extends \LogicException
     {
         return new self(sprintf('Convert type "%s" is not supported', $convertType));
     }
+
+    /**
+     * @param array<int, string> $methods
+     */
+    public static function createDeprecatedMethod(string $class, array $methods): self
+    {
+        return new self(
+            sprintf('Method(s) "%s", are deprecated within class: "%s"', implode('", "', $methods), $class)
+        );
+    }
 }
