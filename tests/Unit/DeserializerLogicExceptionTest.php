@@ -65,4 +65,14 @@ final class DeserializerLogicExceptionTest extends TestCase
 
         self::assertSame('Convert type "type" is not supported', $exception->getMessage());
     }
+
+    public function testCreateDeprecatedMethod(): void
+    {
+        $exception = DeserializerLogicException::createDeprecatedMethod(\stdClass::class, ['getName', 'hasName']);
+
+        self::assertSame(
+            'Method(s) "getName", "hasName", are deprecated within class: "stdClass"',
+            $exception->getMessage()
+        );
+    }
 }
