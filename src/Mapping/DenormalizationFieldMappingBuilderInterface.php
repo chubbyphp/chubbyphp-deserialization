@@ -14,13 +14,13 @@ interface DenormalizationFieldMappingBuilderInterface
 {
     public static function create(string $name): self;
 
-    /**
-     * @param string                          $name
-     * @param FieldDenormalizerInterface|null $fieldNormalizer
-     *
-     * @return DenormalizationFieldMappingBuilderInterface
-     */
-    //public static function create(string $name, FieldNormalizerInterface $fieldNormalizer = null): self;
+    // /**
+    //  * @param string                          $name
+    //  * @param FieldDenormalizerInterface|null $fieldNormalizer
+    //  *
+    //  * @return DenormalizationFieldMappingBuilderInterface
+    //  */
+    // public static function create(string $name, FieldNormalizerInterface $fieldNormalizer = null): self;
 
     /**
      * @deprecated
@@ -31,12 +31,12 @@ interface DenormalizationFieldMappingBuilderInterface
 
     public function setFieldDenormalizer(FieldDenormalizerInterface $fieldDenormalizer): self;
 
-    /**
-     * @param PolicyInterface $policy
-     *
-     * @return self
-     */
-    //public function setPolicy(PolicyInterface $policy): self;
+    // /**
+    //  * @param PolicyInterface $policy
+    //  *
+    //  * @return self
+    //  */
+    // public function setPolicy(PolicyInterface $policy): self;
 
     public function getMapping(): DenormalizationFieldMappingInterface;
 }

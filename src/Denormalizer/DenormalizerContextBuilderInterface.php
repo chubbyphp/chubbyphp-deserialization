@@ -31,10 +31,10 @@ interface DenormalizerContextBuilderInterface
 
     //public function setClearMissing(bool $clearMissing): self;
 
-    /**
-     * @param array<mixed> $attributes
-     */
-    //public function setAttributes(array $attributes): self;
+    // /**
+    //  * @param array<mixed> $attributes
+    //  */
+    // public function setAttributes(array $attributes): self;
 
     public function getContext(): DenormalizerContextInterface;
 }
