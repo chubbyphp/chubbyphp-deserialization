@@ -166,7 +166,7 @@ EOD;
     public function testNotArrayDecode(): void
     {
         $this->expectException(DeserializerRuntimeException::class);
-        $this->expectExceptionMessage('Data is not parsable with content-type: "application/x-yaml"');
+        $this->expectExceptionMessage('Data is not parsable with content-type: "application/x-yaml", error: "Not an object"');
         $decoderType = new YamlTypeDecoder();
         $decoderType->decode('null');
     }

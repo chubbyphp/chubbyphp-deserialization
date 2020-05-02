@@ -29,7 +29,7 @@ final class YamlTypeDecoder implements TypeDecoderInterface
         }
 
         if (!is_array($decoded)) {
-            throw DeserializerRuntimeException::createNotParsable($this->getContentType());
+            throw DeserializerRuntimeException::createNotParsable($this->getContentType(), 'Not an object');
         }
 
         return $decoded;
