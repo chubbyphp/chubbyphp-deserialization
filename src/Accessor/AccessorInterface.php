@@ -9,19 +9,16 @@ use Chubbyphp\Deserialization\DeserializerLogicException;
 interface AccessorInterface
 {
     /**
-     * @param object $object
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @throws DeserializerLogicException
      */
-    public function setValue($object, $value);
+    public function setValue(object $object, $value): void;
 
     /**
-     * @param object $object
-     *
      * @throws DeserializerLogicException
      *
      * @return mixed
      */
-    public function getValue($object);
+    public function getValue(object $object);
 }

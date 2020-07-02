@@ -27,28 +27,9 @@ final class DenormalizerContextBuilderTest extends TestCase
         self::assertInstanceOf(DenormalizerContextInterface::class, $context);
 
         self::assertSame(null, $context->getAllowedAdditionalFields());
-        self::assertSame([], $context->getGroups());
         self::assertNull($context->getRequest());
-        self::assertFalse($context->isResetMissingFields());
         self::assertFalse($context->isClearMissing());
         self::assertSame([], $context->getAttributes());
-    }
-
-    public function testCreateWithSetResetMissingField(): void
-    {
-        error_clear_last();
-
-        DenormalizerContextBuilder::create()->setResetMissingFields(true);
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(
-            'setResetMissingFields is broken by design, please do this your self by model or repository',
-            $error['message']
-        );
     }
 
     public function testCreateWithOverridenSettings(): void
@@ -58,7 +39,6 @@ final class DenormalizerContextBuilderTest extends TestCase
 
         $context = DenormalizerContextBuilder::create()
             ->setAllowedAdditionalFields(['allowed_field'])
-            ->setGroups(['group1'])
             ->setRequest($request)
             ->setClearMissing(true)
             ->setAttributes(['attribute' => 'value'])
@@ -68,9 +48,7 @@ final class DenormalizerContextBuilderTest extends TestCase
         self::assertInstanceOf(DenormalizerContextInterface::class, $context);
 
         self::assertSame(['allowed_field'], $context->getAllowedAdditionalFields());
-        self::assertSame(['group1'], $context->getGroups());
         self::assertSame($request, $context->getRequest());
-        self::assertFalse($context->isResetMissingFields());
         self::assertTrue($context->isClearMissing());
         self::assertSame(['attribute' => 'value'], $context->getAttributes());
     }

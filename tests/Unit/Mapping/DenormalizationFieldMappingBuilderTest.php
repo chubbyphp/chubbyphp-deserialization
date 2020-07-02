@@ -37,7 +37,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         $fieldMapping = DenormalizationFieldMappingBuilder::create('name', false, $fieldDenormalizer)->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
 
         self::assertSame($fieldDenormalizer, $fieldMapping->getFieldDenormalizer());
 
@@ -49,7 +48,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         $fieldMapping = DenormalizationFieldMappingBuilder::create('name')->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
 
         $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
 
@@ -68,7 +66,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         $fieldMapping = DenormalizationFieldMappingBuilder::create('name', true)->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
 
         $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
 
@@ -87,7 +84,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         $fieldMapping = DenormalizationFieldMappingBuilder::createCallback('name', function (): void {})->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
         self::assertInstanceOf(CallbackFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
 
         self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
@@ -101,7 +97,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         )->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
 
         $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
 
@@ -124,7 +119,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         )->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
 
         $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
 
@@ -143,7 +137,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         $fieldMapping = DenormalizationFieldMappingBuilder::createDateTime('name')->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
 
         $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
 
@@ -162,7 +155,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         $fieldMapping = DenormalizationFieldMappingBuilder::createDateTime('name', true)->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
 
         $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
 
@@ -181,7 +173,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         $fieldMapping = DenormalizationFieldMappingBuilder::createDateTime('name', false, new \DateTimeZone('UTC'))->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
         self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
 
         self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
@@ -192,7 +183,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         $fieldMapping = DenormalizationFieldMappingBuilder::createEmbedMany('name', \stdClass::class)->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
         self::assertInstanceOf(EmbedManyFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
 
         self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
@@ -203,7 +193,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         $fieldMapping = DenormalizationFieldMappingBuilder::createEmbedOne('name', \stdClass::class)->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
         self::assertInstanceOf(EmbedOneFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
 
         self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
@@ -214,7 +203,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceMany('name', function (): void {})->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
         self::assertInstanceOf(ReferenceManyFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
 
         self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
@@ -225,7 +213,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceOne('name', function (): void {})->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
 
         $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
 
@@ -248,7 +235,6 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         )->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame([], $fieldMapping->getGroups());
 
         $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
 
@@ -270,22 +256,12 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         /** @var PolicyInterface|MockObject $policy */
         $policy = $this->getMockByCalls(PolicyInterface::class);
 
-        error_clear_last();
-
-        $fieldMapping = DenormalizationFieldMappingBuilder::create('name')
-            ->setGroups(['group1'])
-            ->setFieldDenormalizer($fieldDenormalizer)
+        $fieldMapping = DenormalizationFieldMappingBuilder::create('name', false, $fieldDenormalizer)
             ->setPolicy($policy)
             ->getMapping()
         ;
 
-        $error = error_get_last();
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame('Utilize third parameter of create method instead', $error['message']);
-
         self::assertSame('name', $fieldMapping->getName());
-        self::assertSame(['group1'], $fieldMapping->getGroups());
         self::assertSame($fieldDenormalizer, $fieldMapping->getFieldDenormalizer());
 
         self::assertSame($policy, $fieldMapping->getPolicy());

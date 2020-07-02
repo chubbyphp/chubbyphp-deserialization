@@ -10,13 +10,6 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
 {
     /**
-     * @deprecated
-     *
-     * @var FieldDenormalizerInterface
-     */
-    private $fieldDenormalizer;
-
-    /**
      * @var AccessorInterface
      */
     private $accessor;
@@ -31,58 +24,36 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
      */
     private $dateTimeZone;
 
-    /**
-     * @param AccessorInterface|FieldDenormalizerInterface $accessor
-     */
-    public function __construct($accessor, bool $emptyToNull = false, ?\DateTimeZone $dateTimeZone = null)
-    {
+    public function __construct(
+        AccessorInterface $accessor,
+        bool $emptyToNull = false,
+        ?\DateTimeZone $dateTimeZone = null
+    ) {
+        $this->accessor = $accessor;
         $this->emptyToNull = $emptyToNull;
         $this->dateTimeZone = $dateTimeZone;
-
-        if ($accessor instanceof AccessorInterface) {
-            $this->accessor = $accessor;
-
-            return;
-        }
-
-        if ($accessor instanceof FieldDenormalizerInterface) {
-            $this->setFieldDenormalizer($accessor);
-
-            return;
-        }
-
-        throw new \TypeError(
-            sprintf(
-                '%s::__construct() expects parameter 1 to be %s|%s, %s given',
-                self::class,
-                AccessorInterface::class,
-                FieldDenormalizerInterface::class,
-                is_object($accessor) ? get_class($accessor) : gettype($accessor)
-            )
-        );
     }
 
     /**
-     * @param object $object
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
         string $path,
-        $object,
+        object $object,
         $value,
         DenormalizerContextInterface $context,
         ?DenormalizerInterface $denormalizer = null
     ): void {
         if ('' === $value && $this->emptyToNull) {
-            $this->setValue($path, $object, null, $context, $denormalizer);
+            $this->accessor->setValue($object, null);
 
             return;
         }
 
         if (!is_string($value) || '' === $trimmedValue = trim($value)) {
-            $this->setValue($path, $object, $value, $context, $denormalizer);
+            $this->accessor->setValue($object, $value);
 
             return;
         }
@@ -103,40 +74,6 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
             error_clear_last();
         }
 
-        $this->setValue($path, $object, $value, $context, $denormalizer);
-    }
-
-    private function setFieldDenormalizer(FieldDenormalizerInterface $fieldDenormalizer): void
-    {
-        @trigger_error(
-            sprintf(
-                'Use "%s" instead of "%s" as __construct argument',
-                AccessorInterface::class,
-                FieldDenormalizerInterface::class
-            ),
-            E_USER_DEPRECATED
-        );
-
-        $this->fieldDenormalizer = $fieldDenormalizer;
-    }
-
-    /**
-     * @param object $object
-     * @param mixed  $value
-     */
-    private function setValue(
-        string $path,
-        $object,
-        $value,
-        DenormalizerContextInterface $context,
-        ?DenormalizerInterface $denormalizer = null
-    ): void {
-        if (null !== $this->accessor) {
-            $this->accessor->setValue($object, $value);
-
-            return;
-        }
-
-        $this->fieldDenormalizer->denormalizeField($path, $object, $value, $context, $denormalizer);
+        $this->accessor->setValue($object, $value);
     }
 }

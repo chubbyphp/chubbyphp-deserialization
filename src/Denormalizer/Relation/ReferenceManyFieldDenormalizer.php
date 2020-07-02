@@ -30,15 +30,14 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param object $object
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
         string $path,
-        $object,
+        object $object,
         $value,
         DenormalizerContextInterface $context,
         ?DenormalizerInterface $denormalizer = null
@@ -71,7 +70,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param array<mixed>              $value
+     * @param array<int|string, string> $value
      * @param array<int|string, object> $relatedObjects
      */
     private function assignRelatedObjects(string $path, array $value, &$relatedObjects): void

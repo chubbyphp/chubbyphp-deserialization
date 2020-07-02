@@ -37,7 +37,7 @@ final class Decoder implements DecoderInterface
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
      *
-     * @return array<mixed>
+     * @return array<string, array|string|float|int|bool|null>
      */
     public function decode(string $data, string $contentType): array
     {

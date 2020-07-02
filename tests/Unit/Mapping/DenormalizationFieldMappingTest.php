@@ -25,19 +25,9 @@ final class DenormalizationFieldMappingTest extends TestCase
         /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
         $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
 
-        $fieldMapping = new DenormalizationFieldMapping('name', ['group1'], $fieldDenormalizer);
+        $fieldMapping = new DenormalizationFieldMapping('name', $fieldDenormalizer);
 
         self::assertSame('name', $fieldMapping->getName());
-    }
-
-    public function testGetGroups(): void
-    {
-        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
-        $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
-
-        $fieldMapping = new DenormalizationFieldMapping('name', ['group1'], $fieldDenormalizer);
-
-        self::assertSame(['group1'], $fieldMapping->getGroups());
     }
 
     public function testGetFieldDenormalizer(): void
@@ -45,7 +35,7 @@ final class DenormalizationFieldMappingTest extends TestCase
         /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
         $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
 
-        $fieldMapping = new DenormalizationFieldMapping('name', ['group1'], $fieldDenormalizer);
+        $fieldMapping = new DenormalizationFieldMapping('name', $fieldDenormalizer);
 
         self::assertSame($fieldDenormalizer, $fieldMapping->getFieldDenormalizer());
     }
@@ -58,7 +48,7 @@ final class DenormalizationFieldMappingTest extends TestCase
         /** @var PolicyInterface|MockObject $policy */
         $policy = $this->getMockByCalls(PolicyInterface::class);
 
-        $fieldMapping = new DenormalizationFieldMapping('name', ['group1'], $fieldDenormalizer, $policy);
+        $fieldMapping = new DenormalizationFieldMapping('name', $fieldDenormalizer, $policy);
 
         self::assertSame($policy, $fieldMapping->getPolicy());
     }

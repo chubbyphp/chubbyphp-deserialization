@@ -16,26 +16,7 @@ final class JsonxTypeDecoderTest extends AbstractTypeDecoderTest
 {
     public function testGetContentType(): void
     {
-        error_clear_last();
-
         $decoder = new JsonxTypeDecoder();
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(
-            'Use "application/jsonx+xml" instead of "application/x-jsonx", cause jsonx is a xml variant.',
-            $error['message']
-        );
-
-        self::assertSame('application/x-jsonx', $decoder->getContentType());
-    }
-
-    public function testGetContentTypeWithFixedContentType(): void
-    {
-        $decoder = new JsonxTypeDecoder('application/jsonx+xml');
 
         self::assertSame('application/jsonx+xml', $decoder->getContentType());
     }
@@ -218,7 +199,7 @@ EOD;
     public function testInvalidTag(): void
     {
         $this->expectException(DeserializerRuntimeException::class);
-        $this->expectExceptionMessage('Data is not parsable with content-type: "application/x-jsonx"');
+        $this->expectExceptionMessage('Data is not parsable with content-type: "application/jsonx+xml"');
         $decoderType = new JsonxTypeDecoder();
         $decoderType->decode('<?xml version="1.0" encoding="UTF-8"?><unknown></unknown>');
     }
@@ -226,7 +207,7 @@ EOD;
     public function testInvalidType(): void
     {
         $this->expectException(DeserializerRuntimeException::class);
-        $this->expectExceptionMessage('Data is not parsable with content-type: "application/x-jsonx"');
+        $this->expectExceptionMessage('Data is not parsable with content-type: "application/jsonx+xml"');
         $decoderType = new JsonxTypeDecoder();
         $decoderType->decode('<?xml version="1.0" encoding="UTF-8"?><json:unknown></json:unknown>');
     }
@@ -234,7 +215,7 @@ EOD;
     public function testInvalidDecode(): void
     {
         $this->expectException(DeserializerRuntimeException::class);
-        $this->expectExceptionMessage('Data is not parsable with content-type: "application/x-jsonx"');
+        $this->expectExceptionMessage('Data is not parsable with content-type: "application/jsonx+xml"');
         $decoderType = new JsonxTypeDecoder();
         $decoderType->decode('====');
     }

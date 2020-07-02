@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Unit\DependencyInjection;
 
 use Chubbyphp\Deserialization\Decoder\Decoder;
+use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\DependencyInjection\DeserializationCompilerPass;
@@ -28,6 +29,11 @@ final class DeserializationCompilerPassTest extends TestCase
 
         $container = new ContainerBuilder();
         $container->addCompilerPass(new DeserializationCompilerPass());
+
+        $container
+            ->register('chubbyphp.deserializer.decoder.type.json', JsonTypeDecoder::class)
+            ->addTag('chubbyphp.deserializer.decoder.type')
+        ;
 
         $container
             ->register('stdclass', $stdClassMappingClass)
@@ -59,22 +65,6 @@ final class DeserializationCompilerPassTest extends TestCase
         self::assertInstanceOf(DenormalizerObjectMappingRegistry::class, $objectMappingRegistry);
 
         self::assertSame(['key' => 'value'], $decoder->decode('{"key":"value"}', 'application/json'));
-        self::assertSame(
-            ['key' => 'value'],
-            $decoder->decode(
-                '<?xml version="1.0" encoding="UTF-8"?>'."\n"
-                .'<json:object><json:string name="key">value</json:string></json:object>', 'application/x-jsonx'
-            )
-        );
-        self::assertSame(['key' => 'value'], $decoder->decode('key=value', 'application/x-www-form-urlencoded'));
-        self::assertSame(
-            ['key' => 'value'],
-            $decoder->decode(
-                '<?xml version="1.0" encoding="UTF-8"?>'."\n"
-                .'<object><key type="string">value</key></object>', 'application/xml'
-            )
-        );
-        self::assertSame(['key' => 'value'], $decoder->decode('key: value', 'application/x-yaml'));
 
         self::assertInstanceOf(\stdClass::class, $denormalizer->denormalize(\stdClass::class, ['key' => 'value']));
     }

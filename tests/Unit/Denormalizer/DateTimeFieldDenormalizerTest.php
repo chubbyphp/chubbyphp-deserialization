@@ -23,59 +23,6 @@ final class DateTimeFieldDenormalizerTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testDenormalizeFieldWithInvalidConstructArgument(): void
-    {
-        $this->expectException(\TypeError::class);
-        $this->expectExceptionMessage('Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer::__construct() expects parameter 1 to be Chubbyphp\Deserialization\Accessor\AccessorInterface|Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface, DateTime given');
-
-        new DateTimeFieldDenormalizer(new \DateTime());
-    }
-
-    public function testDenormalizeFieldWithFieldDenormalizer(): void
-    {
-        $object = new \stdClass();
-
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
-
-        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
-        $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class, [
-            Call::create('denormalizeField')
-                ->with(
-                    'date',
-                    $object,
-                    new ArgumentCallback(
-                        function ($date): void {
-                            self::assertInstanceOf(\DateTime::class, $date);
-                            self::assertSame('2017-01-01', $date->format('Y-m-d'));
-                        }
-                    ),
-                    $context,
-                    null
-                ),
-        ]);
-
-        error_clear_last();
-
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($fieldDenormalizer);
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(
-            sprintf(
-                'Use "%s" instead of "%s" as __construct argument',
-                AccessorInterface::class,
-                FieldDenormalizerInterface::class
-            ),
-            $error['message']
-        );
-
-        $fieldDenormalizer->denormalizeField('date', $object, '2017-01-01', $context);
-    }
-
     public function testDenormalizeField(): void
     {
         $object = new \stdClass();
@@ -238,14 +185,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
-
-        error_clear_last();
-
         $fieldDenormalizer->denormalizeField('date', $object, '0', $context);
-
-        $error = error_get_last();
-
-        self::assertNull($error);
     }
 
     public function testDenormalizeArrayField(): void
@@ -326,7 +266,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
             Call::create('setValue')->with($object, new ArgumentCallback(
                 function ($value): void {
                     self::assertInstanceOf(\DateTime::class, $value);
-                    self::assertSame('2016-12-31 22:00:00', $value->format('Y-m-d H:i:s'));
+                    self::assertSame('2016-12-31 23:00:00', $value->format('Y-m-d H:i:s'));
                 }
             )),
         ]);

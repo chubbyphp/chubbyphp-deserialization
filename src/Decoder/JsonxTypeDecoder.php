@@ -11,39 +11,22 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
  */
 final class JsonxTypeDecoder implements TypeDecoderInterface
 {
-    public const DATATYPE_OBJECT = 'object';
-    public const DATATYPE_ARRAY = 'array';
-    public const DATATYPE_BOOLEAN = 'boolean';
-    public const DATATYPE_STRING = 'string';
-    public const DATATYPE_NUMBER = 'number';
-    public const DATATYPE_NULL = 'null';
-
-    /**
-     * @var string
-     */
-    private $contentType;
-
-    public function __construct(string $contentType = 'application/x-jsonx')
-    {
-        if ('application/x-jsonx' === $contentType) {
-            @trigger_error(
-                'Use "application/jsonx+xml" instead of "application/x-jsonx", cause jsonx is a xml variant.',
-                E_USER_DEPRECATED
-            );
-        }
-
-        $this->contentType = $contentType;
-    }
+    private const DATATYPE_OBJECT = 'object';
+    private const DATATYPE_ARRAY = 'array';
+    private const DATATYPE_BOOLEAN = 'boolean';
+    private const DATATYPE_STRING = 'string';
+    private const DATATYPE_NUMBER = 'number';
+    private const DATATYPE_NULL = 'null';
 
     public function getContentType(): string
     {
-        return $this->contentType;
+        return 'application/jsonx+xml';
     }
 
     /**
      * @throws DeserializerRuntimeException
      *
-     * @return array<mixed>
+     * @return array<string, array|string|float|int|bool|null>
      */
     public function decode(string $data): array
     {
@@ -92,6 +75,9 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
         throw DeserializerRuntimeException::createNotParsable($this->getContentType());
     }
 
+    /**
+     * @return array<string, array|bool|string|int|float|null>
+     */
     private function decodeObjectNode(\DOMNode $node): array
     {
         $data = [];
@@ -106,6 +92,9 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
         return $data;
     }
 
+    /**
+     * @return array<int, array|bool|string|int|float|null>
+     */
     private function decodeArrayNode(\DOMNode $node): array
     {
         $data = [];

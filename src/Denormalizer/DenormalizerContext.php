@@ -9,35 +9,9 @@ use Psr\Http\Message\ServerRequestInterface;
 final class DenormalizerContext implements DenormalizerContextInterface
 {
     /**
-     * @var array<int, string>|null
-     */
-    private $allowedAdditionalFields;
-
-    /**
-     * @deprecated
-     *
-     * @var array<int, string>
-     */
-    private $groups = [];
-
-    /**
      * @var ServerRequestInterface|null
      */
     private $request;
-
-    /**
-     * @deprecated
-     *
-     * @var bool
-     */
-    private $resetMissingFields;
-
-    /**
-     * @deprecated
-     *
-     * @var bool
-     */
-    private $clearMissing;
 
     /**
      * @var array<mixed>
@@ -45,71 +19,34 @@ final class DenormalizerContext implements DenormalizerContextInterface
     private $attributes;
 
     /**
+     * @var array<int, string>|null
+     */
+    private $allowedAdditionalFields;
+
+    /**
+     * @var bool
+     */
+    private $clearMissing;
+
+    /**
      * @param array<int, string>|null $allowedAdditionalFields
-     * @param array<int, string>      $groups
      * @param array<mixed>            $attributes
      */
     public function __construct(
-        ?array $allowedAdditionalFields = null,
-        array $groups = [],
         ?ServerRequestInterface $request = null,
-        bool $resetMissingFields = false,
         array $attributes = [],
+        ?array $allowedAdditionalFields = null,
         bool $clearMissing = false
     ) {
-        $this->allowedAdditionalFields = $allowedAdditionalFields;
-        $this->groups = $groups;
         $this->request = $request;
-
-        if ($resetMissingFields) {
-            @trigger_error(
-                'resetMissingFields is broken by design, please do this your self by model or repository',
-                E_USER_DEPRECATED
-            );
-        }
-
-        $this->resetMissingFields = $resetMissingFields;
-        $this->clearMissing = $clearMissing;
         $this->attributes = $attributes;
+        $this->allowedAdditionalFields = $allowedAdditionalFields;
+        $this->clearMissing = $clearMissing;
     }
 
-    /**
-     * @return array<int, string>|null
-     */
-    public function getAllowedAdditionalFields()
-    {
-        return $this->allowedAdditionalFields;
-    }
-
-    /**
-     * @deprecated
-     *
-     * @return array<int, string>
-     */
-    public function getGroups(): array
-    {
-        return $this->groups;
-    }
-
-    /**
-     * @return ServerRequestInterface|null
-     */
-    public function getRequest()
+    public function getRequest(): ?ServerRequestInterface
     {
         return $this->request;
-    }
-
-    /**
-     * @deprecated
-     */
-    public function isResetMissingFields(): bool
-    {
-        return $this->resetMissingFields;
-    }
-
-    public function isClearMissing(): bool
-    {
-        return $this->clearMissing;
     }
 
     /**
@@ -135,6 +72,17 @@ final class DenormalizerContext implements DenormalizerContextInterface
     }
 
     /**
+     * @param array<string, mixed> $attributes
+     */
+    public function withAttributes(array $attributes): DenormalizerContextInterface
+    {
+        $context = clone $this;
+        $context->attributes = $attributes;
+
+        return $context;
+    }
+
+    /**
      * @param mixed $value
      */
     public function withAttribute(string $name, $value): DenormalizerContextInterface
@@ -143,5 +91,18 @@ final class DenormalizerContext implements DenormalizerContextInterface
         $context->attributes[$name] = $value;
 
         return $context;
+    }
+
+    /**
+     * @return array<int, string>|null
+     */
+    public function getAllowedAdditionalFields(): ?array
+    {
+        return $this->allowedAdditionalFields;
+    }
+
+    public function isClearMissing(): bool
+    {
+        return $this->clearMissing;
     }
 }

@@ -16,13 +16,6 @@ final class DenormalizationFieldMapping implements DenormalizationFieldMappingIn
     private $name;
 
     /**
-     * @deprecated
-     *
-     * @var array<int, string>
-     */
-    private $groups;
-
-    /**
      * @var FieldDenormalizerInterface
      */
     private $fieldDenormalizer;
@@ -32,18 +25,12 @@ final class DenormalizationFieldMapping implements DenormalizationFieldMappingIn
      */
     private $policy;
 
-    /**
-     * @param string             $name
-     * @param array<int, string> $groups
-     */
     public function __construct(
-        $name,
-        array $groups,
+        string $name,
         FieldDenormalizerInterface $fieldDenormalizer,
         ?PolicyInterface $policy = null
     ) {
         $this->name = $name;
-        $this->groups = $groups;
         $this->fieldDenormalizer = $fieldDenormalizer;
         $this->policy = $policy ?? new NullPolicy();
     }
@@ -51,16 +38,6 @@ final class DenormalizationFieldMapping implements DenormalizationFieldMappingIn
     public function getName(): string
     {
         return $this->name;
-    }
-
-    /**
-     * @deprecated
-     *
-     * @return array<int, string>
-     */
-    public function getGroups(): array
-    {
-        return $this->groups;
     }
 
     public function getFieldDenormalizer(): FieldDenormalizerInterface

@@ -20,10 +20,9 @@ final class PropertyAccessor implements AccessorInterface
     }
 
     /**
-     * @param object $object
-     * @param mixed  $value
+     * @param mixed $value
      */
-    public function setValue($object, $value): void
+    public function setValue(object $object, $value): void
     {
         $class = $this->getClass($object);
 
@@ -43,11 +42,9 @@ final class PropertyAccessor implements AccessorInterface
     }
 
     /**
-     * @param object $object
-     *
      * @return mixed
      */
-    public function getValue($object)
+    public function getValue(object $object)
     {
         $class = $this->getClass($object);
 
@@ -66,10 +63,7 @@ final class PropertyAccessor implements AccessorInterface
         return $getter($this->property);
     }
 
-    /**
-     * @param object $object
-     */
-    private function getClass($object): string
+    private function getClass(object $object): string
     {
         if (interface_exists('Doctrine\Persistence\Proxy') && $object instanceof Proxy) {
             if (!$object->__isInitialized()) {
