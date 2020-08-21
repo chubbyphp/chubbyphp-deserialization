@@ -266,7 +266,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
             Call::create('setValue')->with($object, new ArgumentCallback(
                 function ($value): void {
                     self::assertInstanceOf(\DateTime::class, $value);
-                    self::assertSame('2016-12-31 23:00:00', $value->format('Y-m-d H:i:s'));
+                    self::assertSame('2016-12-31 22:00:00', $value->format('Y-m-d H:i:s'));
                 }
             )),
         ]);
