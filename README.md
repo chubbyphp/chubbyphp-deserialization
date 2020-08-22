@@ -30,7 +30,7 @@ A simple deserialization.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "^2.17"
+composer require chubbyphp/chubbyphp-deserialization "^2.18"
 ```
 
 ## Usage
@@ -39,6 +39,13 @@ composer require chubbyphp/chubbyphp-deserialization "^2.17"
 
  * [MethodAccessor][2]
  * [PropertyAccessor][3]
+
+### Container
+
+ * [DecoderFactory][40]
+ * [DenormalizerFactory][41]
+ * [DenormalizerObjectMappingRegistryFactory][42]
+ * [DeserializerFactory][43]
 
 ### Decoder
 
@@ -220,3 +227,8 @@ Dominik Zogg 2020
 [27]: doc/ServiceFactory/DeserializationServiceFactory.md
 
 [28]: doc/ServiceProvider/DeserializationServiceProvider.md
+
+[40]: doc/Container/DecoderFactory.md
+[41]: doc/Container/DenormalizerFactory.md
+[42]: doc/Container/DenormalizerObjectMappingRegistryFactory.md
+[43]: doc/Container/DeserializerFactory.md
