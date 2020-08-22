@@ -40,6 +40,13 @@ composer require chubbyphp/chubbyphp-deserialization "^3.0"
  * [MethodAccessor][2]
  * [PropertyAccessor][3]
 
+### Container
+
+ * [DecoderFactory][40]
+ * [DenormalizerFactory][41]
+ * [DenormalizerObjectMappingRegistryFactory][42]
+ * [DeserializerFactory][43]
+
 ### Decoder
 
  * [Decoder][4]
@@ -235,3 +242,8 @@ Dominik Zogg 2020
 [33]: doc/ServiceFactory/DeserializationServiceFactory.md
 
 [34]: doc/ServiceProvider/DeserializationServiceProvider.md
+
+[40]: doc/Container/DecoderFactory.md
+[41]: doc/Container/DenormalizerFactory.md
+[42]: doc/Container/DenormalizerObjectMappingRegistryFactory.md
+[43]: doc/Container/DeserializerFactory.md
