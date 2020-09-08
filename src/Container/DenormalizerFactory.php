@@ -10,6 +10,9 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistryInte
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
 
+/**
+ * @deprecated \Chubbyphp\Deserialization\ServiceFactory\DenormalizerFactory
+ */
 final class DenormalizerFactory
 {
     public function __invoke(ContainerInterface $container): DenormalizerInterface

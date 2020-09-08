@@ -10,6 +10,9 @@ use Chubbyphp\Deserialization\Deserializer;
 use Chubbyphp\Deserialization\DeserializerInterface;
 use Psr\Container\ContainerInterface;
 
+/**
+ * @deprecated \Chubbyphp\Deserialization\ServiceFactory\DeserializerFactory
+ */
 final class DeserializerFactory
 {
     public function __invoke(ContainerInterface $container): DeserializerInterface
