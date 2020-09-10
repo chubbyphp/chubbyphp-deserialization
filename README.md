@@ -40,13 +40,6 @@ composer require chubbyphp/chubbyphp-deserialization "^3.0"
  * [MethodAccessor][2]
  * [PropertyAccessor][3]
 
-### Container
-
- * [DecoderFactory][40]
- * [DenormalizerFactory][41]
- * [DenormalizerObjectMappingRegistryFactory][42]
- * [DeserializerFactory][43]
-
 ### Decoder
 
  * [Decoder][4]
@@ -182,7 +175,16 @@ echo $model->getName();
 
 ### ServiceFactory
 
-* [DeserializationServiceFactory][33]
+#### chubbyphp-container
+
+ * [DeserializationServiceFactory][33]
+
+#### chubbyphp-laminas-config-factory
+
+ * [DecoderFactory][40]
+ * [DenormalizerFactory][41]
+ * [DenormalizerObjectMappingRegistryFactory][42]
+ * [DeserializerFactory][43]
 
 ### ServiceProvider
 
@@ -243,7 +245,7 @@ Dominik Zogg 2020
 
 [34]: doc/ServiceProvider/DeserializationServiceProvider.md
 
-[40]: doc/Container/DecoderFactory.md
-[41]: doc/Container/DenormalizerFactory.md
-[42]: doc/Container/DenormalizerObjectMappingRegistryFactory.md
-[43]: doc/Container/DeserializerFactory.md
+[40]: doc/ServiceFactory/DecoderFactory.md
+[41]: doc/ServiceFactory/DenormalizerFactory.md
+[42]: doc/ServiceFactory/DenormalizerObjectMappingRegistryFactory.md
+[43]: doc/ServiceFactory/DeserializerFactory.md
