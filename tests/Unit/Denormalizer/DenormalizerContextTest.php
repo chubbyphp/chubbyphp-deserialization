@@ -24,9 +24,7 @@ final class DenormalizerContextTest extends TestCase
         $context = new DenormalizerContext();
 
         self::assertSame(null, $context->getAllowedAdditionalFields());
-        self::assertSame([], $context->getGroups());
         self::assertNull($context->getRequest());
-        self::assertFalse($context->isResetMissingFields());
         self::assertFalse($context->isClearMissing());
         self::assertSame([], $context->getAttributes());
         self::assertNull($context->getAttribute('nonExistingAttribute'));
@@ -39,37 +37,32 @@ final class DenormalizerContextTest extends TestCase
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
         $context = new DenormalizerContext(
-            ['allowed_field'],
-            ['group1'],
             $request,
-            false,
             ['attribute' => 'value'],
+            ['allowed_field'],
             true
         );
 
         self::assertSame(['allowed_field'], $context->getAllowedAdditionalFields());
-        self::assertSame(['group1'], $context->getGroups());
         self::assertSame($request, $context->getRequest());
-        self::assertFalse($context->isResetMissingFields());
         self::assertTrue($context->isClearMissing());
         self::assertSame(['attribute' => 'value'], $context->getAttributes());
         self::assertSame('value', $context->getAttribute('attribute'));
     }
 
-    public function testWithResetMissingFieldsExpectDeprecation(): void
+    public function testWithAttributes(): void
     {
-        error_clear_last();
+        /** @var ServerRequestInterface|MockObject $request */
+        $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        $context = new DenormalizerContext(null, [], null, true);
+        $context = new DenormalizerContext($request, ['attribute' => 'value'], ['allowed_field']);
 
-        self::assertTrue($context->isResetMissingFields());
+        $newContext = $context->withAttributes(['otherAttribute' => 'value2']);
 
-        $error = error_get_last();
+        self::assertNotSame($context, $newContext);
 
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame('resetMissingFields is broken by design, please do this your self by model or repository', $error['message']);
+        self::assertSame(['otherAttribute' => 'value2'], $newContext->getAttributes());
+        self::assertSame(['attribute' => 'value'], $context->getAttributes());
     }
 
     public function testWithAttribute(): void
@@ -77,7 +70,7 @@ final class DenormalizerContextTest extends TestCase
         /** @var ServerRequestInterface|MockObject $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
-        $context = new DenormalizerContext(['allowed_field'], ['group1'], $request, false, ['attribute' => 'value']);
+        $context = new DenormalizerContext($request, ['attribute' => 'value'], ['allowed_field']);
 
         $newContext = $context->withAttribute('otherAttribute', 'value2');
 

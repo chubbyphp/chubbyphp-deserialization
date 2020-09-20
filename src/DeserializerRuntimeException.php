@@ -55,4 +55,9 @@ final class DeserializerRuntimeException extends \RuntimeException
             $path
         ));
     }
+
+    public static function createTypeIsNotAString(string $path, string $dataType): self
+    {
+        return new self(sprintf('Type is not a string, "%s" given at path: "%s"', $dataType, $path));
+    }
 }

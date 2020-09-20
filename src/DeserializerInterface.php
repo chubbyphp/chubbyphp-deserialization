@@ -12,8 +12,6 @@ interface DeserializerInterface extends DecoderInterface, DenormalizerInterface
 {
     /**
      * @param object|string $object
-     *
-     * @return object
      */
     public function deserialize(
         $object,
@@ -21,5 +19,5 @@ interface DeserializerInterface extends DecoderInterface, DenormalizerInterface
         string $contentType,
         ?DenormalizerContextInterface $context = null,
         string $path = ''
-    );
+    ): object;
 }

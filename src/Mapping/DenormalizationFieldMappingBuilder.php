@@ -17,19 +17,12 @@ use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalize
 use Chubbyphp\Deserialization\Policy\NullPolicy;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
 
-final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMappingBuilderInterface
+final class DenormalizationFieldMappingBuilder
 {
     /**
      * @var string
      */
     private $name;
-
-    /**
-     * @deprecated
-     *
-     * @var array<int, string>
-     */
-    private $groups = [];
 
     /**
      * @var FieldDenormalizerInterface
@@ -50,7 +43,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         string $name,
         bool $emptyToNull = false,
         ?FieldDenormalizerInterface $fieldDenormalizer = null
-    ): DenormalizationFieldMappingBuilderInterface {
+    ): self {
         if (null === $fieldDenormalizer) {
             $fieldDenormalizer = new FieldDenormalizer(new PropertyAccessor($name), $emptyToNull);
         }
@@ -61,7 +54,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $self;
     }
 
-    public static function createCallback(string $name, callable $callback): DenormalizationFieldMappingBuilderInterface
+    public static function createCallback(string $name, callable $callback): self
     {
         $self = new self($name);
         $self->fieldDenormalizer = new CallbackFieldDenormalizer($callback);
@@ -73,21 +66,18 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         string $name,
         string $type,
         bool $emptyToNull = false
-    ): DenormalizationFieldMappingBuilderInterface {
+    ): self {
         $self = new self($name);
         $self->fieldDenormalizer = new ConvertTypeFieldDenormalizer(new PropertyAccessor($name), $type, $emptyToNull);
 
         return $self;
     }
 
-    /**
-     * @param \DateTimeZone $dateTimeZone
-     */
     public static function createDateTime(
         string $name,
         bool $emptyToNull = false,
         ?\DateTimeZone $dateTimeZone = null
-    ): DenormalizationFieldMappingBuilderInterface {
+    ): self {
         $self = new self($name);
         $self->fieldDenormalizer = new DateTimeFieldDenormalizer(
             new PropertyAccessor($name),
@@ -98,7 +88,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $self;
     }
 
-    public static function createEmbedMany(string $name, string $class): DenormalizationFieldMappingBuilderInterface
+    public static function createEmbedMany(string $name, string $class): self
     {
         $self = new self($name);
         $self->fieldDenormalizer = new EmbedManyFieldDenormalizer($class, new PropertyAccessor($name));
@@ -106,7 +96,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $self;
     }
 
-    public static function createEmbedOne(string $name, string $class): DenormalizationFieldMappingBuilderInterface
+    public static function createEmbedOne(string $name, string $class): self
     {
         $self = new self($name);
         $self->fieldDenormalizer = new EmbedOneFieldDenormalizer($class, new PropertyAccessor($name));
@@ -117,7 +107,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     public static function createReferenceMany(
         string $name,
         callable $repository
-    ): DenormalizationFieldMappingBuilderInterface {
+    ): self {
         $self = new self($name);
         $self->fieldDenormalizer = new ReferenceManyFieldDenormalizer($repository, new PropertyAccessor($name));
 
@@ -128,7 +118,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         string $name,
         callable $repository,
         bool $emptyToNull = false
-    ): DenormalizationFieldMappingBuilderInterface {
+    ): self {
         $self = new self($name);
         $self->fieldDenormalizer = new ReferenceOneFieldDenormalizer(
             $repository,
@@ -139,32 +129,7 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
         return $self;
     }
 
-    /**
-     * @deprecated
-     *
-     * @param array<int, string> $groups
-     */
-    public function setGroups(array $groups): DenormalizationFieldMappingBuilderInterface
-    {
-        $this->groups = $groups;
-
-        return $this;
-    }
-
-    public function setFieldDenormalizer(
-        FieldDenormalizerInterface $fieldDenormalizer
-    ): DenormalizationFieldMappingBuilderInterface {
-        @trigger_error(
-            'Utilize third parameter of create method instead',
-            E_USER_DEPRECATED
-        );
-
-        $this->fieldDenormalizer = $fieldDenormalizer;
-
-        return $this;
-    }
-
-    public function setPolicy(PolicyInterface $policy): DenormalizationFieldMappingBuilderInterface
+    public function setPolicy(PolicyInterface $policy): self
     {
         $this->policy = $policy;
 
@@ -175,7 +140,6 @@ final class DenormalizationFieldMappingBuilder implements DenormalizationFieldMa
     {
         return new DenormalizationFieldMapping(
             $this->name,
-            $this->groups,
             $this->fieldDenormalizer,
             $this->policy ?? new NullPolicy()
         );

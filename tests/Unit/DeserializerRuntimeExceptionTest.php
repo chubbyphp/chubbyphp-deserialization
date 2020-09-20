@@ -58,4 +58,11 @@ final class DeserializerRuntimeExceptionTest extends TestCase
 
         self::assertSame('Unsupported object type "unknown", supported are "model" at path: "path1"', $exception->getMessage());
     }
+
+    public function testCreateTypeIsNotAString(): void
+    {
+        $exception = DeserializerRuntimeException::createTypeIsNotAString('path', 'array');
+
+        self::assertSame('Type is not a string, "array" given at path: "path"', $exception->getMessage());
+    }
 }

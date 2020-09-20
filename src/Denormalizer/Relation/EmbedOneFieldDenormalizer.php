@@ -23,25 +23,21 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
      */
     private $accessor;
 
-    /**
-     * @param string $class
-     */
-    public function __construct($class, AccessorInterface $accessor)
+    public function __construct(string $class, AccessorInterface $accessor)
     {
         $this->class = $class;
         $this->accessor = $accessor;
     }
 
     /**
-     * @param object $object
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
         string $path,
-        $object,
+        object $object,
         $value,
         DenormalizerContextInterface $context,
         ?DenormalizerInterface $denormalizer = null

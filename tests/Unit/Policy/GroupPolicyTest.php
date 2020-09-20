@@ -6,6 +6,7 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Policy;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Policy\GroupPolicy;
+use Chubbyphp\Mock\Call;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -19,102 +20,6 @@ final class GroupPolicyTest extends TestCase
 {
     use MockByCallsTrait;
 
-    public function testIsCompliantReturnsTrueIfNoGroupsAreSet(): void
-    {
-        error_clear_last();
-
-        $object = new \stdClass();
-
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
-
-        $policy = new GroupPolicy([]);
-
-        self::assertTrue($policy->isCompliant($context, $object));
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame('Use "isCompliantIncludingPath()" instead of "isCompliant()"', $error['message']);
-    }
-
-    public function testIsCompliantReturnsTrueWithDefaultValues(): void
-    {
-        error_clear_last();
-
-        $object = new \stdClass();
-
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getDenormalizerContextWithGroupAttribute(null);
-
-        $policy = new GroupPolicy();
-
-        self::assertTrue($policy->isCompliant($context, $object));
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame('Use "isCompliantIncludingPath()" instead of "isCompliant()"', $error['message']);
-    }
-
-    public function testIsCompliantReturnsTrueIfOneGroupMatches(): void
-    {
-        error_clear_last();
-
-        $object = new \stdClass();
-
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getDenormalizerContextWithGroupAttribute(['group2']);
-
-        $policy = new GroupPolicy(['group1', 'group2']);
-
-        self::assertTrue($policy->isCompliant($context, $object));
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame('Use "isCompliantIncludingPath()" instead of "isCompliant()"', $error['message']);
-    }
-
-    public function testIsCompliantReturnsFalseIfNoGroupsAreSetInContext(): void
-    {
-        error_clear_last();
-
-        $object = new \stdClass();
-
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getDenormalizerContextWithGroupAttribute([]);
-
-        $policy = new GroupPolicy(['group1', 'group2']);
-
-        self::assertFalse($policy->isCompliant($context, $object));
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame('Use "isCompliantIncludingPath()" instead of "isCompliant()"', $error['message']);
-    }
-
-    public function testIsCompliantReturnsFalseIfNoGroupsMatch(): void
-    {
-        $object = new \stdClass();
-
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getDenormalizerContextWithGroupAttribute(['unknownGroup']);
-
-        $policy = new GroupPolicy(['group1', 'group2']);
-
-        self::assertFalse($policy->isCompliant($context, $object));
-    }
-
     public function testIsCompliantIncludingPathReturnsTrueIfNoGroupsAreSet(): void
     {
         $object = new \stdClass();
@@ -126,7 +31,7 @@ final class GroupPolicyTest extends TestCase
 
         $policy = new GroupPolicy([]);
 
-        self::assertTrue($policy->isCompliantIncludingPath($path, $object, $context));
+        self::assertTrue($policy->isCompliant($path, $object, $context));
     }
 
     public function testIsCompliantIncludingPathReturnsTrueWithDefaultValues(): void
@@ -136,11 +41,15 @@ final class GroupPolicyTest extends TestCase
         $path = '';
 
         /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getDenormalizerContextWithGroupAttribute(null);
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
+            Call::create('getAttribute')
+                ->with(GroupPolicy::ATTRIBUTE_GROUPS, [GroupPolicy::GROUP_DEFAULT])
+                ->willReturn([GroupPolicy::GROUP_DEFAULT]),
+        ]);
 
         $policy = new GroupPolicy();
 
-        self::assertTrue($policy->isCompliantIncludingPath($path, $object, $context));
+        self::assertTrue($policy->isCompliant($path, $object, $context));
     }
 
     public function testIsCompliantIncludingPathReturnsTrueIfOneGroupMatches(): void
@@ -150,11 +59,15 @@ final class GroupPolicyTest extends TestCase
         $path = '';
 
         /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getDenormalizerContextWithGroupAttribute(['group2']);
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
+            Call::create('getAttribute')
+                ->with(GroupPolicy::ATTRIBUTE_GROUPS, [GroupPolicy::GROUP_DEFAULT])
+                ->willReturn(['group2']),
+        ]);
 
         $policy = new GroupPolicy(['group1', 'group2']);
 
-        self::assertTrue($policy->isCompliantIncludingPath($path, $object, $context));
+        self::assertTrue($policy->isCompliant($path, $object, $context));
     }
 
     public function testIsCompliantIncludingPathReturnsFalseIfNoGroupsAreSetInContext(): void
@@ -164,11 +77,15 @@ final class GroupPolicyTest extends TestCase
         $path = '';
 
         /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getDenormalizerContextWithGroupAttribute([]);
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
+            Call::create('getAttribute')
+                ->with(GroupPolicy::ATTRIBUTE_GROUPS, [GroupPolicy::GROUP_DEFAULT])
+                ->willReturn([]),
+        ]);
 
         $policy = new GroupPolicy(['group1', 'group2']);
 
-        self::assertFalse($policy->isCompliantIncludingPath($path, $object, $context));
+        self::assertFalse($policy->isCompliant($path, $object, $context));
     }
 
     public function testIsCompliantIncludingPathReturnsFalseIfNoGroupsMatch(): void
@@ -178,52 +95,14 @@ final class GroupPolicyTest extends TestCase
         $path = '';
 
         /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getDenormalizerContextWithGroupAttribute(['unknownGroup']);
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
+            Call::create('getAttribute')
+                ->with(GroupPolicy::ATTRIBUTE_GROUPS, [GroupPolicy::GROUP_DEFAULT])
+                ->willReturn(['unknownGroup']),
+        ]);
 
         $policy = new GroupPolicy(['group1', 'group2']);
 
-        self::assertFalse($policy->isCompliantIncludingPath($path, $object, $context));
-    }
-
-    private function getDenormalizerContextWithGroupAttribute(array $groups = null): DenormalizerContextInterface
-    {
-        return new class($groups) implements DenormalizerContextInterface {
-            private $groups;
-
-            public function __construct($groups)
-            {
-                $this->groups = $groups;
-            }
-
-            public function getAllowedAdditionalFields()
-            {
-                return null;
-            }
-
-            public function getGroups(): array
-            {
-                return [];
-            }
-
-            public function getRequest()
-            {
-                return null;
-            }
-
-            public function getAttributes(): array
-            {
-                return [];
-            }
-
-            public function getAttribute(string $name, $default = null)
-            {
-                return $this->groups ?? $default;
-            }
-
-            public function withAttribute(string $name, $value): DenormalizerContextInterface
-            {
-                return $this;
-            }
-        };
+        self::assertFalse($policy->isCompliant($path, $object, $context));
     }
 }

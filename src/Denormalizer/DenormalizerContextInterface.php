@@ -6,51 +6,36 @@ namespace Chubbyphp\Deserialization\Denormalizer;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-/**
- * @method bool                         isResetMissingFields()
- * @method bool                         isClearMissing()
- * @method array                        getAttributes()
- * @method mixed                        getAttribute(string $name, $default = null)
- * @method DenormalizerContextInterface withAttribute(string $name, $value)
- */
 interface DenormalizerContextInterface
 {
-    /**
-     * @return array<int, string>|null
-     */
-    public function getAllowedAdditionalFields();
+    public function getRequest(): ?ServerRequestInterface;
 
     /**
-     * @deprecated
-     *
-     * @return array<int, string>
+     * @return array<string, mixed>
      */
-    public function getGroups(): array;
+    public function getAttributes(): array;
 
     /**
-     * @return ServerRequestInterface|null
-     */
-    public function getRequest();
-
-    //public function isClearMissing(): bool;
-
-    /*
-     * @return array
-     */
-    //public function getAttributes(): array;
-
-    /*
-     * @param string $name
-     * @param mixed  $default
+     * @param mixed $default
      *
      * @return mixed
      */
-    //public function getAttribute(string $name, $default = null);
+    public function getAttribute(string $name, $default = null);
 
-    /*
-     * @param string $name
-     * @param mixed  $value
-     * @return self
+    /**
+     * @param array<string, mixed> $attributes
      */
-    //public function withAttribute(string $name, $value): self;
+    public function withAttributes(array $attributes): self;
+
+    /**
+     * @param mixed $value
+     */
+    public function withAttribute(string $name, $value): self;
+
+    /**
+     * @return array<int, string>|null
+     */
+    public function getAllowedAdditionalFields(): ?array;
+
+    public function isClearMissing(): bool;
 }

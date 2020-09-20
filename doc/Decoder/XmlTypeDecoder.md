@@ -1,4 +1,4 @@
-# XmlTypeDecoder
+# XmlTypeDecoder (alias for Jsonx)
 
 ```php
 <?php
@@ -10,6 +10,6 @@ $decoderType = new XmlTypeDecoder();
 echo $decoderType->getContentType();
 // 'application/xml'
 
-print_r($decoderType->decode('<name type="string">php</name>'));
+print_r($decoderType->decode('<json:object><json:string name="name">php</json:string></json:object>'));
 // ['name' => 'php']
 ```

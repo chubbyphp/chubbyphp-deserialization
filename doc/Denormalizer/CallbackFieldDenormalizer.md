@@ -12,7 +12,7 @@ $context = ...;
 $fieldDenormalizer = new CallbackFieldDenormalizer(
     function (
         string $path,
-        $object,
+        object $object,
         $value,
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer = null

@@ -19,29 +19,26 @@ final class MethodAccessor implements AccessorInterface
     }
 
     /**
-     * @param object $object
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @throws DeserializerLogicException
      */
-    public function setValue($object, $value)
+    public function setValue(object $object, $value): void
     {
         $set = 'set'.ucfirst($this->property);
         if (!method_exists($object, $set)) {
             throw DeserializerLogicException::createMissingMethod(get_class($object), [$set]);
         }
 
-        return $object->{$set}($value);
+        $object->{$set}($value);
     }
 
     /**
-     * @param object $object
-     *
      * @throws DeserializerLogicException
      *
      * @return mixed
      */
-    public function getValue($object)
+    public function getValue(object $object)
     {
         $get = 'get'.ucfirst($this->property);
         $has = 'has'.ucfirst($this->property);

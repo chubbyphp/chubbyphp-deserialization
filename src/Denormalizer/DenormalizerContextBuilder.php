@@ -6,75 +6,38 @@ namespace Chubbyphp\Deserialization\Denormalizer;
 
 use Psr\Http\Message\ServerRequestInterface;
 
-final class DenormalizerContextBuilder implements DenormalizerContextBuilderInterface
+final class DenormalizerContextBuilder
 {
-    /**
-     * @var array<int, string>|null
-     */
-    private $allowedAdditionalFields;
-
-    /**
-     * @deprecated
-     *
-     * @var array<int, string>
-     */
-    private $groups = [];
-
     /**
      * @var ServerRequestInterface|null
      */
     private $request;
 
     /**
-     * @deprecated
-     *
-     * @var bool
+     * @var array<mixed>
      */
-    private $resetMissingFields = false;
+    private $attributes = [];
+
+    /**
+     * @var array<int, string>|null
+     */
+    private $allowedAdditionalFields;
 
     /**
      * @var bool
      */
     private $clearMissing = false;
 
-    /**
-     * @var array<mixed>
-     */
-    private $attributes = [];
-
     private function __construct()
     {
     }
 
-    public static function create(): DenormalizerContextBuilderInterface
+    public static function create(): self
     {
         return new self();
     }
 
-    /**
-     * @param array<int, string>|null $allowedAdditionalFields
-     */
-    public function setAllowedAdditionalFields(
-        ?array $allowedAdditionalFields = null
-    ): DenormalizerContextBuilderInterface {
-        $this->allowedAdditionalFields = $allowedAdditionalFields;
-
-        return $this;
-    }
-
-    /**
-     * @deprecated
-     *
-     * @param array<int, string> $groups
-     */
-    public function setGroups(array $groups): DenormalizerContextBuilderInterface
-    {
-        $this->groups = $groups;
-
-        return $this;
-    }
-
-    public function setRequest(?ServerRequestInterface $request = null): DenormalizerContextBuilderInterface
+    public function setRequest(?ServerRequestInterface $request = null): self
     {
         $this->request = $request;
 
@@ -82,33 +45,28 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     }
 
     /**
-     * @deprecated
+     * @param array<mixed> $attributes
      */
-    public function setResetMissingFields(bool $resetMissingFields): DenormalizerContextBuilderInterface
+    public function setAttributes(array $attributes): self
     {
-        @trigger_error(
-            'setResetMissingFields is broken by design, please do this your self by model or repository',
-            E_USER_DEPRECATED
-        );
-
-        $this->resetMissingFields = $resetMissingFields;
-
-        return $this;
-    }
-
-    public function setClearMissing(bool $clearMissing): DenormalizerContextBuilderInterface
-    {
-        $this->clearMissing = $clearMissing;
+        $this->attributes = $attributes;
 
         return $this;
     }
 
     /**
-     * @param array<mixed> $attributes
+     * @param array<int, string>|null $allowedAdditionalFields
      */
-    public function setAttributes(array $attributes): DenormalizerContextBuilderInterface
+    public function setAllowedAdditionalFields(?array $allowedAdditionalFields = null): self
     {
-        $this->attributes = $attributes;
+        $this->allowedAdditionalFields = $allowedAdditionalFields;
+
+        return $this;
+    }
+
+    public function setClearMissing(bool $clearMissing): self
+    {
+        $this->clearMissing = $clearMissing;
 
         return $this;
     }
@@ -116,11 +74,9 @@ final class DenormalizerContextBuilder implements DenormalizerContextBuilderInte
     public function getContext(): DenormalizerContextInterface
     {
         return new DenormalizerContext(
-            $this->allowedAdditionalFields,
-            $this->groups,
             $this->request,
-            $this->resetMissingFields,
             $this->attributes,
+            $this->allowedAdditionalFields,
             $this->clearMissing
         );
     }

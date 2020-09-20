@@ -15,22 +15,22 @@ A simple deserialization.
 
  * php: ^7.2
  * psr/http-message: ^1.0.1
- * psr/log: ^1.1
+ * psr/log: ^1.1.3
 
 ## Suggest
 
- * chubbyphp/chubbyphp-container: ^1.0
- * pimple/pimple: ^3.2.3
+ * chubbyphp/chubbyphp-container: ^1.1
+ * pimple/pimple: ^3.3
  * psr/container: ^1.0
- * symfony/dependency-injection: ^2.8.50|^3.4.26|^4.2.7|^5.0 (symfony integration)
- * symfony/yaml: ^2.8.50|^3.4.26|^4.2.7|^5.0 (application/x-yaml support)
+ * symfony/dependency-injection: ^3.4.42|^4.4.10|^5.0.10 (symfony integration)
+ * symfony/yaml: ^3.4.42|^4.4.10|^5.0.10 (application/x-yaml support)
 
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "^2.19"
+composer require chubbyphp/chubbyphp-deserialization "^3.0"
 ```
 
 ## Usage
@@ -126,7 +126,7 @@ echo $model->getName();
 print_r($deserializer->getContentTypes());
 //[
 //    'application/json',
-//    'application/x-jsonx',
+//    'application/jsonx+xml',
 //    'application/x-www-form-urlencoded',
 //    'application/xml',
 //    'application/x-yaml'
@@ -164,12 +164,20 @@ echo $model->getName();
  * [CallableDenormalizationObjectMapping][25]
  * [LazyDenormalizationObjectMapping][26]
 
+### Policy
+
+* [AndPolicy][27]
+* [CallbackPolicy][28]
+* [GroupPolicy][29]
+* [NotPolicy][30]
+* [NullPolicy][31]
+* [OrPolicy][32]
 
 ### ServiceFactory
 
 #### chubbyphp-container
 
- * [DeserializationServiceFactory][27]
+ * [DeserializationServiceFactory][33]
 
 #### chubbyphp-laminas-config-factory
 
@@ -180,7 +188,7 @@ echo $model->getName();
 
 ### ServiceProvider
 
-* [DeserializationServiceProvider][28]
+* [DeserializationServiceProvider][34]
 
 ## Copyright
 
@@ -226,9 +234,16 @@ Dominik Zogg 2020
 [25]: doc/Mapping/CallableDenormalizationObjectMapping.md
 [26]: doc/Mapping/LazyDenormalizationObjectMapping.md
 
-[27]: doc/ServiceFactory/DeserializationServiceFactory.md
+[27]: doc/Policy/AndPolicy.md
+[28]: doc/Policy/CallbackPolicy.md
+[29]: doc/Policy/GroupPolicy.md
+[30]: doc/Policy/NotPolicy.md
+[31]: doc/Policy/NullPolicy.md
+[32]: doc/Policy/OrPolicy.md
 
-[28]: doc/ServiceProvider/DeserializationServiceProvider.md
+[33]: doc/ServiceFactory/DeserializationServiceFactory.md
+
+[34]: doc/ServiceProvider/DeserializationServiceProvider.md
 
 [40]: doc/ServiceFactory/DecoderFactory.md
 [41]: doc/ServiceFactory/DenormalizerFactory.md

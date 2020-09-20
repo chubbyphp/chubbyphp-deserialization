@@ -10,17 +10,16 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 interface FieldDenormalizerInterface
 {
     /**
-     * @param object $object
-     * @param mixed  $value
+     * @param mixed $value
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
         string $path,
-        $object,
+        object $object,
         $value,
         DenormalizerContextInterface $context,
         ?DenormalizerInterface $denormalizer = null
-    );
+    ): void;
 }
