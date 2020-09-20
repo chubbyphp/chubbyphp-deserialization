@@ -167,7 +167,7 @@ echo $model->getName();
 ### Policy
 
 * [AndPolicy][27]
-* [CallbackPolicyIncludingPath][28]
+* [CallbackPolicy][28]
 * [GroupPolicy][29]
 * [NotPolicy][30]
 * [NullPolicy][31]
@@ -235,7 +235,7 @@ Dominik Zogg 2020
 [26]: doc/Mapping/LazyDenormalizationObjectMapping.md
 
 [27]: doc/Policy/AndPolicy.md
-[28]: doc/Policy/CallbackPolicyIncludingPath.md
+[28]: doc/Policy/CallbackPolicy.md
 [29]: doc/Policy/GroupPolicy.md
 [30]: doc/Policy/NotPolicy.md
 [31]: doc/Policy/NullPolicy.md

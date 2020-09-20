@@ -184,7 +184,7 @@ final class Denormalizer implements DenormalizerInterface
         DenormalizerContextInterface $context,
         DenormalizationFieldMappingInterface $mapping
     ): bool {
-        return $mapping->getPolicy()->isCompliantIncludingPath($path, $object, $context);
+        return $mapping->getPolicy()->isCompliant($path, $object, $context);
     }
 
     private function getSubPathByName(string $path, string $name): string

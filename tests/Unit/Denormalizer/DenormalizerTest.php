@@ -46,7 +46,7 @@ final class DenormalizerTest extends TestCase
 
         /** @var PolicyInterface|MockObject $namePolicy */
         $namePolicy = $this->getMockByCalls(PolicyInterface::class, [
-            Call::create('isCompliantIncludingPath')->with('name', $object, $context)->willReturn(true),
+            Call::create('isCompliant')->with('name', $object, $context)->willReturn(true),
         ]);
 
         /** @var FieldDenormalizerInterface|MockObject $nameFieldDenormalizer */
@@ -107,7 +107,7 @@ final class DenormalizerTest extends TestCase
 
         /** @var PolicyInterface|MockObject $namePolicy */
         $namePolicy = $this->getMockByCalls(PolicyInterface::class, [
-            Call::create('isCompliantIncludingPath')->with('name', $object, $context)->willReturn(true),
+            Call::create('isCompliant')->with('name', $object, $context)->willReturn(true),
         ]);
 
         /** @var FieldDenormalizerInterface|MockObject $nameFieldDenormalizer */
@@ -167,7 +167,7 @@ final class DenormalizerTest extends TestCase
 
         /** @var PolicyInterface|MockObject $namePolicy */
         $namePolicy = $this->getMockByCalls(PolicyInterface::class, [
-            Call::create('isCompliantIncludingPath')->with('name', $object, $context)->willReturn(true),
+            Call::create('isCompliant')->with('name', $object, $context)->willReturn(true),
         ]);
 
         /** @var FieldDenormalizerInterface|MockObject $nameFieldDenormalizer */
@@ -222,7 +222,7 @@ final class DenormalizerTest extends TestCase
 
         /** @var PolicyInterface|MockObject $namePolicy1 */
         $namePolicy1 = $this->getMockByCalls(PolicyInterface::class, [
-            Call::create('isCompliantIncludingPath')->with('name', $object, $context)->willReturn(true),
+            Call::create('isCompliant')->with('name', $object, $context)->willReturn(true),
         ]);
 
         /** @var FieldDenormalizerInterface|MockObject $nameFieldDenormalizer1 */
@@ -240,7 +240,7 @@ final class DenormalizerTest extends TestCase
 
         /** @var PolicyInterface|MockObject $namePolicy2 */
         $namePolicy2 = $this->getMockByCalls(PolicyInterface::class, [
-            Call::create('isCompliantIncludingPath')->with('name', $object, $context)->willReturn(true),
+            Call::create('isCompliant')->with('name', $object, $context)->willReturn(true),
         ]);
 
         /** @var FieldDenormalizerInterface|MockObject $nameFieldDenormalizer */
@@ -296,7 +296,7 @@ final class DenormalizerTest extends TestCase
 
         /** @var PolicyInterface|MockObject $namePolicy */
         $namePolicy = $this->getMockByCalls(PolicyInterface::class, [
-            Call::create('isCompliantIncludingPath')->with('name', $object, $context)->willReturn(true),
+            Call::create('isCompliant')->with('name', $object, $context)->willReturn(true),
         ]);
 
         /** @var FieldDenormalizerInterface|MockObject $nameFieldDenormalizer */
@@ -314,7 +314,7 @@ final class DenormalizerTest extends TestCase
 
         /** @var PolicyInterface|MockObject $valuePolicy */
         $valuePolicy = $this->getMockByCalls(PolicyInterface::class, [
-            Call::create('isCompliantIncludingPath')->with('value', $object, $context)->willReturn(true),
+            Call::create('isCompliant')->with('value', $object, $context)->willReturn(true),
         ]);
 
         /** @var FieldDenormalizerInterface|MockObject $valueFieldDenormalizer */
@@ -588,7 +588,7 @@ final class DenormalizerTest extends TestCase
 
         /** @var PolicyInterface|MockObject $namePolicy */
         $namePolicy = $this->getMockByCalls(PolicyInterface::class, [
-            Call::create('isCompliantIncludingPath')->with('name', $object, $context)->willReturn(false),
+            Call::create('isCompliant')->with('name', $object, $context)->willReturn(false),
         ]);
 
         /** @var DenormalizationFieldMappingInterface|MockObject $denormalizationNameFieldMapping */

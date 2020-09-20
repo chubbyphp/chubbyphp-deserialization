@@ -16,6 +16,7 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
+use Chubbyphp\Deserialization\Policy\GroupPolicy;
 use MyProject\Model\AbstractManyModel;
 use MyProject\Model\Model;
 
@@ -55,7 +56,9 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
     public function getDenormalizationFieldMappings(string $path, string $type = null): array
     {
         return [
-            DenormalizationFieldMappingBuilder::create('name')->getMapping(),
+            DenormalizationFieldMappingBuilder::create('name')
+                ->setPolicy(new GroupPolicy(['baseInformation']))
+                ->getMapping(),
             DenormalizationFieldMappingBuilder::createEmbedOne('one', OneModel::class)->getMapping(),
             DenormalizationFieldMappingBuilder::createEmbedMany('manies', AbstractManyModel::class)->getMapping(),
         ];

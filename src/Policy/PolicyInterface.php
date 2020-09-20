@@ -8,5 +8,5 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 
 interface PolicyInterface
 {
-    public function isCompliantIncludingPath(string $path, object $object, DenormalizerContextInterface $context): bool;
+    public function isCompliant(string $path, object $object, DenormalizerContextInterface $context): bool;
 }

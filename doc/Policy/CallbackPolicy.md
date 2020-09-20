@@ -1,23 +1,20 @@
-# OrPolicy
+# CallbackPolicy
 
 ```php
 <?php
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
-use Chubbyphp\Deserialization\Policy\OrPolicy;
+use Chubbyphp\Deserialization\Policy\CallbackPolicy;
 use MyProject\Model\Model;
-use MyProject\Policy\AnotherPolicy;
-use MyProject\Policy\SomePolicy;
 
 $model = new Model();
 
 /** @var DenormalizerContextInterface $context */
 $context = ...;
 
-$policy = new OrPolicy([
-    new SomePolicy(),
-    new AnotherPolicy(),
-]);
+$policy = new CallbackPolicy(function (string $path, object $object, DenormalizerContextInterface $context) {
+    return true;
+});
 
 echo $policy->isCompliant('path', $model, $context);
 // 1
