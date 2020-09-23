@@ -30,8 +30,6 @@ final class CallbackFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         ?DenormalizerInterface $denormalizer = null
     ): void {
-        $callback = $this->callback;
-
-        $callback($path, $object, $value, $context, $denormalizer);
+        ($this->callback)($path, $object, $value, $context, $denormalizer);
     }
 }

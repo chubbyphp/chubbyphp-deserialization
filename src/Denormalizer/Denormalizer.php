@@ -13,6 +13,8 @@ use Psr\Log\NullLogger;
 
 final class Denormalizer implements DenormalizerInterface
 {
+    private const TYPE = '_type';
+
     /**
      * @var DenormalizerObjectMappingRegistryInterface
      */
@@ -49,7 +51,7 @@ final class Denormalizer implements DenormalizerInterface
         /** @var string|null $type */
         $type = $this->getType($data, $path);
 
-        unset($data['_type']);
+        unset($data[self::TYPE]);
 
         $class = is_object($object) ? get_class($object) : $object;
         $objectMapping = $this->getObjectMapping($class);
@@ -83,11 +85,11 @@ final class Denormalizer implements DenormalizerInterface
      */
     private function getType(array $data, string $path): ?string
     {
-        if (!isset($data['_type'])) {
+        if (!isset($data[self::TYPE])) {
             return null;
         }
 
-        $type = $data['_type'];
+        $type = $data[self::TYPE];
 
         if (is_string($type)) {
             return $type;
@@ -95,7 +97,7 @@ final class Denormalizer implements DenormalizerInterface
 
         $exception = DeserializerRuntimeException::createTypeIsNotAString($path, gettype($type));
 
-        $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+        $this->logError($exception);
 
         throw $exception;
     }
@@ -108,7 +110,7 @@ final class Denormalizer implements DenormalizerInterface
         try {
             return $this->denormalizerObjectMappingRegistry->getObjectMapping($class);
         } catch (DeserializerLogicException $exception) {
-            $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+            $this->logError($exception);
 
             throw $exception;
         }
@@ -128,7 +130,7 @@ final class Denormalizer implements DenormalizerInterface
 
         $exception = DeserializerLogicException::createFactoryDoesNotReturnObject($path, gettype($object));
 
-        $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+        $this->logError($exception);
 
         throw $exception;
     }
@@ -173,7 +175,7 @@ final class Denormalizer implements DenormalizerInterface
             $this->getSubPathsByNames($path, $names)
         );
 
-        $this->logger->notice('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+        $this->logNotice($exception);
 
         throw $exception;
     }
@@ -205,5 +207,15 @@ final class Denormalizer implements DenormalizerInterface
         }
 
         return $subPaths;
+    }
+
+    private function logError(\Throwable $exception): void
+    {
+        $this->logger->error('deserialize: {exception}', ['exception' => $exception->getMessage()]);
+    }
+
+    private function logNotice(\Throwable $exception): void
+    {
+        $this->logger->notice('deserialize: {exception}', ['exception' => $exception->getMessage()]);
     }
 }

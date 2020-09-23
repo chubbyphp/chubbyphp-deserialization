@@ -75,8 +75,6 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
      */
     private function assignRelatedObjects(string $path, array $value, &$relatedObjects): void
     {
-        $repository = $this->repository;
-
         foreach ($value as $key => $subValue) {
             $subPath = $path.'['.$key.']';
 
@@ -84,7 +82,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
                 throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'string');
             }
 
-            $relatedObjects[$key] = $repository($subValue) ?? $subValue;
+            $relatedObjects[$key] = ($this->repository)($subValue) ?? $subValue;
         }
     }
 }
