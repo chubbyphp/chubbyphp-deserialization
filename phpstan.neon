@@ -7,5 +7,5 @@ parameters:
             message: '//'
             path: %currentWorkingDirectory%/src/Decoder/UrlEncodedTypeDecoder.php
         -
-            message: '/Parameter \#1 \$argument of class ReflectionClass constructor expects class\-string<T of object>\|T of object, string given\./'
-            path: %currentWorkingDirectory%/src/Denormalizer/DenormalizerObjectMappingRegistry.php
+            message: '//'
+            path: %currentWorkingDirectory%/src/Denormalizer/DateTimeFieldDenormalizer.php

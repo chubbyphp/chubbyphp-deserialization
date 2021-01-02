@@ -8,25 +8,19 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class DenormalizerContextBuilder
 {
-    /**
-     * @var ServerRequestInterface|null
-     */
-    private $request;
+    private ?ServerRequestInterface $request = null;
 
     /**
      * @var array<mixed>
      */
-    private $attributes = [];
+    private array $attributes = [];
 
     /**
      * @var array<int, string>|null
      */
-    private $allowedAdditionalFields;
+    private ?array $allowedAdditionalFields = null;
 
-    /**
-     * @var bool
-     */
-    private $clearMissing = false;
+    private bool $clearMissing = false;
 
     private function __construct()
     {

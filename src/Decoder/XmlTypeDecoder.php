@@ -6,10 +6,7 @@ namespace Chubbyphp\Deserialization\Decoder;
 
 final class XmlTypeDecoder implements TypeDecoderInterface
 {
-    /**
-     * @var JsonxTypeDecoder
-     */
-    private $jsonxTypeDecoder;
+    private JsonxTypeDecoder $jsonxTypeDecoder;
 
     public function __construct()
     {

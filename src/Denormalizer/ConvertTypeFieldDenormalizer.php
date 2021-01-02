@@ -22,20 +22,11 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
         self::TYPE_STRING,
     ];
 
-    /**
-     * @var AccessorInterface
-     */
-    private $accessor;
+    private AccessorInterface $accessor;
 
-    /**
-     * @var string
-     */
-    private $type;
+    private string $type;
 
-    /**
-     * @var bool
-     */
-    private $emptyToNull;
+    private bool $emptyToNull;
 
     /**
      * @throws DeserializerLogicException

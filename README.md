@@ -25,7 +25,7 @@ A simple deserialization.
 
 ## Requirements
 
- * php: ^7.2|^8.0
+ * php: ^7.4|^8.0
  * psr/http-message: ^1.0.1
  * psr/log: ^1.1.3
 
@@ -42,7 +42,7 @@ A simple deserialization.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "^3.0"
+composer require chubbyphp/chubbyphp-deserialization "^3.1"
 ```
 
 ## Usage

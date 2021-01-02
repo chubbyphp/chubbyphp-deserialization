@@ -22,9 +22,7 @@ final class ManyModelMapping implements DenormalizationObjectMappingInterface
      */
     public function getDenormalizationFactory(string $path, string $type = null): callable
     {
-        return function () {
-            return new ManyModel();
-        };
+        return fn () => new ManyModel();
     }
 
     /**

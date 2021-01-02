@@ -8,25 +8,19 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class DenormalizerContext implements DenormalizerContextInterface
 {
-    /**
-     * @var ServerRequestInterface|null
-     */
-    private $request;
+    private ?ServerRequestInterface $request;
 
     /**
      * @var array<mixed>
      */
-    private $attributes;
+    private array $attributes;
 
     /**
      * @var array<int, string>|null
      */
-    private $allowedAdditionalFields;
+    private ?array $allowedAdditionalFields;
 
-    /**
-     * @var bool
-     */
-    private $clearMissing;
+    private bool $clearMissing;
 
     /**
      * @param array<int, string>|null $allowedAdditionalFields

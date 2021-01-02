@@ -6,20 +6,14 @@ namespace Chubbyphp\Tests\Deserialization\Resources\Model;
 
 final class Model
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private ?string $name = null;
 
-    /**
-     * @var OneModel|null
-     */
-    private $one;
+    private ?OneModel $one = null;
 
     /**
      * @var AbstractManyModel[]
      */
-    private $manies;
+    private array $manies = [];
 
     public function getName(): string
     {

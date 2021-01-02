@@ -31,13 +31,9 @@ final class CallableDenormalizationObjectMappingTest extends TestCase
     {
         $object = new \stdClass();
 
-        $mapping = new CallableDenormalizationObjectMapping(\stdClass::class, function () use ($object) {
-            return $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
-                Call::create('getDenormalizationFactory')->with('path', null)->willReturn(function () use ($object) {
-                    return $object;
-                }),
-            ]);
-        });
+        $mapping = new CallableDenormalizationObjectMapping(\stdClass::class, fn () => $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
+            Call::create('getDenormalizationFactory')->with('path', null)->willReturn(fn () => $object),
+        ]));
 
         $factory = $mapping->getDenormalizationFactory('path');
 
@@ -50,11 +46,9 @@ final class CallableDenormalizationObjectMappingTest extends TestCase
     {
         $fieldMapping = $this->getMockByCalls(DenormalizationFieldMappingInterface::class);
 
-        $mapping = new CallableDenormalizationObjectMapping(\stdClass::class, function () use ($fieldMapping) {
-            return $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
-                Call::create('getDenormalizationFieldMappings')->with('path', null)->willReturn([$fieldMapping]),
-            ]);
-        });
+        $mapping = new CallableDenormalizationObjectMapping(\stdClass::class, fn () => $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
+            Call::create('getDenormalizationFieldMappings')->with('path', null)->willReturn([$fieldMapping]),
+        ]));
 
         self::assertSame($fieldMapping, $mapping->getDenormalizationFieldMappings('path')[0]);
     }

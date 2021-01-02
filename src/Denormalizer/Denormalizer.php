@@ -15,15 +15,9 @@ final class Denormalizer implements DenormalizerInterface
 {
     private const TYPE = '_type';
 
-    /**
-     * @var DenormalizerObjectMappingRegistryInterface
-     */
-    private $denormalizerObjectMappingRegistry;
+    private DenormalizerObjectMappingRegistryInterface $denormalizerObjectMappingRegistry;
 
-    /**
-     * @var LoggerInterface
-     */
-    private $logger;
+    private LoggerInterface $logger;
 
     public function __construct(
         DenormalizerObjectMappingRegistryInterface $denormalizerObjectMappingRegistry,
@@ -46,7 +40,7 @@ final class Denormalizer implements DenormalizerInterface
         ?DenormalizerContextInterface $context = null,
         string $path = ''
     ): object {
-        $context = $context ?? DenormalizerContextBuilder::create()->getContext();
+        $context ??= DenormalizerContextBuilder::create()->getContext();
 
         /** @var string|null $type */
         $type = $this->getType($data, $path);

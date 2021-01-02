@@ -12,7 +12,7 @@ final class Decoder implements DecoderInterface
     /**
      * @var array<string, TypeDecoderInterface>
      */
-    private $decoderTypes;
+    private array $decoderTypes;
 
     /**
      * @param array<int, TypeDecoderInterface> $decoderTypes

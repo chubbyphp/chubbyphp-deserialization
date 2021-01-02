@@ -23,10 +23,7 @@ final class CallbackFieldDenormalizerTest extends TestCase
     public function testDenormalizeField(): void
     {
         $object = new class() {
-            /**
-             * @var string
-             */
-            private $name;
+            private ?string $name;
 
             public function getName(): string
             {

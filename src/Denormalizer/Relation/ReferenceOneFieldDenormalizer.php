@@ -17,15 +17,9 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
      */
     private $repository;
 
-    /**
-     * @var AccessorInterface
-     */
-    private $accessor;
+    private AccessorInterface $accessor;
 
-    /**
-     * @var bool
-     */
-    private $emptyToNull;
+    private bool $emptyToNull;
 
     public function __construct(callable $repository, AccessorInterface $accessor, bool $emptyToNull = false)
     {

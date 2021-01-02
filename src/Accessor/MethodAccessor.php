@@ -8,10 +8,7 @@ use Chubbyphp\Deserialization\DeserializerLogicException;
 
 final class MethodAccessor implements AccessorInterface
 {
-    /**
-     * @var string
-     */
-    private $property;
+    private string $property;
 
     public function __construct(string $property)
     {

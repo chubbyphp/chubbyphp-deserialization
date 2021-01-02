@@ -12,7 +12,7 @@ final class DenormalizerObjectMappingRegistry implements DenormalizerObjectMappi
     /**
      * @var array<string, DenormalizationObjectMappingInterface>
      */
-    private $objectMappings;
+    private array $objectMappings;
 
     /**
      * @param array<int, DenormalizationObjectMappingInterface> $objectMappings
@@ -26,6 +26,8 @@ final class DenormalizerObjectMappingRegistry implements DenormalizerObjectMappi
     }
 
     /**
+     * @param class-string $class
+     *
      * @throws DeserializerLogicException
      */
     public function getObjectMapping(string $class): DenormalizationObjectMappingInterface

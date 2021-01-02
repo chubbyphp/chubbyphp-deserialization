@@ -20,10 +20,7 @@ final class PropertyAccessorTest extends TestCase
     public function testSetValue(): void
     {
         $object = new class() {
-            /**
-             * @var string
-             */
-            private $name;
+            private string $name;
 
             public function getName(): string
             {
@@ -40,10 +37,7 @@ final class PropertyAccessorTest extends TestCase
     public function testSetValueCanAccessPrivatePropertyThroughDoctrineProxyClass(): void
     {
         $object = new class() extends AbstractManyModel implements Proxy {
-            /**
-             * @var bool
-             */
-            private $initialized = false;
+            private bool $initialized = false;
 
             public function __load(): void
             {
@@ -84,10 +78,7 @@ final class PropertyAccessorTest extends TestCase
     public function testGetValue(): void
     {
         $object = new class() {
-            /**
-             * @var string
-             */
-            private $name;
+            private string $name;
 
             public function setName(string $name): void
             {
@@ -105,10 +96,7 @@ final class PropertyAccessorTest extends TestCase
     public function testGetValueCanAccessPrivatePropertyThroughDoctrineProxyClass(): void
     {
         $object = new class() extends AbstractManyModel implements Proxy {
-            /**
-             * @var bool
-             */
-            private $initialized = false;
+            private bool $initialized = false;
 
             public function __load(): void
             {

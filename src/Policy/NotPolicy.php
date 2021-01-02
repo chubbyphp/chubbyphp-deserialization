@@ -8,10 +8,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 
 final class NotPolicy implements PolicyInterface
 {
-    /**
-     * @var PolicyInterface
-     */
-    private $policy;
+    private PolicyInterface $policy;
 
     public function __construct(PolicyInterface $policy)
     {

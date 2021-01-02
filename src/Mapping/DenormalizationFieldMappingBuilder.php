@@ -19,20 +19,14 @@ use Chubbyphp\Deserialization\Policy\PolicyInterface;
 
 final class DenormalizationFieldMappingBuilder
 {
-    /**
-     * @var string
-     */
-    private $name;
+    private string $name;
 
     /**
      * @var FieldDenormalizerInterface
      */
     private $fieldDenormalizer;
 
-    /**
-     * @var PolicyInterface|null
-     */
-    private $policy;
+    private ?PolicyInterface $policy;
 
     private function __construct(string $name)
     {

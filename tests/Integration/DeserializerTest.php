@@ -503,10 +503,7 @@ final class DeserializerTest extends TestCase
     private function getLogger()
     {
         return new class() extends AbstractLogger {
-            /**
-             * @var array
-             */
-            private $entries = [];
+            private array $entries = [];
 
             public function log($level, $message, array $context = []): void
             {
