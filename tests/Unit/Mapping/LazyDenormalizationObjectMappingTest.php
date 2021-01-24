@@ -26,7 +26,7 @@ final class LazyDenormalizationObjectMappingTest extends TestCase
     {
         $denormalizationFieldMappings = [$this->getMockByCalls(DenormalizationFieldMappingInterface::class)];
 
-        $factory = function (): void {
+        $factory = static function (): void {
         };
 
         /** @var DenormalizationObjectMappingInterface|MockObject $denormalizationObjectMapping */

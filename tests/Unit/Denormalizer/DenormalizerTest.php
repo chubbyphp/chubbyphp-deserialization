@@ -34,7 +34,7 @@ final class DenormalizerTest extends TestCase
     {
         $object = new \stdClass();
 
-        $factory = fn () => $object;
+        $factory = static fn () => $object;
 
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
@@ -93,7 +93,7 @@ final class DenormalizerTest extends TestCase
     {
         $object = new \stdClass();
 
-        $factory = fn () => $object;
+        $factory = static fn () => $object;
 
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
@@ -280,7 +280,7 @@ final class DenormalizerTest extends TestCase
     {
         $object = new \stdClass();
 
-        $factory = fn () => $object;
+        $factory = static fn () => $object;
 
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
@@ -357,7 +357,7 @@ final class DenormalizerTest extends TestCase
         $this->expectException(DeserializerLogicException::class);
         $this->expectExceptionMessage('Factory does not return object, "string" given at path: ""');
 
-        $factory = fn () => 'string';
+        $factory = static fn () => 'string';
 
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
@@ -391,7 +391,7 @@ final class DenormalizerTest extends TestCase
 
         $object = new \stdClass();
 
-        $factory = fn () => $object;
+        $factory = static fn () => $object;
 
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
@@ -442,7 +442,7 @@ final class DenormalizerTest extends TestCase
 
         $object = new \stdClass();
 
-        $factory = fn () => $object;
+        $factory = static fn () => $object;
 
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
@@ -490,7 +490,7 @@ final class DenormalizerTest extends TestCase
     {
         $object = new \stdClass();
 
-        $factory = fn () => $object;
+        $factory = static fn () => $object;
 
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
@@ -562,7 +562,7 @@ final class DenormalizerTest extends TestCase
     {
         $object = new \stdClass();
 
-        $factory = fn () => $object;
+        $factory = static fn () => $object;
 
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, [

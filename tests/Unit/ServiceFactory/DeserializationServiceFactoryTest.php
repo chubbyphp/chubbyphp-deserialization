@@ -68,9 +68,7 @@ final class DeserializationProviderTest extends TestCase
         $logger = $this->getMockByCalls(LoggerInterface::class);
 
         $container = new Container([
-            'logger' => function () use ($logger) {
-                return $logger;
-            },
+            'logger' => static fn () => $logger,
         ]);
 
         $container->factories((new DeserializationServiceFactory())($container));

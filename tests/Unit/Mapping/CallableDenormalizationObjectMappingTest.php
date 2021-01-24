@@ -22,7 +22,7 @@ final class CallableDenormalizationObjectMappingTest extends TestCase
 
     public function testGetClass(): void
     {
-        $mapping = new CallableDenormalizationObjectMapping(\stdClass::class, function (): void {});
+        $mapping = new CallableDenormalizationObjectMapping(\stdClass::class, static function (): void {});
 
         self::assertSame(\stdClass::class, $mapping->getClass());
     }
@@ -32,7 +32,7 @@ final class CallableDenormalizationObjectMappingTest extends TestCase
         $object = new \stdClass();
 
         $mapping = new CallableDenormalizationObjectMapping(\stdClass::class, fn () => $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
-            Call::create('getDenormalizationFactory')->with('path', null)->willReturn(fn () => $object),
+            Call::create('getDenormalizationFactory')->with('path', null)->willReturn(static fn () => $object),
         ]));
 
         $factory = $mapping->getDenormalizationFactory('path');

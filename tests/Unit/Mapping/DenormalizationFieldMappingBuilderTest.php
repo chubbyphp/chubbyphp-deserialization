@@ -81,7 +81,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForCallback(): void
     {
-        $fieldMapping = DenormalizationFieldMappingBuilder::createCallback('name', function (): void {})->getMapping();
+        $fieldMapping = DenormalizationFieldMappingBuilder::createCallback('name', static function (): void {})->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertInstanceOf(CallbackFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
@@ -200,7 +200,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForReferenceMany(): void
     {
-        $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceMany('name', function (): void {})->getMapping();
+        $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceMany('name', static function (): void {})->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertInstanceOf(ReferenceManyFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
@@ -210,7 +210,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForReferenceOne(): void
     {
-        $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceOne('name', function (): void {})->getMapping();
+        $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceOne('name', static function (): void {})->getMapping();
 
         self::assertSame('name', $fieldMapping->getName());
 
@@ -230,7 +230,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
     {
         $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceOne(
             'name',
-            function (): void {},
+            static function (): void {},
             true
         )->getMapping();
 

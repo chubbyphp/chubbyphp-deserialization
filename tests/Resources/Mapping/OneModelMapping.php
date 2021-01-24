@@ -22,7 +22,7 @@ final class OneModelMapping implements DenormalizationObjectMappingInterface
      */
     public function getDenormalizationFactory(string $path, string $type = null): callable
     {
-        return fn () => new OneModel();
+        return static fn () => new OneModel();
     }
 
     /**

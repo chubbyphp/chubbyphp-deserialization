@@ -36,7 +36,7 @@ final class ReferenceManyFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(function (string $id): void {}, $accessor);
+        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(static function (string $id): void {}, $accessor);
         $fieldDenormalizer->denormalizeField('children', $parent, 18.9, $context);
     }
 
@@ -55,7 +55,7 @@ final class ReferenceManyFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(function (string $id): void {}, $accessor);
+        $fieldDenormalizer = new ReferenceManyFieldDenormalizer(static function (string $id): void {}, $accessor);
         $fieldDenormalizer->denormalizeField('children', $parent, [18.9], $context);
     }
 
@@ -73,7 +73,7 @@ final class ReferenceManyFieldDenormalizerTest extends TestCase
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
-            function (): void {
+            static function (): void {
                 self::fail('There should be no id to resolve');
             },
             $accessor
@@ -98,7 +98,7 @@ final class ReferenceManyFieldDenormalizerTest extends TestCase
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
-            function (string $id) use ($child) {
+            static function (string $id) use ($child) {
                 self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
 
                 return $child;
@@ -123,7 +123,7 @@ final class ReferenceManyFieldDenormalizerTest extends TestCase
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
-            function (string $id) {
+            static function (string $id) {
                 self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
 
                 return null;
@@ -150,7 +150,7 @@ final class ReferenceManyFieldDenormalizerTest extends TestCase
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
-            function (string $id) use ($child) {
+            static function (string $id) use ($child) {
                 self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
 
                 return $child;
@@ -189,7 +189,7 @@ final class ReferenceManyFieldDenormalizerTest extends TestCase
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
-            function (string $id) use ($child) {
+            static function (string $id) use ($child) {
                 self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
 
                 return $child;
@@ -233,7 +233,7 @@ final class ReferenceManyFieldDenormalizerTest extends TestCase
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceManyFieldDenormalizer(
-            function (string $id) use ($child) {
+            static function (string $id) use ($child) {
                 self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
 
                 return $child;

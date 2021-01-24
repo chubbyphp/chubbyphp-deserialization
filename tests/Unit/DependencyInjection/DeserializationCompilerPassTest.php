@@ -79,7 +79,7 @@ final class DeserializationCompilerPassTest extends TestCase
 
             public function getDenormalizationFactory(string $path, string $type = null): callable
             {
-                return fn () => new \stdClass();
+                return static fn () => new \stdClass();
             }
 
             /**

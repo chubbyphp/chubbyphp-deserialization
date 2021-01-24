@@ -42,7 +42,7 @@ final class CallbackFieldDenormalizerTest extends TestCase
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new CallbackFieldDenormalizer(
-            function (
+            static function (
                 string $path,
                 $object,
                 $value,

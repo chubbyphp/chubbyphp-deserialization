@@ -24,7 +24,7 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
      */
     public function getDenormalizationFactory(string $path, string $type = null): callable
     {
-        return fn () => new Model();
+        return static fn () => new Model();
     }
 
     /**
