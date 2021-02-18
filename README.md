@@ -204,7 +204,7 @@ echo $model->getName();
 
 ## Copyright
 
-Dominik Zogg 2020
+Dominik Zogg 2021
 
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-deserialization
