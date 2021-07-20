@@ -37,8 +37,7 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
         object $object,
         $value,
         DenormalizerContextInterface $context,
-        ?DenormalizerInterface $denormalizer = null,
-        bool $hasReverseOwning = false
+        ?DenormalizerInterface $denormalizer = null
     ): void {
         if (null === $value) {
             $this->accessor->setValue($object, $value);
@@ -60,11 +59,7 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
 
         $this->accessor->setValue($object, $denormalizedRelatedObject);
 
-        if (true === $hasReverseOwning) {
-            if (null === $this->parentAccessor) {
-                throw DeserializerLogicException::createMissingParentAccessor($path);
-            }
-
+        if (null !== $this->parentAccessor) {
             $this->parentAccessor->setValue($denormalizedRelatedObject, $object);
         }
     }
