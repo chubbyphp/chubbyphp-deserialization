@@ -17,10 +17,13 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
 
     private AccessorInterface $accessor;
 
-    public function __construct(string $class, AccessorInterface $accessor)
+    private ?AccessorInterface $parentAccessor;
+
+    public function __construct(string $class, AccessorInterface $accessor, ?AccessorInterface $parentAccessor = null)
     {
         $this->class = $class;
         $this->accessor = $accessor;
+        $this->parentAccessor = $parentAccessor;
     }
 
     /**
@@ -52,6 +55,12 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
 
         $relatedObject = $this->accessor->getValue($object) ?? $this->class;
 
-        $this->accessor->setValue($object, $denormalizer->denormalize($relatedObject, $value, $context, $path));
+        $denormalizedRelatedObject = $denormalizer->denormalize($relatedObject, $value, $context, $path);
+
+        $this->accessor->setValue($object, $denormalizedRelatedObject);
+
+        if (null !== $this->parentAccessor) {
+            $this->parentAccessor->setValue($denormalizedRelatedObject, $object);
+        }
     }
 }
