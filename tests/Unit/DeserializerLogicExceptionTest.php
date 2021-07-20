@@ -65,4 +65,11 @@ final class DeserializerLogicExceptionTest extends TestCase
 
         self::assertSame('Convert type "type" is not supported', $exception->getMessage());
     }
+
+    public function testCreateMissingParentAccessor(): void
+    {
+        $exception = DeserializerLogicException::createMissingParentAccessor('path1');
+
+        self::assertSame('There is no parent accessor at path: "path1"', $exception->getMessage());
+    }
 }

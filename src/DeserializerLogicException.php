@@ -45,4 +45,9 @@ final class DeserializerLogicException extends \LogicException
     {
         return new self(sprintf('Convert type "%s" is not supported', $convertType));
     }
+
+    public static function createMissingParentAccessor(string $path): self
+    {
+        return new self(sprintf('There is no parent accessor at path: "%s"', $path));
+    }
 }

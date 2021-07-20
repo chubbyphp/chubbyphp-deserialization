@@ -131,4 +131,95 @@ final class EmbedOneFieldDenormalizerTest extends TestCase
         $fieldDenormalizer = new EmbedOneFieldDenormalizer(\stdClass::class, $accessor);
         $fieldDenormalizer->denormalizeField('reference', $object, ['name' => 'name'], $context, $denormalizer);
     }
+
+    public function testDenormalizeFieldWithMissingParentAccessor(): void
+    {
+        $this->expectException(DeserializerLogicException::class);
+        $this->expectExceptionMessage('There is no parent accessor at path: "reference"');
+
+        $object = new \stdClass();
+
+        $reference = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('getValue')->with($object)->willReturn(null),
+            Call::create('setValue')->with($object, $reference),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        /** @var DenormalizerInterface|MockObject $denormalizer */
+        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
+            Call::create('denormalize')
+                ->with(\stdClass::class, ['name' => 'name'], $context, 'reference')
+                ->willReturn($reference),
+        ]);
+
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(\stdClass::class, $accessor);
+        $fieldDenormalizer->denormalizeField('reference', $object, ['name' => 'name'], $context, $denormalizer, true);
+    }
+
+    public function testDenormalizeFieldWithReverseOwning(): void
+    {
+        $object = new \stdClass();
+
+        $reference = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('getValue')->with($object)->willReturn(null),
+            Call::create('setValue')->with($object, $reference),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        /** @var DenormalizerInterface|MockObject $denormalizer */
+        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
+            Call::create('denormalize')
+                ->with(\stdClass::class, ['name' => 'name'], $context, 'reference')
+                ->willReturn($reference),
+        ]);
+
+        /** @var AccessorInterface|MockObject $parentAccessor */
+        $parentAccessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($reference, $object),
+        ]);
+
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(\stdClass::class, $accessor, $parentAccessor);
+        $fieldDenormalizer->denormalizeField('reference', $object, ['name' => 'name'], $context, $denormalizer, true);
+    }
+
+    public function testDenormalizeFieldWithExistingValueAndWithReverseOwning(): void
+    {
+        $object = new \stdClass();
+
+        $reference = new \stdClass();
+
+        /** @var AccessorInterface|MockObject $accessor */
+        $accessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('getValue')->with($object)->willReturn($reference),
+            Call::create('setValue')->with($object, $reference),
+        ]);
+
+        /** @var DenormalizerContextInterface|MockObject $context */
+        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+
+        /** @var DenormalizerInterface|MockObject $denormalizer */
+        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
+            Call::create('denormalize')
+                ->with($reference, ['name' => 'name'], $context, 'reference')
+                ->willReturn($reference),
+        ]);
+
+        /** @var AccessorInterface|MockObject $parentAccessor */
+        $parentAccessor = $this->getMockByCalls(AccessorInterface::class, [
+            Call::create('setValue')->with($reference, $object),
+        ]);
+
+        $fieldDenormalizer = new EmbedOneFieldDenormalizer(\stdClass::class, $accessor, $parentAccessor);
+        $fieldDenormalizer->denormalizeField('reference', $object, ['name' => 'name'], $context, $denormalizer, true);
+    }
 }

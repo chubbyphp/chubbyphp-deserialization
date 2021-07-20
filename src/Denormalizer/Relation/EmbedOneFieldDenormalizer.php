@@ -17,10 +17,13 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
 
     private AccessorInterface $accessor;
 
-    public function __construct(string $class, AccessorInterface $accessor)
+    private ?AccessorInterface $parentAccessor;
+
+    public function __construct(string $class, AccessorInterface $accessor, ?AccessorInterface $parentAccessor = null)
     {
         $this->class = $class;
         $this->accessor = $accessor;
+        $this->parentAccessor = $parentAccessor;
     }
 
     /**
@@ -34,7 +37,8 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
         object $object,
         $value,
         DenormalizerContextInterface $context,
-        ?DenormalizerInterface $denormalizer = null
+        ?DenormalizerInterface $denormalizer = null,
+        bool $hasReverseOwning = false
     ): void {
         if (null === $value) {
             $this->accessor->setValue($object, $value);
@@ -52,6 +56,16 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
 
         $relatedObject = $this->accessor->getValue($object) ?? $this->class;
 
-        $this->accessor->setValue($object, $denormalizer->denormalize($relatedObject, $value, $context, $path));
+        $denormalizedRelatedObject = $denormalizer->denormalize($relatedObject, $value, $context, $path);
+
+        $this->accessor->setValue($object, $denormalizedRelatedObject);
+
+        if (true === $hasReverseOwning) {
+            if (null === $this->parentAccessor) {
+                throw DeserializerLogicException::createMissingParentAccessor($path);
+            }
+
+            $this->parentAccessor->setValue($denormalizedRelatedObject, $object);
+        }
     }
 }
