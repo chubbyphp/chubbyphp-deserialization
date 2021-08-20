@@ -261,7 +261,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
+        /** @var AccessorInterface|MockObject $fieldDenormalizer */
         $fieldDenormalizer = $this->getMockByCalls(AccessorInterface::class, [
             Call::create('setValue')->with($object, new ArgumentCallback(
                 static function ($value): void {
@@ -271,7 +271,11 @@ final class DateTimeFieldDenormalizerTest extends TestCase
             )),
         ]);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($fieldDenormalizer, false, new \DateTimeZone('UTC'));
+        $fieldDenormalizer = new DateTimeFieldDenormalizer(
+            $fieldDenormalizer,
+            false,
+            new \DateTimeZone('Europe/Zurich')
+        );
         $fieldDenormalizer->denormalizeField('date', $object, '2017-01-01T00:00:00+02:00', $context);
     }
 }

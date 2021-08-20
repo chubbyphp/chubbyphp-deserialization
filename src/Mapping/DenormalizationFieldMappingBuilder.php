@@ -17,14 +17,14 @@ use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalize
 use Chubbyphp\Deserialization\Policy\NullPolicy;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
 
+/**
+ * @deprecated Use {@link DenormalizationFieldMappingFactory} instead
+ */
 final class DenormalizationFieldMappingBuilder
 {
     private string $name;
 
-    /**
-     * @var FieldDenormalizerInterface
-     */
-    private $fieldDenormalizer;
+    private FieldDenormalizerInterface $fieldDenormalizer;
 
     private ?PolicyInterface $policy;
 
