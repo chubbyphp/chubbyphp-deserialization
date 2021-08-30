@@ -17,7 +17,7 @@ use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalize
 use Chubbyphp\Deserialization\Policy\NullPolicy;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
 
-final class DenormalizationFieldMappingFactory
+final class DenormalizationFieldMappingFactory implements DenormalizationFieldMappingFactoryInterface
 {
     public function create(
         string $name,
