@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Chubbyphp\Deserialization\Mapping;
 
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
