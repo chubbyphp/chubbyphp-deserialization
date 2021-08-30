@@ -22,33 +22,29 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder
+ * @covers \Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingFactory
  *
  * @internal
  */
-final class DenormalizationFieldMappingBuilderTest extends TestCase
+final class DenormalizationFieldMappingFactoryTest extends TestCase
 {
     use MockByCallsTrait;
+
+    private DenormalizationFieldMappingFactory $factory;
+
+    public function setUp(): void
+    {
+        parent::setUp();
+
+        $this->factory = new DenormalizationFieldMappingFactory();
+    }
 
     public function testGetMappingWithDenormalizer(): void
     {
         /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
         $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
 
-        error_clear_last();
-
-        $fieldMapping = DenormalizationFieldMappingBuilder::create('name', false, $fieldDenormalizer)->getMapping();
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(sprintf(
-            '%s:create use %s:create',
-            DenormalizationFieldMappingBuilder::class,
-            DenormalizationFieldMappingFactory::class
-        ), $error['message']);
+        $fieldMapping = $this->factory->create('name', false, $fieldDenormalizer);
 
         self::assertSame('name', $fieldMapping->getName());
 
@@ -59,7 +55,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMapping(): void
     {
-        $fieldMapping = DenormalizationFieldMappingBuilder::create('name')->getMapping();
+        $fieldMapping = $this->factory->create('name');
 
         self::assertSame('name', $fieldMapping->getName());
 
@@ -77,7 +73,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingWithEmptyToNull(): void
     {
-        $fieldMapping = DenormalizationFieldMappingBuilder::create('name', true)->getMapping();
+        $fieldMapping = $this->factory->create('name', true);
 
         self::assertSame('name', $fieldMapping->getName());
 
@@ -95,20 +91,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForCallback(): void
     {
-        error_clear_last();
-
         $fieldMapping = DenormalizationFieldMappingBuilder::createCallback('name', static function (): void {})->getMapping();
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(sprintf(
-            '%s:createCallback use %s:createCallback',
-            DenormalizationFieldMappingBuilder::class,
-            DenormalizationFieldMappingFactory::class
-        ), $error['message']);
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertInstanceOf(CallbackFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
@@ -118,23 +101,10 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForConvertType(): void
     {
-        error_clear_last();
-
         $fieldMapping = DenormalizationFieldMappingBuilder::createConvertType(
             'name',
             ConvertTypeFieldDenormalizer::TYPE_FLOAT
         )->getMapping();
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(sprintf(
-            '%s:createConvertType use %s:createConvertType',
-            DenormalizationFieldMappingBuilder::class,
-            DenormalizationFieldMappingFactory::class
-        ), $error['message']);
 
         self::assertSame('name', $fieldMapping->getName());
 
@@ -174,20 +144,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForDateTime(): void
     {
-        error_clear_last();
-
-        $fieldMapping = DenormalizationFieldMappingBuilder::createDateTime('name')->getMapping();
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(sprintf(
-            '%s:createDateTime use %s:createDateTime',
-            DenormalizationFieldMappingBuilder::class,
-            DenormalizationFieldMappingFactory::class
-        ), $error['message']);
+        $fieldMapping = $this->factory->createDateTime('name');
 
         self::assertSame('name', $fieldMapping->getName());
 
@@ -205,9 +162,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForDateTimeWithEmptyToNull(): void
     {
-        error_clear_last();
-
-        $fieldMapping = DenormalizationFieldMappingBuilder::createDateTime('name', true)->getMapping();
+        $fieldMapping = $this->factory->createDateTime('name', true);
 
         self::assertSame('name', $fieldMapping->getName());
 
@@ -225,7 +180,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForDateTimeWithTimezone(): void
     {
-        $fieldMapping = DenormalizationFieldMappingBuilder::createDateTime('name', false, new \DateTimeZone('UTC'))->getMapping();
+        $fieldMapping = $this->factory->createDateTime('name', false, new \DateTimeZone('UTC'));
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
@@ -235,20 +190,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForEmbedMany(): void
     {
-        error_clear_last();
-
-        $fieldMapping = DenormalizationFieldMappingBuilder::createEmbedMany('name', \stdClass::class)->getMapping();
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(sprintf(
-            '%s:createEmbedMany use %s:createEmbedMany',
-            DenormalizationFieldMappingBuilder::class,
-            DenormalizationFieldMappingFactory::class
-        ), $error['message']);
+        $fieldMapping = $this->factory->createEmbedMany('name', \stdClass::class);
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertInstanceOf(EmbedManyFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
@@ -258,20 +200,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForEmbedOne(): void
     {
-        error_clear_last();
-
-        $fieldMapping = DenormalizationFieldMappingBuilder::createEmbedOne('name', \stdClass::class)->getMapping();
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(sprintf(
-            '%s:createEmbedOne use %s:createEmbedOne',
-            DenormalizationFieldMappingBuilder::class,
-            DenormalizationFieldMappingFactory::class
-        ), $error['message']);
+        $fieldMapping = $this->factory->createEmbedOne('name', \stdClass::class);
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertInstanceOf(EmbedOneFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
@@ -281,20 +210,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForReferenceMany(): void
     {
-        error_clear_last();
-
-        $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceMany('name', static function (): void {})->getMapping();
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(sprintf(
-            '%s:createReferenceMany use %s:createReferenceMany',
-            DenormalizationFieldMappingBuilder::class,
-            DenormalizationFieldMappingFactory::class
-        ), $error['message']);
+        $fieldMapping = $this->factory->createReferenceMany('name', static function (): void {});
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertInstanceOf(ReferenceManyFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
@@ -304,20 +220,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForReferenceOne(): void
     {
-        error_clear_last();
-
-        $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceOne('name', static function (): void {})->getMapping();
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(sprintf(
-            '%s:createReferenceOne use %s:createReferenceOne',
-            DenormalizationFieldMappingBuilder::class,
-            DenormalizationFieldMappingFactory::class
-        ), $error['message']);
+        $fieldMapping = $this->factory->createReferenceOne('name', static function (): void {});
 
         self::assertSame('name', $fieldMapping->getName());
 
@@ -335,13 +238,11 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
 
     public function testGetDefaultMappingForReferenceOneWithEmptyToNull(): void
     {
-        error_clear_last();
-
-        $fieldMapping = DenormalizationFieldMappingBuilder::createReferenceOne(
+        $fieldMapping = $this->factory->createReferenceOne(
             'name',
             static function (): void {},
             true
-        )->getMapping();
+        );
 
         self::assertSame('name', $fieldMapping->getName());
 
@@ -365,10 +266,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         /** @var PolicyInterface|MockObject $policy */
         $policy = $this->getMockByCalls(PolicyInterface::class);
 
-        $fieldMapping = DenormalizationFieldMappingBuilder::create('name', false, $fieldDenormalizer)
-            ->setPolicy($policy)
-            ->getMapping()
-        ;
+        $fieldMapping = $this->factory->create('name', false, $fieldDenormalizer, $policy);
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertSame($fieldDenormalizer, $fieldMapping->getFieldDenormalizer());

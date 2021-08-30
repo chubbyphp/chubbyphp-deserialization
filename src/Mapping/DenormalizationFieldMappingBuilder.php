@@ -17,14 +17,14 @@ use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalize
 use Chubbyphp\Deserialization\Policy\NullPolicy;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
 
+/**
+ * @deprecated Use {@link DenormalizationFieldMappingFactory} instead
+ */
 final class DenormalizationFieldMappingBuilder
 {
     private string $name;
 
-    /**
-     * @var FieldDenormalizerInterface
-     */
-    private $fieldDenormalizer;
+    private FieldDenormalizerInterface $fieldDenormalizer;
 
     private ?PolicyInterface $policy;
 
@@ -38,6 +38,11 @@ final class DenormalizationFieldMappingBuilder
         bool $emptyToNull = false,
         ?FieldDenormalizerInterface $fieldDenormalizer = null
     ): self {
+        @trigger_error(
+            sprintf('%s:create use %s:create', self::class, DenormalizationFieldMappingFactory::class),
+            E_USER_DEPRECATED
+        );
+
         if (null === $fieldDenormalizer) {
             $fieldDenormalizer = new FieldDenormalizer(new PropertyAccessor($name), $emptyToNull);
         }
@@ -50,6 +55,11 @@ final class DenormalizationFieldMappingBuilder
 
     public static function createCallback(string $name, callable $callback): self
     {
+        @trigger_error(
+            sprintf('%s:createCallback use %s:createCallback', self::class, DenormalizationFieldMappingFactory::class),
+            E_USER_DEPRECATED
+        );
+
         $self = new self($name);
         $self->fieldDenormalizer = new CallbackFieldDenormalizer($callback);
 
@@ -61,6 +71,15 @@ final class DenormalizationFieldMappingBuilder
         string $type,
         bool $emptyToNull = false
     ): self {
+        @trigger_error(
+            sprintf(
+                '%s:createConvertType use %s:createConvertType',
+                self::class,
+                DenormalizationFieldMappingFactory::class
+            ),
+            E_USER_DEPRECATED
+        );
+
         $self = new self($name);
         $self->fieldDenormalizer = new ConvertTypeFieldDenormalizer(new PropertyAccessor($name), $type, $emptyToNull);
 
@@ -72,6 +91,15 @@ final class DenormalizationFieldMappingBuilder
         bool $emptyToNull = false,
         ?\DateTimeZone $dateTimeZone = null
     ): self {
+        @trigger_error(
+            sprintf(
+                '%s:createDateTime use %s:createDateTime',
+                self::class,
+                DenormalizationFieldMappingFactory::class
+            ),
+            E_USER_DEPRECATED
+        );
+
         $self = new self($name);
         $self->fieldDenormalizer = new DateTimeFieldDenormalizer(
             new PropertyAccessor($name),
@@ -84,6 +112,15 @@ final class DenormalizationFieldMappingBuilder
 
     public static function createEmbedMany(string $name, string $class): self
     {
+        @trigger_error(
+            sprintf(
+                '%s:createEmbedMany use %s:createEmbedMany',
+                self::class,
+                DenormalizationFieldMappingFactory::class
+            ),
+            E_USER_DEPRECATED
+        );
+
         $self = new self($name);
         $self->fieldDenormalizer = new EmbedManyFieldDenormalizer($class, new PropertyAccessor($name));
 
@@ -92,6 +129,15 @@ final class DenormalizationFieldMappingBuilder
 
     public static function createEmbedOne(string $name, string $class): self
     {
+        @trigger_error(
+            sprintf(
+                '%s:createEmbedOne use %s:createEmbedOne',
+                self::class,
+                DenormalizationFieldMappingFactory::class
+            ),
+            E_USER_DEPRECATED
+        );
+
         $self = new self($name);
         $self->fieldDenormalizer = new EmbedOneFieldDenormalizer($class, new PropertyAccessor($name));
 
@@ -102,6 +148,15 @@ final class DenormalizationFieldMappingBuilder
         string $name,
         callable $repository
     ): self {
+        @trigger_error(
+            sprintf(
+                '%s:createReferenceMany use %s:createReferenceMany',
+                self::class,
+                DenormalizationFieldMappingFactory::class
+            ),
+            E_USER_DEPRECATED
+        );
+
         $self = new self($name);
         $self->fieldDenormalizer = new ReferenceManyFieldDenormalizer($repository, new PropertyAccessor($name));
 
@@ -113,6 +168,15 @@ final class DenormalizationFieldMappingBuilder
         callable $repository,
         bool $emptyToNull = false
     ): self {
+        @trigger_error(
+            sprintf(
+                '%s:createReferenceOne use %s:createReferenceOne',
+                self::class,
+                DenormalizationFieldMappingFactory::class
+            ),
+            E_USER_DEPRECATED
+        );
+
         $self = new self($name);
         $self->fieldDenormalizer = new ReferenceOneFieldDenormalizer(
             $repository,

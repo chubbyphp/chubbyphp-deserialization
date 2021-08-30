@@ -42,7 +42,7 @@ A simple deserialization.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "^3.2"
+composer require chubbyphp/chubbyphp-deserialization "^3.3"
 ```
 
 ## Usage
@@ -164,7 +164,7 @@ echo $model->getName();
 #### DenormalizationFieldMapping
 
  * [DenormalizationFieldMapping][21]
- * [DenormalizationFieldMappingBuilder][22]
+ * [DenormalizationFieldMappingFactory][22]
 
 #### DenormalizationObjectMapping
 
@@ -238,7 +238,7 @@ Dominik Zogg 2021
 [21]: doc/Denormalizer/DenormalizerObjectMappingRegistry.md
 
 [21]: doc/Mapping/DenormalizationFieldMapping.md
-[22]: doc/Mapping/DenormalizationFieldMappingBuilder.md
+[22]: doc/Mapping/DenormalizationFieldMappingFactory.md
 
 [23]: doc/Mapping/AdvancedDenormalizationObjectMapping.md
 [24]: doc/Mapping/SimpleDenormalizationObjectMapping.md
