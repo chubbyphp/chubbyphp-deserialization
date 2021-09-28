@@ -10,6 +10,8 @@
         }
     ],
     "require": {
+        "ext-dom": "*",
+        "ext-json": "*",
         "php": "^7.4|^8.0",
         "psr/http-message": "^1.0.1",
         "psr/log": "^1.1.3"
