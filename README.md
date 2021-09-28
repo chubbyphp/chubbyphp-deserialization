@@ -28,6 +28,7 @@ A simple deserialization.
  * php: ^7.4|^8.0
  * psr/http-message: ^1.0.1
  * psr/log: ^1.1.3
+ * symfony/yaml: ^3.4.45|^4.4.15|^5.0.11
 
 ## Suggest
 
@@ -35,7 +36,6 @@ A simple deserialization.
  * pimple/pimple: ^3.3
  * psr/container: ^1.0
  * symfony/dependency-injection: ^3.4.45|^4.4.15|^5.0.11 (symfony integration)
- * symfony/yaml: ^3.4.45|^4.4.15|^5.0.11 (application/x-yaml support)
 
 ## Installation
 
