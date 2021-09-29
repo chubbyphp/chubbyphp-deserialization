@@ -23,7 +23,7 @@ final class DecoderTest extends TestCase
 
     public function testGetContentTypes(): void
     {
-        /** @var TypeDecoderInterface|MockObject */
+        /** @var MockObject|TypeDecoderInterface */
         $typeDecoder = $this->getMockByCalls(TypeDecoderInterface::class, [
             Call::create('getContentType')->with()->willReturn('application/json'),
         ]);
@@ -35,7 +35,7 @@ final class DecoderTest extends TestCase
 
     public function testDecode(): void
     {
-        /** @var TypeDecoderInterface|MockObject */
+        /** @var MockObject|TypeDecoderInterface */
         $typeDecoder = $this->getMockByCalls(TypeDecoderInterface::class, [
             Call::create('getContentType')->with()->willReturn('application/json'),
             Call::create('decode')->with('{"key": "value"}')->willReturn(['key' => 'value']),
@@ -51,7 +51,7 @@ final class DecoderTest extends TestCase
         $this->expectException(DeserializerLogicException::class);
         $this->expectExceptionMessage('There is no decoder for content-type: "application/xml"');
 
-        /** @var TypeDecoderInterface|MockObject */
+        /** @var MockObject|TypeDecoderInterface */
         $typeDecoder = $this->getMockByCalls(TypeDecoderInterface::class, [
             Call::create('getContentType')->with()->willReturn('application/json'),
         ]);

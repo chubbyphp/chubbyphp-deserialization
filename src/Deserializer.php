@@ -45,7 +45,7 @@ final class Deserializer implements DeserializerInterface
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
      *
-     * @return array<string, array|string|float|int|bool|null>
+     * @return array<string, null|array|bool|float|int|string>
      */
     public function decode(string $data, string $contentType): array
     {
@@ -54,7 +54,7 @@ final class Deserializer implements DeserializerInterface
 
     /**
      * @param object|string                                   $object
-     * @param array<string, array|string|float|int|bool|null> $data
+     * @param array<string, null|array|bool|float|int|string> $data
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException

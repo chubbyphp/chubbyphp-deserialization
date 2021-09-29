@@ -18,7 +18,7 @@ use Psr\Container\ContainerInterface;
  *
  * @internal
  */
-final class DeserializerFactoryTest extends TestCase
+final class SerializerFactoryTest extends TestCase
 {
     use MockByCallsTrait;
 

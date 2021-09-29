@@ -29,7 +29,7 @@ final class Denormalizer implements DenormalizerInterface
 
     /**
      * @param object|string                                   $object
-     * @param array<string, array|string|float|int|bool|null> $data
+     * @param array<string, null|array|bool|float|int|string> $data
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
@@ -42,15 +42,15 @@ final class Denormalizer implements DenormalizerInterface
     ): object {
         $context ??= DenormalizerContextBuilder::create()->getContext();
 
-        /** @var string|null $type */
+        /** @var null|string $type */
         $type = $this->getType($data, $path);
 
         unset($data[self::TYPE]);
 
-        $class = is_object($object) ? get_class($object) : $object;
+        $class = \is_object($object) ? \get_class($object) : $object;
         $objectMapping = $this->getObjectMapping($class);
 
-        if (!is_object($object)) {
+        if (!\is_object($object)) {
             $object = $this->createNewObject($objectMapping, $path, $type);
         }
 
@@ -75,7 +75,7 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param array<string, array|string|float|int|bool|null> $data
+     * @param array<string, null|array|bool|float|int|string> $data
      */
     private function getType(array $data, string $path): ?string
     {
@@ -85,11 +85,11 @@ final class Denormalizer implements DenormalizerInterface
 
         $type = $data[self::TYPE];
 
-        if (is_string($type)) {
+        if (\is_string($type)) {
             return $type;
         }
 
-        $exception = DeserializerRuntimeException::createTypeIsNotAString($path, gettype($type));
+        $exception = DeserializerRuntimeException::createTypeIsNotAString($path, \gettype($type));
 
         $this->logError($exception);
 
@@ -118,11 +118,11 @@ final class Denormalizer implements DenormalizerInterface
         $factory = $objectMapping->getDenormalizationFactory($path, $type);
         $object = $factory();
 
-        if (is_object($object)) {
+        if (\is_object($object)) {
             return $object;
         }
 
-        $exception = DeserializerLogicException::createFactoryDoesNotReturnObject($path, gettype($object));
+        $exception = DeserializerLogicException::createFactoryDoesNotReturnObject($path, \gettype($object));
 
         $this->logError($exception);
 
@@ -130,7 +130,7 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param array<string, array|string|float|int|bool|null> $data
+     * @param array<string, null|array|bool|float|int|string> $data
      */
     private function denormalizeField(
         DenormalizerContextInterface $context,
@@ -140,7 +140,7 @@ final class Denormalizer implements DenormalizerInterface
         array $data,
         object $object
     ): void {
-        if (!array_key_exists($name, $data)) {
+        if (!\array_key_exists($name, $data)) {
             if (!$context->isClearMissing()) {
                 return;
             }
@@ -161,7 +161,7 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param array<int, string|int> $names
+     * @param array<int, int|string> $names
      */
     private function handleNotAllowedAdditionalFields(string $path, array $names): void
     {
@@ -189,7 +189,7 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param array<int, string|int> $names
+     * @param array<int, int|string> $names
      *
      * @return array<int, string>
      */

@@ -16,14 +16,14 @@ final class DenormalizerContext implements DenormalizerContextInterface
     private array $attributes;
 
     /**
-     * @var array<int, string>|null
+     * @var null|array<int, string>
      */
     private ?array $allowedAdditionalFields;
 
     private bool $clearMissing;
 
     /**
-     * @param array<int, string>|null $allowedAdditionalFields
+     * @param null|array<int, string> $allowedAdditionalFields
      * @param array<mixed>            $attributes
      */
     public function __construct(
@@ -88,7 +88,7 @@ final class DenormalizerContext implements DenormalizerContextInterface
     }
 
     /**
-     * @return array<int, string>|null
+     * @return null|array<int, string>
      */
     public function getAllowedAdditionalFields(): ?array
     {

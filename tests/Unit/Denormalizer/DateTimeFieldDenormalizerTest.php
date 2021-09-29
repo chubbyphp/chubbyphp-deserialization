@@ -30,7 +30,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         $accessor = $this->getMockByCalls(AccessorInterface::class, [
             Call::create('setValue')->with($object, new ArgumentCallback(
                 static function ($value): void {
-                    self::assertInstanceOf(\DateTime::class, $value);
+                    self::assertInstanceOf(\DateTimeImmutable::class, $value);
                     self::assertSame('2017-01-01', $value->format('Y-m-d'));
                 }
             )),
@@ -264,7 +264,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         $fieldDenormalizer = $this->getMockByCalls(AccessorInterface::class, [
             Call::create('setValue')->with($object, new ArgumentCallback(
                 static function ($value): void {
-                    self::assertInstanceOf(\DateTime::class, $value);
+                    self::assertInstanceOf(\DateTimeImmutable::class, $value);
                     self::assertSame('2016-12-31 23:00:00', $value->format('Y-m-d H:i:s'));
                 }
             )),

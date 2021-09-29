@@ -43,11 +43,11 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
             $value = [];
         }
 
-        if (!is_array($value)) {
-            throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
+        if (!\is_array($value)) {
+            throw DeserializerRuntimeException::createInvalidDataType($path, \gettype($value), 'array');
         }
 
-        /** @var array<int|string, object> $relatedObjects */
+        /** @var array<int|string, object>|\ArrayAccess<int|string, object> $relatedObjects */
         $relatedObjects = $this->accessor->getValue($object) ?? [];
 
         $this->cleanRelatedObjects($relatedObjects);
@@ -57,7 +57,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param array<int|string, object> $relatedObjects
+     * @param array<int|string, object>|\ArrayAccess<int|string, object> $relatedObjects
      */
     private function cleanRelatedObjects(&$relatedObjects): void
     {
@@ -67,16 +67,16 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param array<int|string, string> $value
-     * @param array<int|string, object> $relatedObjects
+     * @param array<int|string, string>                                  $value
+     * @param array<int|string, object>|\ArrayAccess<int|string, object> $relatedObjects
      */
     private function assignRelatedObjects(string $path, array $value, &$relatedObjects): void
     {
         foreach ($value as $key => $subValue) {
             $subPath = $path.'['.$key.']';
 
-            if (!is_string($subValue)) {
-                throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'string');
+            if (!\is_string($subValue)) {
+                throw DeserializerRuntimeException::createInvalidDataType($subPath, \gettype($subValue), 'string');
             }
 
             $relatedObjects[$key] = ($this->repository)($subValue) ?? $subValue;

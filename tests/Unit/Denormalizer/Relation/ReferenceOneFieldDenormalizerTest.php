@@ -99,10 +99,8 @@ final class ReferenceOneFieldDenormalizerTest extends TestCase
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
-            static function (string $id) {
+            static function (string $id): void {
                 self::assertSame('60a9ee14-64d6-4992-8042-8d1528ac02d6', $id);
-
-                return null;
             },
             $accessor
         );
@@ -128,10 +126,8 @@ final class ReferenceOneFieldDenormalizerTest extends TestCase
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
-            static function (string $id) {
+            static function (string $id): void {
                 self::assertSame('', $id);
-
-                return null;
             },
             $accessor
         );
@@ -157,10 +153,8 @@ final class ReferenceOneFieldDenormalizerTest extends TestCase
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
         $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
-            static function ($id) {
-                self::assertSame(null, $id);
-
-                return null;
+            static function ($id): void {
+                self::assertNull($id);
             },
             $accessor,
             true

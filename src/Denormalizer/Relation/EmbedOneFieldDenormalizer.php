@@ -49,8 +49,8 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
             throw DeserializerLogicException::createMissingDenormalizer($path);
         }
 
-        if (!is_array($value)) {
-            throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
+        if (!\is_array($value)) {
+            throw DeserializerRuntimeException::createInvalidDataType($path, \gettype($value), 'array');
         }
 
         $relatedObject = $this->accessor->getValue($object) ?? $this->class;

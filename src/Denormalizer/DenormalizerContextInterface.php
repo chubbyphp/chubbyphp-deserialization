@@ -33,7 +33,7 @@ interface DenormalizerContextInterface
     public function withAttribute(string $name, $value): self;
 
     /**
-     * @return array<int, string>|null
+     * @return null|array<int, string>
      */
     public function getAllowedAdditionalFields(): ?array;
 

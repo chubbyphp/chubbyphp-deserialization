@@ -362,7 +362,7 @@ final class DenormalizationFieldMappingBuilderTest extends TestCase
         /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
         $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
 
-        /** @var PolicyInterface|MockObject $policy */
+        /** @var MockObject|PolicyInterface $policy */
         $policy = $this->getMockByCalls(PolicyInterface::class);
 
         $fieldMapping = DenormalizationFieldMappingBuilder::create('name', false, $fieldDenormalizer)

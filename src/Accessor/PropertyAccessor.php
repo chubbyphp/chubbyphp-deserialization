@@ -71,6 +71,6 @@ final class PropertyAccessor implements AccessorInterface
             }
         }
 
-        return get_class($object);
+        return \get_class($object);
     }
 }

@@ -497,10 +497,7 @@ final class DeserializerTest extends TestCase
         self::assertSame('Name', $object->getName());
     }
 
-    /**
-     * @return AbstractLogger
-     */
-    private function getLogger()
+    private function getLogger(): AbstractLogger
     {
         return new class() extends AbstractLogger {
             private array $entries = [];

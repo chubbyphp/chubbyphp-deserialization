@@ -52,8 +52,8 @@ final class ReferenceOneFieldDenormalizer implements FieldDenormalizerInterface
             return;
         }
 
-        if (!is_string($value)) {
-            throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'string');
+        if (!\is_string($value)) {
+            throw DeserializerRuntimeException::createInvalidDataType($path, \gettype($value), 'string');
         }
 
         $this->accessor->setValue($object, ($this->repository)($value) ?? $value);

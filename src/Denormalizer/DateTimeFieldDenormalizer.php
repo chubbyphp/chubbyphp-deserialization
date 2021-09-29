@@ -43,20 +43,20 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
             return;
         }
 
-        if (!is_string($value) || '' === $trimmedValue = trim($value)) {
+        if (!\is_string($value) || '' === $trimmedValue = trim($value)) {
             $this->accessor->setValue($object, $value);
 
             return;
         }
 
         try {
-            $dateTime = new \DateTime($trimmedValue);
+            $dateTime = new \DateTimeImmutable($trimmedValue);
 
             if (null !== $this->dateTimeZone) {
-                $dateTime->setTimezone($this->dateTimeZone);
+                $dateTime = $dateTime->setTimezone($this->dateTimeZone);
             }
 
-            $errors = \DateTime::getLastErrors();
+            $errors = \DateTimeImmutable::getLastErrors();
 
             if (0 === $errors['warning_count'] && 0 === $errors['error_count']) {
                 $value = $dateTime;

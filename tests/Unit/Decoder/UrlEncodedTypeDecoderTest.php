@@ -45,8 +45,8 @@ final class UrlEncodedTypeDecoderTest extends AbstractTypeDecoderTest
         self::assertSame('A fancy Name', $data['name']);
         self::assertSame([1 => [2 => 3]], $data['treeValues']);
         self::assertSame(76.8, $data['progress']);
-        self::assertSame(true, $data['active']);
-        self::assertSame(false, $data['inactive']);
+        self::assertTrue($data['active']);
+        self::assertFalse($data['inactive']);
         self::assertSame('0041000000000', $data['phone']);
     }
 

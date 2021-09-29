@@ -34,7 +34,7 @@ final class DenormalizerObjectMappingRegistry implements DenormalizerObjectMappi
     {
         $reflectionClass = new \ReflectionClass($class);
 
-        if (in_array('Doctrine\Persistence\Proxy', $reflectionClass->getInterfaceNames(), true)) {
+        if (\in_array('Doctrine\Persistence\Proxy', $reflectionClass->getInterfaceNames(), true)) {
             $reflectionParentClass = (new \ReflectionClass($class))->getParentClass();
             if ($reflectionParentClass instanceof \ReflectionClass) {
                 $class = $reflectionParentClass->getName();

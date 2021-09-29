@@ -25,7 +25,7 @@ final class DeserializationCompilerPassTest extends TestCase
     public function testProcess(): void
     {
         $stdClassMapping = $this->getStdClassMapping();
-        $stdClassMappingClass = get_class($stdClassMapping);
+        $stdClassMappingClass = \get_class($stdClassMapping);
 
         $container = new ContainerBuilder();
         $container->addCompilerPass(new DeserializationCompilerPass());
@@ -77,7 +77,7 @@ final class DeserializationCompilerPassTest extends TestCase
                 return \stdClass::class;
             }
 
-            public function getDenormalizationFactory(string $path, string $type = null): callable
+            public function getDenormalizationFactory(string $path, ?string $type = null): callable
             {
                 return static fn () => new \stdClass();
             }
@@ -85,7 +85,7 @@ final class DeserializationCompilerPassTest extends TestCase
             /**
              * @return array<int, DenormalizationFieldMappingInterface>
              */
-            public function getDenormalizationFieldMappings(string $path, string $type = null): array
+            public function getDenormalizationFieldMappings(string $path, ?string $type = null): array
             {
                 return [];
             }

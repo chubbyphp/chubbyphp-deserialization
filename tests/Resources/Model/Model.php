@@ -27,18 +27,12 @@ final class Model
         return $this;
     }
 
-    /**
-     * @return OneModel|null
-     */
-    public function getOne()
+    public function getOne(): ?OneModel
     {
         return $this->one;
     }
 
-    /**
-     * @return self
-     */
-    public function setOne(OneModel $one = null)
+    public function setOne(?OneModel $one = null): self
     {
         $this->one = $one;
 

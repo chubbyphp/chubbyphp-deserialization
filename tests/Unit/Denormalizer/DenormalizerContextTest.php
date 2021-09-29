@@ -23,7 +23,7 @@ final class DenormalizerContextTest extends TestCase
     {
         $context = new DenormalizerContext();
 
-        self::assertSame(null, $context->getAllowedAdditionalFields());
+        self::assertNull($context->getAllowedAdditionalFields());
         self::assertNull($context->getRequest());
         self::assertFalse($context->isClearMissing());
         self::assertSame([], $context->getAttributes());
@@ -33,7 +33,7 @@ final class DenormalizerContextTest extends TestCase
 
     public function testCreateWithOverridenSettings(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
         $context = new DenormalizerContext(
@@ -52,7 +52,7 @@ final class DenormalizerContextTest extends TestCase
 
     public function testWithAttributes(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
         $context = new DenormalizerContext($request, ['attribute' => 'value'], ['allowed_field']);
@@ -67,7 +67,7 @@ final class DenormalizerContextTest extends TestCase
 
     public function testWithAttribute(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
         $context = new DenormalizerContext($request, ['attribute' => 'value'], ['allowed_field']);

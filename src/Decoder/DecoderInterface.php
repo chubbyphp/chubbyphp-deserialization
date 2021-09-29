@@ -18,7 +18,7 @@ interface DecoderInterface
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
      *
-     * @return array<string, array|string|float|int|bool|null>
+     * @return array<string, null|array|bool|float|int|string>
      */
     public function decode(string $data, string $contentType): array;
 }

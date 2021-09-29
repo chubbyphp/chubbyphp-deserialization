@@ -44,11 +44,11 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
             throw DeserializerLogicException::createMissingDenormalizer($path);
         }
 
-        if (!is_array($value)) {
-            throw DeserializerRuntimeException::createInvalidDataType($path, gettype($value), 'array');
+        if (!\is_array($value)) {
+            throw DeserializerRuntimeException::createInvalidDataType($path, \gettype($value), 'array');
         }
 
-        /** @var array<int|string, object> $relatedObjects */
+        /** @var array<int|string, object>|\ArrayAccess<int|string, object> $relatedObjects */
         $relatedObjects = $this->accessor->getValue($object) ?? [];
 
         $existEmbObjects = $this->cleanRelatedObjects($relatedObjects);
@@ -58,7 +58,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param array<int|string, object> $relatedObjects
+     * @param array<int|string, object>|\ArrayAccess<int|string, object> $relatedObjects
      *
      * @return array<int|string, object>
      */
@@ -74,9 +74,9 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param array<int|string, array|null> $value
-     * @param array<int|string, object>     $relatedObjects
-     * @param array<int|string, object>     $existEmbObjects
+     * @param array<int|string, null|array>                              $value
+     * @param array<int|string, object>|\ArrayAccess<int|string, object> $relatedObjects
+     * @param array<int|string, object>                                  $existEmbObjects
      */
     private function assignRelatedObjects(
         string $path,
@@ -93,8 +93,8 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
                 $subValue = [];
             }
 
-            if (!is_array($subValue)) {
-                throw DeserializerRuntimeException::createInvalidDataType($subPath, gettype($subValue), 'array');
+            if (!\is_array($subValue)) {
+                throw DeserializerRuntimeException::createInvalidDataType($subPath, \gettype($subValue), 'array');
             }
 
             $relatedObject = $existEmbObjects[$key] ?? $this->class;

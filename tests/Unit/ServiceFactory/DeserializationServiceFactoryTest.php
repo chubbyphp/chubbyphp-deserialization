@@ -21,7 +21,7 @@ use Psr\Log\NullLogger;
  *
  * @internal
  */
-final class DeserializationProviderTest extends TestCase
+final class DeserializationServiceFactoryTest extends TestCase
 {
     use MockByCallsTrait;
 

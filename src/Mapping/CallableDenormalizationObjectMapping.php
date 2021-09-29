@@ -13,10 +13,7 @@ final class CallableDenormalizationObjectMapping implements DenormalizationObjec
      */
     private $callable;
 
-    /**
-     * @var DenormalizationObjectMappingInterface|null
-     */
-    private $mapping;
+    private ?DenormalizationObjectMappingInterface $mapping = null;
 
     public function __construct(string $class, callable $callable)
     {

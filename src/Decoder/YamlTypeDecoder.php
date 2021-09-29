@@ -18,7 +18,7 @@ final class YamlTypeDecoder implements TypeDecoderInterface
     /**
      * @throws DeserializerRuntimeException
      *
-     * @return array<string, array|string|float|int|bool|null>
+     * @return array<string, null|array|bool|float|int|string>
      */
     public function decode(string $data): array
     {
@@ -28,7 +28,7 @@ final class YamlTypeDecoder implements TypeDecoderInterface
             throw DeserializerRuntimeException::createNotParsable($this->getContentType());
         }
 
-        if (!is_array($decoded)) {
+        if (!\is_array($decoded)) {
             throw DeserializerRuntimeException::createNotParsable($this->getContentType(), 'Not an object');
         }
 

@@ -16,7 +16,7 @@ final class DenormalizerContextBuilder
     private array $attributes = [];
 
     /**
-     * @var array<int, string>|null
+     * @var null|array<int, string>
      */
     private ?array $allowedAdditionalFields = null;
 
@@ -49,7 +49,7 @@ final class DenormalizerContextBuilder
     }
 
     /**
-     * @param array<int, string>|null $allowedAdditionalFields
+     * @param null|array<int, string> $allowedAdditionalFields
      */
     public function setAllowedAdditionalFields(?array $allowedAdditionalFields = null): self
     {

@@ -33,7 +33,7 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
      */
     public function __construct(AccessorInterface $accessor, string $type, bool $emptyToNull = false)
     {
-        if (!in_array($type, self::TYPES, true)) {
+        if (!\in_array($type, self::TYPES, true)) {
             throw DeserializerLogicException::createConvertTypeDoesNotExists($type);
         }
 
@@ -70,7 +70,7 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
      */
     private function convertType($value)
     {
-        $type = gettype($value);
+        $type = \gettype($value);
 
         if ($this->type === $type || !is_scalar($value)) {
             return $value;
@@ -79,10 +79,13 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
         switch ($this->type) {
             case self::TYPE_BOOL:
                 return $this->convertBool($value);
+
             case self::TYPE_INT:
                 return $this->convertInt($value);
+
             case self::TYPE_FLOAT:
                 return $this->convertFloat($value);
+
             default:
                 return $this->convertString($value);
         }
@@ -145,7 +148,7 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
      */
     private function convertString($value)
     {
-        if (is_bool($value)) {
+        if (\is_bool($value)) {
             return $value;
         }
 

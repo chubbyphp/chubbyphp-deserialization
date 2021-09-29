@@ -26,7 +26,7 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
     /**
      * @throws DeserializerRuntimeException
      *
-     * @return array<string, array|string|float|int|bool|null>
+     * @return array<string, null|array|bool|float|int|string>
      */
     public function decode(string $data): array
     {
@@ -40,13 +40,13 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
     }
 
     /**
-     * @return array|bool|string|int|float|null
+     * @return null|array|bool|float|int|string
      */
     private function decodeNode(\DOMNode $node)
     {
         $nodeName = $node->nodeName;
 
-        $nodeType = substr($nodeName, 5);
+        $nodeType = mb_substr($nodeName, 5);
 
         if (self::DATATYPE_OBJECT === $nodeType) {
             return $this->decodeObjectNode($node);
@@ -69,14 +69,14 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
         }
 
         if (self::DATATYPE_NULL === $nodeType) {
-            return null;
+            return;
         }
 
         throw DeserializerRuntimeException::createNotParsable($this->getContentType());
     }
 
     /**
-     * @return array<string, array|bool|string|int|float|null>
+     * @return array<string, null|array|bool|float|int|string>
      */
     private function decodeObjectNode(\DOMNode $node): array
     {
@@ -93,7 +93,7 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
     }
 
     /**
-     * @return array<int, array|bool|string|int|float|null>
+     * @return array<int, null|array|bool|float|int|string>
      */
     private function decodeArrayNode(\DOMNode $node): array
     {
@@ -120,7 +120,7 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
     }
 
     /**
-     * @return int|float
+     * @return float|int
      */
     private function decodeNumberNode(\DOMNode $node)
     {

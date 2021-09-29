@@ -30,7 +30,7 @@ final class NotPolicyTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, []);
 
-        /** @var PolicyInterface|MockObject $nonCompliantPolicy */
+        /** @var MockObject|PolicyInterface $nonCompliantPolicy */
         $nonCompliantPolicy = $this->getMockByCalls(PolicyInterface::class, [
             Call::create('isCompliant')->with($path, $object, $context)->willReturn(false),
         ]);
@@ -49,7 +49,7 @@ final class NotPolicyTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class, []);
 
-        /** @var PolicyInterface|MockObject $nonCompliantPolicy */
+        /** @var MockObject|PolicyInterface $nonCompliantPolicy */
         $nonCompliantPolicy = $this->getMockByCalls(PolicyInterface::class, [
             Call::create('isCompliant')->with($path, $object, $context)->willReturn(true),
         ]);

@@ -20,7 +20,7 @@ final class ManyModelMapping implements DenormalizationObjectMappingInterface
     /**
      * @throws DeserializerRuntimeException
      */
-    public function getDenormalizationFactory(string $path, string $type = null): callable
+    public function getDenormalizationFactory(string $path, ?string $type = null): callable
     {
         return static fn () => new ManyModel();
     }
@@ -30,7 +30,7 @@ final class ManyModelMapping implements DenormalizationObjectMappingInterface
      *
      * @return array<int, DenormalizationFieldMappingInterface>
      */
-    public function getDenormalizationFieldMappings(string $path, string $type = null): array
+    public function getDenormalizationFieldMappings(string $path, ?string $type = null): array
     {
         return [
             DenormalizationFieldMappingBuilder::create('name')->getMapping(),

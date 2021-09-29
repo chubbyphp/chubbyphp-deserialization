@@ -29,7 +29,7 @@ final class BaseManyModelMapping implements DenormalizationObjectMappingInterfac
     /**
      * @throws DeserializerRuntimeException
      */
-    public function getDenormalizationFactory(string $path, string $type = null): callable
+    public function getDenormalizationFactory(string $path, ?string $type = null): callable
     {
         if (null === $type) {
             throw DeserializerRuntimeException::createMissingObjectType($path, $this->supportedTypes);
@@ -47,7 +47,7 @@ final class BaseManyModelMapping implements DenormalizationObjectMappingInterfac
      *
      * @return array<int, DenormalizationFieldMappingInterface>
      */
-    public function getDenormalizationFieldMappings(string $path, string $type = null): array
+    public function getDenormalizationFieldMappings(string $path, ?string $type = null): array
     {
         if (null === $type) {
             throw DeserializerRuntimeException::createMissingObjectType($path, $this->supportedTypes);

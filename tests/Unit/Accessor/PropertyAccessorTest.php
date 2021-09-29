@@ -44,10 +44,7 @@ final class PropertyAccessorTest extends TestCase
                 $this->initialized = true;
             }
 
-            /**
-             * @return bool
-             */
-            public function __isInitialized()
+            public function __isInitialized(): bool
             {
                 return $this->initialized;
             }
@@ -103,10 +100,7 @@ final class PropertyAccessorTest extends TestCase
                 $this->initialized = true;
             }
 
-            /**
-             * @return bool
-             */
-            public function __isInitialized()
+            public function __isInitialized(): bool
             {
                 return $this->initialized;
             }

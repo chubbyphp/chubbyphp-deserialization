@@ -46,7 +46,7 @@ final class DenormalizerObjectMappingRegistryTest extends TestCase
 
         $registry = new DenormalizerObjectMappingRegistry([]);
 
-        $registry->getObjectMapping(get_class(new \stdClass()));
+        $registry->getObjectMapping(\get_class(new \stdClass()));
     }
 
     public function testGetObjectMappingFromDoctrineProxy(): void
@@ -60,15 +60,12 @@ final class DenormalizerObjectMappingRegistryTest extends TestCase
 
         $registry = new DenormalizerObjectMappingRegistry([$denormalizationObjectMapping]);
 
-        $mapping = $registry->getObjectMapping(get_class($object));
+        $mapping = $registry->getObjectMapping(\get_class($object));
 
         self::assertInstanceOf(DenormalizationObjectMappingInterface::class, $mapping);
     }
 
-    /**
-     * @return object
-     */
-    private function getProxyObject()
+    private function getProxyObject(): object
     {
         return new class() extends AbstractManyModel implements Proxy {
             /**
@@ -82,10 +79,8 @@ final class DenormalizerObjectMappingRegistryTest extends TestCase
 
             /**
              * Returns whether this proxy is initialized or not.
-             *
-             * @return bool
              */
-            public function __isInitialized()
+            public function __isInitialized(): bool
             {
             }
         };

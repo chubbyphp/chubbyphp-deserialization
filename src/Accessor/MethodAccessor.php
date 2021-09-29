@@ -24,7 +24,7 @@ final class MethodAccessor implements AccessorInterface
     {
         $set = 'set'.ucfirst($this->property);
         if (!method_exists($object, $set)) {
-            throw DeserializerLogicException::createMissingMethod(get_class($object), [$set]);
+            throw DeserializerLogicException::createMissingMethod(\get_class($object), [$set]);
         }
 
         $object->{$set}($value);
@@ -53,6 +53,6 @@ final class MethodAccessor implements AccessorInterface
             return $object->{$is}();
         }
 
-        throw DeserializerLogicException::createMissingMethod(get_class($object), [$get, $has, $is]);
+        throw DeserializerLogicException::createMissingMethod(\get_class($object), [$get, $has, $is]);
     }
 }

@@ -32,7 +32,7 @@ final class DenormalizationFieldMappingFactoryTest extends TestCase
 
     private DenormalizationFieldMappingFactory $factory;
 
-    public function setUp(): void
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -263,7 +263,7 @@ final class DenormalizationFieldMappingFactoryTest extends TestCase
         /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
         $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
 
-        /** @var PolicyInterface|MockObject $policy */
+        /** @var MockObject|PolicyInterface $policy */
         $policy = $this->getMockByCalls(PolicyInterface::class);
 
         $fieldMapping = $this->factory->create('name', false, $fieldDenormalizer, $policy);

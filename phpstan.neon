@@ -9,3 +9,9 @@ parameters:
         -
             message: '//'
             path: %currentWorkingDirectory%/src/Denormalizer/DateTimeFieldDenormalizer.php
+        -
+            message: '/supplied for foreach, only iterables are supported/'
+            path: %currentWorkingDirectory%/src/Denormalizer/Relation/EmbedManyFieldDenormalizer.php
+        -
+            message: '/supplied for foreach, only iterables are supported/'
+            path: %currentWorkingDirectory%/src/Denormalizer/Relation/ReferenceManyFieldDenormalizer.php

@@ -16,7 +16,7 @@ final class UrlEncodedTypeDecoder implements TypeDecoderInterface
     /**
      * @throws DeserializerRuntimeException
      *
-     * @return array<string, array|string|float|int|bool|null>
+     * @return array<string, null|array|bool|float|int|string>
      */
     public function decode(string $data): array
     {
@@ -31,15 +31,15 @@ final class UrlEncodedTypeDecoder implements TypeDecoderInterface
     }
 
     /**
-     * @param array<int|string, array|string|float|int|bool|null> $rawData
+     * @param array<int|string, null|array|bool|float|int|string> $rawData
      *
-     * @return array<int|string, array|string|float|int|bool|null>
+     * @return array<int|string, null|array|bool|float|int|string>
      */
     private function fixValues(array $rawData): array
     {
         $data = [];
         foreach ($rawData as $key => $value) {
-            if (is_array($value)) {
+            if (\is_array($value)) {
                 $data[$key] = $this->fixValues($value);
             } else {
                 $data[$key] = $this->fixValue($value);
@@ -50,12 +50,12 @@ final class UrlEncodedTypeDecoder implements TypeDecoderInterface
     }
 
     /**
-     * @return string|float|int|bool|null
+     * @return null|bool|float|int|string
      */
     private function fixValue(string $value)
     {
         if ('' === $value) {
-            return null;
+            return;
         }
 
         if ('true' === $value) {

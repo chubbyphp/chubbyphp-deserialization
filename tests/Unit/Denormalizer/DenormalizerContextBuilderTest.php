@@ -26,7 +26,7 @@ final class DenormalizerContextBuilderTest extends TestCase
 
         self::assertInstanceOf(DenormalizerContextInterface::class, $context);
 
-        self::assertSame(null, $context->getAllowedAdditionalFields());
+        self::assertNull($context->getAllowedAdditionalFields());
         self::assertNull($context->getRequest());
         self::assertFalse($context->isClearMissing());
         self::assertSame([], $context->getAttributes());
@@ -34,7 +34,7 @@ final class DenormalizerContextBuilderTest extends TestCase
 
     public function testCreateWithOverridenSettings(): void
     {
-        /** @var ServerRequestInterface|MockObject $request */
+        /** @var MockObject|ServerRequestInterface $request */
         $request = $this->getMockByCalls(ServerRequestInterface::class);
 
         $context = DenormalizerContextBuilder::create()
