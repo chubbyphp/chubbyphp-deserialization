@@ -92,7 +92,7 @@ final class DenormalizationFieldMappingFactoryTest extends TestCase
 
     public function testGetDefaultMappingForCallback(): void
     {
-        $fieldMapping = DenormalizationFieldMappingBuilder::createCallback('name', static function (): void {})->getMapping();
+        $fieldMapping = $this->factory->createCallback('name', static function (): void {});
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertInstanceOf(CallbackFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
@@ -102,10 +102,7 @@ final class DenormalizationFieldMappingFactoryTest extends TestCase
 
     public function testGetDefaultMappingForConvertType(): void
     {
-        $fieldMapping = DenormalizationFieldMappingBuilder::createConvertType(
-            'name',
-            ConvertTypeFieldDenormalizer::TYPE_FLOAT
-        )->getMapping();
+        $fieldMapping = $this->factory->createConvertType('name', ConvertTypeFieldDenormalizer::TYPE_FLOAT);
 
         self::assertSame('name', $fieldMapping->getName());
 
