@@ -7,6 +7,7 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Mapping;
 use Chubbyphp\Deserialization\Denormalizer\CallbackFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\ConvertTypeFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\DateTimeImmutableFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
@@ -184,6 +185,52 @@ final class DenormalizationFieldMappingFactoryTest extends TestCase
 
         self::assertSame('name', $fieldMapping->getName());
         self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
+    }
+
+    public function testGetDefaultMappingForDateTimeImmutable(): void
+    {
+        $fieldMapping = $this->factory->createDateTimeImmutable('name');
+
+        self::assertSame('name', $fieldMapping->getName());
+
+        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
+
+        self::assertInstanceOf(DateTimeImmutableFieldDenormalizer::class, $fieldDenormalizer);
+
+        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
+        $reflectionObject->setAccessible(true);
+
+        self::assertFalse($reflectionObject->getValue($fieldDenormalizer));
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
+    }
+
+    public function testGetDefaultMappingForDateTimeImmutableWithEmptyToNull(): void
+    {
+        $fieldMapping = $this->factory->createDateTimeImmutable('name', true);
+
+        self::assertSame('name', $fieldMapping->getName());
+
+        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
+
+        self::assertInstanceOf(DateTimeImmutableFieldDenormalizer::class, $fieldDenormalizer);
+
+        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
+        $reflectionObject->setAccessible(true);
+
+        self::assertTrue($reflectionObject->getValue($fieldDenormalizer));
+
+        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
+    }
+
+    public function testGetDefaultMappingForDateTimeImmutableWithTimezone(): void
+    {
+        $fieldMapping = $this->factory->createDateTimeImmutable('name', false, new \DateTimeZone('UTC'));
+
+        self::assertSame('name', $fieldMapping->getName());
+        self::assertInstanceOf(DateTimeImmutableFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
 
         self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }

@@ -15,6 +15,9 @@ $config = require __DIR__ . '/vendor/chubbyphp/chubbyphp-dev-helper/phpcs.php';
 // drop onces code is >= 8.0
 unset($config['rules']['phpdoc_to_return_type']);
 
+// drop once DateTimeFieldDenormalizer gets dropped
+unset($config['rules']['date_time_immutable']);
+
 return (new PhpCsFixer\Config)
     ->setIndent($config['indent'])
     ->setLineEnding($config['lineEnding'])

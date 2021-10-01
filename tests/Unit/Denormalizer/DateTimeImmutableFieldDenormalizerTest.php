@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Unit\Denormalizer;
 
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
-use Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DateTimeImmutableFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Mock\Argument\ArgumentCallback;
@@ -15,11 +14,11 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @covers \Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer
+ * @covers \Chubbyphp\Deserialization\Denormalizer\DateTimeImmutableFieldDenormalizer
  *
  * @internal
  */
-final class DateTimeFieldDenormalizerTest extends TestCase
+final class DateTimeImmutableFieldDenormalizerTest extends TestCase
 {
     use MockByCallsTrait;
 
@@ -31,7 +30,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         $accessor = $this->getMockByCalls(AccessorInterface::class, [
             Call::create('setValue')->with($object, new ArgumentCallback(
                 static function ($value): void {
-                    self::assertInstanceOf(\DateTime::class, $value);
+                    self::assertInstanceOf(\DateTimeImmutable::class, $value);
                     self::assertSame('2017-01-01', $value->format('Y-m-d'));
                 }
             )),
@@ -40,22 +39,8 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
-
-        error_clear_last();
-
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, '2017-01-01', $context);
-
-        $error = error_get_last();
-
-        self::assertNotNull($error);
-
-        self::assertSame(E_USER_DEPRECATED, $error['type']);
-        self::assertSame(sprintf(
-            '%s:denormalizeField use %s:denormalizeField',
-            DateTimeFieldDenormalizer::class,
-            DateTimeImmutableFieldDenormalizer::class
-        ), $error['message']);
     }
 
     public function testDenormalizeInvalidMonthField(): void
@@ -70,7 +55,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, '2017-13-01', $context);
     }
 
@@ -86,7 +71,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, '2017-02-31', $context);
     }
 
@@ -102,7 +87,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, '0000-00-00', $context);
     }
 
@@ -118,7 +103,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, '', $context);
     }
 
@@ -134,7 +119,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, '    ', $context);
     }
 
@@ -150,7 +135,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, null, $context);
     }
 
@@ -166,7 +151,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, 'null', $context);
     }
 
@@ -182,7 +167,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, 0, $context);
     }
 
@@ -198,7 +183,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, '0', $context);
     }
 
@@ -214,7 +199,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, [], $context);
     }
 
@@ -232,7 +217,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, $date, $context);
     }
 
@@ -248,7 +233,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('date', $object, '', $context);
     }
 
@@ -264,7 +249,7 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         /** @var DenormalizerContextInterface|MockObject $context */
         $context = $this->getMockByCalls(DenormalizerContextInterface::class);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer($accessor, true);
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer($accessor, true);
         $fieldDenormalizer->denormalizeField('date', $object, '', $context);
     }
 
@@ -279,13 +264,13 @@ final class DateTimeFieldDenormalizerTest extends TestCase
         $fieldDenormalizer = $this->getMockByCalls(AccessorInterface::class, [
             Call::create('setValue')->with($object, new ArgumentCallback(
                 static function ($value): void {
-                    self::assertInstanceOf(\DateTime::class, $value);
+                    self::assertInstanceOf(\DateTimeImmutable::class, $value);
                     self::assertSame('2016-12-31 23:00:00', $value->format('Y-m-d H:i:s'));
                 }
             )),
         ]);
 
-        $fieldDenormalizer = new DateTimeFieldDenormalizer(
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer(
             $fieldDenormalizer,
             false,
             new \DateTimeZone('Europe/Zurich')

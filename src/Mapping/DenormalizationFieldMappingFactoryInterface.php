@@ -7,6 +7,9 @@ namespace Chubbyphp\Deserialization\Mapping;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
 
+/**
+ * @method DenormalizationFieldMappingInterface createDateTimeImmutable(string $name, bool $emptyToNull = false, ?\DateTimeZone $dateTimeZone = null, ?PolicyInterface $policy = null)
+ */
 interface DenormalizationFieldMappingFactoryInterface
 {
     public function create(
@@ -29,12 +32,22 @@ interface DenormalizationFieldMappingFactoryInterface
         ?PolicyInterface $policy = null
     ): DenormalizationFieldMappingInterface;
 
+    /**
+     * @deprecated Use createDateTimeImmutable instead
+     */
     public function createDateTime(
         string $name,
         bool $emptyToNull = false,
         ?\DateTimeZone $dateTimeZone = null,
         ?PolicyInterface $policy = null
     ): DenormalizationFieldMappingInterface;
+
+    // public function createDateTimeImmutable(
+    //     string $name,
+    //     bool $emptyToNull = false,
+    //     ?\DateTimeZone $dateTimeZone = null,
+    //     ?PolicyInterface $policy = null
+    // ): DenormalizationFieldMappingInterface;
 
     public function createEmbedMany(
         string $name,

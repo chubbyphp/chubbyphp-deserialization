@@ -7,10 +7,7 @@ namespace Chubbyphp\Deserialization\Denormalizer;
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
-/**
- * @deprecated Use {@link DateTimeImmutableFieldDenormalizer} instead
- */
-final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
+final class DateTimeImmutableFieldDenormalizer implements FieldDenormalizerInterface
 {
     private AccessorInterface $accessor;
 
@@ -40,15 +37,6 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
         DenormalizerContextInterface $context,
         ?DenormalizerInterface $denormalizer = null
     ): void {
-        @trigger_error(
-            sprintf(
-                '%s:denormalizeField use %s:denormalizeField',
-                self::class,
-                DateTimeImmutableFieldDenormalizer::class
-            ),
-            E_USER_DEPRECATED
-        );
-
         if ('' === $value && $this->emptyToNull) {
             $this->accessor->setValue($object, null);
 
@@ -62,10 +50,10 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
         }
 
         try {
-            $dateTime = new \DateTime($trimmedValue);
+            $dateTime = new \DateTimeImmutable($trimmedValue);
 
             if (null !== $this->dateTimeZone) {
-                $dateTime->setTimezone($this->dateTimeZone);
+                $dateTime = $dateTime->setTimezone($this->dateTimeZone);
             }
 
             $errors = \DateTimeImmutable::getLastErrors();

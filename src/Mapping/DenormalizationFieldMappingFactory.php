@@ -8,6 +8,7 @@ use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
 use Chubbyphp\Deserialization\Denormalizer\CallbackFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\ConvertTypeFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\DateTimeImmutableFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
@@ -53,6 +54,9 @@ final class DenormalizationFieldMappingFactory implements DenormalizationFieldMa
         return $this->getMapping($fieldDenormalizer, $name, $policy);
     }
 
+    /**
+     * @deprecated Use createDateTimeImmutable instead
+     */
     public function createDateTime(
         string $name,
         bool $emptyToNull = false,
@@ -60,6 +64,21 @@ final class DenormalizationFieldMappingFactory implements DenormalizationFieldMa
         ?PolicyInterface $policy = null
     ): DenormalizationFieldMappingInterface {
         $fieldDenormalizer = new DateTimeFieldDenormalizer(
+            new PropertyAccessor($name),
+            $emptyToNull,
+            $dateTimeZone
+        );
+
+        return $this->getMapping($fieldDenormalizer, $name, $policy);
+    }
+
+    public function createDateTimeImmutable(
+        string $name,
+        bool $emptyToNull = false,
+        ?\DateTimeZone $dateTimeZone = null,
+        ?PolicyInterface $policy = null
+    ): DenormalizationFieldMappingInterface {
+        $fieldDenormalizer = new DateTimeImmutableFieldDenormalizer(
             new PropertyAccessor($name),
             $emptyToNull,
             $dateTimeZone

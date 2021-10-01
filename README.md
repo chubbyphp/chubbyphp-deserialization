@@ -71,7 +71,7 @@ composer require chubbyphp/chubbyphp-deserialization "^3.3"
 #### Field Denormalizer
 
  * [CallbackFieldDenormalizer][11]
- * [DateTimeFieldDenormalizer][12]
+ * [DateTimeImmutableFieldDenormalizer][12]
  * [FieldDenormalizer][13]
  * [ConvertTypeFieldDenormalizer][14]
 
@@ -223,7 +223,7 @@ Dominik Zogg 2021
 [10]: doc/Denormalizer/Denormalizer.md
 
 [11]: doc/Denormalizer/CallbackFieldDenormalizer.md
-[12]: doc/Denormalizer/DateTimeFieldDenormalizer.md
+[12]: doc/Denormalizer/DateTimeImmutableFieldDenormalizer.md
 [13]: doc/Denormalizer/FieldDenormalizer.md
 [14]: doc/Denormalizer/ConvertTypeFieldDenormalizer.md
 

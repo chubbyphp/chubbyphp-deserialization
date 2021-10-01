@@ -1,16 +1,16 @@
-# DateTimeFieldDenormalizer
+# DateTimeImmutableFieldDenormalizer
 
 ```php
 <?php
 
 use Chubbyphp\Deserialization\Accessor\PropertyAccessor;
-use Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer;
+use Chubbyphp\Deserialization\Denormalizer\DateTimeImmutableFieldDenormalizer;
 use MyProject\Model\Model;
 
 $model = new Model;
 $context = ...;
 
-$fieldDenormalizer = new DateTimeFieldDenormalizer(
+$fieldDenormalizer = new DateTimeImmutableFieldDenormalizer(
     new PropertyAccessor('at')
 );
 
@@ -26,7 +26,7 @@ echo $model->getAt()
 // '2017-01-01 22:00:00'
 
 // empty to null
-$fieldDenormalizer = new DateTimeFieldDenormalizer(
+$fieldDenormalizer = new DateTimeImmutableFieldDenormalizer(
     new PropertyAccessor('at'),
     null
 );
