@@ -46,7 +46,7 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
     {
         $nodeName = $node->nodeName;
 
-        $nodeType = mb_substr($nodeName, 5);
+        $nodeType = substr($nodeName, 5);
 
         if (self::DATATYPE_OBJECT === $nodeType) {
             return $this->decodeObjectNode($node);
