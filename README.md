@@ -28,14 +28,14 @@ A simple deserialization.
  * php: ^7.4|^8.0
  * psr/http-message: ^1.0.1
  * psr/log: ^1.1.3
- * symfony/yaml: ^3.4.45|^4.4.15|^5.0.11
+ * symfony/yaml: ^4.4.34|^5.3.11|^6.0.0
 
 ## Suggest
 
  * chubbyphp/chubbyphp-container: ^1.1
  * pimple/pimple: ^3.3
  * psr/container: ^1.0
- * symfony/dependency-injection: ^3.4.45|^4.4.15|^5.0.11 (symfony integration)
+ * symfony/dependency-injection: ^4.4.34|^5.3.11|^6.0.0 (symfony integration)
 
 ## Installation
 
