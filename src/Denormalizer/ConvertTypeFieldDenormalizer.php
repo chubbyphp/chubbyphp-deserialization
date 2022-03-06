@@ -22,24 +22,17 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
         self::TYPE_STRING,
     ];
 
-    private AccessorInterface $accessor;
-
     private string $type;
-
-    private bool $emptyToNull;
 
     /**
      * @throws DeserializerLogicException
      */
-    public function __construct(AccessorInterface $accessor, string $type, bool $emptyToNull = false)
+    public function __construct(private AccessorInterface $accessor, string $type, private bool $emptyToNull = false)
     {
         if (!\in_array($type, self::TYPES, true)) {
             throw DeserializerLogicException::createConvertTypeDoesNotExists($type);
         }
-
-        $this->accessor = $accessor;
         $this->type = $type;
-        $this->emptyToNull = $emptyToNull;
     }
 
     /**
@@ -76,27 +69,15 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
             return $value;
         }
 
-        switch ($this->type) {
-            case self::TYPE_BOOL:
-                return $this->convertBool($value);
-
-            case self::TYPE_INT:
-                return $this->convertInt($value);
-
-            case self::TYPE_FLOAT:
-                return $this->convertFloat($value);
-
-            default:
-                return $this->convertString($value);
-        }
+        return match ($this->type) {
+            self::TYPE_BOOL => $this->convertBool($value),
+            self::TYPE_INT => $this->convertInt($value),
+            self::TYPE_FLOAT => $this->convertFloat($value),
+            default => $this->convertString($value),
+        };
     }
 
-    /**
-     * @param bool|float|int|string $value
-     *
-     * @return bool|float|int|string
-     */
-    private function convertBool($value)
+    private function convertBool(bool|float|int|string $value): bool|float|int|string
     {
         if ('true' === $value) {
             return true;
@@ -111,10 +92,8 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
 
     /**
      * @param mixed $value
-     *
-     * @return bool|float|int|string
      */
-    private function convertFloat($value)
+    private function convertFloat($value): bool|float|string
     {
         if (!is_numeric($value)) {
             return $value;
@@ -125,10 +104,8 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
 
     /**
      * @param mixed $value
-     *
-     * @return bool|float|int|string
      */
-    private function convertInt($value)
+    private function convertInt($value): bool|float|int|string
     {
         if (!is_numeric($value)) {
             return $value;
@@ -141,12 +118,7 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
         return (int) $value;
     }
 
-    /**
-     * @param bool|float|int|string $value
-     *
-     * @return bool|string
-     */
-    private function convertString($value)
+    private function convertString(bool|float|int|string $value): bool|string
     {
         if (\is_bool($value)) {
             return $value;

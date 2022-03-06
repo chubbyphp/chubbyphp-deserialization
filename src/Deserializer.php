@@ -10,14 +10,8 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 
 final class Deserializer implements DeserializerInterface
 {
-    private DecoderInterface $decoder;
-
-    private DenormalizerInterface $denormalizer;
-
-    public function __construct(DecoderInterface $decoder, DenormalizerInterface $denormalizer)
+    public function __construct(private DecoderInterface $decoder, private DenormalizerInterface $denormalizer)
     {
-        $this->decoder = $decoder;
-        $this->denormalizer = $denormalizer;
     }
 
     /**

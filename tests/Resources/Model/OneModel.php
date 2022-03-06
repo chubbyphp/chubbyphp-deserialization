@@ -6,9 +6,9 @@ namespace Chubbyphp\Tests\Deserialization\Resources\Model;
 
 final class OneModel
 {
-    private ?string $name;
+    private ?string $name = null;
 
-    private ?string $value;
+    private ?string $value = null;
 
     public function getName(): string
     {

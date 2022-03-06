@@ -18,7 +18,7 @@ final class MethodAccessorTest extends TestCase
     public function testSetValue(): void
     {
         $object = new class() {
-            private ?string $name;
+            private ?string $name = null;
 
             public function getName(): string
             {
@@ -51,7 +51,7 @@ final class MethodAccessorTest extends TestCase
     public function testGetValue(): void
     {
         $object = new class() {
-            private ?string $name;
+            private ?string $name = null;
 
             public function getName(): string
             {
@@ -74,7 +74,7 @@ final class MethodAccessorTest extends TestCase
     public function testHasValue(): void
     {
         $object = new class() {
-            private ?string $name;
+            private ?string $name = null;
 
             public function hasName(): bool
             {
@@ -97,7 +97,7 @@ final class MethodAccessorTest extends TestCase
     public function testIsValue(): void
     {
         $object = new class() {
-            private ?string $name;
+            private ?string $name = null;
 
             public function isName(): bool
             {

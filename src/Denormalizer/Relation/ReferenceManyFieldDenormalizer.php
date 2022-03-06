@@ -18,12 +18,9 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
      */
     private $repository;
 
-    private AccessorInterface $accessor;
-
-    public function __construct(callable $repository, AccessorInterface $accessor)
+    public function __construct(callable $repository, private AccessorInterface $accessor)
     {
         $this->repository = $repository;
-        $this->accessor = $accessor;
     }
 
     /**

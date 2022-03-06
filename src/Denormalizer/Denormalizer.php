@@ -15,15 +15,12 @@ final class Denormalizer implements DenormalizerInterface
 {
     private const TYPE = '_type';
 
-    private DenormalizerObjectMappingRegistryInterface $denormalizerObjectMappingRegistry;
-
     private LoggerInterface $logger;
 
     public function __construct(
-        DenormalizerObjectMappingRegistryInterface $denormalizerObjectMappingRegistry,
+        private DenormalizerObjectMappingRegistryInterface $denormalizerObjectMappingRegistry,
         ?LoggerInterface $logger = null
     ) {
-        $this->denormalizerObjectMappingRegistry = $denormalizerObjectMappingRegistry;
         $this->logger = $logger ?? new NullLogger();
     }
 
@@ -47,7 +44,7 @@ final class Denormalizer implements DenormalizerInterface
 
         unset($data[self::TYPE]);
 
-        $class = \is_object($object) ? \get_class($object) : $object;
+        $class = \is_object($object) ? $object::class : $object;
         $objectMapping = $this->getObjectMapping($class);
 
         if (!\is_object($object)) {

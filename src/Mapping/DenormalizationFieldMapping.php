@@ -10,19 +10,13 @@ use Chubbyphp\Deserialization\Policy\PolicyInterface;
 
 final class DenormalizationFieldMapping implements DenormalizationFieldMappingInterface
 {
-    private string $name;
-
-    private FieldDenormalizerInterface $fieldDenormalizer;
-
     private PolicyInterface $policy;
 
     public function __construct(
-        string $name,
-        FieldDenormalizerInterface $fieldDenormalizer,
+        private string $name,
+        private FieldDenormalizerInterface $fieldDenormalizer,
         ?PolicyInterface $policy = null
     ) {
-        $this->name = $name;
-        $this->fieldDenormalizer = $fieldDenormalizer;
         $this->policy = $policy ?? new NullPolicy();
     }
 

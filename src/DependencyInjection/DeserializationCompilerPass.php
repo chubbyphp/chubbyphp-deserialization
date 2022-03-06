@@ -38,7 +38,7 @@ final class DeserializationCompilerPass implements CompilerPassInterface
     private function registerDecoder(ContainerBuilder $container): void
     {
         $decoderTypeReferences = [];
-        foreach ($container->findTaggedServiceIds('chubbyphp.deserializer.decoder.type') as $id => $tags) {
+        foreach (array_keys($container->findTaggedServiceIds('chubbyphp.deserializer.decoder.type')) as $id) {
             $decoderTypeReferences[] = new Reference($id);
         }
 
@@ -54,7 +54,7 @@ final class DeserializationCompilerPass implements CompilerPassInterface
         $denormalizerObjectMappingReferences = [];
 
         $taggedServiceIds = $container->findTaggedServiceIds('chubbyphp.deserializer.denormalizer.objectmapping');
-        foreach ($taggedServiceIds as $id => $tags) {
+        foreach (array_keys($taggedServiceIds) as $id) {
             $denormalizerObjectMappingReferences[] = new Reference($id);
         }
 

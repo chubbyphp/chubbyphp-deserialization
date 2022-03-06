@@ -28,7 +28,7 @@ final class DeserializationServiceFactoryTest extends TestCase
     public function testRegister(): void
     {
         $container = new Container();
-        $container->factories((new DeserializationServiceFactory())($container));
+        $container->factories((new DeserializationServiceFactory())());
 
         self::assertTrue($container->has('deserializer'));
 
@@ -71,7 +71,7 @@ final class DeserializationServiceFactoryTest extends TestCase
             'logger' => static fn () => $logger,
         ]);
 
-        $container->factories((new DeserializationServiceFactory())($container));
+        $container->factories((new DeserializationServiceFactory())());
 
         /** @var Denormalizer $denormalizer */
         $denormalizer = $container->get('deserializer.denormalizer');

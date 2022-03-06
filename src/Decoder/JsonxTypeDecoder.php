@@ -119,10 +119,7 @@ final class JsonxTypeDecoder implements TypeDecoderInterface
         return html_entity_decode($node->nodeValue, ENT_COMPAT | ENT_XML1, 'UTF-8');
     }
 
-    /**
-     * @return float|int
-     */
-    private function decodeNumberNode(\DOMNode $node)
+    private function decodeNumberNode(\DOMNode $node): float|int
     {
         $value = $node->nodeValue;
 

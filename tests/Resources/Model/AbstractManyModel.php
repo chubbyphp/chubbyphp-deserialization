@@ -6,9 +6,9 @@ namespace Chubbyphp\Tests\Deserialization\Resources\Model;
 
 abstract class AbstractManyModel
 {
-    protected ?string $name;
+    protected ?string $name = null;
 
-    private ?string $address;
+    private ?string $address = null;
 
     final public function getName(): string
     {

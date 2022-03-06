@@ -8,11 +8,8 @@ use Chubbyphp\Deserialization\DeserializerLogicException;
 
 final class MethodAccessor implements AccessorInterface
 {
-    private string $property;
-
-    public function __construct(string $property)
+    public function __construct(private string $property)
     {
-        $this->property = $property;
     }
 
     /**
@@ -24,7 +21,7 @@ final class MethodAccessor implements AccessorInterface
     {
         $set = 'set'.ucfirst($this->property);
         if (!method_exists($object, $set)) {
-            throw DeserializerLogicException::createMissingMethod(\get_class($object), [$set]);
+            throw DeserializerLogicException::createMissingMethod($object::class, [$set]);
         }
 
         $object->{$set}($value);
@@ -53,6 +50,6 @@ final class MethodAccessor implements AccessorInterface
             return $object->{$is}();
         }
 
-        throw DeserializerLogicException::createMissingMethod(\get_class($object), [$get, $has, $is]);
+        throw DeserializerLogicException::createMissingMethod($object::class, [$get, $has, $is]);
     }
 }

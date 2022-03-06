@@ -25,7 +25,7 @@ final class DeserializationCompilerPassTest extends TestCase
     public function testProcess(): void
     {
         $stdClassMapping = $this->getStdClassMapping();
-        $stdClassMappingClass = \get_class($stdClassMapping);
+        $stdClassMappingClass = $stdClassMapping::class;
 
         $container = new ContainerBuilder();
         $container->addCompilerPass(new DeserializationCompilerPass());

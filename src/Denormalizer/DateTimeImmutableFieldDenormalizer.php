@@ -9,20 +9,11 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 final class DateTimeImmutableFieldDenormalizer implements FieldDenormalizerInterface
 {
-    private AccessorInterface $accessor;
-
-    private bool $emptyToNull;
-
-    private ?\DateTimeZone $dateTimeZone;
-
     public function __construct(
-        AccessorInterface $accessor,
-        bool $emptyToNull = false,
-        ?\DateTimeZone $dateTimeZone = null
+        private AccessorInterface $accessor,
+        private bool $emptyToNull = false,
+        private ?\DateTimeZone $dateTimeZone = null
     ) {
-        $this->accessor = $accessor;
-        $this->emptyToNull = $emptyToNull;
-        $this->dateTimeZone = $dateTimeZone;
     }
 
     /**
@@ -61,7 +52,7 @@ final class DateTimeImmutableFieldDenormalizer implements FieldDenormalizerInter
             if (0 === $errors['warning_count'] && 0 === $errors['error_count']) {
                 $value = $dateTime;
             }
-        } catch (\Exception $exception) {
+        } catch (\Exception) {
             error_clear_last();
         }
 

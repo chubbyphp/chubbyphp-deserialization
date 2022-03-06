@@ -8,34 +8,16 @@ use Psr\Http\Message\ServerRequestInterface;
 
 final class DenormalizerContext implements DenormalizerContextInterface
 {
-    private ?ServerRequestInterface $request;
-
-    /**
-     * @var array<mixed>
-     */
-    private array $attributes;
-
-    /**
-     * @var null|array<int, string>
-     */
-    private ?array $allowedAdditionalFields;
-
-    private bool $clearMissing;
-
     /**
      * @param null|array<int, string> $allowedAdditionalFields
      * @param array<mixed>            $attributes
      */
     public function __construct(
-        ?ServerRequestInterface $request = null,
-        array $attributes = [],
-        ?array $allowedAdditionalFields = null,
-        bool $clearMissing = false
+        private ?ServerRequestInterface $request = null,
+        private array $attributes = [],
+        private ?array $allowedAdditionalFields = null,
+        private bool $clearMissing = false
     ) {
-        $this->request = $request;
-        $this->attributes = $attributes;
-        $this->allowedAdditionalFields = $allowedAdditionalFields;
-        $this->clearMissing = $clearMissing;
     }
 
     public function getRequest(): ?ServerRequestInterface

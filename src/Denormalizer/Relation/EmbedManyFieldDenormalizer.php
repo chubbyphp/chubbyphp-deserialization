@@ -13,14 +13,8 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
 {
-    private string $class;
-
-    private AccessorInterface $accessor;
-
-    public function __construct(string $class, AccessorInterface $accessor)
+    public function __construct(private string $class, private AccessorInterface $accessor)
     {
-        $this->class = $class;
-        $this->accessor = $accessor;
     }
 
     /**

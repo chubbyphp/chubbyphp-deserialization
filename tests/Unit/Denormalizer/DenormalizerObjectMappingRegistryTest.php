@@ -46,7 +46,7 @@ final class DenormalizerObjectMappingRegistryTest extends TestCase
 
         $registry = new DenormalizerObjectMappingRegistry([]);
 
-        $registry->getObjectMapping(\get_class(new \stdClass()));
+        $registry->getObjectMapping((new \stdClass())::class);
     }
 
     public function testGetObjectMappingFromDoctrineProxy(): void
@@ -60,7 +60,7 @@ final class DenormalizerObjectMappingRegistryTest extends TestCase
 
         $registry = new DenormalizerObjectMappingRegistry([$denormalizationObjectMapping]);
 
-        $mapping = $registry->getObjectMapping(\get_class($object));
+        $mapping = $registry->getObjectMapping($object::class);
 
         self::assertInstanceOf(DenormalizationObjectMappingInterface::class, $mapping);
     }

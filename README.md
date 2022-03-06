@@ -25,24 +25,24 @@ A simple deserialization.
 
 ## Requirements
 
- * php: ^7.4|^8.0
+ * php: ^8.0
  * psr/http-message: ^1.0.1
- * psr/log: ^1.1.3
- * symfony/yaml: ^4.4.34|^5.3.11|^6.0.0
+ * psr/log: ^1.1.4|^2.0|^3.0
+ * symfony/yaml: ^4.4.38|^5.4.5|^6.0
 
 ## Suggest
 
- * chubbyphp/chubbyphp-container: ^1.1
- * pimple/pimple: ^3.3
- * psr/container: ^1.0
- * symfony/dependency-injection: ^4.4.34|^5.3.11|^6.0.0 (symfony integration)
+ * chubbyphp/chubbyphp-container: ^2.1
+ * pimple/pimple: ^3.5
+ * psr/container: ^1.1.2|^2.0.2
+ * symfony/dependency-injection: ^4.4.38|^5.4.5|^6.0 (symfony integration)
 
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "^3.3"
+composer require chubbyphp/chubbyphp-deserialization "^3.4"
 ```
 
 ## Usage
@@ -204,7 +204,7 @@ echo $model->getName();
 
 ## Copyright
 
-Dominik Zogg 2021
+Dominik Zogg 2022
 
 
 [1]: https://packagist.org/packages/chubbyphp/chubbyphp-deserialization

@@ -9,14 +9,8 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 final class FieldDenormalizer implements FieldDenormalizerInterface
 {
-    private AccessorInterface $accessor;
-
-    private bool $emptyToNull;
-
-    public function __construct(AccessorInterface $accessor, bool $emptyToNull = false)
+    public function __construct(private AccessorInterface $accessor, private bool $emptyToNull = false)
     {
-        $this->accessor = $accessor;
-        $this->emptyToNull = $emptyToNull;
     }
 
     /**

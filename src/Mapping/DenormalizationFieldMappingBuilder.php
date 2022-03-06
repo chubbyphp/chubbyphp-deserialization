@@ -22,15 +22,12 @@ use Chubbyphp\Deserialization\Policy\PolicyInterface;
  */
 final class DenormalizationFieldMappingBuilder
 {
-    private string $name;
-
     private FieldDenormalizerInterface $fieldDenormalizer;
 
-    private ?PolicyInterface $policy;
+    private ?PolicyInterface $policy = null;
 
-    private function __construct(string $name)
+    private function __construct(private string $name)
     {
-        $this->name = $name;
     }
 
     public static function create(
