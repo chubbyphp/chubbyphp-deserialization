@@ -56,7 +56,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
      *
      * @return array<int|string, object>
      */
-    private function cleanRelatedObjects(&$relatedObjects): array
+    private function cleanRelatedObjects(array|\ArrayAccess &$relatedObjects): array
     {
         $existEmbObjects = [];
         foreach ($relatedObjects as $key => $existEmbObject) {
@@ -75,7 +75,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
     private function assignRelatedObjects(
         string $path,
         array $value,
-        &$relatedObjects,
+        array|\ArrayAccess &$relatedObjects,
         array $existEmbObjects,
         DenormalizerContextInterface $context,
         DenormalizerInterface $denormalizer

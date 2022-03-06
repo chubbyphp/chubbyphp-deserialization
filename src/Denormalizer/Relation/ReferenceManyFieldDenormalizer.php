@@ -56,7 +56,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
     /**
      * @param array<int|string, object>|\ArrayAccess<int|string, object> $relatedObjects
      */
-    private function cleanRelatedObjects(&$relatedObjects): void
+    private function cleanRelatedObjects(array|\ArrayAccess &$relatedObjects): void
     {
         foreach ($relatedObjects as $key => $existEmbObject) {
             unset($relatedObjects[$key]);
@@ -67,7 +67,7 @@ final class ReferenceManyFieldDenormalizer implements FieldDenormalizerInterface
      * @param array<int|string, string>                                  $value
      * @param array<int|string, object>|\ArrayAccess<int|string, object> $relatedObjects
      */
-    private function assignRelatedObjects(string $path, array $value, &$relatedObjects): void
+    private function assignRelatedObjects(string $path, array $value, array|\ArrayAccess &$relatedObjects): void
     {
         foreach ($value as $key => $subValue) {
             $subPath = $path.'['.$key.']';
