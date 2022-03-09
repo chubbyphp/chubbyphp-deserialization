@@ -65,7 +65,7 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
     {
         $type = \gettype($value);
 
-        if ($this->type === $type || !is_scalar($value)) {
+        if ($this->type === $type || !\is_scalar($value)) {
             return $value;
         }
 
