@@ -4,13 +4,34 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Decoder;
 
+use Chubbyphp\DecodeEncode\Decoder\UrlEncodedTypeDecoder as BaseUrlEncodedTypeDecoder;
+use Chubbyphp\DecodeEncode\RuntimeException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
+/**
+ * @deprecated use \Chubbyphp\DecodeEncode\Decoder\UrlEncodedTypeDecoder
+ */
 final class UrlEncodedTypeDecoder implements TypeDecoderInterface
 {
+    private BaseUrlEncodedTypeDecoder $urlEncodedTypeDecoder;
+
+    public function __construct()
+    {
+        $this->urlEncodedTypeDecoder = new BaseUrlEncodedTypeDecoder();
+    }
+
     public function getContentType(): string
     {
-        return 'application/x-www-form-urlencoded';
+        @trigger_error(
+            sprintf(
+                '%s:getContentType use %s:getContentType',
+                self::class,
+                BaseUrlEncodedTypeDecoder::class
+            ),
+            E_USER_DEPRECATED
+        );
+
+        return $this->urlEncodedTypeDecoder->getContentType();
     }
 
     /**
@@ -20,56 +41,19 @@ final class UrlEncodedTypeDecoder implements TypeDecoderInterface
      */
     public function decode(string $data): array
     {
-        $rawData = [];
-        parse_str($data, $rawData);
+        @trigger_error(
+            sprintf(
+                '%s:decode use %s:decode',
+                self::class,
+                BaseUrlEncodedTypeDecoder::class
+            ),
+            E_USER_DEPRECATED
+        );
 
-        if ('' !== $data && [] === $rawData) {
-            throw DeserializerRuntimeException::createNotParsable($this->getContentType());
+        try {
+            return $this->urlEncodedTypeDecoder->decode($data);
+        } catch (RuntimeException $e) {
+            throw new DeserializerRuntimeException($e->getMessage(), $e->getCode(), $e);
         }
-
-        return $this->fixValues($rawData);
-    }
-
-    /**
-     * @param array<int|string, null|array|bool|float|int|string> $rawData
-     *
-     * @return array<int|string, null|array|bool|float|int|string>
-     */
-    private function fixValues(array $rawData): array
-    {
-        $data = [];
-        foreach ($rawData as $key => $value) {
-            $data[$key] = \is_array($value) ? $this->fixValues($value) : $this->fixValue($value);
-        }
-
-        return $data;
-    }
-
-    /**
-     * @return null|bool|float|int|string
-     */
-    private function fixValue(string $value)
-    {
-        if ('' === $value) {
-            return;
-        }
-
-        if ('true' === $value) {
-            return true;
-        }
-
-        if ('false' === $value) {
-            return false;
-        }
-
-        if (is_numeric($value) && '0' !== $value[0]) {
-            if ((string) (int) $value === $value) {
-                return (int) $value;
-            }
-
-            return (float) $value;
-        }
-
-        return $value;
     }
 }

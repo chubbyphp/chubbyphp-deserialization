@@ -4,21 +4,11 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Decoder;
 
-use Chubbyphp\Deserialization\DeserializerLogicException;
-use Chubbyphp\Deserialization\DeserializerRuntimeException;
+use Chubbyphp\DecodeEncode\Decoder\DecoderInterface as BaseDecoderInterface;
 
-interface DecoderInterface
+/**
+ * @deprecated use \Chubbyphp\DecodeEncode\Decoder\DecoderInterface
+ */
+interface DecoderInterface extends BaseDecoderInterface
 {
-    /**
-     * @return array<int, string>
-     */
-    public function getContentTypes(): array;
-
-    /**
-     * @throws DeserializerLogicException
-     * @throws DeserializerRuntimeException
-     *
-     * @return array<string, null|array|bool|float|int|string>
-     */
-    public function decode(string $data, string $contentType): array;
 }

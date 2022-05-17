@@ -4,15 +4,34 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Decoder;
 
+use Chubbyphp\DecodeEncode\Decoder\YamlTypeDecoder as BaseYamlTypeDecoder;
+use Chubbyphp\DecodeEncode\RuntimeException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Symfony\Component\Yaml\Exception\ParseException;
-use Symfony\Component\Yaml\Yaml;
 
+/**
+ * @deprecated use \Chubbyphp\DecodeEncode\Decoder\YamlTypeDecoder
+ */
 final class YamlTypeDecoder implements TypeDecoderInterface
 {
+    private BaseYamlTypeDecoder $yamlTypeDecoder;
+
+    public function __construct()
+    {
+        $this->yamlTypeDecoder = new BaseYamlTypeDecoder();
+    }
+
     public function getContentType(): string
     {
-        return 'application/x-yaml';
+        @trigger_error(
+            sprintf(
+                '%s:getContentType use %s:getContentType',
+                self::class,
+                BaseYamlTypeDecoder::class
+            ),
+            E_USER_DEPRECATED
+        );
+
+        return $this->yamlTypeDecoder->getContentType();
     }
 
     /**
@@ -22,16 +41,19 @@ final class YamlTypeDecoder implements TypeDecoderInterface
      */
     public function decode(string $data): array
     {
+        @trigger_error(
+            sprintf(
+                '%s:decode use %s:decode',
+                self::class,
+                BaseYamlTypeDecoder::class
+            ),
+            E_USER_DEPRECATED
+        );
+
         try {
-            $decoded = Yaml::parse($data);
-        } catch (ParseException) {
-            throw DeserializerRuntimeException::createNotParsable($this->getContentType());
+            return $this->yamlTypeDecoder->decode($data);
+        } catch (RuntimeException $e) {
+            throw new DeserializerRuntimeException($e->getMessage(), $e->getCode(), $e);
         }
-
-        if (!\is_array($decoded)) {
-            throw DeserializerRuntimeException::createNotParsable($this->getContentType(), 'Not an object');
-        }
-
-        return $decoded;
     }
 }

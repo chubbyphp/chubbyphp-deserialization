@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Unit\Decoder;
 
+use Chubbyphp\DecodeEncode\Decoder\YamlTypeDecoder as BaseYamlTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
@@ -18,7 +19,20 @@ final class YamlTypeDecoderTest extends AbstractTypeDecoderTest
     {
         $decoder = new YamlTypeDecoder();
 
+        error_clear_last();
+
         self::assertSame('application/x-yaml', $decoder->getContentType());
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(sprintf(
+            '%s:getContentType use %s:getContentType',
+            YamlTypeDecoder::class,
+            BaseYamlTypeDecoder::class
+        ), $error['message']);
     }
 
     /**

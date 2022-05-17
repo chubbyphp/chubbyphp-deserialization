@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Unit\Decoder;
 
+use Chubbyphp\DecodeEncode\Decoder\UrlEncodedTypeDecoder as BaseUrlEncodedTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
@@ -18,7 +19,20 @@ final class UrlEncodedTypeDecoderTest extends AbstractTypeDecoderTest
     {
         $decoder = new UrlEncodedTypeDecoder();
 
+        error_clear_last();
+
         self::assertSame('application/x-www-form-urlencoded', $decoder->getContentType());
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(sprintf(
+            '%s:getContentType use %s:getContentType',
+            UrlEncodedTypeDecoder::class,
+            BaseUrlEncodedTypeDecoder::class
+        ), $error['message']);
     }
 
     /**

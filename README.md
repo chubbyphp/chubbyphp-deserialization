@@ -26,9 +26,9 @@ A simple deserialization.
 ## Requirements
 
  * php: ^8.0
+ * chubbyphp/chubbyphp-decode-encode: ^1.0.0
  * psr/http-message: ^1.0.1
  * psr/log: ^1.1.4|^2.0|^3.0
- * symfony/yaml: ^4.4.38|^5.4.5|^6.0
 
 ## Suggest
 
@@ -42,7 +42,7 @@ A simple deserialization.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "^3.4"
+composer require chubbyphp/chubbyphp-deserialization "^3.5"
 ```
 
 ## Usage
@@ -96,12 +96,12 @@ composer require chubbyphp/chubbyphp-deserialization "^3.4"
 ```php
 <?php
 
-use Chubbyphp\Deserialization\Decoder\Decoder;
-use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
-use Chubbyphp\Deserialization\Decoder\JsonxTypeDecoder;
-use Chubbyphp\Deserialization\Decoder\UrlEncodedTypeDecoder;
-use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
-use Chubbyphp\Deserialization\Decoder\YamlTypeDecoder;
+use Chubbyphp\DecodeEncode\Decoder\Decoder;
+use Chubbyphp\DecodeEncode\Decoder\JsonTypeDecoder;
+use Chubbyphp\DecodeEncode\Decoder\JsonxTypeDecoder;
+use Chubbyphp\DecodeEncode\Decoder\UrlEncodedTypeDecoder;
+use Chubbyphp\DecodeEncode\Decoder\XmlTypeDecoder;
+use Chubbyphp\DecodeEncode\Decoder\YamlTypeDecoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;

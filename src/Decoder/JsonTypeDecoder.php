@@ -4,13 +4,34 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Deserialization\Decoder;
 
+use Chubbyphp\DecodeEncode\Decoder\JsonTypeDecoder as BaseJsonTypeDecoder;
+use Chubbyphp\DecodeEncode\RuntimeException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
+/**
+ * @deprecated use \Chubbyphp\DecodeEncode\Decoder\JsonTypeDecoder
+ */
 final class JsonTypeDecoder implements TypeDecoderInterface
 {
+    private BaseJsonTypeDecoder $jsonTypeDecoder;
+
+    public function __construct()
+    {
+        $this->jsonTypeDecoder = new BaseJsonTypeDecoder();
+    }
+
     public function getContentType(): string
     {
-        return 'application/json';
+        @trigger_error(
+            sprintf(
+                '%s:getContentType use %s:getContentType',
+                self::class,
+                BaseJsonTypeDecoder::class
+            ),
+            E_USER_DEPRECATED
+        );
+
+        return $this->jsonTypeDecoder->getContentType();
     }
 
     /**
@@ -20,16 +41,19 @@ final class JsonTypeDecoder implements TypeDecoderInterface
      */
     public function decode(string $data): array
     {
-        $decoded = json_decode($data, true);
+        @trigger_error(
+            sprintf(
+                '%s:decode use %s:decode',
+                self::class,
+                BaseJsonTypeDecoder::class
+            ),
+            E_USER_DEPRECATED
+        );
 
-        if (JSON_ERROR_NONE !== json_last_error()) {
-            throw DeserializerRuntimeException::createNotParsable($this->getContentType(), json_last_error_msg());
+        try {
+            return $this->jsonTypeDecoder->decode($data);
+        } catch (RuntimeException $e) {
+            throw new DeserializerRuntimeException($e->getMessage(), $e->getCode(), $e);
         }
-
-        if (!\is_array($decoded)) {
-            throw DeserializerRuntimeException::createNotParsable($this->getContentType(), 'Not an object');
-        }
-
-        return $decoded;
     }
 }
