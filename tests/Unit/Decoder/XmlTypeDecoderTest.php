@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Unit\Decoder;
 
+use Chubbyphp\DecodeEncode\Decoder\XmlTypeDecoder as BaseXmlTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
 
 /**
@@ -17,7 +18,20 @@ final class XmlTypeDecoderTest extends AbstractTypeDecoderTest
     {
         $decoder = new XmlTypeDecoder();
 
+        error_clear_last();
+
         self::assertSame('application/xml', $decoder->getContentType());
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(sprintf(
+            '%s:getContentType use %s:getContentType',
+            XmlTypeDecoder::class,
+            BaseXmlTypeDecoder::class
+        ), $error['message']);
     }
 
     /**

@@ -1,15 +1,5 @@
-# XmlTypeDecoder (alias for Jsonx)
+# XmlTypeDecoder
 
-```php
-<?php
+Use [XmlTypeDecoder][1] from chubbyphp/chubbyphp-decode-encode.
 
-use Chubbyphp\Deserialization\Decoder\XmlTypeDecoder;
-
-$decoderType = new XmlTypeDecoder();
-
-echo $decoderType->getContentType();
-// 'application/xml'
-
-print_r($decoderType->decode('<json:object><json:string name="name">php</json:string></json:object>'));
-// ['name' => 'php']
-```
+[1]: https://github.com/chubbyphp/chubbyphp-decode-encode/blob/master/doc/Decoder/XmlTypeDecoder.md

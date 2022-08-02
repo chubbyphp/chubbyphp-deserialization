@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Unit\Decoder;
 
+use Chubbyphp\DecodeEncode\Decoder\JsonxTypeDecoder as BaseJsonxTypeDecoder;
 use Chubbyphp\Deserialization\Decoder\JsonxTypeDecoder;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
@@ -18,7 +19,20 @@ final class JsonxTypeDecoderTest extends AbstractTypeDecoderTest
     {
         $decoder = new JsonxTypeDecoder();
 
+        error_clear_last();
+
         self::assertSame('application/jsonx+xml', $decoder->getContentType());
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(sprintf(
+            '%s:getContentType use %s:getContentType',
+            JsonxTypeDecoder::class,
+            BaseJsonxTypeDecoder::class
+        ), $error['message']);
     }
 
     /**
