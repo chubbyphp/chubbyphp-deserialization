@@ -174,7 +174,20 @@ final class JsonTypeDecoderTest extends AbstractTypeDecoderTest
 
         $decoder = new JsonTypeDecoder();
 
+        error_clear_last();
+
         self::assertEquals($expectedData, $decoder->decode($json));
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(sprintf(
+            '%s:decode use %s:decode',
+            JsonTypeDecoder::class,
+            BaseJsonTypeDecoder::class
+        ), $error['message']);
     }
 
     public function testTypes(): void

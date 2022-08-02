@@ -11,7 +11,7 @@ use Chubbyphp\Laminas\Config\Factory\AbstractFactory;
 use Psr\Container\ContainerInterface;
 
 /**
- * @deprecated \Chubbyphp\DecodeEncode\Decoder\Decoder
+ * @deprecated \Chubbyphp\DecodeEncode\ServiceFactory\DecoderFactory
  */
 final class DecoderFactory extends AbstractFactory
 {

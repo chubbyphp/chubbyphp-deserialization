@@ -57,7 +57,20 @@ final class DecoderTest extends TestCase
 
         $decoder = new Decoder([$typeDecoder]);
 
+        error_clear_last();
+
         self::assertSame(['key' => 'value'], $decoder->decode('{"key": "value"}', 'application/json'));
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(sprintf(
+            '%s:decode use %s:decode',
+            Decoder::class,
+            BaseDecoder::class
+        ), $error['message']);
     }
 
     public function testDecodeWithMissingType(): void

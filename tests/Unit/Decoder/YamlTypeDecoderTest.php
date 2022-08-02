@@ -139,7 +139,20 @@ final class YamlTypeDecoderTest extends AbstractTypeDecoderTest
 
         $decoder = new YamlTypeDecoder();
 
+        error_clear_last();
+
         self::assertEquals($expectedData, $decoder->decode($yaml));
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(sprintf(
+            '%s:decode use %s:decode',
+            YamlTypeDecoder::class,
+            BaseYamlTypeDecoder::class
+        ), $error['message']);
     }
 
     public function testTypes(): void

@@ -174,6 +174,19 @@ final class XmlTypeDecoderTest extends AbstractTypeDecoderTest
 
         $decoder = new XmlTypeDecoder();
 
+        error_clear_last();
+
         self::assertEquals($expectedData, $decoder->decode($xml));
+
+        $error = error_get_last();
+
+        self::assertNotNull($error);
+
+        self::assertSame(E_USER_DEPRECATED, $error['type']);
+        self::assertSame(sprintf(
+            '%s:decode use %s:decode',
+            XmlTypeDecoder::class,
+            BaseXmlTypeDecoder::class
+        ), $error['message']);
     }
 }
