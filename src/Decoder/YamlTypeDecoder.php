@@ -35,9 +35,9 @@ final class YamlTypeDecoder implements TypeDecoderInterface
     }
 
     /**
-     * @throws DeserializerRuntimeException
-     *
      * @return array<string, null|array|bool|float|int|string>
+     *
+     * @throws DeserializerRuntimeException
      */
     public function decode(string $data): array
     {

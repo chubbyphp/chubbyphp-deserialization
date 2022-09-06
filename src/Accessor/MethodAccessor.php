@@ -28,9 +28,9 @@ final class MethodAccessor implements AccessorInterface
     }
 
     /**
-     * @throws DeserializerLogicException
-     *
      * @return mixed
+     *
+     * @throws DeserializerLogicException
      */
     public function getValue(object $object)
     {

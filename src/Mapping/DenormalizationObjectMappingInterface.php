@@ -16,9 +16,9 @@ interface DenormalizationObjectMappingInterface
     public function getDenormalizationFactory(string $path, ?string $type = null): callable;
 
     /**
-     * @throws DeserializerRuntimeException
-     *
      * @return array<int, DenormalizationFieldMappingInterface>
+     *
+     * @throws DeserializerRuntimeException
      */
     public function getDenormalizationFieldMappings(string $path, ?string $type = null): array;
 }

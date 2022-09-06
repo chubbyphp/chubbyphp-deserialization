@@ -28,9 +28,9 @@ final class ModelMapping implements DenormalizationObjectMappingInterface
     }
 
     /**
-     * @throws DeserializerRuntimeException
-     *
      * @return array<int, DenormalizationFieldMappingInterface>
+     *
+     * @throws DeserializerRuntimeException
      */
     public function getDenormalizationFieldMappings(string $path, ?string $type = null): array
     {

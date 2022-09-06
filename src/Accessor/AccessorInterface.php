@@ -16,9 +16,9 @@ interface AccessorInterface
     public function setValue(object $object, $value): void;
 
     /**
-     * @throws DeserializerLogicException
-     *
      * @return mixed
+     *
+     * @throws DeserializerLogicException
      */
     public function getValue(object $object);
 }
