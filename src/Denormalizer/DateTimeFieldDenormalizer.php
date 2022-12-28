@@ -61,7 +61,7 @@ final class DateTimeFieldDenormalizer implements FieldDenormalizerInterface
 
             $errors = \DateTimeImmutable::getLastErrors();
 
-            if (0 === $errors['warning_count'] && 0 === $errors['error_count']) {
+            if (false === $errors || 0 === $errors['warning_count'] && 0 === $errors['error_count']) {
                 $value = $dateTime;
             }
         } catch (\Exception) {
