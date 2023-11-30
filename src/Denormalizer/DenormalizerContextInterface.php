@@ -16,21 +16,16 @@ interface DenormalizerContextInterface
     public function getAttributes(): array;
 
     /**
-     * @param mixed $default
-     *
      * @return mixed
      */
-    public function getAttribute(string $name, $default = null);
+    public function getAttribute(string $name, mixed $default = null);
 
     /**
      * @param array<string, mixed> $attributes
      */
     public function withAttributes(array $attributes): self;
 
-    /**
-     * @param mixed $value
-     */
-    public function withAttribute(string $name, $value): self;
+    public function withAttribute(string $name, mixed $value): self;
 
     /**
      * @return null|array<int, string>

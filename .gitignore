@@ -1,7 +1,7 @@
 .DS_Store
 .idea/
+.phpunit.cache
 .vscode/
-.phpunit.result.cache
 build/
 composer.lock
 vendor/

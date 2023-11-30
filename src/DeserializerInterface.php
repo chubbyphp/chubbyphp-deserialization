@@ -10,11 +10,8 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 
 interface DeserializerInterface extends DecoderInterface, DenormalizerInterface
 {
-    /**
-     * @param object|string $object
-     */
     public function deserialize(
-        $object,
+        object|string $object,
         string $data,
         string $contentType,
         ?DenormalizerContextInterface $context = null,

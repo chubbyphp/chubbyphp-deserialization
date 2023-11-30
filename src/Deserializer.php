@@ -10,15 +10,10 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 
 final class Deserializer implements DeserializerInterface
 {
-    public function __construct(private DecoderInterface $decoder, private DenormalizerInterface $denormalizer)
-    {
-    }
+    public function __construct(private DecoderInterface $decoder, private DenormalizerInterface $denormalizer) {}
 
-    /**
-     * @param object|string $object
-     */
     public function deserialize(
-        $object,
+        object|string $object,
         string $data,
         string $contentType,
         ?DenormalizerContextInterface $context = null,
@@ -47,14 +42,13 @@ final class Deserializer implements DeserializerInterface
     }
 
     /**
-     * @param object|string                                   $object
      * @param array<string, null|array|bool|float|int|string> $data
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
      */
     public function denormalize(
-        $object,
+        object|string $object,
         array $data,
         ?DenormalizerContextInterface $context = null,
         string $path = ''

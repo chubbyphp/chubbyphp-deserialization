@@ -196,7 +196,7 @@ final class ConvertTypeFieldDenormalizerTest extends TestCase
 
         $fieldDenormalizer->denormalizeField('value', $object, 0x539, $context);
         $fieldDenormalizer->denormalizeField('value', $object, 0b10100111001, $context);
-        $fieldDenormalizer->denormalizeField('value', $object, 02471, $context);
+        $fieldDenormalizer->denormalizeField('value', $object, 0o2471, $context);
         $fieldDenormalizer->denormalizeField('value', $object, 1337e0, $context);
     }
 
@@ -379,7 +379,7 @@ final class ConvertTypeFieldDenormalizerTest extends TestCase
 
         $fieldDenormalizer->denormalizeField('value', $object, 0x539, $context);
         $fieldDenormalizer->denormalizeField('value', $object, 0b10100111001, $context);
-        $fieldDenormalizer->denormalizeField('value', $object, 02471, $context);
+        $fieldDenormalizer->denormalizeField('value', $object, 0o2471, $context);
         $fieldDenormalizer->denormalizeField('value', $object, 1337e0, $context);
     }
 

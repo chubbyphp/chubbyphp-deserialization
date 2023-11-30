@@ -8,9 +8,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 
 final class NotPolicy implements PolicyInterface
 {
-    public function __construct(private PolicyInterface $policy)
-    {
-    }
+    public function __construct(private PolicyInterface $policy) {}
 
     public function isCompliant(string $path, object $object, DenormalizerContextInterface $context): bool
     {

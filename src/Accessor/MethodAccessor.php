@@ -8,16 +8,12 @@ use Chubbyphp\Deserialization\DeserializerLogicException;
 
 final class MethodAccessor implements AccessorInterface
 {
-    public function __construct(private string $property)
-    {
-    }
+    public function __construct(private string $property) {}
 
     /**
-     * @param mixed $value
-     *
      * @throws DeserializerLogicException
      */
-    public function setValue(object $object, $value): void
+    public function setValue(object $object, mixed $value): void
     {
         $set = 'set'.ucfirst($this->property);
         if (!method_exists($object, $set)) {

@@ -22,9 +22,7 @@ final class DenormalizerContextBuilder
 
     private bool $clearMissing = false;
 
-    private function __construct()
-    {
-    }
+    private function __construct() {}
 
     public static function create(): self
     {

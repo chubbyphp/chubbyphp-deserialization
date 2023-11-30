@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Resources\Mapping;
 
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingFactory;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use Chubbyphp\Tests\Deserialization\Resources\Model\ManyModel;
@@ -32,9 +32,11 @@ final class ManyModelMapping implements DenormalizationObjectMappingInterface
      */
     public function getDenormalizationFieldMappings(string $path, ?string $type = null): array
     {
+        $denormalizationFieldMappingFactory = new DenormalizationFieldMappingFactory();
+
         return [
-            DenormalizationFieldMappingBuilder::create('name')->getMapping(),
-            DenormalizationFieldMappingBuilder::create('value')->getMapping(),
+            $denormalizationFieldMappingFactory->create('name'),
+            $denormalizationFieldMappingFactory->create('value'),
         ];
     }
 }

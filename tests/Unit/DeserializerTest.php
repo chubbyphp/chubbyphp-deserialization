@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Unit;
 
-use Chubbyphp\Deserialization\Decoder\DecoderInterface;
+use Chubbyphp\DecodeEncode\Decoder\DecoderInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Deserializer;

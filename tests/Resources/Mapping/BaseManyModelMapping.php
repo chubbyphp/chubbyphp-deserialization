@@ -11,9 +11,7 @@ use Chubbyphp\Tests\Deserialization\Resources\Model\AbstractManyModel;
 
 final class BaseManyModelMapping implements DenormalizationObjectMappingInterface
 {
-    public function __construct(private ManyModelMapping $modelMapping, private array $supportedTypes)
-    {
-    }
+    public function __construct(private ManyModelMapping $modelMapping, private array $supportedTypes) {}
 
     public function getClass(): string
     {

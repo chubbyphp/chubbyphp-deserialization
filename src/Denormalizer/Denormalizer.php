@@ -25,14 +25,13 @@ final class Denormalizer implements DenormalizerInterface
     }
 
     /**
-     * @param object|string                                   $object
      * @param array<string, null|array|bool|float|int|string> $data
      *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
      */
     public function denormalize(
-        $object,
+        object|string $object,
         array $data,
         ?DenormalizerContextInterface $context = null,
         string $path = ''

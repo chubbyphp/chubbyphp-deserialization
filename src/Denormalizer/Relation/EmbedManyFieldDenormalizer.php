@@ -13,20 +13,16 @@ use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
 {
-    public function __construct(private string $class, private AccessorInterface $accessor)
-    {
-    }
+    public function __construct(private string $class, private AccessorInterface $accessor) {}
 
     /**
-     * @param mixed $value
-     *
      * @throws DeserializerLogicException
      * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
         string $path,
         object $object,
-        $value,
+        mixed $value,
         DenormalizerContextInterface $context,
         ?DenormalizerInterface $denormalizer = null
     ): void {

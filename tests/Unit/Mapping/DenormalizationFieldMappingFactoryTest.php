@@ -6,7 +6,6 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Mapping;
 
 use Chubbyphp\Deserialization\Denormalizer\CallbackFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\ConvertTypeFieldDenormalizer;
-use Chubbyphp\Deserialization\Denormalizer\DateTimeFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DateTimeImmutableFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
@@ -14,7 +13,6 @@ use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedOneFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceManyFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer;
-use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingBuilder;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingFactory;
 use Chubbyphp\Deserialization\Policy\NullPolicy;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
@@ -114,74 +112,6 @@ final class DenormalizationFieldMappingFactoryTest extends TestCase
         $reflectionObject->setAccessible(true);
 
         self::assertFalse($reflectionObject->getValue($fieldDenormalizer));
-
-        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
-    }
-
-    public function testGetDefaultMappingForConvertTypeWithEmptyToNull(): void
-    {
-        $fieldMapping = DenormalizationFieldMappingBuilder::createConvertType(
-            'name',
-            ConvertTypeFieldDenormalizer::TYPE_FLOAT,
-            true
-        )->getMapping();
-
-        self::assertSame('name', $fieldMapping->getName());
-
-        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
-
-        self::assertInstanceOf(ConvertTypeFieldDenormalizer::class, $fieldDenormalizer);
-
-        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
-        $reflectionObject->setAccessible(true);
-
-        self::assertTrue($reflectionObject->getValue($fieldDenormalizer));
-
-        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
-    }
-
-    public function testGetDefaultMappingForDateTime(): void
-    {
-        $fieldMapping = $this->factory->createDateTime('name');
-
-        self::assertSame('name', $fieldMapping->getName());
-
-        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
-
-        self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldDenormalizer);
-
-        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
-        $reflectionObject->setAccessible(true);
-
-        self::assertFalse($reflectionObject->getValue($fieldDenormalizer));
-
-        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
-    }
-
-    public function testGetDefaultMappingForDateTimeWithEmptyToNull(): void
-    {
-        $fieldMapping = $this->factory->createDateTime('name', true);
-
-        self::assertSame('name', $fieldMapping->getName());
-
-        $fieldDenormalizer = $fieldMapping->getFieldDenormalizer();
-
-        self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldDenormalizer);
-
-        $reflectionObject = new \ReflectionProperty($fieldDenormalizer, 'emptyToNull');
-        $reflectionObject->setAccessible(true);
-
-        self::assertTrue($reflectionObject->getValue($fieldDenormalizer));
-
-        self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
-    }
-
-    public function testGetDefaultMappingForDateTimeWithTimezone(): void
-    {
-        $fieldMapping = $this->factory->createDateTime('name', false, new \DateTimeZone('UTC'));
-
-        self::assertSame('name', $fieldMapping->getName());
-        self::assertInstanceOf(DateTimeFieldDenormalizer::class, $fieldMapping->getFieldDenormalizer());
 
         self::assertInstanceOf(NullPolicy::class, $fieldMapping->getPolicy());
     }

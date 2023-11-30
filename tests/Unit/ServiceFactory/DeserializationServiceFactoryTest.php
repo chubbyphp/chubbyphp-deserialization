@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Unit\ServiceFactory;
 
 use Chubbyphp\Container\Container;
-use Chubbyphp\Deserialization\Decoder\Decoder;
+use Chubbyphp\DecodeEncode\Decoder\Decoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;

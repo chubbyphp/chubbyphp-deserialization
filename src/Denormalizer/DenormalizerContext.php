@@ -17,8 +17,7 @@ final class DenormalizerContext implements DenormalizerContextInterface
         private array $attributes = [],
         private ?array $allowedAdditionalFields = null,
         private bool $clearMissing = false
-    ) {
-    }
+    ) {}
 
     public function getRequest(): ?ServerRequestInterface
     {
@@ -34,11 +33,9 @@ final class DenormalizerContext implements DenormalizerContextInterface
     }
 
     /**
-     * @param mixed $default
-     *
      * @return mixed
      */
-    public function getAttribute(string $name, $default = null)
+    public function getAttribute(string $name, mixed $default = null)
     {
         if (isset($this->attributes[$name])) {
             return $this->attributes[$name];
@@ -58,10 +55,7 @@ final class DenormalizerContext implements DenormalizerContextInterface
         return $context;
     }
 
-    /**
-     * @param mixed $value
-     */
-    public function withAttribute(string $name, $value): DenormalizerContextInterface
+    public function withAttribute(string $name, mixed $value): DenormalizerContextInterface
     {
         $context = clone $this;
         $context->attributes[$name] = $value;

@@ -9,14 +9,9 @@ use Doctrine\Persistence\Proxy;
 
 final class PropertyAccessor implements AccessorInterface
 {
-    public function __construct(private string $property)
-    {
-    }
+    public function __construct(private string $property) {}
 
-    /**
-     * @param mixed $value
-     */
-    public function setValue(object $object, $value): void
+    public function setValue(object $object, mixed $value): void
     {
         $class = $this->getClass($object);
 

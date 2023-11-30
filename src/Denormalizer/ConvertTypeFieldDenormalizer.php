@@ -36,14 +36,12 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param mixed $value
-     *
      * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
         string $path,
         object $object,
-        $value,
+        mixed $value,
         DenormalizerContextInterface $context,
         ?DenormalizerInterface $denormalizer = null
     ): void {
@@ -57,11 +55,9 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param mixed $value
-     *
      * @return mixed
      */
-    private function convertType($value)
+    private function convertType(mixed $value)
     {
         $type = \gettype($value);
 
@@ -90,10 +86,7 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
         return $value;
     }
 
-    /**
-     * @param mixed $value
-     */
-    private function convertFloat($value): bool|float|string
+    private function convertFloat(mixed $value): bool|float|string
     {
         if (!is_numeric($value)) {
             return $value;
@@ -102,10 +95,7 @@ final class ConvertTypeFieldDenormalizer implements FieldDenormalizerInterface
         return (float) $value;
     }
 
-    /**
-     * @param mixed $value
-     */
-    private function convertInt($value): bool|float|int|string
+    private function convertInt(mixed $value): bool|float|int|string
     {
         if (!is_numeric($value)) {
             return $value;

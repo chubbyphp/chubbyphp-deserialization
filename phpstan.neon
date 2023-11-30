@@ -4,12 +4,6 @@ parameters:
             message: '/no value type specified in iterable type array/'
             path: %currentWorkingDirectory%/src/*.php
         -
-            message: '//'
-            path: %currentWorkingDirectory%/src/Decoder/JsonxTypeDecoder.php
-        -
-            message: '//'
-            path: %currentWorkingDirectory%/src/Decoder/UrlEncodedTypeDecoder.php
-        -
             message: '/supplied for foreach, only iterables are supported/'
             path: %currentWorkingDirectory%/src/Denormalizer/Relation/EmbedManyFieldDenormalizer.php
         -

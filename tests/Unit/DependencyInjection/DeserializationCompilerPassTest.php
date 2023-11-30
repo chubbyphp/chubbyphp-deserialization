@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Chubbyphp\Tests\Deserialization\Unit\DependencyInjection;
 
-use Chubbyphp\Deserialization\Decoder\Decoder;
-use Chubbyphp\Deserialization\Decoder\JsonTypeDecoder;
+use Chubbyphp\DecodeEncode\Decoder\Decoder;
+use Chubbyphp\DecodeEncode\Decoder\JsonTypeDecoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\DependencyInjection\DeserializationCompilerPass;

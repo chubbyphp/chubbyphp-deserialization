@@ -41,8 +41,7 @@ final class MethodAccessorTest extends TestCase
     {
         $this->expectException(DeserializerLogicException::class);
 
-        $object = new class() {
-        };
+        $object = new class() {};
 
         $accessor = new MethodAccessor('name');
         $accessor->setValue($object, 'Name');
@@ -121,8 +120,7 @@ final class MethodAccessorTest extends TestCase
     {
         $this->expectException(DeserializerLogicException::class);
 
-        $object = new class() {
-        };
+        $object = new class() {};
 
         $accessor = new MethodAccessor('name');
         $accessor->getValue($object);

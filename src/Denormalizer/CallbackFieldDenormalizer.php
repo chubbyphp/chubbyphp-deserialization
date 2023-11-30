@@ -19,14 +19,12 @@ final class CallbackFieldDenormalizer implements FieldDenormalizerInterface
     }
 
     /**
-     * @param mixed $value
-     *
      * @throws DeserializerRuntimeException
      */
     public function denormalizeField(
         string $path,
         object $object,
-        $value,
+        mixed $value,
         DenormalizerContextInterface $context,
         ?DenormalizerInterface $denormalizer = null
     ): void {

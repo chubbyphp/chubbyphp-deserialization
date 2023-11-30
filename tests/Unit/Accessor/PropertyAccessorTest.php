@@ -65,8 +65,7 @@ final class PropertyAccessorTest extends TestCase
     {
         $this->expectException(DeserializerLogicException::class);
 
-        $object = new class() {
-        };
+        $object = new class() {};
 
         $accessor = new PropertyAccessor('name');
         $accessor->setValue($object, 'Name');
@@ -121,8 +120,7 @@ final class PropertyAccessorTest extends TestCase
     {
         $this->expectException(DeserializerLogicException::class);
 
-        $object = new class() {
-        };
+        $object = new class() {};
 
         $accessor = new PropertyAccessor('name');
         $accessor->getValue($object);

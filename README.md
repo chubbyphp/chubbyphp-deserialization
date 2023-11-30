@@ -2,7 +2,7 @@
 
 [![CI](https://github.com/chubbyphp/chubbyphp-deserialization/workflows/CI/badge.svg?branch=master)](https://github.com/chubbyphp/chubbyphp-deserialization/actions?query=workflow%3ACI)
 [![Coverage Status](https://coveralls.io/repos/github/chubbyphp/chubbyphp-deserialization/badge.svg?branch=master)](https://coveralls.io/github/chubbyphp/chubbyphp-deserialization?branch=master)
-[![Infection MSI](https://badge.stryker-mutator.io/github.com/chubbyphp/chubbyphp-deserialization/master)](https://dashboard.stryker-mutator.io/reports/github.com/chubbyphp/chubbyphp-deserialization/master)
+[![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fchubbyphp%2Fchubbyphp-deserialization%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/chubbyphp/chubbyphp-deserialization/master)[![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-deserialization/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialization)
 [![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-deserialization/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialization)
 [![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-deserialization/downloads.png)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialization)
 [![Monthly Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-deserialization/d/monthly)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialization)
@@ -25,24 +25,25 @@ A simple deserialization.
 
 ## Requirements
 
- * php: ^8.0
- * chubbyphp/chubbyphp-decode-encode: ^1.0.0
- * psr/http-message: ^1.0.1
- * psr/log: ^1.1.4|^2.0|^3.0
+ * php: ^8.1
+ * chubbyphp/chubbyphp-decode-encode: ^1.1
+ * psr/http-message: ^1.1|^2.0
+ * psr/log: ^2.0|^3.0
 
 ## Suggest
 
- * chubbyphp/chubbyphp-container: ^2.1
+ * chubbyphp/chubbyphp-container: ^2.2
  * pimple/pimple: ^3.5
- * psr/container: ^1.1.2|^2.0.2
- * symfony/dependency-injection: ^4.4.38|^5.4.5|^6.0 (symfony integration)
+ * psr/container: ^2.0.2
+ * symfony/config: ^5.4.31|^6.3.8|^7.0 (symfony integration)
+ * symfony/dependency-injection: ^5.4.31|^6.3.8|^7.0 (symfony integration)
 
 ## Installation
 
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "^3.5"
+composer require chubbyphp/chubbyphp-deserialization "^4.0"
 ```
 
 ## Usage
@@ -51,18 +52,6 @@ composer require chubbyphp/chubbyphp-deserialization "^3.5"
 
  * [MethodAccessor][2]
  * [PropertyAccessor][3]
-
-### Decoder
-
- * [Decoder][4]
-
-#### Type Decoder
-
- * [JsonTypeDecoder][5]
- * [JsonxTypeDecoder][6]
- * [UrlEncodedTypeDecoder][7]
- * [XmlTypeDecoder][8]
- * [YamlTypeDecoder][9]
 
 ### Denormalizer
 
@@ -193,7 +182,6 @@ echo $model->getName();
 
 #### chubbyphp-laminas-config-factory
 
- * [DecoderFactory][40]
  * [DenormalizerFactory][41]
  * [DenormalizerObjectMappingRegistryFactory][42]
  * [DeserializerFactory][43]
@@ -211,14 +199,6 @@ echo $model->getName();
 
 [2]: doc/Accessor/MethodAccessor.md
 [3]: doc/Accessor/PropertyAccessor.md
-
-[4]: doc/Decoder/Decoder.md
-
-[5]: doc/Decoder/JsonTypeDecoder.md
-[6]: doc/Decoder/JsonxTypeDecoder.md
-[7]: doc/Decoder/UrlEncodedTypeDecoder.md
-[8]: doc/Decoder/XmlTypeDecoder.md
-[9]: doc/Decoder/YamlTypeDecoder.md
 
 [10]: doc/Denormalizer/Denormalizer.md
 
@@ -257,7 +237,6 @@ echo $model->getName();
 
 [34]: doc/ServiceProvider/DeserializationServiceProvider.md
 
-[40]: doc/ServiceFactory/DecoderFactory.md
 [41]: doc/ServiceFactory/DenormalizerFactory.md
 [42]: doc/ServiceFactory/DenormalizerObjectMappingRegistryFactory.md
 [43]: doc/ServiceFactory/DeserializerFactory.md
