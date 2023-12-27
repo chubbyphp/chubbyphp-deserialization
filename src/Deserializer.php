@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Chubbyphp\Deserialization;
 
 use Chubbyphp\DecodeEncode\Decoder\DecoderInterface;
+use Chubbyphp\DecodeEncode\LogicException as DecodeEncodeLogicException;
+use Chubbyphp\DecodeEncode\RuntimeException as DecodeEncodeRuntimeException;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 
@@ -19,7 +21,7 @@ final class Deserializer implements DeserializerInterface
         ?DenormalizerContextInterface $context = null,
         string $path = ''
     ): object {
-        return $this->denormalizer->denormalize($object, $this->decoder->decode($data, $contentType), $context, $path);
+        return $this->denormalize($object, $this->decode($data, $contentType), $context, $path);
     }
 
     /**
@@ -33,8 +35,8 @@ final class Deserializer implements DeserializerInterface
     /**
      * @return array<string, null|array|bool|float|int|string>
      *
-     * @throws DeserializerLogicException
-     * @throws DeserializerRuntimeException
+     * @throws DecodeEncodeLogicException
+     * @throws DecodeEncodeRuntimeException
      */
     public function decode(string $data, string $contentType): array
     {
