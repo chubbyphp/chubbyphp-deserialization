@@ -43,7 +43,7 @@ A simple deserialization.
 Through [Composer](http://getcomposer.org) as [chubbyphp/chubbyphp-deserialization][1].
 
 ```sh
-composer require chubbyphp/chubbyphp-deserialization "^4.0"
+composer require chubbyphp/chubbyphp-deserialization "^4.1"
 ```
 
 ## Usage
@@ -182,9 +182,10 @@ echo $model->getName();
 
 #### chubbyphp-laminas-config-factory
 
- * [DenormalizerFactory][41]
- * [DenormalizerObjectMappingRegistryFactory][42]
- * [DeserializerFactory][43]
+ * [DenormalizationFieldMappingFactoryFactory][41]
+ * [DenormalizerFactory][42]
+ * [DenormalizerObjectMappingRegistryFactory][43]
+ * [DeserializerFactory][44]
 
 ### ServiceProvider
 
@@ -237,6 +238,7 @@ echo $model->getName();
 
 [34]: doc/ServiceProvider/DeserializationServiceProvider.md
 
-[41]: doc/ServiceFactory/DenormalizerFactory.md
-[42]: doc/ServiceFactory/DenormalizerObjectMappingRegistryFactory.md
-[43]: doc/ServiceFactory/DeserializerFactory.md
+[41]: doc/ServiceFactory/DenormalizationFieldMappingFactoryFactory.md
+[42]: doc/ServiceFactory/DenormalizerFactory.md
+[43]: doc/ServiceFactory/DenormalizerObjectMappingRegistryFactory.md
+[44]: doc/ServiceFactory/DeserializerFactory.md

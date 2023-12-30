@@ -9,6 +9,7 @@ use Chubbyphp\DecodeEncode\Decoder\Decoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingFactory;
 use Chubbyphp\Deserialization\ServiceFactory\DeserializationServiceFactory;
 use Chubbyphp\Mock\MockByCallsTrait;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -36,6 +37,7 @@ final class DeserializationServiceFactoryTest extends TestCase
         self::assertTrue($container->has('deserializer.decodertypes'));
 
         self::assertTrue($container->has('deserializer.denormalizer'));
+        self::assertTrue($container->has('deserializer.denormalizer.fieldmappingfactory'));
         self::assertTrue($container->has('deserializer.denormalizer.objectmappingregistry'));
         self::assertTrue($container->has('deserializer.denormalizer.objectmappings'));
 
@@ -43,6 +45,11 @@ final class DeserializationServiceFactoryTest extends TestCase
 
         self::assertInstanceOf(Decoder::class, $container->get('deserializer.decoder'));
         self::assertIsArray($container->get('deserializer.decodertypes'));
+
+        self::assertInstanceOf(
+            DenormalizationFieldMappingFactory::class,
+            $container->get('deserializer.denormalizer.fieldmappingfactory')
+        );
 
         self::assertInstanceOf(
             DenormalizerObjectMappingRegistry::class,

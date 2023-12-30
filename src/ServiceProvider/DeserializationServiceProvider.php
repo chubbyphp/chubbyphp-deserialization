@@ -8,6 +8,7 @@ use Chubbyphp\DecodeEncode\Decoder\Decoder;
 use Chubbyphp\Deserialization\Denormalizer\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;
+use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingFactory;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
@@ -25,6 +26,8 @@ final class DeserializationServiceProvider implements ServiceProviderInterface
             $container['deserializer.denormalizer.objectmappingregistry'],
             $container['logger'] ?? null
         );
+
+        $container['deserializer.denormalizer.fieldmappingfactory'] = static fn () => new DenormalizationFieldMappingFactory();
 
         $container['deserializer.denormalizer.objectmappingregistry'] = static fn () => new DenormalizerObjectMappingRegistry($container['deserializer.denormalizer.objectmappings']);
 
