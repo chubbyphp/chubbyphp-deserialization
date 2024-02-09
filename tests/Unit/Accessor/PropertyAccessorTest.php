@@ -89,6 +89,22 @@ final class PropertyAccessorTest extends TestCase
         self::assertSame('Name', $accessor->getValue($object));
     }
 
+    public function testGetValueHandleUninitializedProperty(): void
+    {
+        $object = new class() {
+            private string $name;
+
+            public function getName(): string
+            {
+                return $this->name;
+            }
+        };
+
+        $accessor = new PropertyAccessor('name');
+
+        self::assertNull($accessor->getValue($object));
+    }
+
     public function testGetValueCanAccessPrivatePropertyThroughDoctrineProxyClass(): void
     {
         $object = new class() extends AbstractManyModel implements Proxy {
