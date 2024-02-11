@@ -41,6 +41,11 @@ final class PropertyAccessor implements AccessorInterface
             throw DeserializerLogicException::createMissingProperty($class, $this->property);
         }
 
+        $reflection = new \ReflectionProperty($class, $this->property);
+        if (!$reflection->isInitialized($object)) {
+            return null;
+        }
+
         $getter = \Closure::bind(
             fn ($property) => $this->{$property},
             $object,
