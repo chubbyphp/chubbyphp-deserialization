@@ -43,7 +43,7 @@ final class PropertyAccessor implements AccessorInterface
 
         $reflection = new \ReflectionProperty($class, $this->property);
         if (!$reflection->isInitialized($object)) {
-            return null;
+            return;
         }
 
         $getter = \Closure::bind(
