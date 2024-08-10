@@ -1,10 +1,10 @@
 # chubbyphp-deserialization
 
-[![CI](https://github.com/chubbyphp/chubbyphp-deserialization/workflows/CI/badge.svg?branch=master)](https://github.com/chubbyphp/chubbyphp-deserialization/actions?query=workflow%3ACI)
+[![CI](https://github.com/chubbyphp/chubbyphp-deserialization/actions/workflows/ci.yml/badge.svg)](https://github.com/chubbyphp/chubbyphp-deserialization/actions/workflows/ci.yml)
 [![Coverage Status](https://coveralls.io/repos/github/chubbyphp/chubbyphp-deserialization/badge.svg?branch=master)](https://coveralls.io/github/chubbyphp/chubbyphp-deserialization?branch=master)
 [![Mutation testing badge](https://img.shields.io/endpoint?style=flat&url=https%3A%2F%2Fbadge-api.stryker-mutator.io%2Fgithub.com%2Fchubbyphp%2Fchubbyphp-deserialization%2Fmaster)](https://dashboard.stryker-mutator.io/reports/github.com/chubbyphp/chubbyphp-deserialization/master)
-[![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-deserialization/v/stable.png)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialization)
-[![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-deserialization/downloads.png)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialization)
+[![Latest Stable Version](https://poser.pugx.org/chubbyphp/chubbyphp-deserialization/v)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialization)
+[![Total Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-deserialization/downloads)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialization)
 [![Monthly Downloads](https://poser.pugx.org/chubbyphp/chubbyphp-deserialization/d/monthly)](https://packagist.org/packages/chubbyphp/chubbyphp-deserialization)
 
 [![bugs](https://sonarcloud.io/api/project_badges/measure?project=chubbyphp_chubbyphp-deserialization&metric=bugs)](https://sonarcloud.io/dashboard?id=chubbyphp_chubbyphp-deserialization)
