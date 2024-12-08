@@ -7,5 +7,14 @@ parameters:
             message: '/supplied for foreach, only iterables are supported/'
             path: %currentWorkingDirectory%/src/Denormalizer/Relation/EmbedManyFieldDenormalizer.php
         -
+            message: '/Call to function is_array\(\) with array will always evaluate to true./'
+            path: %currentWorkingDirectory%/src/Denormalizer/Relation/EmbedManyFieldDenormalizer.php
+        -
             message: '/supplied for foreach, only iterables are supported/'
+            path: %currentWorkingDirectory%/src/Denormalizer/Relation/ReferenceManyFieldDenormalizer.php
+        -
+            message: '/Call to function is_string\(\) with string will always evaluate to true./'
+            path: %currentWorkingDirectory%/src/Denormalizer/Relation/ReferenceManyFieldDenormalizer.php
+        -
+            message: '/Parameter .*relatedObjects.*/'
             path: %currentWorkingDirectory%/src/Denormalizer/Relation/ReferenceManyFieldDenormalizer.php

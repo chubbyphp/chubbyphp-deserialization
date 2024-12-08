@@ -19,7 +19,7 @@ final class PropertyAccessorTest extends TestCase
 {
     public function testSetValue(): void
     {
-        $object = new class() {
+        $object = new class {
             private string $name;
 
             public function getName(): string
@@ -36,7 +36,7 @@ final class PropertyAccessorTest extends TestCase
 
     public function testSetValueCanAccessPrivatePropertyThroughDoctrineProxyClass(): void
     {
-        $object = new class() extends AbstractManyModel implements Proxy {
+        $object = new class extends AbstractManyModel implements Proxy {
             private bool $initialized = false;
 
             public function __load(): void
@@ -65,7 +65,7 @@ final class PropertyAccessorTest extends TestCase
     {
         $this->expectException(DeserializerLogicException::class);
 
-        $object = new class() {};
+        $object = new class {};
 
         $accessor = new PropertyAccessor('name');
         $accessor->setValue($object, 'Name');
@@ -73,7 +73,7 @@ final class PropertyAccessorTest extends TestCase
 
     public function testGetValue(): void
     {
-        $object = new class() {
+        $object = new class {
             private string $name;
 
             public function setName(string $name): void
@@ -91,7 +91,7 @@ final class PropertyAccessorTest extends TestCase
 
     public function testGetValueHandleUninitializedProperty(): void
     {
-        $object = new class() {
+        $object = new class {
             private string $name;
 
             public function getName(): string
@@ -107,7 +107,7 @@ final class PropertyAccessorTest extends TestCase
 
     public function testGetValueCanAccessPrivatePropertyThroughDoctrineProxyClass(): void
     {
-        $object = new class() extends AbstractManyModel implements Proxy {
+        $object = new class extends AbstractManyModel implements Proxy {
             private bool $initialized = false;
 
             public function __load(): void
@@ -136,7 +136,7 @@ final class PropertyAccessorTest extends TestCase
     {
         $this->expectException(DeserializerLogicException::class);
 
-        $object = new class() {};
+        $object = new class {};
 
         $accessor = new PropertyAccessor('name');
         $accessor->getValue($object);

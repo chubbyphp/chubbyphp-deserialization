@@ -71,7 +71,7 @@ final class DeserializationCompilerPassTest extends TestCase
 
     private function getStdClassMapping()
     {
-        return new class() implements DenormalizationObjectMappingInterface {
+        return new class implements DenormalizationObjectMappingInterface {
             public function getClass(): string
             {
                 return \stdClass::class;

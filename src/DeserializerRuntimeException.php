@@ -9,15 +9,15 @@ final class DeserializerRuntimeException extends \RuntimeException
     public static function createInvalidDataType(string $path, string $givenType, string $wishedType): self
     {
         return new self(
-            sprintf('There is an invalid data type "%s", needed "%s" at path: "%s"', $givenType, $wishedType, $path)
+            \sprintf('There is an invalid data type "%s", needed "%s" at path: "%s"', $givenType, $wishedType, $path)
         );
     }
 
     public static function createNotParsable(string $contentType, ?string $error = null): self
     {
-        $message = sprintf('Data is not parsable with content-type: "%s"', $contentType);
+        $message = \sprintf('Data is not parsable with content-type: "%s"', $contentType);
         if (null !== $error) {
-            $message .= sprintf(', error: "%s"', $error);
+            $message .= \sprintf(', error: "%s"', $error);
         }
 
         return new self($message);
@@ -28,7 +28,7 @@ final class DeserializerRuntimeException extends \RuntimeException
      */
     public static function createNotAllowedAdditionalFields(array $paths): self
     {
-        return new self(sprintf('There are additional field(s) at paths: "%s"', implode('", "', $paths)));
+        return new self(\sprintf('There are additional field(s) at paths: "%s"', implode('", "', $paths)));
     }
 
     /**
@@ -36,7 +36,7 @@ final class DeserializerRuntimeException extends \RuntimeException
      */
     public static function createMissingObjectType(string $path, array $supportedTypes): self
     {
-        return new self(sprintf(
+        return new self(\sprintf(
             'Missing object type, supported are "%s" at path: "%s"',
             implode('", "', $supportedTypes),
             $path
@@ -48,7 +48,7 @@ final class DeserializerRuntimeException extends \RuntimeException
      */
     public static function createInvalidObjectType(string $path, string $type, array $supportedTypes): self
     {
-        return new self(sprintf(
+        return new self(\sprintf(
             'Unsupported object type "%s", supported are "%s" at path: "%s"',
             $type,
             implode('", "', $supportedTypes),
@@ -58,6 +58,6 @@ final class DeserializerRuntimeException extends \RuntimeException
 
     public static function createTypeIsNotAString(string $path, string $dataType): self
     {
-        return new self(sprintf('Type is not a string, "%s" given at path: "%s"', $dataType, $path));
+        return new self(\sprintf('Type is not a string, "%s" given at path: "%s"', $dataType, $path));
     }
 }

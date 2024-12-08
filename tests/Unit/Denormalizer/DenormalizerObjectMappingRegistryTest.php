@@ -67,7 +67,7 @@ final class DenormalizerObjectMappingRegistryTest extends TestCase
 
     private function getProxyObject(): object
     {
-        return new class() extends AbstractManyModel implements Proxy {
+        return new class extends AbstractManyModel implements Proxy {
             /**
              * Initializes this proxy if its not yet initialized.
              *

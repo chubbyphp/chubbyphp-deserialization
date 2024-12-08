@@ -5,15 +5,11 @@ declare(strict_types=1);
 namespace Chubbyphp\Deserialization\Denormalizer;
 
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
-use Chubbyphp\Deserialization\DeserializerRuntimeException;
 
 final class FieldDenormalizer implements FieldDenormalizerInterface
 {
     public function __construct(private AccessorInterface $accessor, private bool $emptyToNull = false) {}
 
-    /**
-     * @throws DeserializerRuntimeException
-     */
     public function denormalizeField(
         string $path,
         object $object,
