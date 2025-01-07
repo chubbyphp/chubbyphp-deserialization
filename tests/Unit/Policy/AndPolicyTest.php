@@ -59,7 +59,7 @@ final class AndPolicyTest extends TestCase
             Call::create('isCompliant')->with($path, $object, $context)->willReturn(true),
         ]);
 
-        /** @var MockObject|PolicyInterface $compliantPolicy2 */
+        /** @var MockObject|PolicyInterface $nonCompliantPolicy */
         $nonCompliantPolicy = $this->getMockByCalls(PolicyInterface::class, [
             Call::create('isCompliant')->with($path, $object, $context)->willReturn(false),
         ]);

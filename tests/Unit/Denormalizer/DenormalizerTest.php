@@ -227,7 +227,7 @@ final class DenormalizerTest extends TestCase
                 ->with('name', $object, 'name', $context, new ArgumentInstanceOf(DenormalizerInterface::class)),
         ]);
 
-        /** @var DenormalizationFieldMappingInterface|MockObject $denormalizationNameFieldMapping */
+        /** @var DenormalizationFieldMappingInterface $denormalizationNameFieldMapping1 */
         $denormalizationNameFieldMapping1 = $this->getMockByCalls(DenormalizationFieldMappingInterface::class, [
             Call::create('getName')->with()->willReturn('name'),
             Call::create('getPolicy')->with()->willReturn($namePolicy1),
@@ -239,13 +239,13 @@ final class DenormalizerTest extends TestCase
             Call::create('isCompliant')->with('name', $object, $context)->willReturn(true),
         ]);
 
-        /** @var FieldDenormalizerInterface|MockObject $nameFieldDenormalizer */
+        /** @var FieldDenormalizerInterface $nameFieldDenormalizer2 */
         $nameFieldDenormalizer2 = $this->getMockByCalls(FieldDenormalizerInterface::class, [
             Call::create('denormalizeField')
                 ->with('name', $object, 'name', $context, new ArgumentInstanceOf(DenormalizerInterface::class)),
         ]);
 
-        /** @var DenormalizationFieldMappingInterface|MockObject $denormalizationNameFieldMapping */
+        /** @var DenormalizationFieldMappingInterface $denormalizationNameFieldMapping2 */
         $denormalizationNameFieldMapping2 = $this->getMockByCalls(DenormalizationFieldMappingInterface::class, [
             Call::create('getName')->with()->willReturn('name'),
             Call::create('getPolicy')->with()->willReturn($namePolicy2),
@@ -534,8 +534,6 @@ final class DenormalizerTest extends TestCase
     {
         $this->expectException(DeserializerLogicException::class);
         $this->expectExceptionMessage('There is no mapping for class: "stdClass"');
-
-        $object = new \stdClass();
 
         $exception = DeserializerLogicException::createMissingMapping(\stdClass::class);
 

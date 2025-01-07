@@ -25,8 +25,6 @@ final class DenormalizerObjectMappingRegistryTest extends TestCase
 
     public function testGetObjectMapping(): void
     {
-        $object = new \stdClass();
-
         /** @var DenormalizationObjectMappingInterface|MockObject $denormalizationObjectMapping */
         $denormalizationObjectMapping = $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
             Call::create('getClass')->with()->willReturn(\stdClass::class),
@@ -68,17 +66,25 @@ final class DenormalizerObjectMappingRegistryTest extends TestCase
     private function getProxyObject(): object
     {
         return new class extends AbstractManyModel implements Proxy {
+            private bool $initialized = false;
+
             /**
              * Initializes this proxy if its not yet initialized.
              *
              * Acts as a no-op if already initialized.
              */
-            public function __load(): void {}
+            public function __load(): void
+            {
+                $this->initialized = true;
+            }
 
             /**
              * Returns whether this proxy is initialized or not.
              */
-            public function __isInitialized(): bool {}
+            public function __isInitialized(): bool
+            {
+                return $this->initialized;
+            }
         };
     }
 }

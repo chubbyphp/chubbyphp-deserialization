@@ -80,6 +80,11 @@ final class PropertyAccessorTest extends TestCase
             {
                 $this->name = $name;
             }
+
+            public function getName(): string
+            {
+                return $this->name;
+            }
         };
 
         $object->setName('Name');

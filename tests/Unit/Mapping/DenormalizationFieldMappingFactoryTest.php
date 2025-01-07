@@ -33,8 +33,6 @@ final class DenormalizationFieldMappingFactoryTest extends TestCase
 
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->factory = new DenormalizationFieldMappingFactory();
     }
 
