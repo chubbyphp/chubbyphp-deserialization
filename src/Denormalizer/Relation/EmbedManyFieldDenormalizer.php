@@ -30,7 +30,7 @@ final class EmbedManyFieldDenormalizer implements FieldDenormalizerInterface
             $value = [];
         }
 
-        if (null === $denormalizer) {
+        if (!$denormalizer instanceof DenormalizerInterface) {
             throw DeserializerLogicException::createMissingDenormalizer($path);
         }
 

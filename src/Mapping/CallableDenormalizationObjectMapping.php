@@ -38,7 +38,7 @@ final class CallableDenormalizationObjectMapping implements DenormalizationObjec
 
     private function getMapping(): DenormalizationObjectMappingInterface
     {
-        if (null === $this->mapping) {
+        if (!$this->mapping instanceof DenormalizationObjectMappingInterface) {
             $this->mapping = ($this->callable)();
         }
 

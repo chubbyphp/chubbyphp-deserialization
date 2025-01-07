@@ -40,7 +40,7 @@ final class DateTimeImmutableFieldDenormalizer implements FieldDenormalizerInter
         try {
             $dateTime = new \DateTimeImmutable($trimmedValue);
 
-            if (null !== $this->dateTimeZone) {
+            if ($this->dateTimeZone instanceof \DateTimeZone) {
                 $dateTime = $dateTime->setTimezone($this->dateTimeZone);
             }
 

@@ -36,7 +36,7 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
             return;
         }
 
-        if (null === $denormalizer) {
+        if (!$denormalizer instanceof DenormalizerInterface) {
             throw DeserializerLogicException::createMissingDenormalizer($path);
         }
 
@@ -50,7 +50,7 @@ final class EmbedOneFieldDenormalizer implements FieldDenormalizerInterface
 
         $this->accessor->setValue($object, $denormalizedRelatedObject);
 
-        if (null !== $this->parentAccessor) {
+        if ($this->parentAccessor instanceof AccessorInterface) {
             $this->parentAccessor->setValue($denormalizedRelatedObject, $object);
         }
     }

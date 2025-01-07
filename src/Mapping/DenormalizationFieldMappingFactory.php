@@ -25,7 +25,7 @@ final class DenormalizationFieldMappingFactory implements DenormalizationFieldMa
         ?FieldDenormalizerInterface $fieldDenormalizer = null,
         ?PolicyInterface $policy = null
     ): DenormalizationFieldMappingInterface {
-        if (null === $fieldDenormalizer) {
+        if (!$fieldDenormalizer instanceof FieldDenormalizerInterface) {
             $fieldDenormalizer = new FieldDenormalizer(new PropertyAccessor($name), $emptyToNull);
         }
 
