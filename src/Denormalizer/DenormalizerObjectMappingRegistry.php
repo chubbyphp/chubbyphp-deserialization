@@ -12,14 +12,13 @@ final class DenormalizerObjectMappingRegistry implements DenormalizerObjectMappi
     /**
      * @var array<string, DenormalizationObjectMappingInterface>
      */
-    private array $objectMappings;
+    private array $objectMappings = [];
 
     /**
      * @param array<int, DenormalizationObjectMappingInterface> $objectMappings
      */
     public function __construct(array $objectMappings)
     {
-        $this->objectMappings = [];
         foreach ($objectMappings as $objectMapping) {
             $this->addObjectMapping($objectMapping);
         }
