@@ -7,7 +7,7 @@ namespace Chubbyphp\Deserialization\Mapping;
 final class CallableDenormalizationObjectMapping implements DenormalizationObjectMappingInterface
 {
     /**
-     * @var callable
+     * @var callable(): DenormalizationObjectMappingInterface
      */
     private $callable;
 
