@@ -10,8 +10,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingFactory;
 use Chubbyphp\Deserialization\ServiceProvider\DeserializationServiceProvider;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
@@ -24,8 +23,6 @@ use Psr\Log\NullLogger;
  */
 final class DeserializationServiceProviderTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testRegister(): void
     {
         $container = new Container();
@@ -71,8 +68,10 @@ final class DeserializationServiceProviderTest extends TestCase
 
     public function testRegisterWithDefinedLogger(): void
     {
-        /** @var LoggerInterface|MockObject $logger */
-        $logger = $this->getMockByCalls(LoggerInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var LoggerInterface $logger */
+        $logger = $builder->create(LoggerInterface::class, []);
 
         $container = new Container([
             'logger' => $logger,

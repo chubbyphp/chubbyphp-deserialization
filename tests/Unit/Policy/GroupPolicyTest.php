@@ -6,9 +6,8 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Policy;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Policy\GroupPolicy;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,16 +17,16 @@ use PHPUnit\Framework\TestCase;
  */
 final class GroupPolicyTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testIsCompliantIncludingPathReturnsTrueIfNoGroupsAreSet(): void
     {
         $object = new \stdClass();
 
         $path = '';
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $policy = new GroupPolicy([]);
 
@@ -40,11 +39,15 @@ final class GroupPolicyTest extends TestCase
 
         $path = '';
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
-            Call::create('getAttribute')
-                ->with(GroupPolicy::ATTRIBUTE_GROUPS, [GroupPolicy::GROUP_DEFAULT])
-                ->willReturn([GroupPolicy::GROUP_DEFAULT]),
+        $builder = new MockObjectBuilder();
+
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, [
+            new WithReturn(
+                'getAttribute',
+                [GroupPolicy::ATTRIBUTE_GROUPS, [GroupPolicy::GROUP_DEFAULT]],
+                [GroupPolicy::GROUP_DEFAULT]
+            ),
         ]);
 
         $policy = new GroupPolicy();
@@ -58,11 +61,11 @@ final class GroupPolicyTest extends TestCase
 
         $path = '';
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
-            Call::create('getAttribute')
-                ->with(GroupPolicy::ATTRIBUTE_GROUPS, [GroupPolicy::GROUP_DEFAULT])
-                ->willReturn(['group2']),
+        $builder = new MockObjectBuilder();
+
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, [
+            new WithReturn('getAttribute', [GroupPolicy::ATTRIBUTE_GROUPS, [GroupPolicy::GROUP_DEFAULT]], ['group2']),
         ]);
 
         $policy = new GroupPolicy(['group1', 'group2']);
@@ -76,11 +79,11 @@ final class GroupPolicyTest extends TestCase
 
         $path = '';
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
-            Call::create('getAttribute')
-                ->with(GroupPolicy::ATTRIBUTE_GROUPS, [GroupPolicy::GROUP_DEFAULT])
-                ->willReturn([]),
+        $builder = new MockObjectBuilder();
+
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, [
+            new WithReturn('getAttribute', [GroupPolicy::ATTRIBUTE_GROUPS, [GroupPolicy::GROUP_DEFAULT]], []),
         ]);
 
         $policy = new GroupPolicy(['group1', 'group2']);
@@ -94,11 +97,15 @@ final class GroupPolicyTest extends TestCase
 
         $path = '';
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class, [
-            Call::create('getAttribute')
-                ->with(GroupPolicy::ATTRIBUTE_GROUPS, [GroupPolicy::GROUP_DEFAULT])
-                ->willReturn(['unknownGroup']),
+        $builder = new MockObjectBuilder();
+
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, [
+            new WithReturn(
+                'getAttribute',
+                [GroupPolicy::ATTRIBUTE_GROUPS, [GroupPolicy::GROUP_DEFAULT]],
+                ['unknownGroup']
+            ),
         ]);
 
         $policy = new GroupPolicy(['group1', 'group2']);

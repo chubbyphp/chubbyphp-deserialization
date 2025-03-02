@@ -7,9 +7,9 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Denormalizer;
 use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizer;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,51 +19,56 @@ use PHPUnit\Framework\TestCase;
  */
 final class FieldDenormalizerTest extends TestCase
 {
-    use MockByCallsTrait;
-
+    #[DoesNotPerformAssertions]
     public function testDenormalizeField(): void
     {
         $object = new \stdClass();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('setValue')->with($object, 'name'),
+        $builder = new MockObjectBuilder();
+
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithReturn('setValue', [$object, 'name'], null),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $fieldDenormalizer = new FieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('name', $object, 'name', $context);
     }
 
+    #[DoesNotPerformAssertions]
     public function testDenormalizeFieldWithEmptyToNullDisabled(): void
     {
         $object = new \stdClass();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('setValue')->with($object, ''),
+        $builder = new MockObjectBuilder();
+
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithReturn('setValue', [$object, ''], null),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $fieldDenormalizer = new FieldDenormalizer($accessor);
         $fieldDenormalizer->denormalizeField('name', $object, '', $context);
     }
 
+    #[DoesNotPerformAssertions]
     public function testDenormalizeFieldWithEmptyToNullEnabled(): void
     {
         $object = new \stdClass();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('setValue')->with($object, null),
+        $builder = new MockObjectBuilder();
+
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithReturn('setValue', [$object, null], null),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $fieldDenormalizer = new FieldDenormalizer($accessor, true);
         $fieldDenormalizer->denormalizeField('name', $object, '', $context);

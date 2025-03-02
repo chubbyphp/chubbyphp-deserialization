@@ -6,8 +6,7 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Policy;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Policy\NullPolicy;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,16 +16,16 @@ use PHPUnit\Framework\TestCase;
  */
 final class NullPolicyTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testIsCompliantIncludingReturnsTrue(): void
     {
         $object = new \stdClass();
 
         $path = '';
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $policy = new NullPolicy();
 

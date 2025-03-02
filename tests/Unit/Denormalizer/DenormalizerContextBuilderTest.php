@@ -6,8 +6,7 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Denormalizer;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextBuilder;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -18,8 +17,6 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class DenormalizerContextBuilderTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testCreate(): void
     {
         $context = DenormalizerContextBuilder::create()->getContext();
@@ -34,8 +31,10 @@ final class DenormalizerContextBuilderTest extends TestCase
 
     public function testCreateWithOverridenSettings(): void
     {
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
         $context = DenormalizerContextBuilder::create()
             ->setAllowedAdditionalFields(['allowed_field'])

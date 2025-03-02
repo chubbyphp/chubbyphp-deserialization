@@ -7,8 +7,7 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Mapping;
 use Chubbyphp\Deserialization\Denormalizer\FieldDenormalizerInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMapping;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,12 +17,12 @@ use PHPUnit\Framework\TestCase;
  */
 final class DenormalizationFieldMappingTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testGetName(): void
     {
-        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
-        $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var FieldDenormalizerInterface $fieldDenormalizer */
+        $fieldDenormalizer = $builder->create(FieldDenormalizerInterface::class, []);
 
         $fieldMapping = new DenormalizationFieldMapping('name', $fieldDenormalizer);
 
@@ -32,8 +31,10 @@ final class DenormalizationFieldMappingTest extends TestCase
 
     public function testGetFieldDenormalizer(): void
     {
-        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
-        $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var FieldDenormalizerInterface $fieldDenormalizer */
+        $fieldDenormalizer = $builder->create(FieldDenormalizerInterface::class, []);
 
         $fieldMapping = new DenormalizationFieldMapping('name', $fieldDenormalizer);
 
@@ -42,11 +43,13 @@ final class DenormalizationFieldMappingTest extends TestCase
 
     public function testGetPolicy(): void
     {
-        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
-        $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|PolicyInterface $policy */
-        $policy = $this->getMockByCalls(PolicyInterface::class);
+        /** @var FieldDenormalizerInterface $fieldDenormalizer */
+        $fieldDenormalizer = $builder->create(FieldDenormalizerInterface::class, []);
+
+        /** @var PolicyInterface $policy */
+        $policy = $builder->create(PolicyInterface::class, []);
 
         $fieldMapping = new DenormalizationFieldMapping('name', $fieldDenormalizer, $policy);
 

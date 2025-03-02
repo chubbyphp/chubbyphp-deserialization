@@ -7,8 +7,8 @@ namespace Chubbyphp\Tests\Deserialization\Unit\ServiceFactory;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistryInterface;
 use Chubbyphp\Deserialization\ServiceFactory\DenormalizerFactory;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 use Psr\Log\LoggerInterface;
@@ -20,20 +20,18 @@ use Psr\Log\LoggerInterface;
  */
 final class DenormalizerFactoryTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testInvoke(): void
     {
+        $builder = new MockObjectBuilder();
+
         /** @var DenormalizerObjectMappingRegistryInterface $normalizerObjectMappingRegistry */
-        $normalizerObjectMappingRegistry = $this->getMockByCalls(DenormalizerObjectMappingRegistryInterface::class);
+        $normalizerObjectMappingRegistry = $builder->create(DenormalizerObjectMappingRegistryInterface::class, []);
 
         /** @var ContainerInterface $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('has')->with(DenormalizerObjectMappingRegistryInterface::class)->willReturn(true),
-            Call::create('get')
-                ->with(DenormalizerObjectMappingRegistryInterface::class)
-                ->willReturn($normalizerObjectMappingRegistry),
-            Call::create('has')->with(LoggerInterface::class)->willReturn(false),
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('has', [DenormalizerObjectMappingRegistryInterface::class], true),
+            new WithReturn('get', [DenormalizerObjectMappingRegistryInterface::class], $normalizerObjectMappingRegistry),
+            new WithReturn('has', [LoggerInterface::class], false),
         ]);
 
         $factory = new DenormalizerFactory();
@@ -45,16 +43,16 @@ final class DenormalizerFactoryTest extends TestCase
 
     public function testCallStatic(): void
     {
+        $builder = new MockObjectBuilder();
+
         /** @var DenormalizerObjectMappingRegistryInterface $normalizerObjectMappingRegistry */
-        $normalizerObjectMappingRegistry = $this->getMockByCalls(DenormalizerObjectMappingRegistryInterface::class);
+        $normalizerObjectMappingRegistry = $builder->create(DenormalizerObjectMappingRegistryInterface::class, []);
 
         /** @var ContainerInterface $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('has')->with(DenormalizerObjectMappingRegistryInterface::class.'default')->willReturn(true),
-            Call::create('get')
-                ->with(DenormalizerObjectMappingRegistryInterface::class.'default')
-                ->willReturn($normalizerObjectMappingRegistry),
-            Call::create('has')->with(LoggerInterface::class)->willReturn(false),
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('has', [DenormalizerObjectMappingRegistryInterface::class.'default'], true),
+            new WithReturn('get', [DenormalizerObjectMappingRegistryInterface::class.'default'], $normalizerObjectMappingRegistry),
+            new WithReturn('has', [LoggerInterface::class], false),
         ]);
         $factory = [DenormalizerFactory::class, 'default'];
 

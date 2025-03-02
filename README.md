@@ -26,7 +26,7 @@ A simple deserialization.
 ## Requirements
 
  * php: ^8.2
- * chubbyphp/chubbyphp-decode-encode: ^1.1
+ * chubbyphp/chubbyphp-decode-encode: ^1.2
  * psr/http-message: ^1.1|^2.0
  * psr/log: ^2.0|^3.0.2
 

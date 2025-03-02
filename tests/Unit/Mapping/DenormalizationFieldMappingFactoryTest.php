@@ -16,8 +16,7 @@ use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalize
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingFactory;
 use Chubbyphp\Deserialization\Policy\NullPolicy;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -27,8 +26,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class DenormalizationFieldMappingFactoryTest extends TestCase
 {
-    use MockByCallsTrait;
-
     private DenormalizationFieldMappingFactory $factory;
 
     protected function setUp(): void
@@ -38,8 +35,10 @@ final class DenormalizationFieldMappingFactoryTest extends TestCase
 
     public function testGetMappingWithDenormalizer(): void
     {
-        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
-        $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var FieldDenormalizerInterface $fieldDenormalizer */
+        $fieldDenormalizer = $builder->create(FieldDenormalizerInterface::class, []);
 
         $fieldMapping = $this->factory->create('name', false, $fieldDenormalizer);
 
@@ -232,11 +231,13 @@ final class DenormalizationFieldMappingFactoryTest extends TestCase
 
     public function testGetMapping(): void
     {
-        /** @var FieldDenormalizerInterface|MockObject $fieldDenormalizer */
-        $fieldDenormalizer = $this->getMockByCalls(FieldDenormalizerInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|PolicyInterface $policy */
-        $policy = $this->getMockByCalls(PolicyInterface::class);
+        /** @var FieldDenormalizerInterface $fieldDenormalizer */
+        $fieldDenormalizer = $builder->create(FieldDenormalizerInterface::class, []);
+
+        /** @var PolicyInterface $policy */
+        $policy = $builder->create(PolicyInterface::class, []);
 
         $fieldMapping = $this->factory->create('name', false, $fieldDenormalizer, $policy);
 

@@ -7,8 +7,8 @@ namespace Chubbyphp\Tests\Deserialization\Unit\ServiceFactory;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistryInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use Chubbyphp\Deserialization\ServiceFactory\DenormalizerObjectMappingRegistryFactory;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -19,13 +19,13 @@ use Psr\Container\ContainerInterface;
  */
 final class DenormalizerObjectMappingRegistryFactoryTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testInvoke(): void
     {
+        $builder = new MockObjectBuilder();
+
         /** @var ContainerInterface $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('get')->with(DenormalizationObjectMappingInterface::class.'[]')->willReturn([]),
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('get', [DenormalizationObjectMappingInterface::class.'[]'], []),
         ]);
 
         $factory = new DenormalizerObjectMappingRegistryFactory();
@@ -37,9 +37,11 @@ final class DenormalizerObjectMappingRegistryFactoryTest extends TestCase
 
     public function testCallStatic(): void
     {
+        $builder = new MockObjectBuilder();
+
         /** @var ContainerInterface $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('get')->with(DenormalizationObjectMappingInterface::class.'[]default')->willReturn([]),
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('get', [DenormalizationObjectMappingInterface::class.'[]default'], []),
         ]);
 
         $factory = [DenormalizerObjectMappingRegistryFactory::class, 'default'];

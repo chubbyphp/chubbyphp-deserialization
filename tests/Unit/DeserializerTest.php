@@ -8,9 +8,8 @@ use Chubbyphp\DecodeEncode\Decoder\DecoderInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Deserializer;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,23 +19,27 @@ use PHPUnit\Framework\TestCase;
  */
 final class DeserializerTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testDeserialize(): void
     {
         $object = new \stdClass();
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var DecoderInterface|MockObject $decoder */
-        $decoder = $this->getMockByCalls(DecoderInterface::class, [
-            Call::create('decode')->with('{"name": "php"}', 'application/json')->willReturn(['name' => 'php']),
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
+
+        /** @var DecoderInterface $decoder */
+        $decoder = $builder->create(DecoderInterface::class, [
+            new WithReturn('decode', ['{"name": "php"}', 'application/json'], ['name' => 'php']),
         ]);
 
-        /** @var DenormalizerInterface|MockObject $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
-            Call::create('denormalize')->with($object, ['name' => 'php'], $context, '')->willReturn($object),
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $builder->create(DenormalizerInterface::class, [
+            new WithReturn(
+                'denormalize',
+                [$object, ['name' => 'php'], $context, ''],
+                $object
+            ),
         ]);
 
         $deserializer = new Deserializer($decoder, $denormalizer);
@@ -46,13 +49,15 @@ final class DeserializerTest extends TestCase
 
     public function testDecode(): void
     {
-        /** @var DecoderInterface|MockObject $decoder */
-        $decoder = $this->getMockByCalls(DecoderInterface::class, [
-            Call::create('decode')->with('{"name": "php"}', 'application/json')->willReturn(['name' => 'php']),
+        $builder = new MockObjectBuilder();
+
+        /** @var DecoderInterface $decoder */
+        $decoder = $builder->create(DecoderInterface::class, [
+            new WithReturn('decode', ['{"name": "php"}', 'application/json'], ['name' => 'php']),
         ]);
 
-        /** @var DenormalizerInterface|MockObject $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class);
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $builder->create(DenormalizerInterface::class, []);
 
         $deserializer = new Deserializer($decoder, $denormalizer);
 
@@ -61,13 +66,15 @@ final class DeserializerTest extends TestCase
 
     public function testGetContentTypes(): void
     {
-        /** @var DecoderInterface|MockObject $decoder */
-        $decoder = $this->getMockByCalls(DecoderInterface::class, [
-            Call::create('getContentTypes')->with()->willReturn(['application/json']),
+        $builder = new MockObjectBuilder();
+
+        /** @var DecoderInterface $decoder */
+        $decoder = $builder->create(DecoderInterface::class, [
+            new WithReturn('getContentTypes', [], ['application/json']),
         ]);
 
-        /** @var DenormalizerInterface|MockObject $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class);
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $builder->create(DenormalizerInterface::class, []);
 
         $deserializer = new Deserializer($decoder, $denormalizer);
 
@@ -78,15 +85,17 @@ final class DeserializerTest extends TestCase
     {
         $object = new \stdClass();
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var DecoderInterface|MockObject $decoder */
-        $decoder = $this->getMockByCalls(DecoderInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
-        /** @var DenormalizerInterface|MockObject $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
-            Call::create('denormalize')->with($object, ['name' => 'php'], $context, '')->willReturn($object),
+        /** @var DecoderInterface $decoder */
+        $decoder = $builder->create(DecoderInterface::class, []);
+
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $builder->create(DenormalizerInterface::class, [
+            new WithReturn('denormalize', [$object, ['name' => 'php'], $context, ''], $object),
         ]);
 
         $deserializer = new Deserializer($decoder, $denormalizer);
