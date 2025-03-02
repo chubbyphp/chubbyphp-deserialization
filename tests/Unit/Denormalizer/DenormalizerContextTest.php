@@ -5,8 +5,7 @@ declare(strict_types=1);
 namespace Chubbyphp\Tests\Deserialization\Unit\Denormalizer;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContext;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ServerRequestInterface;
 
@@ -17,8 +16,6 @@ use Psr\Http\Message\ServerRequestInterface;
  */
 final class DenormalizerContextTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testCreate(): void
     {
         $context = new DenormalizerContext();
@@ -33,8 +30,10 @@ final class DenormalizerContextTest extends TestCase
 
     public function testCreateWithOverridenSettings(): void
     {
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
         $context = new DenormalizerContext(
             $request,
@@ -52,8 +51,10 @@ final class DenormalizerContextTest extends TestCase
 
     public function testWithAttributes(): void
     {
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
         $context = new DenormalizerContext($request, ['attribute' => 'value'], ['allowed_field']);
 
@@ -67,8 +68,10 @@ final class DenormalizerContextTest extends TestCase
 
     public function testWithAttribute(): void
     {
-        /** @var MockObject|ServerRequestInterface $request */
-        $request = $this->getMockByCalls(ServerRequestInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var ServerRequestInterface $request */
+        $request = $builder->create(ServerRequestInterface::class, []);
 
         $context = new DenormalizerContext($request, ['attribute' => 'value'], ['allowed_field']);
 

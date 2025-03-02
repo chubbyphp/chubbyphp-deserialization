@@ -8,9 +8,9 @@ use Chubbyphp\Deserialization\Accessor\AccessorInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\Relation\ReferenceOneFieldDenormalizer;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockMethod\WithoutReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -20,36 +20,37 @@ use PHPUnit\Framework\TestCase;
  */
 final class ReferenceOneFieldDenormalizerTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testDenormalizeFieldWithWrongType(): void
     {
         $this->expectException(DeserializerRuntimeException::class);
         $this->expectExceptionMessage('There is an invalid data type "integer", needed "string" at path: "reference"');
 
         $object = new \stdClass();
+        $builder = new MockObjectBuilder();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class);
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, []);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $fieldDenormalizer = new ReferenceOneFieldDenormalizer(static function (string $id): void {}, $accessor);
         $fieldDenormalizer->denormalizeField('reference', $object, 5, $context);
     }
 
+    #[DoesNotPerformAssertions]
     public function testDenormalizeFieldWithNull(): void
     {
         $object = new \stdClass();
+        $builder = new MockObjectBuilder();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('setValue')->with($object, null),
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithoutReturn('setValue', [$object, null]),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $fieldDenormalizer = new ReferenceOneFieldDenormalizer(static function (string $id): void {}, $accessor);
         $fieldDenormalizer->denormalizeField('reference', $object, null, $context);
@@ -60,14 +61,15 @@ final class ReferenceOneFieldDenormalizerTest extends TestCase
         $object = new \stdClass();
 
         $reference = new \stdClass();
+        $builder = new MockObjectBuilder();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('setValue')->with($object, $reference),
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithoutReturn('setValue', [$object, $reference]),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
             static function (string $id) use ($reference) {
@@ -89,14 +91,15 @@ final class ReferenceOneFieldDenormalizerTest extends TestCase
     public function testDenormalizeFieldWithNotFoundValue(): void
     {
         $object = new \stdClass();
+        $builder = new MockObjectBuilder();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('setValue')->with($object, '60a9ee14-64d6-4992-8042-8d1528ac02d6'),
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithoutReturn('setValue', [$object, '60a9ee14-64d6-4992-8042-8d1528ac02d6']),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
             static function (string $id): void {
@@ -116,14 +119,15 @@ final class ReferenceOneFieldDenormalizerTest extends TestCase
     public function testDenormalizeFieldWithEmptyToNullDisabled(): void
     {
         $object = new \stdClass();
+        $builder = new MockObjectBuilder();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('setValue')->with($object, ''),
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithoutReturn('setValue', [$object, '']),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
             static function (string $id): void {
@@ -140,17 +144,19 @@ final class ReferenceOneFieldDenormalizerTest extends TestCase
         );
     }
 
+    #[DoesNotPerformAssertions]
     public function testDenormalizeFieldWithEmptyToNullEnabled(): void
     {
         $object = new \stdClass();
+        $builder = new MockObjectBuilder();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('setValue')->with($object, null),
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithoutReturn('setValue', [$object, null]),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $fieldDenormalizer = new ReferenceOneFieldDenormalizer(
             static function ($id): void {

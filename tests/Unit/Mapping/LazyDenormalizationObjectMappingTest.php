@@ -7,9 +7,8 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Mapping;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
 use Chubbyphp\Deserialization\Mapping\LazyDenormalizationObjectMapping;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -20,26 +19,25 @@ use Psr\Container\ContainerInterface;
  */
 final class LazyDenormalizationObjectMappingTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testInvoke(): void
     {
-        $denormalizationFieldMappings = [$this->getMockByCalls(DenormalizationFieldMappingInterface::class)];
+        $builder = new MockObjectBuilder();
+
+        /** @var DenormalizationFieldMappingInterface[] $denormalizationFieldMappings */
+        $denormalizationFieldMappings = [$builder->create(DenormalizationFieldMappingInterface::class, [])];
 
         $factory = static function (): void {};
 
-        /** @var DenormalizationObjectMappingInterface|MockObject $denormalizationObjectMapping */
-        $denormalizationObjectMapping = $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
-            Call::create('getDenormalizationFactory')->with('path', 'type')->willReturn($factory),
-            Call::create('getDenormalizationFieldMappings')
-                ->with('path', 'type')
-                ->willReturn($denormalizationFieldMappings),
+        /** @var DenormalizationObjectMappingInterface $denormalizationObjectMapping */
+        $denormalizationObjectMapping = $builder->create(DenormalizationObjectMappingInterface::class, [
+            new WithReturn('getDenormalizationFactory', ['path', 'type'], $factory),
+            new WithReturn('getDenormalizationFieldMappings', ['path', 'type'], $denormalizationFieldMappings),
         ]);
 
-        /** @var ContainerInterface|MockObject $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('get')->with('service')->willReturn($denormalizationObjectMapping),
-            Call::create('get')->with('service')->willReturn($denormalizationObjectMapping),
+        /** @var ContainerInterface $container */
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('get', ['service'], $denormalizationObjectMapping),
+            new WithReturn('get', ['service'], $denormalizationObjectMapping),
         ]);
 
         $objectMapping = new LazyDenormalizationObjectMapping($container, 'service', \stdClass::class);

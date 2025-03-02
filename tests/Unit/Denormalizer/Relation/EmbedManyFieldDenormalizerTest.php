@@ -10,10 +10,11 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\Denormalizer\Relation\EmbedManyFieldDenormalizer;
 use Chubbyphp\Deserialization\DeserializerLogicException;
 use Chubbyphp\Deserialization\DeserializerRuntimeException;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Mock\MockMethod\WithoutReturn;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use Doctrine\Common\Collections\Collection;
-use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\Attributes\DoesNotPerformAssertions;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -23,8 +24,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class EmbedManyFieldDenormalizerTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testDenormalizeFieldWithMissingDenormalizer(): void
     {
         $this->expectException(DeserializerLogicException::class);
@@ -32,11 +31,13 @@ final class EmbedManyFieldDenormalizerTest extends TestCase
 
         $parent = new \stdClass();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, []);
+
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $fieldDenormalizer = new EmbedManyFieldDenormalizer(\stdClass::class, $accessor);
         $fieldDenormalizer->denormalizeField('children', $parent, [['name' => 'name']], $context);
@@ -49,14 +50,16 @@ final class EmbedManyFieldDenormalizerTest extends TestCase
 
         $parent = new \stdClass();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class);
+        $builder = new MockObjectBuilder();
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, []);
 
-        /** @var DenormalizerInterface|MockObject $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
+
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $builder->create(DenormalizerInterface::class, []);
 
         $fieldDenormalizer = new EmbedManyFieldDenormalizer(\stdClass::class, $accessor);
         $fieldDenormalizer->denormalizeField('children', $parent, 'test', $context, $denormalizer);
@@ -69,194 +72,212 @@ final class EmbedManyFieldDenormalizerTest extends TestCase
 
         $parent = new \stdClass();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('getValue')->with($parent)->willReturn([]),
+        $builder = new MockObjectBuilder();
+
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithReturn('getValue', [$parent], []),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
-        /** @var DenormalizerInterface|MockObject $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class);
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $builder->create(DenormalizerInterface::class, []);
 
         $fieldDenormalizer = new EmbedManyFieldDenormalizer(\stdClass::class, $accessor);
         $fieldDenormalizer->denormalizeField('children', $parent, ['test'], $context, $denormalizer);
     }
 
+    #[DoesNotPerformAssertions]
     public function testDenormalizeFieldWithNull(): void
     {
         $parent = new \stdClass();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('getValue')->with($parent)->willReturn([]),
-            Call::create('setValue')->with($parent, []),
+        $builder = new MockObjectBuilder();
+
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithReturn('getValue', [$parent], []),
+            new WithoutReturn('setValue', [$parent, []]),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
-        /** @var DenormalizerInterface|MockObject $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class);
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $builder->create(DenormalizerInterface::class, []);
 
         $fieldDenormalizer = new EmbedManyFieldDenormalizer(\stdClass::class, $accessor);
         $fieldDenormalizer->denormalizeField('children', $parent, null, $context, $denormalizer);
     }
 
+    #[DoesNotPerformAssertions]
     public function testDenormalizeFieldWithSubValueNull(): void
     {
         $parent = new \stdClass();
-
         $child = new \stdClass();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('getValue')->with($parent)->willReturn([]),
-            Call::create('setValue')->with($parent, [$child]),
+        $builder = new MockObjectBuilder();
+
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithReturn('getValue', [$parent], []),
+            new WithoutReturn('setValue', [$parent, [$child]]),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
-        /** @var DenormalizerInterface|MockObject $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
-            Call::create('denormalize')
-                ->with(\stdClass::class, [], $context, 'children[0]')
-                ->willReturn($child),
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $builder->create(DenormalizerInterface::class, [
+            new WithReturn(
+                'denormalize',
+                [\stdClass::class, [], $context, 'children[0]'],
+                $child
+            ),
         ]);
 
         $fieldDenormalizer = new EmbedManyFieldDenormalizer(\stdClass::class, $accessor);
         $fieldDenormalizer->denormalizeField('children', $parent, [null], $context, $denormalizer);
     }
 
+    #[DoesNotPerformAssertions]
     public function testDenormalizeFieldWithNewChild(): void
     {
         $parent = new \stdClass();
 
         $child = new \stdClass();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('getValue')->with($parent)->willReturn([]),
-            Call::create('setValue')->with($parent, [$child]),
+        $builder = new MockObjectBuilder();
+
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithReturn('getValue', [$parent], []),
+            new WithoutReturn('setValue', [$parent, [$child]]),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
-        /** @var DenormalizerInterface|MockObject $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
-            Call::create('denormalize')
-                ->with(\stdClass::class, ['name' => 'name'], $context, 'children[0]')
-                ->willReturn($child),
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $builder->create(DenormalizerInterface::class, [
+            new WithReturn(
+                'denormalize',
+                [\stdClass::class, ['name' => 'name'], $context, 'children[0]'],
+                $child
+            ),
         ]);
 
         $fieldDenormalizer = new EmbedManyFieldDenormalizer(\stdClass::class, $accessor);
         $fieldDenormalizer->denormalizeField('children', $parent, [['name' => 'name']], $context, $denormalizer);
     }
 
+    #[DoesNotPerformAssertions]
     public function testDenormalizeFieldWithNewChildAndCollection(): void
     {
         $parent = new \stdClass();
 
         $child = new \stdClass();
 
-        /** @var \Iterator|MockObject $iterator */
-        $iterator = $this->getMockByCalls(\Iterator::class, [
-            Call::create('rewind')->with(),
-            Call::create('valid')->with()->willReturn(false),
+        $builder = new MockObjectBuilder();
+
+        /** @var \Iterator $iterator */
+        $iterator = $builder->create(\Iterator::class, [
+            new WithoutReturn('rewind', []),
+            new WithReturn('valid', [], false),
         ]);
 
-        /** @var Collection|MockObject $collection */
-        $collection = $this->getMockByCalls(Collection::class, [
-            Call::create('getIterator')->with()->willReturn($iterator),
-            Call::create('offsetSet')->with(0, $child),
+        /** @var Collection $collection */
+        $collection = $builder->create(Collection::class, [
+            new WithReturn('getIterator', [], $iterator),
+            new WithoutReturn('offsetSet', [0, $child]),
         ]);
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('getValue')->with($parent)->willReturn($collection),
-            Call::create('setValue')->with($parent, $collection),
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithReturn('getValue', [$parent], $collection),
+            new WithoutReturn('setValue', [$parent, $collection]),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
-        /** @var DenormalizerInterface|MockObject $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
-            Call::create('denormalize')
-                ->with(\stdClass::class, ['name' => 'name'], $context, 'children[0]')
-                ->willReturn($child),
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $builder->create(DenormalizerInterface::class, [
+            new WithReturn(
+                'denormalize',
+                [\stdClass::class, ['name' => 'name'], $context, 'children[0]'],
+                $child
+            ),
         ]);
 
         $fieldDenormalizer = new EmbedManyFieldDenormalizer(\stdClass::class, $accessor);
         $fieldDenormalizer->denormalizeField('children', $parent, [['name' => 'name']], $context, $denormalizer);
     }
 
+    #[DoesNotPerformAssertions]
     public function testDenormalizeFieldWithExistingChild(): void
     {
         $parent = new \stdClass();
-
         $child = new \stdClass();
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('getValue')->with($parent)->willReturn([$child]),
-            Call::create('setValue')->with($parent, [$child]),
+        $builder = new MockObjectBuilder();
+
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithReturn('getValue', [$parent], [$child]),
+            new WithoutReturn('setValue', [$parent, [$child]]),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
-        /** @var DenormalizerInterface|MockObject $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
-            Call::create('denormalize')
-                ->with($child, ['name' => 'name'], $context, 'children[0]')
-                ->willReturn($child),
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $builder->create(DenormalizerInterface::class, [
+            new WithReturn('denormalize', [$child, ['name' => 'name'], $context, 'children[0]'], $child),
         ]);
 
         $fieldDenormalizer = new EmbedManyFieldDenormalizer(\stdClass::class, $accessor);
         $fieldDenormalizer->denormalizeField('children', $parent, [['name' => 'name']], $context, $denormalizer);
     }
 
+    #[DoesNotPerformAssertions]
     public function testDenormalizeFieldWithExistingChildAndCollection(): void
     {
         $parent = new \stdClass();
-
         $child = new \stdClass();
 
-        /** @var \Iterator|MockObject $iterator */
-        $iterator = $this->getMockByCalls(\Iterator::class, [
-            Call::create('rewind')->with(),
-            Call::create('valid')->with()->willReturn(true),
-            Call::create('current')->with()->willReturn($child),
-            Call::create('key')->with()->willReturn(0),
-            Call::create('next')->with(),
-            Call::create('valid')->with()->willReturn(false),
+        $builder = new MockObjectBuilder();
+
+        /** @var \Iterator $iterator */
+        $iterator = $builder->create(\Iterator::class, [
+            new WithoutReturn('rewind', []),
+            new WithReturn('valid', [], true),
+            new WithReturn('current', [], $child),
+            new WithReturn('key', [], 0),
+            new WithoutReturn('next', []),
+            new WithReturn('valid', [], false),
         ]);
 
-        /** @var Collection|MockObject $collection */
-        $collection = $this->getMockByCalls(Collection::class, [
-            Call::create('getIterator')->with()->willReturn($iterator),
-            Call::create('offsetUnset')->with(0),
-            Call::create('offsetSet')->with(0, $child),
+        /** @var Collection $collection */
+        $collection = $builder->create(Collection::class, [
+            new WithReturn('getIterator', [], $iterator),
+            new WithoutReturn('offsetUnset', [0]),
+            new WithoutReturn('offsetSet', [0, $child]),
         ]);
 
-        /** @var AccessorInterface|MockObject $accessor */
-        $accessor = $this->getMockByCalls(AccessorInterface::class, [
-            Call::create('getValue')->with($parent)->willReturn($collection),
-            Call::create('setValue')->with($parent, $collection),
+        /** @var AccessorInterface $accessor */
+        $accessor = $builder->create(AccessorInterface::class, [
+            new WithReturn('getValue', [$parent], $collection),
+            new WithoutReturn('setValue', [$parent, $collection]),
         ]);
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
-        /** @var DenormalizerInterface|MockObject $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class, [
-            Call::create('denormalize')
-                ->with($child, ['name' => 'name'], $context, 'children[0]')
-                ->willReturn($child),
+        /** @var DenormalizerInterface $denormalizer */
+        $denormalizer = $builder->create(DenormalizerInterface::class, [
+            new WithReturn('denormalize', [$child, ['name' => 'name'], $context, 'children[0]'], $child),
         ]);
 
         $fieldDenormalizer = new EmbedManyFieldDenormalizer(\stdClass::class, $accessor);

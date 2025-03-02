@@ -11,8 +11,7 @@ use Chubbyphp\Deserialization\Denormalizer\DenormalizerObjectMappingRegistry;
 use Chubbyphp\Deserialization\Deserializer;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingFactory;
 use Chubbyphp\Deserialization\ServiceFactory\DeserializationServiceFactory;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 use Psr\Log\NullLogger;
@@ -24,12 +23,11 @@ use Psr\Log\NullLogger;
  */
 final class DeserializationServiceFactoryTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testRegister(): void
     {
         $container = new Container();
-        $container->factories((new DeserializationServiceFactory())());
+        $factory = new DeserializationServiceFactory();
+        $container->factories($factory());
 
         self::assertTrue($container->has('deserializer'));
 
@@ -71,14 +69,18 @@ final class DeserializationServiceFactoryTest extends TestCase
 
     public function testRegisterWithDefinedLogger(): void
     {
-        /** @var LoggerInterface|MockObject $logger */
-        $logger = $this->getMockByCalls(LoggerInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var LoggerInterface $logger */
+        $logger = $builder->create(LoggerInterface::class, []);
 
         $container = new Container([
             'logger' => static fn () => $logger,
         ]);
 
-        $container->factories((new DeserializationServiceFactory())());
+        $factory = new DeserializationServiceFactory();
+
+        $container->factories($factory());
 
         /** @var Denormalizer $denormalizer */
         $denormalizer = $container->get('deserializer.denormalizer');

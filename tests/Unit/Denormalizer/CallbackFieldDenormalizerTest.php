@@ -7,8 +7,7 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Denormalizer;
 use Chubbyphp\Deserialization\Denormalizer\CallbackFieldDenormalizer;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,8 +17,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class CallbackFieldDenormalizerTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testDenormalizeField(): void
     {
         $object = new class {
@@ -38,8 +35,10 @@ final class CallbackFieldDenormalizerTest extends TestCase
             }
         };
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class);
+        $builder = new MockObjectBuilder();
+
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $fieldDenormalizer = new CallbackFieldDenormalizer(
             static function (

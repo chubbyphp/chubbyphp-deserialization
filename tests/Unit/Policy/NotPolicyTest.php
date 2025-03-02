@@ -7,9 +7,8 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Policy;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Policy\NotPolicy;
 use Chubbyphp\Deserialization\Policy\PolicyInterface;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -19,20 +18,20 @@ use PHPUnit\Framework\TestCase;
  */
 final class NotPolicyTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testIsCompliantIncludingPathReturnsTrueIfGivenPolicyIncludingPathReturnsFalse(): void
     {
         $object = new \stdClass();
 
         $path = '';
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class, []);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|PolicyInterface $nonCompliantPolicy */
-        $nonCompliantPolicy = $this->getMockByCalls(PolicyInterface::class, [
-            Call::create('isCompliant')->with($path, $object, $context)->willReturn(false),
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
+
+        /** @var PolicyInterface $nonCompliantPolicy */
+        $nonCompliantPolicy = $builder->create(PolicyInterface::class, [
+            new WithReturn('isCompliant', [$path, $object, $context], false),
         ]);
 
         $policy = new NotPolicy($nonCompliantPolicy);
@@ -46,12 +45,14 @@ final class NotPolicyTest extends TestCase
 
         $path = '';
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class, []);
+        $builder = new MockObjectBuilder();
 
-        /** @var MockObject|PolicyInterface $nonCompliantPolicy */
-        $nonCompliantPolicy = $this->getMockByCalls(PolicyInterface::class, [
-            Call::create('isCompliant')->with($path, $object, $context)->willReturn(true),
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
+
+        /** @var PolicyInterface $compliantPolicy */
+        $nonCompliantPolicy = $builder->create(PolicyInterface::class, [
+            new WithReturn('isCompliant', [$path, $object, $context], true),
         ]);
 
         $policy = new NotPolicy($nonCompliantPolicy);

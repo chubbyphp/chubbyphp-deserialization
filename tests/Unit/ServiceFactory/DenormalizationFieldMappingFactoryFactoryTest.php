@@ -6,7 +6,7 @@ namespace Chubbyphp\Tests\Deserialization\Unit\ServiceFactory;
 
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingFactoryInterface;
 use Chubbyphp\Deserialization\ServiceFactory\DenormalizationFieldMappingFactoryFactory;
-use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -17,12 +17,12 @@ use Psr\Container\ContainerInterface;
  */
 final class DenormalizationFieldMappingFactoryFactoryTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testInvoke(): void
     {
+        $builder = new MockObjectBuilder();
+
         /** @var ContainerInterface $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, []);
+        $container = $builder->create(ContainerInterface::class, []);
 
         $factory = new DenormalizationFieldMappingFactoryFactory();
 
@@ -33,8 +33,10 @@ final class DenormalizationFieldMappingFactoryFactoryTest extends TestCase
 
     public function testCallStatic(): void
     {
+        $builder = new MockObjectBuilder();
+
         /** @var ContainerInterface $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, []);
+        $container = $builder->create(ContainerInterface::class, []);
 
         $factory = [DenormalizationFieldMappingFactoryFactory::class, 'default'];
 

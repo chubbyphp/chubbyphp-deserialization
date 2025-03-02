@@ -7,8 +7,8 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Mapping;
 use Chubbyphp\Deserialization\Mapping\CallableDenormalizationObjectMapping;
 use Chubbyphp\Deserialization\Mapping\DenormalizationFieldMappingInterface;
 use Chubbyphp\Deserialization\Mapping\DenormalizationObjectMappingInterface;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -18,8 +18,6 @@ use PHPUnit\Framework\TestCase;
  */
 final class CallableDenormalizationObjectMappingTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testGetClass(): void
     {
         $mapping = new CallableDenormalizationObjectMapping(\stdClass::class, static function (): void {});
@@ -30,10 +28,14 @@ final class CallableDenormalizationObjectMappingTest extends TestCase
     public function testGetDenormalizationFactory(): void
     {
         $object = new \stdClass();
+        $builder = new MockObjectBuilder();
 
-        $mapping = new CallableDenormalizationObjectMapping(\stdClass::class, fn () => $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
-            Call::create('getDenormalizationFactory')->with('path', null)->willReturn(static fn () => $object),
-        ]));
+        $mapping = new CallableDenormalizationObjectMapping(
+            \stdClass::class,
+            static fn () => $builder->create(DenormalizationObjectMappingInterface::class, [
+                new WithReturn('getDenormalizationFactory', ['path', null], static fn () => $object),
+            ])
+        );
 
         $factory = $mapping->getDenormalizationFactory('path');
 
@@ -44,11 +46,17 @@ final class CallableDenormalizationObjectMappingTest extends TestCase
 
     public function testGetDenormalizationFieldMappings(): void
     {
-        $fieldMapping = $this->getMockByCalls(DenormalizationFieldMappingInterface::class);
+        $builder = new MockObjectBuilder();
 
-        $mapping = new CallableDenormalizationObjectMapping(\stdClass::class, fn () => $this->getMockByCalls(DenormalizationObjectMappingInterface::class, [
-            Call::create('getDenormalizationFieldMappings')->with('path', null)->willReturn([$fieldMapping]),
-        ]));
+        /** @var DenormalizationFieldMappingInterface $fieldMapping */
+        $fieldMapping = $builder->create(DenormalizationFieldMappingInterface::class, []);
+
+        $mapping = new CallableDenormalizationObjectMapping(
+            \stdClass::class,
+            static fn () => $builder->create(DenormalizationObjectMappingInterface::class, [
+                new WithReturn('getDenormalizationFieldMappings', ['path', null], [$fieldMapping]),
+            ])
+        );
 
         self::assertSame($fieldMapping, $mapping->getDenormalizationFieldMappings('path')[0]);
     }

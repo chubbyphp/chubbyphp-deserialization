@@ -6,8 +6,7 @@ namespace Chubbyphp\Tests\Deserialization\Unit\Policy;
 
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerContextInterface;
 use Chubbyphp\Deserialization\Policy\CallbackPolicy;
-use Chubbyphp\Mock\MockByCallsTrait;
-use PHPUnit\Framework\MockObject\MockObject;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -17,16 +16,16 @@ use PHPUnit\Framework\TestCase;
  */
 final class CallbackPolicyTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testIsCompliantIncludingPathReturnsTrueIfCallbackReturnsTrue(): void
     {
         $object = new \stdClass();
 
         $path = '';
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class, []);
+        $builder = new MockObjectBuilder();
+
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $policy = new CallbackPolicy(
             static function ($pathParameter, $objectParameter, $contextParameter) use ($path, $object, $context) {
@@ -47,8 +46,10 @@ final class CallbackPolicyTest extends TestCase
 
         $path = '';
 
-        /** @var DenormalizerContextInterface|MockObject $context */
-        $context = $this->getMockByCalls(DenormalizerContextInterface::class, []);
+        $builder = new MockObjectBuilder();
+
+        /** @var DenormalizerContextInterface $context */
+        $context = $builder->create(DenormalizerContextInterface::class, []);
 
         $policy = new CallbackPolicy(
             static function ($pathParameter, $objectParameter, $contextParameter) use ($path, $object, $context) {

@@ -8,8 +8,8 @@ use Chubbyphp\DecodeEncode\Decoder\DecoderInterface;
 use Chubbyphp\Deserialization\Denormalizer\DenormalizerInterface;
 use Chubbyphp\Deserialization\DeserializerInterface;
 use Chubbyphp\Deserialization\ServiceFactory\DeserializerFactory;
-use Chubbyphp\Mock\Call;
-use Chubbyphp\Mock\MockByCallsTrait;
+use Chubbyphp\Mock\MockMethod\WithReturn;
+use Chubbyphp\Mock\MockObjectBuilder;
 use PHPUnit\Framework\TestCase;
 use Psr\Container\ContainerInterface;
 
@@ -20,22 +20,22 @@ use Psr\Container\ContainerInterface;
  */
 final class DeserializerFactoryTest extends TestCase
 {
-    use MockByCallsTrait;
-
     public function testInvoke(): void
     {
+        $builder = new MockObjectBuilder();
+
         /** @var DecoderInterface $decoder */
-        $decoder = $this->getMockByCalls(DecoderInterface::class);
+        $decoder = $builder->create(DecoderInterface::class, []);
 
         /** @var DenormalizerInterface $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class);
+        $denormalizer = $builder->create(DenormalizerInterface::class, []);
 
         /** @var ContainerInterface $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('has')->with(DecoderInterface::class)->willReturn(true),
-            Call::create('get')->with(DecoderInterface::class)->willReturn($decoder),
-            Call::create('has')->with(DenormalizerInterface::class)->willReturn(true),
-            Call::create('get')->with(DenormalizerInterface::class)->willReturn($denormalizer),
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('has', [DecoderInterface::class], true),
+            new WithReturn('get', [DecoderInterface::class], $decoder),
+            new WithReturn('has', [DenormalizerInterface::class], true),
+            new WithReturn('get', [DenormalizerInterface::class], $denormalizer),
         ]);
 
         $factory = new DeserializerFactory();
@@ -47,18 +47,23 @@ final class DeserializerFactoryTest extends TestCase
 
     public function testCallStatic(): void
     {
+        $builder = new MockObjectBuilder();
+
+        $decoderKey = DecoderInterface::class.'default';
+        $denormalizerKey = DenormalizerInterface::class.'default';
+
         /** @var DecoderInterface $decoder */
-        $decoder = $this->getMockByCalls(DecoderInterface::class);
+        $decoder = $builder->create(DecoderInterface::class, []);
 
         /** @var DenormalizerInterface $denormalizer */
-        $denormalizer = $this->getMockByCalls(DenormalizerInterface::class);
+        $denormalizer = $builder->create(DenormalizerInterface::class, []);
 
         /** @var ContainerInterface $container */
-        $container = $this->getMockByCalls(ContainerInterface::class, [
-            Call::create('has')->with(DecoderInterface::class.'default')->willReturn(true),
-            Call::create('get')->with(DecoderInterface::class.'default')->willReturn($decoder),
-            Call::create('has')->with(DenormalizerInterface::class.'default')->willReturn(true),
-            Call::create('get')->with(DenormalizerInterface::class.'default')->willReturn($denormalizer),
+        $container = $builder->create(ContainerInterface::class, [
+            new WithReturn('has', [$decoderKey], true),
+            new WithReturn('get', [$decoderKey], $decoder),
+            new WithReturn('has', [$denormalizerKey], true),
+            new WithReturn('get', [$denormalizerKey], $denormalizer),
         ]);
 
         $factory = [DeserializerFactory::class, 'default'];
